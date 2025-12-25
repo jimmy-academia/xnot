@@ -5,13 +5,9 @@ import os
 import re
 import json
 import ast
+from llm import call_llm
 
-LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "openai").lower()
-LLM_MODEL = os.environ.get("LLM_MODEL", "gpt-4o-mini")
-LLM_TEMPERATURE = float(os.environ.get("LLM_TEMPERATURE", "0.0"))
-LLM_MAX_TOKENS = int(os.environ.get("LLM_MAX_TOKENS", "1024"))
 DEBUG = os.environ.get("NOT_DEBUG", "0") == "1"
-
 SYSTEM_PROMPT = "You follow instructions precisely. Output only what is requested, no additional explanation."
 
 FIXED_SCRIPT = """(0)=LLM("Extract 3-5 key requirements from the user's request. Be specific. Context: {(context)}")
@@ -65,46 +61,6 @@ def parse_script(script: str) -> list:
     return steps
 
 
-def call_llm(prompt: str) -> str:
-    """Call LLM API."""
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": prompt}
-    ]
-
-    if LLM_PROVIDER == "openai":
-        import openai
-        client = openai.OpenAI()
-        resp = client.chat.completions.create(
-            model=LLM_MODEL, messages=messages,
-            temperature=LLM_TEMPERATURE, max_tokens=LLM_MAX_TOKENS
-        )
-        return resp.choices[0].message.content
-
-    elif LLM_PROVIDER == "anthropic":
-        import anthropic
-        client = anthropic.Anthropic()
-        model = LLM_MODEL if "claude" in LLM_MODEL.lower() else "claude-sonnet-4-20250514"
-        resp = client.messages.create(
-            model=model, max_tokens=LLM_MAX_TOKENS,
-            system=SYSTEM_PROMPT, messages=[{"role": "user", "content": prompt}]
-        )
-        return resp.content[0].text
-
-    elif LLM_PROVIDER == "local":
-        import urllib.request
-        base_url = os.environ.get("LLM_BASE_URL", "")
-        url = base_url.rstrip("/") + "/v1/chat/completions"
-        payload = {"model": LLM_MODEL, "messages": messages,
-                   "temperature": LLM_TEMPERATURE, "max_tokens": LLM_MAX_TOKENS}
-        req = urllib.request.Request(url, data=json.dumps(payload).encode(),
-                                      headers={"Content-Type": "application/json"}, method="POST")
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            return json.loads(resp.read())["choices"][0]["message"]["content"]
-
-    raise ValueError(f"Unknown LLM_PROVIDER: {LLM_PROVIDER}")
-
-
 def parse_final_answer(output: str) -> int:
     """Parse output to -1, 0, or 1."""
     output = output.strip()
@@ -140,7 +96,7 @@ class SimpleNetworkOfThought:
                 print(f"Step ({idx}): {filled[:80]}...")
 
             try:
-                output = call_llm(filled)
+                output = call_llm(filled, system=SYSTEM_PROMPT)
             except Exception as e:
                 output = "0"
                 if DEBUG:

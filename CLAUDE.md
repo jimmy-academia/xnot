@@ -23,23 +23,25 @@ export OPENAI_API_KEY=$(cat ../.openaiapi)
 # Or for Anthropic
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# rnot.py configuration
+# Optional LLM configuration (llm.py)
 export LLM_PROVIDER="openai"  # or "anthropic" or "local"
 export LLM_MODEL="gpt-4o-mini"
-export NOT_DEBUG=1  # Enable debug output
+export NOT_DEBUG=1  # Enable debug output for rnot.py
 ```
 
 ## Architecture
 
 ### Core Files
 
-- **main.py** - Evaluation harness with `--method` flag to select cot/not/dummy. Computes accuracy and confusion matrices.
+- **main.py** - Evaluation harness with `--method` flag to select cot/not/dummy.
 
-- **cot.py** - Chain-of-Thought implementation using few-shot prompting. Exports `method(query, context) -> int`.
+- **llm.py** - Unified LLM API wrapper. Supports OpenAI, Anthropic, and local endpoints. Auto-detects provider from API keys.
 
-- **rnot.py** - Network-of-Thought implementation with fixed 5-step reasoning pipeline. Exports `method(query, context) -> int`.
+- **cot.py** - Chain-of-Thought using few-shot prompting. Exports `method(query, context) -> int`.
 
-- **data.jsonl** - Dataset with 9 Chicago restaurants, each with reviews and ground-truth labels for 3 user request types (R0/R1/R2).
+- **rnot.py** - Network-of-Thought with fixed 5-step pipeline. Exports `method(query, context) -> int`.
+
+- **data.jsonl** - Dataset with 9 Chicago restaurants and ground-truth labels for R0/R1/R2.
 
 ### Method Interface
 

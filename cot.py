@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Chain-of-Thought method for restaurant recommendation."""
 
-import os
 import re
+from llm import call_llm
 
 FEW_SHOT_EXAMPLES = [
     {
@@ -139,37 +139,8 @@ def parse_response(text: str) -> int:
     raise ValueError(f"Could not parse answer from: {text[-200:]}")
 
 
-def call_llm(prompt: str, system: str, provider: str, model: str) -> str:
-    """Call LLM API (anthropic or openai)."""
-    if provider == "anthropic":
-        import anthropic
-        client = anthropic.Anthropic()
-        msg = client.messages.create(
-            model=model, max_tokens=1024, temperature=0.0,
-            system=system, messages=[{"role": "user", "content": prompt}]
-        )
-        return msg.content[0].text
-    else:
-        import openai
-        client = openai.OpenAI()
-        resp = client.chat.completions.create(
-            model=model, max_tokens=1024, temperature=0.0,
-            messages=[{"role": "system", "content": system}, {"role": "user", "content": prompt}]
-        )
-        return resp.choices[0].message.content
-
-
-_method = None
-
 def method(query: str, context: str) -> int:
     """Evaluate restaurant recommendation. Returns -1, 0, or 1."""
-    global _method
-    if _method is None:
-        if os.environ.get("ANTHROPIC_API_KEY"):
-            provider, model = "anthropic", "claude-sonnet-4-20250514"
-        elif os.environ.get("OPENAI_API_KEY"):
-            provider, model = "openai", "gpt-4o"
-        else:
-            raise EnvironmentError("Set ANTHROPIC_API_KEY or OPENAI_API_KEY")
-        _method = lambda q, c: parse_response(call_llm(build_prompt(q, c), SYSTEM_PROMPT, provider, model))
-    return _method(query, context)
+    prompt = build_prompt(query, context)
+    response = call_llm(prompt, system=SYSTEM_PROMPT)
+    return parse_response(response)

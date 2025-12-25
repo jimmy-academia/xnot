@@ -5,7 +5,9 @@
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot log --stat -2)",
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot show eced437 --stat)",
       "Bash(grep:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(wc:*)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
