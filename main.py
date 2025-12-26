@@ -181,6 +181,8 @@ def main():
     parser.add_argument("--limit", type=int, help="Limit items to process")
     parser.add_argument("--method", choices=["cot", "not", "knot", "dummy"], default="dummy", help="Method to use")
     parser.add_argument("--mode", choices=["string", "dict"], default="string", help="Input mode for knot")
+    parser.add_argument("--knot-approach", choices=["base", "voting", "iterative", "divide"], default="base",
+                        help="Approach for knot (base=default, voting=self-consistency, iterative=plan refinement, divide=divide-conquer)")
     args = parser.parse_args()
 
     # Load data and requests
@@ -196,10 +198,11 @@ def main():
         from rnot import method
     elif args.method == "knot":
         from knot import create_method
-        method = create_method(mode=args.mode)
+        approach = getattr(args, 'knot_approach', 'base')
+        method = create_method(mode=args.mode, approach=approach)
     else:
         method = dummy_method
-    print(f"Using method: {args.method}" + (f" (mode={args.mode})" if args.method == "knot" else ""))
+    print(f"Using method: {args.method}" + (f" (mode={args.mode}, approach={getattr(args, 'knot_approach', 'base')})" if args.method == "knot" else ""))
 
     eval_out = evaluate(items, method, requests, mode=args.mode if args.method == "knot" else "string")
 

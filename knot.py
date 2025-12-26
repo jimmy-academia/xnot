@@ -295,15 +295,199 @@ Example with verification:
 
 _executor = None
 _current_mode = None
+_current_approach = None
+
+# Approach configuration
+APPROACH_CONFIG = {
+    "base": {},  # Default, current implementation
+    "voting": {"n_samples": 3},  # Self-consistency voting
+    "iterative": {"max_revisions": 2},  # Iterative plan refinement
+    "divide": {},  # Divide and conquer planning
+    "hierarchical": {},  # Hierarchical D&C
+    "iterative_divide": {"max_revisions": 1},  # Combined approach
+    "progressive": {},  # Progressive refinement
+}
 
 
-def create_method(mode="string"):
-    """Factory to create method with specific mode."""
+def majority_vote(answers: list) -> int:
+    """Return most common answer, defaulting to 0 on tie."""
+    from collections import Counter
+    if not answers:
+        return 0
+    counts = Counter(answers)
+    # Get most common, prefer 0 on tie
+    most_common = counts.most_common()
+    if len(most_common) > 1 and most_common[0][1] == most_common[1][1]:
+        # Tie - check if 0 is among top
+        for val, cnt in most_common:
+            if val == 0 and cnt == most_common[0][1]:
+                return 0
+    return most_common[0][0]
+
+
+class KnowledgeNetworkOfThoughtVoting(KnowledgeNetworkOfThought):
+    """Self-consistency voting: generate multiple plans, vote on final answer."""
+
+    def __init__(self, mode="string", n_samples=3):
+        super().__init__(mode)
+        self.n_samples = n_samples
+
+    def solve(self, query, context: str) -> int:
+        """Generate multiple plans/scripts, execute each, vote on answers."""
+        answers = []
+
+        for i in range(self.n_samples):
+            if DEBUG:
+                print(f"\n--- Voting sample {i+1}/{self.n_samples} ---")
+            try:
+                knowledge = self.generate_knowledge(query, context)
+                script = self.generate_script(knowledge, query, context)
+                output = self.execute_script(script, query, context)
+                answer = parse_final_answer(output)
+                answers.append(answer)
+                if DEBUG:
+                    print(f"Sample {i+1} answer: {answer}")
+            except Exception as e:
+                if DEBUG:
+                    print(f"Sample {i+1} error: {e}")
+                answers.append(0)
+
+        final = majority_vote(answers)
+        if DEBUG:
+            print(f"Voting result: {answers} -> {final}")
+        return final
+
+
+class KnowledgeNetworkOfThoughtIterative(KnowledgeNetworkOfThought):
+    """Iterative plan refinement: generate, critique, revise."""
+
+    def __init__(self, mode="string", max_revisions=2):
+        super().__init__(mode)
+        self.max_revisions = max_revisions
+
+    def generate_knowledge(self, query, context: str) -> str:
+        """Generate knowledge with iterative refinement."""
+        if self.mode == "dict":
+            goal = f"Input (dict): {json.dumps(query)}\\nContext: {context}"
+        else:
+            goal = f"Input: {query}\\nContext: {context}"
+
+        # Initial knowledge
+        prompt = KNOWLEDGE_PROMPT % goal
+        if _defense:
+            prompt += f"\n\n{_defense}\n\nIMPORTANT: Add an AUTHENTICITY VERIFICATION step."
+
+        knowledge = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
+
+        if DEBUG:
+            print("=" * 50)
+            print("INITIAL KNOWLEDGE:")
+            print(knowledge)
+
+        # Iterative refinement
+        for i in range(self.max_revisions):
+            # Critique
+            critique_prompt = f"""Review this analysis plan and identify weaknesses or missing steps:
+
+{knowledge}
+
+What could go wrong? What's missing? Be specific and brief."""
+            critique = call_llm(critique_prompt, system=SYSTEM_PROMPT, role="planner")
+
+            if DEBUG:
+                print(f"CRITIQUE {i+1}:")
+                print(critique)
+
+            # Revise
+            revise_prompt = f"""Improve this plan based on feedback:
+
+ORIGINAL PLAN:
+{knowledge}
+
+FEEDBACK:
+{critique}
+
+Write an improved step-by-step plan. Keep it simple and focused."""
+            knowledge = call_llm(revise_prompt, system=SYSTEM_PROMPT, role="planner")
+
+            if DEBUG:
+                print(f"REVISED KNOWLEDGE {i+1}:")
+                print(knowledge)
+
+        if DEBUG:
+            print("=" * 50)
+
+        return knowledge
+
+
+class KnowledgeNetworkOfThoughtDivide(KnowledgeNetworkOfThought):
+    """Divide and conquer planning: plan each aspect separately then combine."""
+
+    def generate_knowledge(self, query, context: str) -> str:
+        """Generate knowledge by dividing planning into sub-tasks."""
+        if self.mode == "dict":
+            goal = f"Input (dict): {json.dumps(query)[:300]}...\\nContext: {context}"
+        else:
+            goal = f"Input: {str(query)[:300]}...\\nContext: {context}"
+
+        # Divide: Plan each sub-task separately
+        subtasks = [
+            ("extract", f"How should I extract what the user specifically wants from: {context}? Output one brief step."),
+            ("find", f"How should I find relevant information in restaurant reviews for: {context}? Output one brief step."),
+            ("score", "How should I count or score positive vs negative evidence? Output one brief step."),
+            ("decide", "How should I make the final decision (-1, 0, or 1)? Output one brief step."),
+        ]
+
+        subplans = {}
+        for name, prompt in subtasks:
+            subplans[name] = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
+            if DEBUG:
+                print(f"SUBPLAN {name}: {subplans[name][:100]}...")
+
+        # Conquer: Combine sub-plans
+        combine_prompt = f"""Combine these steps into one coherent plan for restaurant recommendation:
+
+1. Understanding user need: {subplans['extract']}
+2. Finding evidence: {subplans['find']}
+3. Scoring evidence: {subplans['score']}
+4. Making decision: {subplans['decide']}
+
+Task: {goal}
+
+Write a unified step-by-step plan using Step0, Step1, Step2, etc. Keep it simple."""
+
+        knowledge = call_llm(combine_prompt, system=SYSTEM_PROMPT, role="planner")
+
+        if DEBUG:
+            print("=" * 50)
+            print("COMBINED KNOWLEDGE:")
+            print(knowledge)
+            print("=" * 50)
+
+        return knowledge
+
+
+def create_method(mode="string", approach="base"):
+    """Factory to create method with specific mode and approach."""
     def method(query, context: str) -> int:
-        global _executor, _current_mode
-        if _executor is None or _current_mode != mode:
-            _executor = KnowledgeNetworkOfThought(mode=mode)
+        global _executor, _current_mode, _current_approach
+
+        # Recreate executor if mode or approach changed
+        if _executor is None or _current_mode != mode or _current_approach != approach:
+            config = APPROACH_CONFIG.get(approach, {})
+
+            if approach == "voting":
+                _executor = KnowledgeNetworkOfThoughtVoting(mode=mode, **config)
+            elif approach == "iterative":
+                _executor = KnowledgeNetworkOfThoughtIterative(mode=mode, **config)
+            elif approach == "divide":
+                _executor = KnowledgeNetworkOfThoughtDivide(mode=mode)
+            else:
+                _executor = KnowledgeNetworkOfThought(mode=mode)
+
             _current_mode = mode
+            _current_approach = approach
+
         try:
             return _executor.solve(query, context)
         except Exception as e:
@@ -313,7 +497,7 @@ def create_method(mode="string"):
     return method
 
 
-# Default method (string mode)
+# Default method (string mode, base approach)
 def method(query, context: str) -> int:
-    """Default KNoT method using string mode."""
-    return create_method("string")(query, context)
+    """Default KNoT method using string mode and base approach."""
+    return create_method("string", "base")(query, context)
