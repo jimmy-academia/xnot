@@ -5,12 +5,99 @@ import os
 import re
 import json
 import ast
+from datetime import datetime
+from pathlib import Path
 from llm import call_llm
 
 DEBUG = os.environ.get("KNOT_DEBUG", "0") == "1"
+LOG_ENABLED = os.environ.get("KNOT_LOG", "0") == "1"
+
+# Logging data store
+_log_data = None
+_log_counter = 0
+_current_item_id = None
+_current_request_id = None
 
 # Defense support
 _defense = None
+
+
+def set_current_ids(item_id: str, request_id: str):
+    """Set current item and request IDs for logging."""
+    global _current_item_id, _current_request_id
+    _current_item_id = item_id
+    _current_request_id = request_id
+
+
+def init_log(item_id: str, request_id: str):
+    """Initialize logging for a new solve() call."""
+    global _log_data
+    _log_data = {
+        "timestamp": datetime.now().isoformat(),
+        "item_id": item_id,
+        "request_id": request_id,
+        "phases": {
+            "knowledge": {"input": None, "output": None},
+            "script": {"input": None, "output": None},
+            "execution": {"steps": []}
+        }
+    }
+
+
+def log_knowledge(prompt: str, output: str):
+    """Log knowledge generation phase."""
+    global _log_data
+    if _log_data and LOG_ENABLED:
+        _log_data["phases"]["knowledge"]["input"] = prompt
+        _log_data["phases"]["knowledge"]["output"] = output
+
+
+def log_script(prompt: str, output: str):
+    """Log script generation phase."""
+    global _log_data
+    if _log_data and LOG_ENABLED:
+        _log_data["phases"]["script"]["input"] = prompt
+        _log_data["phases"]["script"]["output"] = output
+
+
+def log_execution_step(step_idx: str, instruction: str, filled_input: str, output: str):
+    """Log one step of script execution."""
+    global _log_data
+    if _log_data and LOG_ENABLED:
+        _log_data["phases"]["execution"]["steps"].append({
+            "step": step_idx,
+            "instruction": instruction,
+            "filled_input": filled_input,
+            "llm_output": output
+        })
+
+
+def save_log(final_answer: int):
+    """Save log to results/ folder."""
+    global _log_data, _log_counter
+    if not _log_data or not LOG_ENABLED:
+        return
+
+    _log_data["final_answer"] = final_answer
+    _log_counter += 1
+
+    # Create results directory
+    results_dir = Path("results")
+    results_dir.mkdir(exist_ok=True)
+
+    # Generate filename
+    item_id = _log_data.get("item_id", "unknown")[:8]
+    req_id = _log_data.get("request_id", "unknown")
+    filename = f"knot_{item_id}_{req_id}_{_log_counter:04d}.json"
+
+    # Save log
+    log_path = results_dir / filename
+    with open(log_path, "w") as f:
+        json.dump(_log_data, f, indent=2)
+
+    if DEBUG:
+        print(f"Log saved to: {log_path}")
+
 
 def set_defense(defense_concept: str):
     """Enable defense prompt - knot will add verification steps."""
@@ -222,6 +309,9 @@ Example with verification:
 
         knowledge = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
 
+        # Log knowledge generation
+        log_knowledge(prompt, knowledge)
+
         if DEBUG:
             print("=" * 50)
             print("KNOWLEDGE:")
@@ -242,6 +332,9 @@ Example with verification:
         prompt = SCRIPT_PROMPT % (example, knowledge, goal)
         script = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
 
+        # Log script generation
+        log_script(prompt, script)
+
         if DEBUG:
             print("SCRIPT:")
             print(script)
@@ -257,7 +350,9 @@ Example with verification:
         if not steps:
             # Fallback: direct answer
             fallback = f"Based on restaurant: {query}\nUser wants: {context}\nRecommend? Output only: -1, 0, or 1"
-            return call_llm(fallback, system=SYSTEM_PROMPT, role="worker")
+            output = call_llm(fallback, system=SYSTEM_PROMPT, role="worker")
+            log_execution_step("fallback", "direct answer", fallback, output)
+            return output
 
         final = ""
         for idx, instr in steps:
@@ -273,6 +368,9 @@ Example with verification:
                 if DEBUG:
                     print(f"  Error: {e}")
 
+            # Log execution step
+            log_execution_step(idx, instr, filled, output)
+
             # Cache result
             try:
                 self.cache[idx] = ast.literal_eval(output)
@@ -285,12 +383,34 @@ Example with verification:
 
         return final
 
-    def solve(self, query, context: str) -> int:
+    def solve(self, query, context: str, item_id: str = None, request_id: str = None) -> int:
         """Full pipeline: knowledge → script → execute → parse."""
+        # Use global IDs if not provided directly
+        if item_id is None:
+            item_id = _current_item_id
+        if request_id is None:
+            request_id = _current_request_id
+
+        # Extract item_id from query if still None
+        if item_id is None and isinstance(query, dict):
+            item_id = query.get("item_id", "unknown")
+        elif item_id is None:
+            item_id = "unknown"
+
+        # Initialize logging
+        if LOG_ENABLED:
+            init_log(item_id, request_id or "unknown")
+
         knowledge = self.generate_knowledge(query, context)
         script = self.generate_script(knowledge, query, context)
         output = self.execute_script(script, query, context)
-        return parse_final_answer(output)
+        answer = parse_final_answer(output)
+
+        # Save log
+        if LOG_ENABLED:
+            save_log(answer)
+
+        return answer
 
 
 _executor = None
@@ -332,8 +452,24 @@ class KnowledgeNetworkOfThoughtVoting(KnowledgeNetworkOfThought):
         super().__init__(mode)
         self.n_samples = n_samples
 
-    def solve(self, query, context: str) -> int:
+    def solve(self, query, context: str, item_id: str = None, request_id: str = None) -> int:
         """Generate multiple plans/scripts, execute each, vote on answers."""
+        # Use global IDs if not provided
+        if item_id is None:
+            item_id = _current_item_id
+        if request_id is None:
+            request_id = _current_request_id
+        if item_id is None and isinstance(query, dict):
+            item_id = query.get("item_id", "unknown")
+        elif item_id is None:
+            item_id = "unknown"
+
+        # Initialize logging for voting
+        if LOG_ENABLED:
+            init_log(item_id, request_id or "unknown")
+            _log_data["approach"] = "voting"
+            _log_data["samples"] = []
+
         answers = []
 
         for i in range(self.n_samples):
@@ -347,6 +483,14 @@ class KnowledgeNetworkOfThoughtVoting(KnowledgeNetworkOfThought):
                 answers.append(answer)
                 if DEBUG:
                     print(f"Sample {i+1} answer: {answer}")
+                # Log sample
+                if LOG_ENABLED and _log_data:
+                    _log_data["samples"].append({
+                        "sample": i + 1,
+                        "knowledge": knowledge,
+                        "script": script,
+                        "answer": answer
+                    })
             except Exception as e:
                 if DEBUG:
                     print(f"Sample {i+1} error: {e}")
@@ -355,6 +499,12 @@ class KnowledgeNetworkOfThoughtVoting(KnowledgeNetworkOfThought):
         final = majority_vote(answers)
         if DEBUG:
             print(f"Voting result: {answers} -> {final}")
+
+        # Save log
+        if LOG_ENABLED:
+            _log_data["votes"] = answers
+            save_log(final)
+
         return final
 
 

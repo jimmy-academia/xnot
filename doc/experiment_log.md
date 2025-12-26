@@ -8,6 +8,7 @@ This document tracks all experiments comparing knot (Knowledge Network of Though
 |------------|---------------|--------------|-------------|
 | 1. gpt-4o-mini Baseline | 56% | 40% | knot +16pp on clean data |
 | 2. Mixed Model + Attacks | 47% (consistent) | 20-53% (varies) | knot more robust |
+| 3. Complex Task Design | **43.75%** | 22.5% | knot +21pp on complex tasks |
 
 ---
 
@@ -31,6 +32,19 @@ This document tracks all experiments comparing knot (Knowledge Network of Though
 - knot wins 4/8 attack scenarios
 - knot provides robustness at cost of ~6pp clean accuracy
 - gpt-5-nano requires `max_completion_tokens=4096` due to reasoning tokens
+
+---
+
+### 3. Complex Task Design
+**File:** [3_complex_task_design.md](3_complex_task_design.md)
+
+**Summary:** Designed harder evaluation tasks requiring structured reasoning. Implemented 5-level evidence scoring (-2 to +2), requirement levels (MUST/SHOULD/NICE), and compound logic (AND/OR). Both methods use gpt-5-nano.
+
+**Key Results:**
+- knot: 43.75% (7/16) vs cot: 22.5% (9/40)
+- Gap: +21.25 percentage points
+- Complex tasks require structured decomposition that cot can't handle
+- Natural language requirement parsing tests LLM understanding
 
 ---
 

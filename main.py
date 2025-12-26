@@ -18,10 +18,19 @@ DEFAULT_REQUESTS = [
 
 
 def load_requests(path: str = "requests.json") -> list[dict]:
-    """Load user requests from JSON file."""
+    """Load user requests from JSON file.
+
+    Supports both simple format (id, context) and complex format (id, text, structure).
+    For complex format, 'text' is used as 'context'.
+    """
     try:
         with open(path) as f:
-            return json.load(f)
+            requests = json.load(f)
+            # Normalize complex format to have 'context' field
+            for req in requests:
+                if "text" in req and "context" not in req:
+                    req["context"] = req["text"]
+            return requests
     except FileNotFoundError:
         return DEFAULT_REQUESTS
 
@@ -122,6 +131,13 @@ def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: st
             if gold is None:
                 continue
             gold = int(gold)
+
+            # Set IDs for knot logging (if enabled)
+            try:
+                from knot import set_current_ids
+                set_current_ids(item_id, req_id)
+            except ImportError:
+                pass
 
             try:
                 pred = normalize_pred(method(query, context))
