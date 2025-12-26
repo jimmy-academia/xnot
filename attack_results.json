@@ -1,0 +1,22 @@
+{
+  "cot": {
+    "clean": 0.3,
+    "typo_10": 0.2,
+    "typo_20": 0.3,
+    "inject_override": 0.3,
+    "inject_fake_sys": 0.1,
+    "inject_hidden": 0.4,
+    "fake_positive": 0.4,
+    "fake_negative": 0.2
+  },
+  "knot": {
+    "clean": 0.3,
+    "typo_10": 0.3,
+    "typo_20": 0.4,
+    "inject_override": 0.5,
+    "inject_fake_sys": 0.5,
+    "inject_hidden": 0.4,
+    "fake_positive": 0.4,
+    "fake_negative": 0.6
+  }
+}

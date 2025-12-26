@@ -8,6 +8,14 @@ FEW_SHOT_EXAMPLES = []  # No examples - pure zero-shot
 
 SYSTEM_PROMPT = """Rate this restaurant. Output ANSWER: 1, 0, or -1."""
 
+# Defense support
+_defense = None
+
+def set_defense(defense_concept: str):
+    """Enable defense prompt."""
+    global _defense
+    _defense = defense_concept
+
 
 def build_prompt(query: str, context: str) -> str:
     """Build prompt with few-shot examples."""
@@ -54,5 +62,8 @@ def parse_response(text: str) -> int:
 def method(query: str, context: str) -> int:
     """Evaluate restaurant recommendation. Returns -1, 0, or 1."""
     prompt = build_prompt(query, context)
-    response = call_llm(prompt, system=SYSTEM_PROMPT)
+    system = SYSTEM_PROMPT
+    if _defense:
+        system = _defense + "\n\n" + SYSTEM_PROMPT
+    response = call_llm(prompt, system=system)
     return parse_response(response)
