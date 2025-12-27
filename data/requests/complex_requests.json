@@ -1,0 +1,108 @@
+[
+  {
+    "id": "C0",
+    "text": "I'm in a rush so quick service is non-negotiable for me. I'd really appreciate good food, but honestly if it's just decent and the prices are fair, that works too.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"aspect": "speed", "level": "MUST"},
+        {"op": "OR", "conditions": [
+          {"aspect": "food", "level": "SHOULD"},
+          {"aspect": "value", "level": "SHOULD"}
+        ]}
+      ]
+    }
+  },
+  {
+    "id": "C1",
+    "text": "Good food is essential - I won't settle for mediocre. I'd prefer friendly service, and reasonable prices would be a nice bonus.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"aspect": "food", "level": "MUST"},
+        {"aspect": "service", "level": "SHOULD"},
+        {"aspect": "value", "level": "NICE"}
+      ]
+    }
+  },
+  {
+    "id": "C2",
+    "text": "I need either really good food or great value - one of those has to work. Beyond that, quick service matters to me but isn't a dealbreaker.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"op": "OR", "conditions": [
+          {"aspect": "food", "level": "MUST"},
+          {"aspect": "value", "level": "MUST"}
+        ]},
+        {"aspect": "speed", "level": "SHOULD"}
+      ]
+    }
+  },
+  {
+    "id": "C3",
+    "text": "Quality of service is absolutely critical - I won't tolerate rude staff. The food should be good, and it would be a bonus if it's quick.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"aspect": "service", "level": "MUST"},
+        {"aspect": "food", "level": "SHOULD"},
+        {"aspect": "speed", "level": "NICE"}
+      ]
+    }
+  },
+  {
+    "id": "C4",
+    "text": "I'm looking for either fast service or good value - need at least one. Food quality is important to me and friendly staff would be nice.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"op": "OR", "conditions": [
+          {"aspect": "speed", "level": "MUST"},
+          {"aspect": "value", "level": "MUST"}
+        ]},
+        {"aspect": "food", "level": "SHOULD"},
+        {"aspect": "service", "level": "NICE"}
+      ]
+    }
+  },
+  {
+    "id": "C5",
+    "text": "Consistency is everything to me - can't stand places that are hit or miss. I'd prefer good portions, and quick service is a nice extra if they can manage it.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"aspect": "consistency", "level": "MUST"},
+        {"aspect": "portions", "level": "SHOULD"},
+        {"aspect": "speed", "level": "NICE"}
+      ]
+    }
+  },
+  {
+    "id": "C6",
+    "text": "The food needs to be either really good or the value needs to be great - can't have neither. Good service would be appreciated, and fast service is always a plus.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"op": "OR", "conditions": [
+          {"aspect": "food", "level": "MUST"},
+          {"aspect": "value", "level": "MUST"}
+        ]},
+        {"aspect": "service", "level": "SHOULD"},
+        {"aspect": "speed", "level": "NICE"}
+      ]
+    }
+  },
+  {
+    "id": "C7",
+    "text": "I absolutely require good value for money - not looking to overpay. The food should be decent, and if the staff are particularly friendly, that's icing on the cake.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {"aspect": "value", "level": "MUST"},
+        {"aspect": "food", "level": "SHOULD"},
+        {"aspect": "service", "level": "NICE"}
+      ]
+    }
+  }
+]

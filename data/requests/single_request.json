@@ -1,0 +1,28 @@
+[
+  {
+    "id": "C0",
+    "text": "I'm in a rush so quick service is non-negotiable for me. I'd really appreciate good food, but honestly if it's just decent and the prices are fair, that works too.",
+    "structure": {
+      "op": "AND",
+      "conditions": [
+        {
+          "aspect": "speed",
+          "level": "MUST"
+        },
+        {
+          "op": "OR",
+          "conditions": [
+            {
+              "aspect": "food",
+              "level": "SHOULD"
+            },
+            {
+              "aspect": "value",
+              "level": "SHOULD"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

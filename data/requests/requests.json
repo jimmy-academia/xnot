@@ -1,0 +1,74 @@
+[
+  {
+    "id": "R0",
+    "context": "I'm in a hurry and need quick service. Is the wait time reasonable?",
+    "focus": [
+      "speed",
+      "wait",
+      "time",
+      "quick",
+      "fast",
+      "slow",
+      "minute",
+      "hour"
+    ],
+    "reasoning": "Must find and analyze wait time mentions specifically"
+  },
+  {
+    "id": "R1",
+    "context": "I've heard mixed things. Is this place consistent in quality?",
+    "focus": [
+      "consistent",
+      "always",
+      "sometimes",
+      "depends",
+      "varies",
+      "used to",
+      "changed"
+    ],
+    "reasoning": "Must compare across reviews and check for temporal changes"
+  },
+  {
+    "id": "R2",
+    "context": "Planning a special dinner date. Good for romantic occasions?",
+    "focus": [
+      "date",
+      "romantic",
+      "ambiance",
+      "quiet",
+      "intimate",
+      "loud",
+      "crowded",
+      "atmosphere"
+    ],
+    "reasoning": "Must find ambiance mentions and infer romantic suitability"
+  },
+  {
+    "id": "R3",
+    "context": "Is it worth the price? Looking for good value, not necessarily cheap.",
+    "focus": [
+      "price",
+      "value",
+      "worth",
+      "expensive",
+      "cheap",
+      "quality",
+      "portion"
+    ],
+    "reasoning": "Must weigh price mentions against quality mentions"
+  },
+  {
+    "id": "R4",
+    "context": "I care more about food quality than service. How's the food?",
+    "focus": [
+      "food",
+      "dish",
+      "taste",
+      "flavor",
+      "fresh",
+      "delicious",
+      "quality"
+    ],
+    "reasoning": "Must separate food comments from service comments and weight food higher"
+  }
+]
