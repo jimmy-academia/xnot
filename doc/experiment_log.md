@@ -9,6 +9,8 @@ This document tracks all experiments comparing knot (Knowledge Network of Though
 | 1. gpt-4o-mini Baseline | 56% | 40% | knot +16pp on clean data |
 | 2. Mixed Model + Attacks | 47% (consistent) | 20-53% (varies) | knot more robust |
 | 3. Complex Task Design | **43.75%** | 22.5% | knot +21pp on complex tasks |
+| 4. Parallel + All Attacks | 29% avg (60% best) | - | Parallel exec works; attack detection works |
+| 5. CoT Normal vs Defense | - | 53% / 20% | Defense prompts hurt CoT; minimal prompt better |
 
 ---
 
@@ -45,6 +47,32 @@ This document tracks all experiments comparing knot (Knowledge Network of Though
 - Gap: +21.25 percentage points
 - Complex tasks require structured decomposition that cot can't handle
 - Natural language requirement parsing tests LLM understanding
+
+---
+
+### 4. Parallel Execution with All Attacks
+**File:** [4_knot_parallel_all_attacks.md](4_knot_parallel_all_attacks.md)
+
+**Summary:** Implemented DAG-based parallel execution for knot scripts. Tested across 9 attack types with gpt-5-nano. Best performance on inject_hidden (60%) where attack detection worked correctly.
+
+**Key Results:**
+- Parallel execution working (2-3 steps per layer)
+- Attack detection successful in knowledge phase
+- Empty script problem when knowledge contains final answer
+- inject_hidden: 60%, typo_20/inject_fake_sys: 40%, others: 20%
+
+---
+
+### 5. CoT All Attacks (Normal vs Defense)
+**File:** [5_cot_all_attacks.md](5_cot_all_attacks.md)
+
+**Summary:** Tested CoT method with two prompt versions - normal (minimal) and defense (with data quality checks). Counterintuitively, defense prompts significantly hurt performance.
+
+**Key Results:**
+- CoT Normal: 53% average (80% clean, 100% inject_fake_sys)
+- CoT Defense: 20% average (uniform poor performance)
+- Defense prompts cause over-filtering and distraction
+- Minimal prompt allows model to focus on content analysis
 
 ---
 

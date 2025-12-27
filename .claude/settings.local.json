@@ -12,7 +12,8 @@
       "Bash(KNOT_DEBUG=1 python3:*)",
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot status)",
       "Bash(cat:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(PYTHONUNBUFFERED=1 python3:*)"
     ]
   }
 }

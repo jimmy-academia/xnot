@@ -3,7 +3,27 @@
 
 import os
 import json
+import threading
 from pathlib import Path
+
+# Global rate limiter - limits concurrent API calls across all threads
+_api_semaphore = None
+_max_concurrent = 500  # Default, safe for OpenAI Tier 5
+
+
+def init_rate_limiter(max_concurrent: int = 500):
+    """Initialize global rate limiter. Call from main() before evaluation."""
+    global _api_semaphore, _max_concurrent
+    _max_concurrent = max_concurrent
+    _api_semaphore = threading.Semaphore(max_concurrent)
+
+
+def _get_semaphore():
+    """Get or create the rate limiter semaphore."""
+    global _api_semaphore
+    if _api_semaphore is None:
+        init_rate_limiter()
+    return _api_semaphore
 
 
 def _load_api_key():
@@ -45,6 +65,14 @@ def call_llm(prompt: str, system: str = "", provider: str = None, model: str = N
     if model is None:
         model = get_model(role)
 
+    # Rate limit: acquire semaphore before API call
+    sem = _get_semaphore()
+    with sem:
+        return _call_llm_impl(prompt, system, provider, model)
+
+
+def _call_llm_impl(prompt: str, system: str, provider: str, model: str) -> str:
+    """Internal implementation of LLM call (called within semaphore)."""
     if provider == "openai":
         import openai
         client = openai.OpenAI()
@@ -96,6 +124,29 @@ def call_llm(prompt: str, system: str = "", provider: str = None, model: str = N
     raise ValueError(f"Unknown provider: {provider}")
 
 
+# Global async clients (reused to avoid cleanup issues)
+_async_openai_client = None
+_async_anthropic_client = None
+
+
+def _get_async_openai_client():
+    """Get or create async OpenAI client (reused across calls)."""
+    global _async_openai_client
+    if _async_openai_client is None:
+        import openai
+        _async_openai_client = openai.AsyncOpenAI()
+    return _async_openai_client
+
+
+def _get_async_anthropic_client():
+    """Get or create async Anthropic client (reused across calls)."""
+    global _async_anthropic_client
+    if _async_anthropic_client is None:
+        import anthropic
+        _async_anthropic_client = anthropic.AsyncAnthropic()
+    return _async_anthropic_client
+
+
 async def call_llm_async(prompt: str, system: str = "", provider: str = None, model: str = None, role: str = "default") -> str:
     """Async version of call_llm for parallel execution."""
     if provider is None:
@@ -104,8 +155,7 @@ async def call_llm_async(prompt: str, system: str = "", provider: str = None, mo
         model = get_model(role)
 
     if provider == "openai":
-        import openai
-        client = openai.AsyncOpenAI()
+        client = _get_async_openai_client()
         messages = []
         if system:
             messages.append({"role": "system", "content": system})
@@ -124,8 +174,7 @@ async def call_llm_async(prompt: str, system: str = "", provider: str = None, mo
         return resp.choices[0].message.content
 
     elif provider == "anthropic":
-        import anthropic
-        client = anthropic.AsyncAnthropic()
+        client = _get_async_anthropic_client()
         if "claude" not in model.lower():
             model = "claude-sonnet-4-20250514"
         resp = await client.messages.create(

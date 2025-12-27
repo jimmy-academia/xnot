@@ -6,6 +6,7 @@ import argparse
 import glob
 import os
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
@@ -207,6 +208,71 @@ def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: st
     return {"results": results, "stats": stats, "req_ids": req_ids}
 
 
+def evaluate_single(item: dict, req: dict, method: Callable, mode: str = "string") -> dict:
+    """Evaluate a single item-request pair (thread-safe)."""
+    item_id = item.get("item_id", "unknown")
+    req_id = req["id"]
+    context = req["context"]
+    gold_answers = item.get("gold_labels") or item.get("final_answers", {})
+    gold = gold_answers.get(req_id)
+    if gold is None:
+        return None
+
+    query, _ = format_query(item, mode)
+    try:
+        pred = normalize_pred(method(query, context))
+        error = False
+    except Exception:
+        pred = 0
+        error = True
+
+    return {
+        "item_id": item_id,
+        "request_id": req_id,
+        "pred": pred,
+        "gold": int(gold),
+        "correct": pred == int(gold),
+        "error": error,
+    }
+
+
+def compute_stats(results: list[dict], req_ids: list[str]) -> dict:
+    """Aggregate stats from results list."""
+    stats = {
+        "total": len(results),
+        "correct": sum(1 for r in results if r["correct"]),
+        "errors": sum(1 for r in results if r.get("error", False)),
+        "per_request": {rid: {"total": 0, "correct": 0} for rid in req_ids},
+        "confusion": {g: {p: 0 for p in [-1, 0, 1]} for g in [-1, 0, 1]},
+    }
+    for r in results:
+        rid = r["request_id"]
+        if rid in stats["per_request"]:
+            stats["per_request"][rid]["total"] += 1
+            stats["per_request"][rid]["correct"] += r["correct"]
+        stats["confusion"][r["gold"]][r["pred"]] += 1
+    return stats
+
+
+def evaluate_parallel(items: list[dict], method: Callable, requests: list[dict],
+                      mode: str = "string", max_workers: int = 40) -> dict:
+    """Parallel version of evaluate() - all item-request pairs at once."""
+    req_ids = [r["id"] for r in requests]
+    pairs = [(item, req) for item in items for req in requests]
+    results = []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(evaluate_single, item, req, method, mode)
+                   for item, req in pairs]
+        for future in as_completed(futures):
+            result = future.result()
+            if result:
+                results.append(result)
+
+    stats = compute_stats(results, req_ids)
+    return {"results": results, "stats": stats, "req_ids": req_ids}
+
+
 def print_results(stats: dict, req_ids: list[str] = None):
     """Print evaluation summary."""
     total, correct = stats["total"], stats["correct"]
@@ -233,20 +299,57 @@ def dummy_method(query: str, context: str) -> int:
     return (hash(query + context) % 3) - 1
 
 
+def run_attack(attack_name: str, items_clean: list[dict], method: Callable,
+               requests: list[dict], mode: str, run_dir: Path,
+               attack_configs: dict, apply_attack_fn) -> tuple:
+    """Run evaluation for a single attack (can run in parallel with other attacks)."""
+    print(f"Starting: {attack_name}")
+
+    if attack_name == "clean":
+        items = items_clean
+    else:
+        attack_type, kwargs = attack_configs[attack_name]
+        items = apply_attack_fn(items_clean, attack_type, **kwargs)
+
+    # Use parallel evaluation for item-request pairs
+    eval_out = evaluate_parallel(items, method, requests, mode)
+
+    # Save results (sorted for deterministic output)
+    result_path = run_dir / f"results_{attack_name}.jsonl"
+    with open(result_path, 'w') as f:
+        for r in sorted(eval_out["results"], key=lambda x: (x["item_id"], x["request_id"])):
+            f.write(json.dumps(r) + '\n')
+
+    stats = eval_out["stats"]
+    acc = stats["correct"] / stats["total"] if stats["total"] else 0
+    print(f"Completed: {attack_name} - {acc:.4f} ({stats['correct']}/{stats['total']})")
+    return attack_name, eval_out
+
+
 def main():
     parser = argparse.ArgumentParser(description="Evaluate LLM on restaurant recommendations")
     parser.add_argument("--data", default="data/processed/real_data.jsonl", help="Input JSONL file")
-    parser.add_argument("--requests", default="data/requests/requests.json", help="User requests JSON file")
+    parser.add_argument("--requests", default="data/requests/complex_requests.json", help="User requests JSON file")
     parser.add_argument("--run-name", help="Name for this run (creates results/{N}_{run-name}/)")
     parser.add_argument("--out", help="Output results file (default: auto in run dir)")
     parser.add_argument("--limit", type=int, help="Limit items to process")
     parser.add_argument("--method", choices=["cot", "not", "knot", "dummy"], default="dummy", help="Method to use")
     parser.add_argument("--mode", choices=["string", "dict"], default="string", help="Input mode for knot")
-    parser.add_argument("--knot-approach", choices=["base", "voting", "iterative", "divide"], default="base",
-                        help="Approach for knot (base=default, voting=self-consistency, iterative=plan refinement, divide=divide-conquer)")
+    parser.add_argument("--knot-approach", choices=["base", "voting", "iterative", "divide", "v4"], default="base",
+                        help="Approach for knot (base=default, voting=self-consistency, iterative=plan refinement, divide=divide-conquer, v4=hierarchical planning)")
     parser.add_argument("--attack", choices=ATTACK_CHOICES, default="none",
                         help="Attack type to apply (none=clean, all=run all attacks)")
+    parser.add_argument("--defense", action="store_true",
+                        help="Enable defense prompts (attack-resistant mode)")
+    parser.add_argument("--max-concurrent", type=int, default=500,
+                        help="Max concurrent API calls (default=500, safe for Tier 5)")
+    parser.add_argument("--parallel", action="store_true",
+                        help="Enable parallel execution (all attacks + all item-request pairs)")
     args = parser.parse_args()
+
+    # Initialize rate limiter
+    from llm import init_rate_limiter
+    init_rate_limiter(args.max_concurrent)
 
     # Create run directory
     run_name = args.run_name or args.method
@@ -262,17 +365,25 @@ def main():
 
     # Select method
     if args.method == "cot":
-        from cot import method
+        from cot import method, set_defense_mode as cot_set_defense
+        if args.defense:
+            cot_set_defense(True)
     elif args.method == "not":
         from rnot import method
     elif args.method == "knot":
-        from knot import create_method, set_output_dir
+        from knot import create_method, set_output_dir, set_defense_mode as knot_set_defense
         set_output_dir(run_dir)  # Tell knot where to write logs
+        if args.defense:
+            knot_set_defense(True)
+        else:
+            knot_set_defense(False)  # Override default (True) when not requested
         approach = getattr(args, 'knot_approach', 'base')
-        method = create_method(mode=args.mode, approach=approach)
+        # Pass run_dir for v4 debug logging
+        method = create_method(mode=args.mode, approach=approach, run_dir=str(run_dir))
     else:
         method = dummy_method
-    print(f"Using method: {args.method}" + (f" (mode={args.mode}, approach={getattr(args, 'knot_approach', 'base')})" if args.method == "knot" else ""))
+    defense_str = " +defense" if args.defense else ""
+    print(f"Using method: {args.method}" + (f" (mode={args.mode}, approach={getattr(args, 'knot_approach', 'base')})" if args.method == "knot" else "") + defense_str)
 
     # Determine which attacks to run
     if args.attack == "all":
@@ -285,39 +396,64 @@ def main():
     # Import attack functions if needed
     if args.attack != "none":
         from attack import apply_attack
+    else:
+        apply_attack = None
 
-    # Run evaluation for each attack
+    eval_mode = args.mode if args.method == "knot" else "string"
     all_stats = {}
-    for attack_name in attacks_to_run:
+
+    if args.parallel and len(attacks_to_run) > 1:
+        # PARALLEL: Run all attacks concurrently
         print(f"\n{'='*50}")
-        print(f"Running: {attack_name}")
+        print(f"Running {len(attacks_to_run)} attacks in PARALLEL (max {args.max_concurrent} concurrent API calls)")
         print("=" * 50)
 
-        # Apply attack (or use clean data)
-        if attack_name == "clean":
-            items = items_clean
-        else:
-            attack_type, attack_kwargs = ATTACK_CONFIGS[attack_name]
-            items = apply_attack(items_clean, attack_type, **attack_kwargs)
+        with ThreadPoolExecutor(max_workers=len(attacks_to_run)) as executor:
+            futures = {
+                executor.submit(run_attack, name, items_clean, method, requests,
+                                eval_mode, run_dir, ATTACK_CONFIGS, apply_attack): name
+                for name in attacks_to_run
+            }
 
-        # Evaluate
-        eval_mode = args.mode if args.method == "knot" else "string"
-        eval_out = evaluate(items, method, requests, mode=eval_mode)
+            for future in as_completed(futures):
+                attack_name, eval_out = future.result()
+                all_stats[attack_name] = eval_out["stats"]
+                print_results(eval_out["stats"], eval_out.get("req_ids"))
 
-        # Print results
-        print_results(eval_out["stats"], eval_out.get("req_ids"))
-        all_stats[attack_name] = eval_out["stats"]
+    else:
+        # SEQUENTIAL: Run attacks one by one (original behavior)
+        for attack_name in attacks_to_run:
+            print(f"\n{'='*50}")
+            print(f"Running: {attack_name}")
+            print("=" * 50)
 
-        # Save results
-        if len(attacks_to_run) == 1:
-            result_filename = "results.jsonl"
-        else:
-            result_filename = f"results_{attack_name}.jsonl"
-        result_path = run_dir / result_filename
-        with open(result_path, 'w') as f:
-            for r in eval_out["results"]:
-                f.write(json.dumps(r) + '\n')
-        print(f"Results saved to {result_path}")
+            # Apply attack (or use clean data)
+            if attack_name == "clean":
+                items = items_clean
+            else:
+                attack_type, attack_kwargs = ATTACK_CONFIGS[attack_name]
+                items = apply_attack(items_clean, attack_type, **attack_kwargs)
+
+            # Evaluate (use parallel for item-requests if --parallel, else sequential)
+            if args.parallel:
+                eval_out = evaluate_parallel(items, method, requests, mode=eval_mode)
+            else:
+                eval_out = evaluate(items, method, requests, mode=eval_mode)
+
+            # Print results
+            print_results(eval_out["stats"], eval_out.get("req_ids"))
+            all_stats[attack_name] = eval_out["stats"]
+
+            # Save results
+            if len(attacks_to_run) == 1:
+                result_filename = "results.jsonl"
+            else:
+                result_filename = f"results_{attack_name}.jsonl"
+            result_path = run_dir / result_filename
+            with open(result_path, 'w') as f:
+                for r in sorted(eval_out["results"], key=lambda x: (x["item_id"], x["request_id"])):
+                    f.write(json.dumps(r) + '\n')
+            print(f"Results saved to {result_path}")
 
     # Save run config
     config = {
@@ -325,6 +461,7 @@ def main():
         "method": args.method,
         "mode": args.mode if args.method == "knot" else None,
         "approach": getattr(args, 'knot_approach', None) if args.method == "knot" else None,
+        "defense": args.defense,
         "data": args.data,
         "requests": args.requests,
         "limit": args.limit,
@@ -336,6 +473,17 @@ def main():
     with open(config_path, 'w') as f:
         json.dump(config, f, indent=2)
     print(f"\nConfig saved to {config_path}")
+
+    # Consolidate debug logs if v4 was used
+    if args.method == "knot" and getattr(args, 'knot_approach', 'base') == "v4":
+        try:
+            from utils.logger import consolidate_logs
+            consolidate_logs(str(run_dir))
+            print(f"Debug logs consolidated to {run_dir}/debug/")
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"Warning: Could not consolidate debug logs: {e}")
 
 
 if __name__ == "__main__":
