@@ -1,5 +1,8 @@
 **/raw
-results/
+
+# Results directories
+results/dev/
+!results/benchmarks/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

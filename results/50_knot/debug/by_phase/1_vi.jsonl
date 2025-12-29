@@ -1,0 +1,120 @@
+{"ts": "2025-12-27T14:20:47.802939", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:20:47.802948", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:20:47.802951", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:22:43.362808", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:22:43.362819", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:22:43.362822", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:24:50.085873", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:24:50.085882", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:24:50.085886", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:27:04.046699", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:27:04.046707", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:27:04.046710", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:28:47.440113", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:28:47.440123", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:28:47.440127", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:31:26.733329", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:31:26.733337", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:31:26.733339", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:33:40.251557", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:33:40.251570", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:33:40.251573", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:36:07.313143", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:36:07.313156", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:36:07.313159", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:37:34.258888", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:37:34.258897", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:37:34.258901", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:39:33.352083", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:39:33.352093", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:39:33.352097", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:41:48.515553", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:41:48.515570", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:41:48.515577", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:44:14.700169", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:44:14.700188", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:44:14.700208", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:46:41.135234", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:46:41.135252", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:46:41.135260", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:48:50.707633", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:48:50.707649", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:48:50.707656", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:50:53.804888", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:50:53.804905", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:50:53.804907", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:52:49.390816", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:52:49.390834", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:52:49.390841", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:54:47.657142", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:54:47.657169", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:54:47.657177", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:57:04.285978", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:57:04.286004", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:57:04.286011", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T14:59:12.252058", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:59:12.252078", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:59:12.252085", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:00:44.686692", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:00:44.686697", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:00:44.686699", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:02:05.002358", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:02:05.002364", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:02:05.002367", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:04:16.115460", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:04:16.115479", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:04:16.115487", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:07:01.344787", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:07:01.344804", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:07:01.344807", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:08:57.720147", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:08:57.720157", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:08:57.720161", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:10:57.395997", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:10:57.396023", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:10:57.396028", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:12:47.659118", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:12:47.659131", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:12:47.659135", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:15:02.898736", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:15:02.898743", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:15:02.898745", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:16:53.202917", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:16:53.202929", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:16:53.202932", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:19:06.777743", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:19:06.777753", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:19:06.777757", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:20:55.672565", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:20:55.672577", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:20:55.672582", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:22:58.046900", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:22:58.046910", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:22:58.046914", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:25:15.592209", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:25:15.592217", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:25:15.592221", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:27:19.657040", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:27:19.657058", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:27:19.657065", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:29:56.672179", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:29:56.672193", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:29:56.672199", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:32:11.457568", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:32:11.457586", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:32:11.457594", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:33:34.745201", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:33:34.745222", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:33:34.745230", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:36:12.539842", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:36:12.539867", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:36:12.539875", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:38:13.345267", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:38:13.345284", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:38:13.345289", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:40:54.413126", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:40:54.413239", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:40:54.413248", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T15:43:12.381252", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:43:12.381266", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T15:43:12.381269", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}

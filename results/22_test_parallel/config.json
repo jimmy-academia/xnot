@@ -1,0 +1,528 @@
+{
+  "timestamp": "2025-12-27T08:29:53.236489",
+  "method": "dummy",
+  "mode": null,
+  "approach": null,
+  "defense": false,
+  "data": "data/processed/real_data.jsonl",
+  "requests": "data/requests/complex_requests.json",
+  "limit": 2,
+  "attack": "all",
+  "attacks_run": [
+    "clean",
+    "typo_10",
+    "typo_20",
+    "inject_override",
+    "inject_fake_sys",
+    "inject_hidden",
+    "inject_manipulation",
+    "fake_positive",
+    "fake_negative"
+  ],
+  "stats": {
+    "clean": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "fake_positive": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "typo_10": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "inject_manipulation": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "inject_hidden": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "fake_negative": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "typo_20": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "inject_override": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    },
+    "inject_fake_sys": {
+      "total": 0,
+      "correct": 0,
+      "errors": 0,
+      "per_request": {
+        "C0": {
+          "total": 0,
+          "correct": 0
+        },
+        "C1": {
+          "total": 0,
+          "correct": 0
+        },
+        "C2": {
+          "total": 0,
+          "correct": 0
+        },
+        "C3": {
+          "total": 0,
+          "correct": 0
+        },
+        "C4": {
+          "total": 0,
+          "correct": 0
+        },
+        "C5": {
+          "total": 0,
+          "correct": 0
+        },
+        "C6": {
+          "total": 0,
+          "correct": 0
+        },
+        "C7": {
+          "total": 0,
+          "correct": 0
+        }
+      },
+      "confusion": {
+        "-1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "0": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        },
+        "1": {
+          "-1": 0,
+          "0": 0,
+          "1": 0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "total_entries": 0,
+  "phases": {},
+  "items": {},
+  "llm_calls": 0,
+  "checks": {
+    "passed": 0,
+    "failed": 0
+  },
+  "fixes": 0
+}

@@ -1,12 +1,96 @@
 """
 Debug logger for KNoT v4 with buffered writes and interrupt handling.
+Also provides colored console logging via SimpleLogger.
 """
 
 import json
 import os
 import signal
 from datetime import datetime
-from typing import Optional
+from enum import Enum
+from typing import Optional, Union
+
+
+class Colors:
+    """Terminal color codes"""
+    GRAY = '\033[90m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+    BG_YELLOW = '\033[43m'
+
+
+class LogLevel(Enum):
+    """Log levels with corresponding colors"""
+    DEBUG = (10, Colors.GRAY)
+    LLM_INPUT = (15, Colors.BLUE)
+    LLM_OUTPUT = (16, Colors.CYAN)
+    INFO = (20, Colors.GREEN)
+    WARNING = (30, Colors.YELLOW)
+    ERROR = (40, Colors.RED)
+    CRITICAL = (50, f"{Colors.RED}{Colors.BG_YELLOW}")
+
+
+class SimpleLogger:
+    """Simple logger class that supports colored terminal output"""
+
+    def __init__(
+        self,
+        name: str = "xnot",
+        log_level: Union[int, LogLevel] = LogLevel.INFO,
+        console_output: bool = True
+    ):
+        self.name = name
+        if isinstance(log_level, LogLevel):
+            self.log_level = log_level.value[0]
+        else:
+            self.log_level = log_level
+        self.console_output = console_output
+
+    def _log(self, level: LogLevel, message: str) -> None:
+        """Internal method to log messages at specified level"""
+        if level.value[0] < self.log_level:
+            return
+
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        level_name = level.name
+        formatted_msg = f"[{timestamp}] {level_name}: {message}"
+
+        if self.console_output:
+            color = level.value[1]
+            colored_msg = f"{color}{formatted_msg}{Colors.RESET}"
+            print(colored_msg)
+
+    def debug(self, message: str) -> None:
+        self._log(LogLevel.DEBUG, message)
+
+    def llm_input(self, message: str) -> None:
+        self._log(LogLevel.LLM_INPUT, message)
+
+    def llm_output(self, message: str) -> None:
+        self._log(LogLevel.LLM_OUTPUT, message)
+
+    def info(self, message: str) -> None:
+        self._log(LogLevel.INFO, message)
+
+    def warning(self, message: str) -> None:
+        self._log(LogLevel.WARNING, message)
+
+    def error(self, message: str) -> None:
+        self._log(LogLevel.ERROR, message)
+
+    def critical(self, message: str) -> None:
+        self._log(LogLevel.CRITICAL, message)
+
+
+# Module-level logger instance
+logger = SimpleLogger()
 
 
 class DebugLogger:
@@ -205,12 +289,16 @@ def consolidate_logs(run_dir: str):
 def setup_logger_level(verbose: bool):
     """
     Configures the global logger based on the verbose flag.
-    
+
     Args:
         verbose (bool): If True, set level to DEBUG. Otherwise, INFO.
+
+    Returns:
+        SimpleLogger: The configured logger instance
     """
     if verbose:
         logger.log_level = LogLevel.DEBUG.value[0]
         logger.debug("Verbose mode enabled.")
     else:
         logger.log_level = LogLevel.INFO.value[0]
+    return logger

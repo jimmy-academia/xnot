@@ -1,0 +1,76 @@
+{
+  "timestamp": "2025-12-27T17:21:48.124156",
+  "method": "dummy",
+  "mode": null,
+  "approach": null,
+  "defense": false,
+  "data": "data/processed/real_data.jsonl",
+  "requests": "data/requests/complex_requests.json",
+  "limit": 1,
+  "attack": "none",
+  "attacks_run": [
+    "clean"
+  ],
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 1024
+  },
+  "stats": {
+    "total": 0,
+    "correct": 0,
+    "errors": 0,
+    "per_request": {
+      "C0": {
+        "total": 0,
+        "correct": 0
+      },
+      "C1": {
+        "total": 0,
+        "correct": 0
+      },
+      "C2": {
+        "total": 0,
+        "correct": 0
+      },
+      "C3": {
+        "total": 0,
+        "correct": 0
+      },
+      "C4": {
+        "total": 0,
+        "correct": 0
+      },
+      "C5": {
+        "total": 0,
+        "correct": 0
+      },
+      "C6": {
+        "total": 0,
+        "correct": 0
+      },
+      "C7": {
+        "total": 0,
+        "correct": 0
+      }
+    },
+    "confusion": {
+      "-1": {
+        "-1": 0,
+        "0": 0,
+        "1": 0
+      },
+      "0": {
+        "-1": 0,
+        "0": 0,
+        "1": 0
+      },
+      "1": {
+        "-1": 0,
+        "0": 0,
+        "1": 0
+      }
+    }
+  }
+}

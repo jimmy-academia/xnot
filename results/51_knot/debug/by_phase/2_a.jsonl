@@ -1,0 +1,14 @@
+{"ts": "2025-12-27T16:39:02.426847", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:39:02.426927", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 5959, "step_count": 45}}
+{"ts": "2025-12-27T16:40:42.918711", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:40:42.918731", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 1582, "step_count": 12}}
+{"ts": "2025-12-27T16:41:17.492319", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:41:17.492361", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 4617, "step_count": 34}}
+{"ts": "2025-12-27T16:41:51.155871", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:41:51.155935", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 6107, "step_count": 45}}
+{"ts": "2025-12-27T16:42:28.528716", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:42:28.528751", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 4551, "step_count": 34}}
+{"ts": "2025-12-27T16:43:20.508348", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:43:20.508378", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 4761, "step_count": 34}}
+{"ts": "2025-12-27T16:44:04.373814", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "start", "data": {}}
+{"ts": "2025-12-27T16:44:04.373847", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "2.a", "event": "end", "data": {"script_length": 4696, "step_count": 34}}

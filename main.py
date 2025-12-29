@@ -4,32 +4,39 @@
 from utils.arguments import parse_args
 from utils.logger import setup_logger_level, logger
 from utils.llm import config_llm
-
+from utils.experiment import create_experiment, ExperimentError
 
 from data.loader import load_data, load_requests
 from methods import get_method
 
-
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
 
 from eval import evaluate, evaluate_parallel, print_results
 from attack import ATTACK_CONFIGS, ATTACK_CHOICES, run_attack, apply_attack
 
-RESULTS_DIR = Path("results")
-
 def main():
-
     args = parse_args()
-    logger = setup_logger_level(args.verbose)
+    log = setup_logger_level(args.verbose)
     config_llm(args)
+
+    # Create experiment (handles dev vs benchmark mode)
+    try:
+        experiment = create_experiment(args)
+        run_dir = experiment.setup()
+    except ExperimentError as e:
+        log.error(str(e))
+        return 1
+
+    mode_str = "BENCHMARK" if experiment.benchmark_mode else "development"
+    log.info(f"Mode: {mode_str}")
+    log.info(f"Run directory: {run_dir}")
 
     # Load data and requests
     items_clean = load_data(args.data, args.limit)
     requests = load_requests(args.requests)
 
-    print(f"Loaded {len(items_clean)} items from {args.data}")
-    print(f"Loaded {len(requests)} requests")
+    log.info(f"Loaded {len(items_clean)} items from {args.data}")
+    log.info(f"Loaded {len(requests)} requests")
 
     # # Select method
     # approach = getattr(args, 'knot_approach', 'base')

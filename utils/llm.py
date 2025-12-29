@@ -210,7 +210,8 @@ async def call_llm_async(prompt: str, system: str = "", provider: str = None, mo
     raise ValueError(f"Unknown provider for async: {provider}")
 
 def config_llm(args):
-
+    """Configure LLM settings from args (placeholder)."""
+    pass
     # # Initialize LLM configuration
     # init_rate_limiter(args.max_concurrent)
     # configure(

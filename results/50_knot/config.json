@@ -1,0 +1,70 @@
+{
+  "timestamp": "2025-12-27T15:44:56.123080",
+  "method": "knot",
+  "mode": "string",
+  "approach": "v4",
+  "defense": false,
+  "data": "data/processed/complex_data.jsonl",
+  "requests": "data/requests/complex_requests.json",
+  "limit": 5,
+  "attack": "none",
+  "attacks_run": [
+    "clean"
+  ],
+  "stats": {
+    "total": 40,
+    "correct": 13,
+    "errors": 0,
+    "per_request": {
+      "C0": {
+        "total": 5,
+        "correct": 5
+      },
+      "C1": {
+        "total": 5,
+        "correct": 0
+      },
+      "C2": {
+        "total": 5,
+        "correct": 1
+      },
+      "C3": {
+        "total": 5,
+        "correct": 2
+      },
+      "C4": {
+        "total": 5,
+        "correct": 1
+      },
+      "C5": {
+        "total": 5,
+        "correct": 3
+      },
+      "C6": {
+        "total": 5,
+        "correct": 0
+      },
+      "C7": {
+        "total": 5,
+        "correct": 1
+      }
+    },
+    "confusion": {
+      "-1": {
+        "-1": 6,
+        "0": 3,
+        "1": 15
+      },
+      "0": {
+        "-1": 0,
+        "0": 3,
+        "1": 9
+      },
+      "1": {
+        "-1": 0,
+        "0": 0,
+        "1": 4
+      }
+    }
+  }
+}

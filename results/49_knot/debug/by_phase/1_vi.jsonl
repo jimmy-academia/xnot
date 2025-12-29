@@ -1,0 +1,3 @@
+{"ts": "2025-12-27T14:14:49.322852", "item_id": "test1", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:14:49.322865", "item_id": "test1", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T14:14:49.322869", "item_id": "test1", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}

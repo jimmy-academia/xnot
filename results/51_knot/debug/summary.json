@@ -1,0 +1,25 @@
+{
+  "total_entries": 160,
+  "phases": {
+    "1.i": 24,
+    "1.ii": 16,
+    "1.iii": 24,
+    "1.iv": 36,
+    "1.v": 14,
+    "1.vi": 21,
+    "2.a": 14,
+    "2.b": 3,
+    "2.c": 3,
+    "2.d": 3,
+    "3": 2
+  },
+  "items": {
+    "9OG5YkX1g2GR_unknown": 160
+  },
+  "llm_calls": 22,
+  "checks": {
+    "passed": 0,
+    "failed": 18
+  },
+  "fixes": 6
+}

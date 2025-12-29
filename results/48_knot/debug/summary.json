@@ -1,0 +1,25 @@
+{
+  "total_entries": 30,
+  "phases": {
+    "1.i": 3,
+    "1.ii": 2,
+    "1.iii": 3,
+    "1.iv": 3,
+    "1.v": 2,
+    "1.vi": 3,
+    "2.a": 3,
+    "2.b": 3,
+    "2.c": 3,
+    "2.d": 3,
+    "3": 2
+  },
+  "items": {
+    "test1_unknown": 30
+  },
+  "llm_calls": 3,
+  "checks": {
+    "passed": 0,
+    "failed": 5
+  },
+  "fixes": 0
+}

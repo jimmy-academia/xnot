@@ -1,0 +1,2 @@
+{"ts": "2025-12-27T14:14:45.645439", "item_id": "test1", "request_id": "unknown", "phase": "1.ii", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:14:45.645453", "item_id": "test1", "request_id": "unknown", "phase": "1.ii", "event": "end", "data": {"result": {"count": 2, "content_map": ["R0: 5 stars, 25 chars", "R1: 2 stars, 20 chars"]}}}

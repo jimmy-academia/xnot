@@ -1,8 +1,8 @@
 import argparse
 from attack import ATTACK_CHOICES
 
-DEFAULT_PARALLEL = True
-DEFAULT_BENCHMARK = False
+PARALLEL_MODE = True
+BENCHMARK_MODE = False
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Evaluate LLM on restaurant recommendations")
@@ -45,10 +45,11 @@ def parse_args():
                         help="Max concurrent API calls (default=500, safe for Tier 5)")
     parser.add_argument("--sequential", action="store_true",
                         help="Disable parallel execution (run sequentially instead)")
-    parser.add_argument("--force", action="store_true",
-                        help="In benchmark mode, run even if results exist.")
+    # Verbose
+    parser.add_argument("--verbose", "-v", action="store_true",
+                        help="Enable verbose/debug output")
 
     args = parser.parse_args()
-    args.parallel = DEFAULT_PARALLEL and not args.sequential
-    args.benchmark = DEFAULT_BENCHMARK
+    args.parallel = PARALLEL_MODE and not args.sequential
+    args.benchmark = BENCHMARK_MODE
     return args

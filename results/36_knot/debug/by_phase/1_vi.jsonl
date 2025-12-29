@@ -1,0 +1,21 @@
+{"ts": "2025-12-27T13:35:36.202351", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:35:36.202363", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:35:36.202367", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T13:37:33.998464", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:37:33.998469", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:37:33.998470", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T13:38:51.657778", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:38:51.657784", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:38:51.657786", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T13:40:18.877841", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:40:18.877852", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:40:18.877855", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T13:41:58.009047", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:41:58.009082", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:41:58.009086", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T13:42:47.340842", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:42:47.340856", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:42:47.340859", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}
+{"ts": "2025-12-27T13:44:56.246128", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "start", "data": {}}
+{"ts": "2025-12-27T13:44:56.246140", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "check", "data": {"checks": [["review_blocks_count", true], ["has_aggregation", true], ["has_decision", true]], "all_passed": true}}
+{"ts": "2025-12-27T13:44:56.246144", "item_id": "unknown", "request_id": "unknown", "phase": "1.vi", "event": "end", "data": {"validated": true}}

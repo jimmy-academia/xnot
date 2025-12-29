@@ -1,0 +1,29 @@
+{
+  "total_entries": 1372,
+  "phases": {
+    "1.i": 120,
+    "1.ii": 80,
+    "1.iii": 120,
+    "1.iv": 140,
+    "1.v": 80,
+    "1.vi": 120,
+    "2.a": 120,
+    "2.b": 302,
+    "2.c": 90,
+    "2.d": 120,
+    "3": 80
+  },
+  "items": {
+    "aPNXGTDkf-4b_unknown": 274,
+    "QdN72BWoyFyp_unknown": 274,
+    "ljxNT9p0y7YM_unknown": 276,
+    "wghnIlMb_i5U_unknown": 272,
+    "9OG5YkX1g2GR_unknown": 276
+  },
+  "llm_calls": 202,
+  "checks": {
+    "passed": 0,
+    "failed": 208
+  },
+  "fixes": 82
+}

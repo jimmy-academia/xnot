@@ -1,0 +1,5 @@
+{"item_id": "9OG5YkX1g2GR", "request_id": "R0", "pred": -1, "gold": -1, "correct": true}
+{"item_id": "9OG5YkX1g2GR", "request_id": "R1", "pred": -1, "gold": 1, "correct": false}
+{"item_id": "9OG5YkX1g2GR", "request_id": "R2", "pred": 1, "gold": 0, "correct": false}
+{"item_id": "9OG5YkX1g2GR", "request_id": "R3", "pred": 1, "gold": 0, "correct": false}
+{"item_id": "9OG5YkX1g2GR", "request_id": "R4", "pred": 0, "gold": 1, "correct": false}

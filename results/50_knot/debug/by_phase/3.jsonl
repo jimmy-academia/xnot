@@ -1,0 +1,80 @@
+{"ts": "2025-12-27T14:22:13.420281", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:22:20.812978", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:24:05.033205", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:24:10.823813", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:26:16.944173", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:26:25.736764", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:27:59.193558", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:28:07.362328", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:30:16.749305", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:30:26.107820", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "0", "answer": 0}}
+{"ts": "2025-12-27T14:33:00.655015", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:33:06.563938", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:35:10.559160", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:35:20.941268", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:37:07.298038", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:37:15.823249", "item_id": "9OG5YkX1g2GR", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:39:04.732668", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:39:15.876154", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "-1", "answer": -1}}
+{"ts": "2025-12-27T14:41:01.054241", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:41:07.778812", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:43:30.642342", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:43:39.155510", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:45:37.962194", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:45:46.215685", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "0", "answer": 0}}
+{"ts": "2025-12-27T14:48:15.633298", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:48:26.519840", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:50:21.858054", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:50:25.763016", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "-1", "answer": -1}}
+{"ts": "2025-12-27T14:52:21.193575", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:52:27.194282", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:54:14.703095", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:54:25.095249", "item_id": "QdN72BWoyFyp", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "-1", "answer": -1}}
+{"ts": "2025-12-27T14:56:20.039256", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:56:25.715323", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:58:30.613084", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:58:37.707669", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T14:59:59.050064", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:00:13.519568", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:01:13.821172", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:01:32.106680", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:03:32.948040", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:03:40.755934", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:05:59.069347", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:06:09.315135", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:08:34.681670", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:08:41.215420", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:10:21.282857", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:10:26.585747", "item_id": "aPNXGTDkf-4b", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:12:21.339566", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:12:26.889276", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "-1", "answer": -1}}
+{"ts": "2025-12-27T15:14:13.285920", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:14:27.937130", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "0", "answer": 0}}
+{"ts": "2025-12-27T15:15:51.223663", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:16:04.262710", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "0", "answer": 0}}
+{"ts": "2025-12-27T15:18:20.188893", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:18:36.981485", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "0", "answer": 0}}
+{"ts": "2025-12-27T15:20:25.983800", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:20:35.372463", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:22:19.783037", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:22:26.252136", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "-1", "answer": -1}}
+{"ts": "2025-12-27T15:24:26.389557", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:24:36.380495", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:26:49.856675", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:27:03.627823", "item_id": "ljxNT9p0y7YM", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "0", "answer": 0}}
+{"ts": "2025-12-27T15:29:05.747107", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:29:11.477239", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:31:31.011801", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:31:36.298948", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:32:44.327097", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:32:59.821740", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:35:15.325156", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:35:31.413464", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:37:48.053449", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:37:52.932083", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:39:54.185165", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:40:03.358790", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "-1", "answer": -1}}
+{"ts": "2025-12-27T15:42:33.626678", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:42:44.331590", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}
+{"ts": "2025-12-27T15:44:49.377792", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "start", "data": {}}
+{"ts": "2025-12-27T15:44:56.120214", "item_id": "wghnIlMb_i5U", "request_id": "unknown", "phase": "3", "event": "end", "data": {"output": "1", "answer": 1}}

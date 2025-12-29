@@ -1,0 +1,3 @@
+{"ts": "2025-12-27T14:13:34.109617", "item_id": "test1", "request_id": "unknown", "phase": "2.b", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:13:34.109987", "item_id": "test1", "request_id": "unknown", "phase": "2.b", "event": "check", "data": {"iteration": 0, "checks": [["has_steps", true], ["has_enough_steps", true], ["ends_with_decision", true]], "step_count": 4, "all_passed": true}}
+{"ts": "2025-12-27T14:13:34.110012", "item_id": "test1", "request_id": "unknown", "phase": "2.b", "event": "end", "data": {"final_step_count": 4}}

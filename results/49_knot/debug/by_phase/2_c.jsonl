@@ -1,0 +1,3 @@
+{"ts": "2025-12-27T14:15:14.541222", "item_id": "test1", "request_id": "unknown", "phase": "2.c", "event": "start", "data": {}}
+{"ts": "2025-12-27T14:15:14.541331", "item_id": "test1", "request_id": "unknown", "phase": "2.c", "event": "check", "data": {"issues": []}}
+{"ts": "2025-12-27T14:15:14.541335", "item_id": "test1", "request_id": "unknown", "phase": "2.c", "event": "end", "data": {"issues_found": 0}}

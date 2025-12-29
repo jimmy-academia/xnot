@@ -1,5 +1,13 @@
+"""
+Legacy helper functions - prefer using utils.experiment.ExperimentManager.
+"""
+
 import glob
 from datetime import datetime
+from pathlib import Path
+
+RESULTS_DIR = Path("results")
+
 
 def get_next_run_number() -> int:
     """Scan results/ and find the next available run number."""
