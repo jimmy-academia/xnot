@@ -6,6 +6,7 @@ from .cot import method as cot
 from .rnot import method as rnot
 from .knot import create_method, method as knot, set_output_dir, set_defense_mode, set_current_ids
 from .knot_v4 import KnowledgeNetworkOfThoughtV4
+from .knot_v5 import KnowledgeNetworkOfThoughtV5, create_method as create_method_v5
 
 
 def get_method(name: str, mode: str = "string", approach: str = "base",
@@ -33,6 +34,13 @@ def get_method(name: str, mode: str = "string", approach: str = "base",
         return method
 
     elif name == "knot":
+        # v5 is a separate implementation with built-in defense
+        if approach == "v5":
+            from .knot_v5 import create_method as create_v5
+            import os
+            debug = os.environ.get("KNOT_DEBUG", "0") == "1"
+            return create_v5(run_dir=run_dir, debug=debug)
+
         from .knot import create_method, set_output_dir, set_defense_mode as knot_set_defense
         if run_dir:
             set_output_dir(run_dir)
