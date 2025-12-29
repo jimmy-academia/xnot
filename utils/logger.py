@@ -201,3 +201,16 @@ def consolidate_logs(run_dir: str):
 
     with open(f"{debug_dir}/summary.json", "w") as f:
         json.dump(summary, f, indent=2)
+
+def setup_logger_level(verbose: bool):
+    """
+    Configures the global logger based on the verbose flag.
+    
+    Args:
+        verbose (bool): If True, set level to DEBUG. Otherwise, INFO.
+    """
+    if verbose:
+        logger.log_level = LogLevel.DEBUG.value[0]
+        logger.debug("Verbose mode enabled.")
+    else:
+        logger.log_level = LogLevel.INFO.value[0]

@@ -21,7 +21,8 @@
       "Bash(ls:*)",
       "Bash(done)",
       "Bash(KNOT_DEBUG=1 python main.py:*)",
-      "Bash(python main.py:*)"
+      "Bash(python main.py:*)",
+      "Bash(tree:*)"
     ]
   }
 }

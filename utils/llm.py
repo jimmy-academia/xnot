@@ -208,3 +208,16 @@ async def call_llm_async(prompt: str, system: str = "", provider: str = None, mo
         return resp.content[0].text
 
     raise ValueError(f"Unknown provider for async: {provider}")
+
+def config_llm(args):
+
+    # # Initialize LLM configuration
+    # init_rate_limiter(args.max_concurrent)
+    # configure(
+    #     temperature=args.temperature,
+    #     max_tokens=args.max_tokens,
+    #     max_tokens_reasoning=args.max_tokens_reasoning,
+    #     provider=args.provider,
+    #     model=args.model,
+    #     base_url=args.base_url,
+    # )
