@@ -6,6 +6,75 @@ from pathlib import Path
 from typing import Any, Union
 
 ATTACKED_DIR = Path("data/attacked")
+SELECTIONS_PATH = Path("data/selections.jsonl")
+RAW_DIR = Path("data/raw")
+PROCESSED_DIR = Path("data/processed")
+
+DEFAULT_SELECTION = "v1_basic"
+
+
+# --- Data Generation from Selections ---
+
+def load_selections() -> dict:
+    """Load all selections from selections.jsonl, keyed by id."""
+    selections = {}
+    if SELECTIONS_PATH.exists():
+        with open(SELECTIONS_PATH) as f:
+            for line in f:
+                if line.strip():
+                    sel = json.loads(line)
+                    selections[sel["id"]] = sel
+    return selections
+
+
+def generate_from_selection(selection_id: str, output_path: str) -> None:
+    """Generate processed data from a hardcoded selection.
+
+    Args:
+        selection_id: ID of selection in selections.jsonl
+        output_path: Where to write the output JSONL
+    """
+    selections = load_selections()
+    if selection_id not in selections:
+        available = list(selections.keys())
+        raise ValueError(f"Selection '{selection_id}' not found. Available: {available}")
+
+    selection = selections[selection_id]
+    print(f"Generating data from selection: {selection_id}")
+    print(f"  Description: {selection.get('description', 'N/A')}")
+
+    restaurant_ids = selection.get("restaurant_ids", [])
+    review_ids = selection.get("review_ids_per_restaurant", {})
+
+    if not restaurant_ids:
+        print("  Warning: No restaurant_ids in selection - cannot generate")
+        raise ValueError(f"Selection '{selection_id}' has no restaurant_ids")
+
+    # TODO: Load from raw Yelp data based on selection IDs
+    items = []
+    # ... implementation in Stage 2
+
+    # Write output
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output, 'w') as f:
+        for item in items:
+            f.write(json.dumps(item) + '\n')
+
+    print(f"  Generated {len(items)} items to {output_path}")
+
+
+def _ensure_data_exists(path: str, selection_id: str = None) -> None:
+    """Check if data exists, generate from selection if not."""
+    if Path(path).exists():
+        return
+
+    selection_id = selection_id or DEFAULT_SELECTION
+    print(f"Data not found at {path}")
+    print(f"Generating from selection: {selection_id}")
+    generate_from_selection(selection_id, path)
+
 
 DEFAULT_REQUESTS = [
     {"id": "R0", "context": "I'm in a hurry and need quick service. Is the wait time reasonable?"},
@@ -46,6 +115,9 @@ def load_data(path: str, limit: int = None, attack: str = "none") -> Union[dict,
         - dict {attack_name: items} when attack="all"
         - list[dict] for single attack/clean
     """
+    # Ensure data exists (generate from selection if not)
+    _ensure_data_exists(path)
+
     def _load_jsonl(filepath: str, limit: int = None) -> list[dict]:
         items = []
         with open(filepath, 'r') as f:
