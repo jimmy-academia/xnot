@@ -3,7 +3,7 @@
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
 ATTACKED_DIR = Path("data/attacked")
 
@@ -34,7 +34,7 @@ def load_requests(path: str = "requests.json") -> list[dict]:
         return DEFAULT_REQUESTS
 
 
-def load_data(path: str, limit: int = None, attack: str = "none") -> dict | list:
+def load_data(path: str, limit: int = None, attack: str = "none") -> Union[dict, list]:
     """Load data, optionally with attack variant(s).
 
     Args:

@@ -6,7 +6,7 @@ import re
 import json
 import ast
 
-from llm import call_llm
+from utils.llm import call_llm
 
 DEBUG = os.environ.get("NOT_DEBUG", "0") == "1"
 SYSTEM_PROMPT = "You follow instructions precisely. Output only what is requested, no additional explanation."

@@ -11,6 +11,7 @@ from utils.llm import config_llm
 from utils.experiment import create_experiment
 
 from data.loader import load_data, load_requests
+from data.schema import print_schema
 from methods import get_method
 
 from run import run_evaluation_loop, save_final_config
@@ -30,7 +31,7 @@ def main():
 
     # Load data and requests
     data = load_data(args.data, args.limit, args.attack)
-    print(data)
+    print_schema()
     input()
     requests = load_requests(args.requests)
 

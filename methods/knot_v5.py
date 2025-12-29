@@ -12,7 +12,7 @@ Stage 4: Logic-Aware Decision
 import json
 import re
 from typing import Dict, List, Any, Tuple
-from llm import call_llm
+from utils.llm import call_llm
 
 
 # Condition aspects used in complex requests
