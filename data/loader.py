@@ -34,16 +34,44 @@ def load_requests(path: str = "requests.json") -> list[dict]:
         return DEFAULT_REQUESTS
 
 
-def load_data(path: str, limit: int = None) -> list[dict]:
-    """Load JSONL data file."""
-    items = []
-    with open(path, 'r') as f:
-        for line in f:
-            if line.strip():
-                items.append(json.loads(line))
-                if limit and len(items) >= limit:
-                    break
-    return items
+def load_data(path: str, limit: int = None, attack: str = "none") -> dict | list:
+    """Load data, optionally with attack variant(s).
+
+    Args:
+        path: Path to clean data file
+        limit: Max items to load
+        attack: "none"/"clean" for original, specific name, or "all" for all attacks
+
+    Returns:
+        - dict {attack_name: items} when attack="all"
+        - list[dict] for single attack/clean
+    """
+    def _load_jsonl(filepath: str, limit: int = None) -> list[dict]:
+        items = []
+        with open(filepath, 'r') as f:
+            for line in f:
+                if line.strip():
+                    items.append(json.loads(line))
+                    if limit and len(items) >= limit:
+                        break
+        return items
+
+    # Load all attacks
+    if attack == "all":
+        result = {"clean": _load_jsonl(path, limit)}
+        for attack_file in ATTACKED_DIR.glob("*.jsonl"):
+            result[attack_file.stem] = _load_jsonl(str(attack_file), limit)
+        return result
+
+    # Load clean data
+    if attack in ("none", "clean", None):
+        return _load_jsonl(path, limit)
+
+    # Load specific attack
+    attack_path = ATTACKED_DIR / f"{attack}.jsonl"
+    if not attack_path.exists():
+        raise FileNotFoundError(f"Attacked data not found: {attack_path}")
+    return _load_jsonl(str(attack_path), limit)
 
 
 def format_query(item: dict, mode: str = "string"):
@@ -122,33 +150,3 @@ def prepare_data(data_path: str, requests_path: str, limit: int = None) -> tuple
     return items, requests
 
 
-def load_attacked_data(attack_name: str, base_data_path: str = None, limit: int = None) -> list[dict]:
-    """Load pre-generated attacked data.
-
-    Args:
-        attack_name: Name of attack (e.g., "typo_10", "inject_override")
-                     Use "clean" to load original data
-        base_data_path: Path to clean data (used when attack_name="clean")
-        limit: Max items to load
-
-    Returns:
-        List of items (attacked or clean)
-    """
-    if attack_name == "clean":
-        return load_data(base_data_path, limit)
-
-    attack_path = ATTACKED_DIR / f"{attack_name}.jsonl"
-    if not attack_path.exists():
-        raise FileNotFoundError(f"Attacked data not found: {attack_path}")
-
-    return load_data(str(attack_path), limit)
-
-
-def get_available_attacks() -> list[str]:
-    """List available pre-generated attack datasets."""
-    if not ATTACKED_DIR.exists():
-        return ["clean"]
-    attacks = ["clean"]
-    for f in ATTACKED_DIR.glob("*.jsonl"):
-        attacks.append(f.stem)
-    return attacks

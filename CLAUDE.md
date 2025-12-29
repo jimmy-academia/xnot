@@ -10,16 +10,29 @@ This is a Python-based LLM evaluation framework comparing prompting methodologie
 
 ### Run Evaluation
 ```bash
-# Runs create auto-numbered directories in results/
+# Development mode (default): creates results/dev/{NNN}_{run-name}/
 python main.py --method cot --run-name baseline
 python main.py --method knot --run-name experiment1
 python main.py --method knot --mode dict --run-name dict_test
 
+# Benchmark mode: set BENCHMARK_MODE=True in utils/arguments.py
+# Creates results/benchmarks/{run-name}/ (tracked in git)
+
 # Custom data paths
 python main.py --method knot --data data/processed/complex_data.jsonl --run-name complex
 
+# With pre-generated attacks
+python main.py --method knot --attack typo_10 --run-name robustness
+
 # Test with dummy method
-python main.py --method dummy --limit 5
+python main.py --method dummy --limit 5 -v
+```
+
+### Generate Attacked Data
+```bash
+# Pre-generate attacked datasets (one-time)
+python data/scripts/generate_attacks.py data/processed/real_data.jsonl
+# Creates: data/attacked/typo_10.jsonl, data/attacked/inject_override.jsonl, etc.
 ```
 
 ### Environment Setup
@@ -42,33 +55,39 @@ export KNOT_DEBUG=1  # for knot.py
 
 ### Core Files
 
-- **main.py** - Evaluation harness with `--method` and `--mode` flags.
+- **main.py** - Entry point: parses args, sets up experiment, delegates to run.py.
 
-- **llm.py** - Unified LLM API wrapper. Supports OpenAI, Anthropic, and local endpoints.
+- **run.py** - Evaluation orchestration: `run_evaluation_loop()`, `evaluate()`, `evaluate_parallel()`.
 
-- **cot.py** - Chain-of-Thought using few-shot prompting.
+- **utils/experiment.py** - `ExperimentManager` class for dev/benchmark mode directory handling.
 
-- **rnot.py** - Network-of-Thought with fixed 5-step pipeline.
+- **utils/llm.py** - Unified LLM API wrapper. Supports OpenAI, Anthropic, and local endpoints.
 
-- **knot.py** - Knowledge Network of Thought with dynamic 2-phase script generation:
-  - Phase 1: Generate knowledge (step-by-step approach)
-  - Phase 2: Generate executable script from knowledge
-  - Supports `--mode string` (flatten input) or `--mode dict` (structured access)
+- **methods/cot.py** - Chain-of-Thought using few-shot prompting.
+
+- **methods/knot.py** - Knowledge Network of Thought with dynamic 2-phase script generation.
+
+- **attack.py** - Attack functions (typo, injection, fake_review) and configs.
 
 ### Directory Structure
 
 ```
 data/
 ├── raw/           # Raw Yelp data
-├── processed/     # Generated datasets (real_data.jsonl, complex_data.jsonl, etc.)
-└── requests/      # User persona definitions (requests.json)
+├── processed/     # Generated datasets (real_data.jsonl, complex_data.jsonl)
+├── attacked/      # Pre-generated attacked datasets
+├── requests/      # User persona definitions
+└── scripts/       # Data generation scripts
 
 results/
-├── results_log.md  # Central index of all runs
-├── 1_baseline/     # Auto-numbered run directories
-└── ...
+├── dev/           # Development runs (gitignored)
+│   ├── 001_baseline/
+│   └── 002_experiment/
+└── benchmarks/    # Benchmark runs (tracked in git)
+    └── final_run/
 
-scripts/           # Data generation scripts
+utils/             # Utility modules
+methods/           # Evaluation methods (cot, knot, etc.)
 doc/               # Experiment documentation
 ```
 

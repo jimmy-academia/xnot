@@ -4,7 +4,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Callable
 
-from data.loader import format_query, normalize_pred, load_attacked_data, get_available_attacks
+from data.loader import format_query, normalize_pred
 
 
 def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: str = "string") -> dict:
@@ -150,21 +150,12 @@ def print_results(stats: dict, req_ids: list[str] = None):
 
 # --- Orchestration Helpers ---
 
-def get_attacks_list(args):
-    """Determine which attacks to run from pre-generated datasets."""
-    available = get_available_attacks()
-    if args.attack == "all":
-        return available
-    elif args.attack == "none":
-        return ["clean"]
-    else:
-        if args.attack not in available:
-            raise ValueError(f"Attack '{args.attack}' not found. Available: {available}")
-        return [args.attack]
+def run_evaluation_loop(args, data, requests, method, experiment):
+    """Evaluate dataset(s) - handles both single and multi-attack.
 
-
-def run_evaluation_loop(args, items_clean, requests, method, attacks, experiment):
-    """Core loop - load pre-generated attacked data and evaluate."""
+    Args:
+        data: Either list[dict] (single attack) or dict[str, list[dict]] (all attacks)
+    """
     # Determine eval_mode for variable substitution
     approach = getattr(args, 'knot_approach', 'base')
     if args.method == "knot" and approach in ("v4", "v5"):
@@ -172,13 +163,14 @@ def run_evaluation_loop(args, items_clean, requests, method, attacks, experiment
     else:
         eval_mode = args.mode if args.method == "knot" else "string"
 
+    # Single attack case - wrap in dict for uniform handling
+    if isinstance(data, list):
+        attack_name = args.attack if args.attack not in ("none", "clean", None) else "clean"
+        data = {attack_name: data}
+
     all_stats = {}
-
-    for attack_name in attacks:
+    for attack_name, items in data.items():
         print(f"\n{'='*50}\nRunning: {attack_name}\n{'='*50}")
-
-        # Load pre-generated attacked data (or clean data)
-        items = load_attacked_data(attack_name, args.data, args.limit)
 
         # Evaluate
         if args.parallel:
@@ -190,15 +182,18 @@ def run_evaluation_loop(args, items_clean, requests, method, attacks, experiment
         print_results(eval_out["stats"], eval_out.get("req_ids"))
         all_stats[attack_name] = eval_out["stats"]
 
-        filename = "results.jsonl" if len(attacks) == 1 else f"results_{attack_name}.jsonl"
+        filename = "results.jsonl" if len(data) == 1 else f"results_{attack_name}.jsonl"
         result_path = experiment.save_results(eval_out["results"], filename)
         print(f"Results saved to {result_path}")
 
     return all_stats
 
 
-def save_final_config(args, attacks, stats, experiment):
+def save_final_config(args, stats, experiment):
     """Construct and save the run configuration."""
+    # Unwrap stats if only one attack was run
+    final_stats = stats if len(stats) > 1 else next(iter(stats.values()))
+
     config = {
         "method": args.method,
         "mode": args.mode if args.method == "knot" else None,
@@ -208,15 +203,13 @@ def save_final_config(args, attacks, stats, experiment):
         "requests": args.requests,
         "limit": args.limit,
         "attack": args.attack,
-        "attacks_run": attacks,
         "llm_config": {
             "provider": args.provider,
             "model": args.model,
             "temperature": args.temperature,
             "max_tokens": args.max_tokens,
         },
-        # Unwrap stats if only one attack was run
-        "stats": stats if len(attacks) > 1 else stats.get("clean", stats),
+        "stats": final_stats,
     }
 
     config_path = experiment.save_config(config)
