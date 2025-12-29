@@ -4,8 +4,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Callable
 
-from data.loader import format_query, normalize_pred
-from attack import ATTACK_CONFIGS, run_attack, apply_attack
+from data.loader import format_query, normalize_pred, load_attacked_data, get_available_attacks
 
 
 def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: str = "string") -> dict:
@@ -152,17 +151,20 @@ def print_results(stats: dict, req_ids: list[str] = None):
 # --- Orchestration Helpers ---
 
 def get_attacks_list(args):
-    """Determine which attacks to run."""
+    """Determine which attacks to run from pre-generated datasets."""
+    available = get_available_attacks()
     if args.attack == "all":
-        return ["clean"] + list(ATTACK_CONFIGS.keys())
+        return available
     elif args.attack == "none":
         return ["clean"]
     else:
+        if args.attack not in available:
+            raise ValueError(f"Attack '{args.attack}' not found. Available: {available}")
         return [args.attack]
 
 
-def run_evaluation_loop(args, items, requests, method, attacks, experiment):
-    """Core loop to run attacks (sequentially or in parallel) and save results."""
+def run_evaluation_loop(args, items_clean, requests, method, attacks, experiment):
+    """Core loop - load pre-generated attacked data and evaluate."""
     # Determine eval_mode for variable substitution
     approach = getattr(args, 'knot_approach', 'base')
     if args.method == "knot" and approach in ("v4", "v5"):
@@ -170,52 +172,27 @@ def run_evaluation_loop(args, items, requests, method, attacks, experiment):
     else:
         eval_mode = args.mode if args.method == "knot" else "string"
 
-    run_dir = experiment.run_dir
     all_stats = {}
 
-    if args.parallel and len(attacks) > 1:
-        # PARALLEL: Run all attacks concurrently
-        print(f"\n{'='*50}\nRunning {len(attacks)} attacks in PARALLEL\n{'='*50}")
+    for attack_name in attacks:
+        print(f"\n{'='*50}\nRunning: {attack_name}\n{'='*50}")
 
-        with ThreadPoolExecutor(max_workers=len(attacks)) as executor:
-            futures = {
-                executor.submit(run_attack, name, items, method, requests,
-                                eval_mode, run_dir, evaluate_parallel): name
-                for name in attacks
-            }
+        # Load pre-generated attacked data (or clean data)
+        items = load_attacked_data(attack_name, args.data, args.limit)
 
-            for future in as_completed(futures):
-                attack_name, eval_out = future.result()
-                all_stats[attack_name] = eval_out["stats"]
-                print_results(eval_out["stats"], eval_out.get("req_ids"))
+        # Evaluate
+        if args.parallel:
+            eval_out = evaluate_parallel(items, method, requests, mode=eval_mode)
+        else:
+            eval_out = evaluate(items, method, requests, mode=eval_mode)
 
-                # Save results via ExperimentManager
-                experiment.save_results(eval_out["results"], f"results_{attack_name}.jsonl")
+        # Print and save
+        print_results(eval_out["stats"], eval_out.get("req_ids"))
+        all_stats[attack_name] = eval_out["stats"]
 
-    else:
-        # SEQUENTIAL: Run attacks one by one
-        for attack_name in attacks:
-            print(f"\n{'='*50}\nRunning: {attack_name}\n{'='*50}")
-
-            if attack_name == "clean":
-                curr_items = items
-            else:
-                atype, akwargs = ATTACK_CONFIGS[attack_name]
-                curr_items = apply_attack(items, atype, **akwargs)
-
-            # Evaluate
-            if args.parallel:
-                eval_out = evaluate_parallel(curr_items, method, requests, mode=eval_mode)
-            else:
-                eval_out = evaluate(curr_items, method, requests, mode=eval_mode)
-
-            # Print and save
-            print_results(eval_out["stats"], eval_out.get("req_ids"))
-            all_stats[attack_name] = eval_out["stats"]
-
-            filename = "results.jsonl" if len(attacks) == 1 else f"results_{attack_name}.jsonl"
-            result_path = experiment.save_results(eval_out["results"], filename)
-            print(f"Results saved to {result_path}")
+        filename = "results.jsonl" if len(attacks) == 1 else f"results_{attack_name}.jsonl"
+        result_path = experiment.save_results(eval_out["results"], filename)
+        print(f"Results saved to {result_path}")
 
     return all_stats
 

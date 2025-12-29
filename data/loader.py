@@ -2,7 +2,10 @@
 """Data loading and formatting utilities."""
 
 import json
+from pathlib import Path
 from typing import Any
+
+ATTACKED_DIR = Path("data/attacked")
 
 DEFAULT_REQUESTS = [
     {"id": "R0", "context": "I'm in a hurry and need quick service. Is the wait time reasonable?"},
@@ -117,3 +120,35 @@ def prepare_data(data_path: str, requests_path: str, limit: int = None) -> tuple
     items = load_data(data_path, limit)
     requests = load_requests(requests_path)
     return items, requests
+
+
+def load_attacked_data(attack_name: str, base_data_path: str = None, limit: int = None) -> list[dict]:
+    """Load pre-generated attacked data.
+
+    Args:
+        attack_name: Name of attack (e.g., "typo_10", "inject_override")
+                     Use "clean" to load original data
+        base_data_path: Path to clean data (used when attack_name="clean")
+        limit: Max items to load
+
+    Returns:
+        List of items (attacked or clean)
+    """
+    if attack_name == "clean":
+        return load_data(base_data_path, limit)
+
+    attack_path = ATTACKED_DIR / f"{attack_name}.jsonl"
+    if not attack_path.exists():
+        raise FileNotFoundError(f"Attacked data not found: {attack_path}")
+
+    return load_data(str(attack_path), limit)
+
+
+def get_available_attacks() -> list[str]:
+    """List available pre-generated attack datasets."""
+    if not ATTACKED_DIR.exists():
+        return ["clean"]
+    attacks = ["clean"]
+    for f in ATTACKED_DIR.glob("*.jsonl"):
+        attacks.append(f.stem)
+    return attacks
