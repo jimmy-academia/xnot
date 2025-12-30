@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Human-in-the-Loop Yelp data curation tool for benchmark dataset creation."""
 
+import asyncio
 import json
 import random
 import re
@@ -20,7 +21,7 @@ from rich.prompt import Prompt
 from rich.table import Table
 from rich.text import Text
 
-from utils.llm import call_llm
+from utils.llm import call_llm, call_llm_async
 
 
 # File paths
@@ -310,13 +311,128 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         except Exception as e:
             return f"[Error: {e}]"
 
+    def parse_percentage(self, response: str) -> int:
+        """Extract percentage number from LLM response like '85% - explanation'."""
+        match = re.search(r'(\d+)%', response)
+        return int(match.group(1)) if match else 0
+
+    async def estimate_category_fit_async(self, biz: dict) -> Tuple[dict, int, str]:
+        """Async version for batch processing. Returns (biz, percentage, explanation)."""
+        reviews = self.reviews_by_biz.get(biz["business_id"], [])
+        total_reviews = len(reviews)
+
+        # Use pre-generated category keywords
+        keywords = self.category_keywords
+
+        # Get evidence snippets using keywords
+        evidence_snippets, evidence_count, _ = self.get_keyword_evidence(biz, keywords, max_snippets=5)
+        evidence_texts = "\n---\n".join(evidence_snippets) if evidence_snippets else "(None found)"
+
+        # First 5 reviews + random 5 other reviews
+        first_5 = reviews[:5]
+        remaining = reviews[5:]
+        random_5 = random.sample(remaining, min(5, len(remaining))) if remaining else []
+        sample_reviews = first_5 + random_5
+        review_texts = "\n---\n".join([r.get("text", "")[:500] for r in sample_reviews])
+
+        cats = ", ".join(self.selected_categories)
+        prompt = f"""Based on these reviews and evidence, estimate the probability (0-100%) that this restaurant truly belongs to the category "{cats}".
+
+Restaurant: {biz.get('name')}
+Listed categories: {biz.get('categories', 'Unknown')}
+
+Keywords used for evidence: {', '.join(keywords[:10])}...
+Keyword matches: {evidence_count} / {total_reviews} reviews contain category-related keywords
+
+=== Evidence snippets (reviews mentioning keywords) ===
+{evidence_texts}
+
+=== Sample reviews (first 5 + random 5) ===
+{review_texts}
+
+Consider both the keyword match ratio and the content of reviews.
+Reply with just the percentage and one sentence explanation. Example: "85% - Reviews consistently mention authentic Italian dishes and pasta."
+"""
+
+        try:
+            response = await call_llm_async(prompt, system="You are a data quality evaluator.")
+            response = response.strip()
+            pct = self.parse_percentage(response)
+            return (biz, pct, response)
+        except Exception as e:
+            return (biz, 0, f"[Error: {e}]")
+
+    async def run_auto_mode(self) -> None:
+        """Auto mode: batch estimate all restaurants, keep those >= 70%."""
+        scored = self.compute_richness_scores()
+        target = 100
+        threshold = 70
+        batch_size = 20
+
+        self.console.print(f"\n[bold]Auto mode: Estimating {len(scored)} restaurants...[/bold]")
+
+        above_threshold = []
+        below_threshold = []
+
+        # Process in batches with early stopping
+        for batch_start in range(0, len(scored), batch_size):
+            batch = scored[batch_start:batch_start + batch_size]
+            self.console.print(f"[dim]Processing batch {batch_start//batch_size + 1} ({batch_start+1}-{batch_start+len(batch)})...[/dim]")
+
+            tasks = [self.estimate_category_fit_async(biz) for biz, _ in batch]
+            results = await asyncio.gather(*tasks)
+
+            for biz, pct, exp in results:
+                if pct >= threshold:
+                    above_threshold.append((biz, pct, exp))
+                else:
+                    below_threshold.append((biz, pct, exp))
+
+            # Early stop if we have enough
+            if len(above_threshold) >= target:
+                self.console.print(f"[green]Reached {target} restaurants above {threshold}%. Stopping early.[/green]")
+                break
+
+        below_threshold.sort(key=lambda x: -x[1])  # Sort by pct descending
+
+        self.console.print(f"[green]Above {threshold}%: {len(above_threshold)}[/green]")
+        self.console.print(f"[yellow]Below {threshold}%: {len(below_threshold)}[/yellow]")
+
+        # Auto-save above threshold
+        for biz, pct, exp in above_threshold[:target]:
+            richness = sum(len(r.get("text", "")) for r in self.reviews_by_biz.get(biz["business_id"], []))
+            self.process_and_save(biz, richness)
+
+        kept = len(above_threshold[:target])
+
+        # Fill from below if needed
+        if kept < target and below_threshold:
+            needed = target - kept
+            self.console.print(f"\n[yellow]Filling {needed} more from top of below-threshold list...[/yellow]")
+            for biz, pct, exp in below_threshold[:needed]:
+                richness = sum(len(r.get("text", "")) for r in self.reviews_by_biz.get(biz["business_id"], []))
+                self.process_and_save(biz, richness)
+
+        self.console.print(f"\n[bold green]Auto mode complete. Saved {len(self.selections)} restaurants.[/bold green]")
+
+        # Print final summary list
+        self.console.print("\n[bold]═══ Saved Restaurants ═══[/bold]")
+        all_saved = above_threshold[:target]
+        if kept < target:
+            all_saved.extend(below_threshold[:target - kept])
+        for i, (biz, pct, exp) in enumerate(all_saved, 1):
+            self.console.print(f"{i:3}. {biz['name'][:40]:<40} ({pct}%) {exp}")
+
     def get_category_evidence(self, biz: dict, page: int = 0, per_page: int = 3) -> Tuple[List[Tuple[str, str]], int, bool]:
         """Find review snippets containing category keywords with pagination.
 
         Returns: ([(snippet, matched_keyword), ...], total_matches, has_more)
         """
-        # Use category names as keywords
-        keywords = [cat.lower() for cat in self.selected_categories]
+        # Use expanded keywords if available, otherwise fall back to category names
+        if self.category_keywords:
+            keywords = self.category_keywords
+        else:
+            keywords = [cat.lower() for cat in self.selected_categories]
 
         reviews = self.reviews_by_biz.get(biz["business_id"], [])
         matches = []
@@ -949,8 +1065,12 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         business_ids = {b["business_id"] for b in filtered}
         self.load_reviews_for_businesses(business_ids)
 
-        # Run main restaurant selection loop
-        self.run_restaurant_loop()
+        # Ask for mode choice
+        mode = Prompt.ask("[M]anual / [A]uto", default="m").lower()
+        if mode == "a":
+            asyncio.run(self.run_auto_mode())
+        else:
+            self.run_restaurant_loop()
 
         # Update metalog and show summary
         if self.selections:
