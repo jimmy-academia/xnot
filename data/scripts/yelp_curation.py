@@ -12,7 +12,6 @@ from typing import Dict, List, Optional, Tuple
 # Add project root to path for utils import
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
@@ -328,10 +327,9 @@ class YelpCurator:
                 continue
 
             self.preview_city(selected)
-            confirm = Prompt.ask("[C]onfirm / [A]djust / [Q]uit",
-                                 choices=["c", "a", "q", "C", "A", "Q"], default="c").lower()
-            if confirm == "q":
-                return False
+            confirm = Prompt.ask("[C]onfirm / [B]ack", default="c").lower()
+            if confirm == "b":
+                continue  # Back to city selection
             if confirm == "c":
                 self.selected_city = selected
                 return True
@@ -409,13 +407,10 @@ class YelpCurator:
 
             self.preview_categories(selected_cats, cat_counts)
 
-            action = Prompt.ask("[C]onfirm / [A]djust / [B]ack / [Q]uit",
-                                choices=["c", "a", "b", "q", "C", "A", "B", "Q"], default="c").lower()
-            if action == "q":
-                return False
-            elif action == "b":
+            action = Prompt.ask("[C]onfirm / [B]ack", default="c").lower()
+            if action == "b":
                 self.selected_city = None
-                return None
+                return None  # Back to city selection
             elif action == "c":
                 self.selected_categories = selected_cats
                 return True
@@ -441,8 +436,8 @@ class YelpCurator:
         title = f"[bold]{biz['name']}[/bold] ({biz.get('stars', '?')}★, {biz.get('review_count', 0)} reviews)"
         self.console.print(Panel(content, title=title))
 
-        # Category Evidence panel (first page only)
-        snippets, total, has_more = self.get_category_evidence(biz)
+        # Category Evidence panel (first page only, 5 items)
+        snippets, total, has_more = self.get_category_evidence(biz, page=0, per_page=5)
         if snippets:
             ev_content = Text()
             for i, snippet in enumerate(snippets, 1):
@@ -462,19 +457,34 @@ class YelpCurator:
             self.console.print("[dim]No attributes available[/dim]")
             return
 
-        # Format each attr as "key: value"
+        # Calculate columns based on terminal width
+        term_width = shutil.get_terminal_size().columns
         items = [f"{k}: {v}" for k, v in sorted(attrs.items())]
 
-        # Use Rich Columns for auto-wrapping based on terminal width
-        self.console.print(Panel(
-            Columns(items, equal=True, expand=True),
-            title=f"[bold]All Attributes ({len(attrs)})[/bold]"
-        ))
+        # Estimate column width from longest item
+        max_item_len = max(len(str(item)) for item in items) if items else 20
+        col_width = min(max_item_len + 4, 50)  # Cap at 50 chars
+        num_cols = max(1, (term_width - 4) // col_width)  # -4 for panel borders
+
+        # Build table with dynamic columns
+        table = Table(show_header=False, box=None, padding=(0, 2))
+        for _ in range(num_cols):
+            table.add_column(width=col_width)
+
+        # Fill rows
+        for i in range(0, len(items), num_cols):
+            row = items[i:i + num_cols]
+            # Pad row if needed
+            while len(row) < num_cols:
+                row.append("")
+            table.add_row(*row)
+
+        self.console.print(Panel(table, title=f"[bold]All Attributes ({len(attrs)})[/bold]"))
 
     def browse_evidence_loop(self, biz: dict) -> None:
         """Paginated evidence browser."""
         page = 0
-        per_page = 3
+        per_page = 5
 
         while True:
             snippets, total, has_more = self.get_category_evidence(biz, page, per_page)
@@ -498,16 +508,13 @@ class YelpCurator:
 
             # Build dynamic options
             opts = []
-            choices = ["b", "B"]
             if has_more:
                 opts.append("[N]ext")
-                choices.extend(["n", "N"])
             if page > 0:
                 opts.append("[P]rev")
-                choices.extend(["p", "P"])
             opts.append("[B]ack")
 
-            action = Prompt.ask(" / ".join(opts), choices=choices, default="b").lower()
+            action = Prompt.ask(" / ".join(opts), default="b").lower()
             if action == "b":
                 return
             elif action == "n" and has_more:
@@ -535,7 +542,6 @@ class YelpCurator:
 
             action = Prompt.ask(
                 "[K]eep / [S]kip / [A]ttributes / [E]vidence / [Q]uit",
-                choices=["k", "s", "a", "e", "q", "K", "S", "A", "E", "Q"],
                 default="k"
             ).lower()
 
