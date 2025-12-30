@@ -9,10 +9,63 @@ from typing import Any, Union
 DATA_DIR = Path(__file__).parent
 ATTACKED_DIR = DATA_DIR / "attacked"
 SELECTIONS_PATH = DATA_DIR / "selections.jsonl"
-RAW_DIR = DATA_DIR / "raw"
-PROCESSED_DIR = DATA_DIR / "processed"
-REQUESTS_DIR = DATA_DIR / "requests"
-YELP_DIR = PROCESSED_DIR / "yelp"
+YELP_DIR = DATA_DIR / "yelp"
+
+
+class Dataset:
+    """Wrapper for loaded dataset with schema/stats."""
+
+    def __init__(self, name: str, items: list, requests: list):
+        self.name = name
+        self.items = items
+        self.requests = requests
+
+    def _get_schema(self) -> str:
+        """Extract nested schema from first item."""
+        if not self.items:
+            return "  (no items)"
+
+        item = self.items[0]
+        lines = ["  Item Schema:"]
+
+        # Top-level keys (excluding item_data)
+        top_keys = [k for k in item.keys() if k != "item_data"]
+        lines.append(f"    {', '.join(top_keys)}")
+
+        # item_data structure
+        if "item_data" in item and item["item_data"]:
+            review = item["item_data"][0]
+            review_keys = [k for k in review.keys() if k != "user"]
+            lines.append(f"    item_data[]:")
+            lines.append(f"      {', '.join(review_keys)}")
+
+            # user structure
+            if "user" in review and review["user"]:
+                user_keys = list(review["user"].keys())
+                lines.append(f"      user: {', '.join(user_keys)}")
+
+        return "\n".join(lines)
+
+    def __repr__(self):
+        total_reviews = sum(len(item.get("item_data", [])) for item in self.items)
+        categories = set()
+        for item in self.items:
+            categories.update(item.get("categories", []))
+
+        return (
+            f"Dataset({self.name})\n"
+            f"  Items: {len(self.items)}\n"
+            f"  Requests: {len(self.requests)}\n"
+            f"  Reviews: {total_reviews}\n"
+            f"  Categories: {len(categories)}\n\n"
+            f"{self._get_schema()}"
+        )
+
+    def __len__(self):
+        return len(self.items)
+
+    def __iter__(self):
+        return iter(self.items)
 
 
 def resolve_dataset(name_or_path: str) -> tuple[Path, Path]:
@@ -252,20 +305,28 @@ def normalize_pred(raw: Any) -> int:
                 return int(tok)
     raise ValueError(f"Cannot normalize: {repr(raw)}")
 
+def load_dataset(data: str, selection_name: str = None, limit: int = None, attack: str = "none") -> Dataset:
+    """Unified dataset loading - handles both selection-based and legacy datasets.
 
-def prepare_data(data_path: str, requests_path: str, limit: int = None) -> tuple[list, list]:
-    """Load and prepare items and requests.
+    Args:
+        data: Dataset name (e.g., 'yelp') or explicit path to JSONL file
+        selection_name: Selection name (e.g., 'selection_1') or None for legacy
+        limit: Max items to load
+        attack: Attack type for legacy datasets
 
-    Returns: (items, requests)
+    Returns: Dataset object
     """
-    items = load_data(data_path, limit)
-    requests = load_requests(requests_path)
-    return items, requests
+    if data == 'yelp':
+        items, requests = load_yelp_dataset(selection_name, limit)
+        return Dataset(f"yelp/{selection_name}", items, requests)
+
+    # Legacy dataset loading (fallback)
+    raise ValueError(f"Unknown dataset: {data}")
 
 
 # --- Yelp Dataset Loading ---
 
-def load_yelp_dataset(selection_name: str, limit: int = None) -> list[dict]:
+def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict], list[dict]]:
     """Load Yelp dataset from cached files (no raw file access).
 
     Reads:
@@ -273,12 +334,13 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> list[dict]:
     - rev_selection_n.jsonl (sampled review_ids per restaurant)
     - reviews_cache_n.jsonl (reviews + user metadata)
     - restaurants_cache_n.jsonl (restaurant metadata)
+    - requests_n.json (user requests for this selection)
 
     Args:
         selection_name: e.g., "selection_1"
         limit: Max restaurants to return (uses top by llm_percent)
 
-    Returns list of items with full data:
+    Returns: (items, requests) tuple where items is list of dicts with full data:
     {
         "item_id": "...",
         "item_name": "...",
@@ -304,15 +366,26 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> list[dict]:
     rev_selection_path = YELP_DIR / f"rev_{selection_name}.jsonl"
     reviews_cache_path = YELP_DIR / f"reviews_cache_{n}.jsonl"
     restaurants_cache_path = YELP_DIR / f"restaurants_cache_{n}.jsonl"
+    requests_path = YELP_DIR / f"requests_{n}.json"
 
-    # Check files exist
-    missing = [p for p in [selection_path, rev_selection_path, reviews_cache_path, restaurants_cache_path] if not p.exists()]
-    if missing:
-        msg = f"Missing files for '{selection_name}':\n"
-        msg += "\n".join(f"  - {p}" for p in missing)
+    # Check files exist with smart error messages
+    selection_exists = selection_path.exists()
+    cache_files = [rev_selection_path, reviews_cache_path, restaurants_cache_path]
+    cache_missing = [p for p in cache_files if not p.exists()]
+
+    if not selection_exists:
+        # Selection file missing - need to run both scripts
+        msg = f"Selection file not found: {selection_path}\n\n"
+        msg += f"To create, run:\n"
+        msg += f"  1. python data/scripts/yelp_curation.py\n"
+        msg += f"  2. python data/scripts/yelp_review_sampler.py {selection_name}"
+        raise FileNotFoundError(msg)
+    elif cache_missing:
+        # Selection exists but cache files missing - need to run sampler
+        msg = f"Cache files missing for '{selection_name}':\n"
+        msg += "\n".join(f"  - {p.name}" for p in cache_missing)
         msg += f"\n\nTo create, run:\n"
-        msg += f"  1. python data/scripts/yelp_curation.py  (creates {selection_name}.jsonl)\n"
-        msg += f"  2. python data/scripts/yelp_review_sampler.py {selection_name}  (creates cache files)"
+        msg += f"  python data/scripts/yelp_review_sampler.py {selection_name}"
         raise FileNotFoundError(msg)
 
     # Load selection (for llm_percent ordering)
@@ -399,6 +472,12 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> list[dict]:
             "item_data": item_data
         })
 
-    return items
+    # Load requests (use defaults if file doesn't exist)
+    if requests_path.exists():
+        requests = load_requests(str(requests_path))
+    else:
+        requests = DEFAULT_REQUESTS
+
+    return items, requests
 
 

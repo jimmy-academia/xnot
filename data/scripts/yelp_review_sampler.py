@@ -23,8 +23,8 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 
 # Paths
-RAW_DIR = Path(__file__).parent.parent / "raw" / "yelp"
-PROCESSED_DIR = Path(__file__).parent.parent / "processed" / "yelp"
+YELP_DIR = Path(__file__).parent.parent / "yelp"
+RAW_DIR = YELP_DIR / "raw"
 BUSINESS_FILE = RAW_DIR / "yelp_academic_dataset_business.json"
 REVIEW_FILE = RAW_DIR / "yelp_academic_dataset_review.json"
 USER_FILE = RAW_DIR / "yelp_academic_dataset_user.json"
@@ -34,7 +34,7 @@ console = Console()
 
 def load_selection(selection_name: str) -> list[dict]:
     """Load selection file and return list of {item_id, llm_percent, llm_reasoning}."""
-    selection_path = PROCESSED_DIR / f"{selection_name}.jsonl"
+    selection_path = YELP_DIR / f"{selection_name}.jsonl"
     if not selection_path.exists():
         console.print(f"[red]Selection file not found: {selection_path}[/red]")
         sys.exit(1)
@@ -142,6 +142,27 @@ def extract_users(user_ids: set) -> dict[str, dict]:
     return users
 
 
+def check_cache_valid(selection_name: str, selection_ids: set) -> bool:
+    """Check if cache files exist and match selection."""
+    n = selection_name.replace("selection_", "")
+    rev_path = YELP_DIR / f"rev_{selection_name}.jsonl"
+    reviews_path = YELP_DIR / f"reviews_cache_{n}.jsonl"
+    restaurants_path = YELP_DIR / f"restaurants_cache_{n}.jsonl"
+
+    # All files must exist
+    if not all(p.exists() for p in [rev_path, reviews_path, restaurants_path]):
+        return False
+
+    # Load item_ids from rev_selection
+    cached_ids = set()
+    with open(rev_path) as f:
+        for line in f:
+            if line.strip():
+                cached_ids.add(json.loads(line)["item_id"])
+
+    return cached_ids == selection_ids
+
+
 def sample_reviews(reviews: list[dict], per_bucket: int = 4) -> list[str]:
     """Sample top N longest reviews from each star bucket (1-5).
 
@@ -186,6 +207,15 @@ def main():
     selection = load_selection(selection_name)
     business_ids = {item["item_id"] for item in selection}
     console.print(f"Found {len(business_ids)} restaurants in selection")
+
+    # Check if cache is valid
+    if check_cache_valid(selection_name, business_ids):
+        console.print("[yellow]Cache files already exist and match selection.[/yellow]")
+        response = console.input("[bold]Regenerate? (y/N): [/bold]")
+        if response.lower() != "y":
+            console.print("[green]Skipping regeneration.[/green]")
+            return
+        console.print("[cyan]Regenerating...[/cyan]")
 
     # Step 2: Extract restaurant metadata
     console.print(f"\n[bold]Step 2: Extracting restaurant metadata...[/bold]")
@@ -248,21 +278,21 @@ def main():
     console.print(f"\n[bold]Step 6: Writing output files...[/bold]")
 
     # rev_selection_n.jsonl
-    rev_selection_path = PROCESSED_DIR / f"rev_{selection_name}.jsonl"
+    rev_selection_path = YELP_DIR / f"rev_{selection_name}.jsonl"
     with open(rev_selection_path, "w") as f:
         for item in rev_selection:
             f.write(json.dumps(item) + "\n")
     console.print(f"[green]Wrote {rev_selection_path}[/green]")
 
     # reviews_cache_n.jsonl
-    reviews_cache_path = PROCESSED_DIR / f"reviews_cache_{selection_name.replace('selection_', '')}.jsonl"
+    reviews_cache_path = YELP_DIR / f"reviews_cache_{selection_name.replace('selection_', '')}.jsonl"
     with open(reviews_cache_path, "w") as f:
         for r in reviews_cache:
             f.write(json.dumps(r) + "\n")
     console.print(f"[green]Wrote {reviews_cache_path} ({len(reviews_cache)} reviews)[/green]")
 
     # restaurants_cache_n.jsonl
-    restaurants_cache_path = PROCESSED_DIR / f"restaurants_cache_{selection_name.replace('selection_', '')}.jsonl"
+    restaurants_cache_path = YELP_DIR / f"restaurants_cache_{selection_name.replace('selection_', '')}.jsonl"
     with open(restaurants_cache_path, "w") as f:
         for biz_id in business_ids:
             if biz_id in restaurants:

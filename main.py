@@ -10,8 +10,7 @@ from utils.logger import setup_logger_level, logger
 from utils.llm import config_llm
 from utils.experiment import create_experiment
 
-from data.loader import load_data, load_requests, resolve_dataset, check_dataset_exists
-from data.schema import print_schema
+from data.loader import load_dataset
 from methods import get_method
 
 from run import run_evaluation_loop, save_final_config
@@ -29,27 +28,16 @@ def main():
     logger.info(f"Mode: {modestr}")
     logger.info(f"Run directory: {run_dir}")
 
-    # Resolve dataset name to paths and check existence
-    data_path, requests_path = resolve_dataset(args.data)
-    check_dataset_exists(data_path, requests_path, args.data)
-
-    # Load data and requests
-    data = load_data(str(data_path), args.limit, args.attack)
-    print_schema()
+    # Load data
+    dataset = load_dataset(args.data, args.selection_name, args.limit, args.attack)
+    logger.info(f"\n{dataset}")
     input()
-    requests = load_requests(str(requests_path))
-
-    if isinstance(data, dict):
-        logger.info(f"Loaded {len(data)} attack variants")
-    else:
-        logger.info(f"Loaded {len(data)} items from {data_path}")
-    logger.info(f"Loaded {len(requests)} requests")
-
+    
     # Select method
     method = get_method(args, run_dir)
 
     # Run evaluation (handles both parallel and sequential)
-    stats = run_evaluation_loop(args, data, requests, method, experiment)
+    stats = run_evaluation_loop(args, dataset.items, dataset.requests, method, experiment)
 
     # Finalize
     save_final_config(args, stats, experiment)

@@ -25,11 +25,12 @@ from utils.llm import call_llm, call_llm_async
 
 
 # File paths
-RAW_DIR = Path(__file__).parent.parent / "raw" / "yelp"
+YELP_DIR = Path(__file__).parent.parent / "yelp"
+RAW_DIR = YELP_DIR / "raw"
 BUSINESS_FILE = RAW_DIR / "yelp_academic_dataset_business.json"
 REVIEW_FILE = RAW_DIR / "yelp_academic_dataset_review.json"
-OUTPUT_DIR = Path(__file__).parent.parent / "processed" / "yelp"
-METALOG_FILE = OUTPUT_DIR / "meta_log.json"
+OUTPUT_DIR = YELP_DIR
+METALOG_FILE = YELP_DIR / "meta_log.json"
 
 
 class YelpCurator:
