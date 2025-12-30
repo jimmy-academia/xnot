@@ -79,20 +79,12 @@ class YelpCurator:
         """Update metalog with current selection metadata."""
         metalog = self.load_metalog()
 
-        # Calculate stats
-        total_reviews = sum(
-            sum(len(s.get("reviews_by_star", {}).get(f"{star}_star", []))
-                for star in range(1, 6))
-            for s in self.selections
-        )
-
         metalog["selections"][self.selection_id] = {
             "file": self.output_file.name,
             "created": datetime.now().isoformat(),
             "city": self.selected_city,
             "categories": self.selected_categories,
             "restaurant_count": len(self.selections),
-            "total_reviews": total_reviews,
         }
 
         with open(METALOG_FILE, "w") as f:
@@ -363,16 +355,16 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
             return (biz, 0, f"[Error: {e}]")
 
     async def run_auto_mode(self) -> None:
-        """Auto mode: batch estimate all restaurants, keep those >= 70%."""
+        """Auto mode: batch estimate with early stopping, save ALL estimated."""
         scored = self.compute_richness_scores()
-        target = 100
+        target = 10
         threshold = 70
         batch_size = 20
 
         self.console.print(f"\n[bold]Auto mode: Estimating {len(scored)} restaurants...[/bold]")
 
-        above_threshold = []
-        below_threshold = []
+        all_results = []
+        above_threshold_count = 0
 
         # Process in batches with early stopping
         for batch_start in range(0, len(scored), batch_size):
@@ -381,46 +373,32 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
 
             tasks = [self.estimate_category_fit_async(biz) for biz, _ in batch]
             results = await asyncio.gather(*tasks)
+            all_results.extend(results)
 
-            for biz, pct, exp in results:
-                if pct >= threshold:
-                    above_threshold.append((biz, pct, exp))
-                else:
-                    below_threshold.append((biz, pct, exp))
+            # Count above threshold for early stopping
+            above_threshold_count = sum(1 for _, pct, _ in all_results if pct >= threshold)
 
-            # Early stop if we have enough
-            if len(above_threshold) >= target:
+            # Early stop if we have enough above threshold
+            if above_threshold_count >= target:
                 self.console.print(f"[green]Reached {target} restaurants above {threshold}%. Stopping early.[/green]")
                 break
 
-        below_threshold.sort(key=lambda x: -x[1])  # Sort by pct descending
+        # Sort ALL estimated by percentage descending
+        all_results.sort(key=lambda x: -x[1])
 
-        self.console.print(f"[green]Above {threshold}%: {len(above_threshold)}[/green]")
-        self.console.print(f"[yellow]Below {threshold}%: {len(below_threshold)}[/yellow]")
+        # Save ALL estimated results (not just above threshold)
+        for biz, pct, exp in all_results:
+            self.save_selection(biz, pct, exp)
 
-        # Auto-save above threshold
-        for biz, pct, exp in above_threshold[:target]:
-            richness = sum(len(r.get("text", "")) for r in self.reviews_by_biz.get(biz["business_id"], []))
-            self.process_and_save(biz, richness)
+        # Write JSONL file
+        self.write_selections_file()
 
-        kept = len(above_threshold[:target])
+        self.console.print(f"\n[bold green]Saved {len(all_results)} estimated restaurants.[/bold green]")
+        self.console.print(f"[dim]Above {threshold}%: {above_threshold_count} | Below: {len(all_results) - above_threshold_count}[/dim]")
 
-        # Fill from below if needed
-        if kept < target and below_threshold:
-            needed = target - kept
-            self.console.print(f"\n[yellow]Filling {needed} more from top of below-threshold list...[/yellow]")
-            for biz, pct, exp in below_threshold[:needed]:
-                richness = sum(len(r.get("text", "")) for r in self.reviews_by_biz.get(biz["business_id"], []))
-                self.process_and_save(biz, richness)
-
-        self.console.print(f"\n[bold green]Auto mode complete. Saved {len(self.selections)} restaurants.[/bold green]")
-
-        # Print final summary list
-        self.console.print("\n[bold]═══ Saved Restaurants ═══[/bold]")
-        all_saved = above_threshold[:target]
-        if kept < target:
-            all_saved.extend(below_threshold[:target - kept])
-        for i, (biz, pct, exp) in enumerate(all_saved, 1):
+        # Print summary (top 20)
+        self.console.print("\n[bold]═══ Top 20 Restaurants ═══[/bold]")
+        for i, (biz, pct, exp) in enumerate(all_results[:20], 1):
             self.console.print(f"{i:3}. {biz['name'][:40]:<40} ({pct}%) {exp}")
 
     def get_category_evidence(self, biz: dict, page: int = 0, per_page: int = 3) -> Tuple[List[Tuple[str, str]], int, bool]:
@@ -958,70 +936,32 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
                 # Stay on same restaurant
                 continue
             elif action == "y":
-                self.process_and_save(biz, richness)
+                # Get LLM estimate for saving
+                llm_response = self.estimate_category_fit(biz)
+                llm_percent = self.parse_percentage(llm_response)
+                self.save_selection(biz, llm_percent, llm_response)
                 kept_count += 1
                 self.console.print(f"[green]Saved! ({kept_count}/{target})[/green]")
                 idx += 1
 
+        # Write JSONL file at end
+        self.write_selections_file()
         self.console.print(f"\n[bold]Session complete. Kept {kept_count} restaurants.[/bold]")
 
-    def process_and_save(self, biz: dict, richness: int) -> None:
-        """Automatically process and save restaurant with bucketed reviews."""
-        reviews = self.reviews_by_biz.get(biz["business_id"], [])
-
-        # Bucket by stars (1-5)
-        buckets = {1: [], 2: [], 3: [], 4: [], 5: []}
-        for r in reviews:
-            star = int(r.get("stars", 3))
-            star = max(1, min(5, star))  # Clamp to 1-5
-            buckets[star].append(r)
-
-        # Sort each bucket by length (longest first)
-        for star in buckets:
-            buckets[star].sort(key=lambda r: -len(r.get("text", "")))
-
-        # Build structured output
-        reviews_by_star = {}
-        for star, bucket in buckets.items():
-            reviews_by_star[f"{star}_star"] = [
-                {
-                    "review_id": r.get("review_id"),
-                    "user_id": r.get("user_id"),
-                    "text": r.get("text"),
-                    "stars": r.get("stars"),
-                    "date": r.get("date"),
-                    "useful": r.get("useful", 0),
-                    "length": len(r.get("text", ""))
-                }
-                for r in bucket
-            ]
-
-        # Save
-        self.save_selection(biz, reviews_by_star, richness)
-
-    def save_selection(self, biz: dict, reviews_by_star: dict, richness: int) -> None:
-        """Save a curated selection to the output file (new format with star buckets)."""
-        cats = (biz.get("categories") or "").split(", ")
-        cats = [c.strip() for c in cats if c.strip()]
-
-        selection = {
+    def save_selection(self, biz: dict, llm_percent: int, llm_reasoning: str) -> None:
+        """Add selection to in-memory list (written at end)."""
+        self.selections.append({
             "item_id": biz["business_id"],
-            "item_name": biz["name"],
-            "city": biz.get("city"),
-            "categories": cats,
-            "stars": biz.get("stars"),
-            "review_count": biz.get("review_count"),
-            "richness_score": richness,
-            "reviews_by_star": reviews_by_star
-        }
+            "llm_percent": llm_percent,
+            "llm_reasoning": llm_reasoning
+        })
 
-        # Append to file
-        with open(self.output_file, "a") as f:
-            f.write(json.dumps(selection) + "\n")
-
-        self.selections.append(selection)
-        self.console.print(f"[green]Saved to {self.output_file.name}[/green]")
-        self.console.print(f"[dim]Total this session: {len(self.selections)}[/dim]")
+    def write_selections_file(self) -> None:
+        """Write all selections to file as JSONL (one dict per line)."""
+        with open(self.output_file, "w") as f:
+            for sel in self.selections:
+                f.write(json.dumps(sel) + "\n")
+        self.console.print(f"[green]Saved {len(self.selections)} selections to {self.output_file}[/green]")
 
     def run(self) -> None:
         """Main entry point for the curation tool."""
@@ -1066,7 +1006,10 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         self.load_reviews_for_businesses(business_ids)
 
         # Ask for mode choice
-        mode = Prompt.ask("[M]anual / [A]uto", default="m").lower()
+        self.console.print(f"\n[bold]Mode selection:[/bold]")
+        self.console.print(f"  [M]anual: Review each restaurant one by one")
+        self.console.print(f"  [A]uto: LLM batch estimates, auto-keep ≥70%, target 10 restaurants")
+        mode = Prompt.ask("\nChoose mode", default="m").lower()
         if mode == "a":
             asyncio.run(self.run_auto_mode())
         else:

@@ -2,14 +2,14 @@
   "selections": {
     "selection_1": {
       "file": "selection_1.jsonl",
-      "created": "2025-12-29T19:57:44.465402",
+      "created": "2025-12-29T20:51:47.594193",
       "city": "Philadelphia",
       "categories": [
         "Coffee & Tea",
         "Cafes"
       ],
-      "restaurant_count": 4,
-      "total_reviews": 7359
+      "restaurant_count": 10,
+      "total_reviews": 9665
     }
   }
 }
