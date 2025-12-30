@@ -25,7 +25,7 @@ from utils.llm import call_llm, call_llm_async
 
 
 # File paths
-YELP_DIR = Path(__file__).parent.parent / "yelp"
+YELP_DIR = Path("data/yelp")
 RAW_DIR = YELP_DIR / "raw"
 BUSINESS_FILE = RAW_DIR / "yelp_academic_dataset_business.json"
 REVIEW_FILE = RAW_DIR / "yelp_academic_dataset_review.json"

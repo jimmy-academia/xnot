@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any, Union
 
-DATA_DIR = Path(__file__).parent
+DATA_DIR = Path("data")
 ATTACKED_DIR = DATA_DIR / "attacked"
 SELECTIONS_PATH = DATA_DIR / "selections.jsonl"
 YELP_DIR = DATA_DIR / "yelp"
@@ -187,7 +187,7 @@ def load_requests(path: str = "requests.json") -> list[dict]:
                     req["context"] = req["text"]
             return requests
     except FileNotFoundError:
-        return DEFAULT_REQUESTS
+        raise FileNotFoundError(f"Requests file not found: {path}")
 
 
 def load_data(path: str, limit: int = None, attack: str = "none") -> Union[dict, list]:

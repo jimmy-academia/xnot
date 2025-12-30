@@ -24,7 +24,8 @@
       "Bash(python main.py:*)",
       "Bash(tree:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(source:*)"
     ]
   }
 }

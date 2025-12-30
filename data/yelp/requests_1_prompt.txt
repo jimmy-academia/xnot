@@ -1,0 +1,167 @@
+You are designing 20 user requests for a restaurant recommendation benchmark.
+
+**Task:** Analyze the sample data below and create diverse, realistic user requests that leverage the data's rich structure.
+
+## Dataset Context
+- Selection: selection_1
+- Items: 220 restaurants
+- Total Reviews: 4302
+- Cities: {'Philadelphia': 220}
+- Top Categories: {'Restaurants': 220, 'Food': 192, 'Coffee & Tea': 177, 'Breakfast & Brunch': 94, 'Cafes': 93, 'Sandwiches': 53, 'American (New)': 42, 'Bakeries': 41, 'Nightlife': 35, 'Bars': 30}
+
+## Sample Item (with metadata structure)
+```json
+{
+  "item_id": "C5MdSiVtZKirRghyh08C0g",
+  "item_name": "Bodhi Coffee",
+  "city": "Philadelphia",
+  "state": "PA",
+  "stars": 4.0,
+  "categories": [
+    "Sandwiches",
+    "Breakfast & Brunch",
+    "Food",
+    "Coffee & Tea",
+    "Restaurants"
+  ],
+  "attributes": {
+    "RestaurantsPriceRange2": "1",
+    "BusinessAcceptsCreditCards": "True",
+    "WiFi": "u'free'",
+    "RestaurantsReservations": "False",
+    "BusinessParking": "{'garage': False, 'street': True, 'validated': False, 'lot': False, 'valet': False}"
+  },
+  "item_data": [
+    {
+      "review_id": "i6dy3ZZajhdjczEQuvP_Yw",
+      "review": "Stopped in for the first time today. The place is nicely decorated with a hipster clubby feel and some interesting art. New York Times and WSJ for reading materials on the bar. \nSeveral customers, one...",
+      "stars": 1.0,
+      "date": "2013-04-29 16:37:20",
+      "useful": 0,
+      "user": {
+        "name": "S",
+        "elite": [],
+        "friends": "[1 friends]",
+        "review_count": 6
+      }
+    },
+    {
+      "review_id": "He9Wnqx2yf8D9ZpTnI8M2Q",
+      "review": "All these changes over the years, yet they still barely recognize coffee lovers who don't want or can't have caffeine. And yeah, there are a lot of us.  A cup of decaf drip? Not here. Decaf cold brew?...",
+      "stars": 1.0,
+      "date": "2019-11-02 21:40:05",
+      "useful": 0,
+      "user": {
+        "name": "L",
+        "elite": [],
+        "friends": "[1 friends]",
+        "review_count": 11
+      }
+    },
+    {
+      "review_id": "5sxTR89kpcWdKncL74UdNQ",
+      "review": "Ewww-- right after tamping down the coffee, the barista blew off the extra dust/grinds on the tamper before pushing it into the espresso maker.  That's right-- with his mouth, blew on my coffee.  Gros...",
+      "stars": 1.0,
+      "date": "2016-08-25 21:05:04",
+      "useful": 0,
+      "user": {
+        "name": "L",
+        "elite": [],
+        "friends": "[1 friends]",
+        "review_count": 14
+      }
+    }
+  ]
+}
+```
+
+## Sample Reviews (with reviewer metadata)
+
+- [1-star, 56 friends, 25 reviews] 
+  "I have no idea why I decided to go to this establishment today, but it was a mistake. When I walked in, there was no one behind the bagel counter, so ..."
+
+- [1-star, 1 friends, 3 reviews] 
+  "I was having an extremely pleasant bunch at here today with my friend, and we were sitting and chatting after we finished our food for no longer than ..."
+
+- [2-star, 10 friends, 12 reviews] 
+  "We have gone to this place several times due to its close proximity to a friends house, and have experienced consistent long wait times.  We waited 45..."
+
+- [2-star, 100 friends, 324 reviews] [ELITE]
+  "2.5 stars.
+
+I stopped in to get recaffeinated after a nice lunch at Mixto. The coffee place has a good feel/look to it. Its warm and not IKEA/sterile...."
+
+- [3-star, 5 friends, 28 reviews] 
+  "I don't consider myself that old, however, I suppose this review will end up being a testament to my increasing age. At the risk of sounding like Mr. ..."
+
+- [3-star, 221 friends, 2 reviews] 
+  "Let me start by saying how much I love La Colombe coffee. It's definitely my favorite coffee in the area & I would go out of my way to get first thing..."
+
+
+## Aspect Coverage in Reviews
+- food: 78.9% of reviews mention this
+- service: 61.8% of reviews mention this
+- speed: 55.3% of reviews mention this
+- portions: 40.3% of reviews mention this
+- value: 40.1% of reviews mention this
+- ambiance: 22.6% of reviews mention this
+- outdoor: 15.3% of reviews mention this
+- parking: 7.9% of reviews mention this
+
+
+## Available Data Dimensions
+
+**1. Review Text** - Extract sentiment about:
+   - food quality, service, speed, value, ambiance, portions, etc.
+
+**2. Item Metadata**:
+   - categories (cuisine type)
+   - stars (overall rating)
+   - attributes (parking, outdoor, wifi, etc.)
+   - city, hours
+
+**3. Reviewer Metadata**:
+   - elite status (expert opinion weight)
+   - friends list (trust network)
+   - review_count (experience level)
+   - average_stars (reviewer tendency)
+
+**4. Review Metadata**:
+   - stars (per-review rating)
+   - date (recency)
+   - useful/funny/cool votes (community validation)
+
+## Request Schema
+```json
+{
+  "id": "R0",
+  "text": "Natural language user request...",
+  "structure": {
+    "op": "AND|OR",
+    "conditions": [
+      {"aspect": "aspect_name", "level": "MUST|SHOULD|NICE", "source": "review_text|item_meta|reviewer_meta|review_meta"}
+    ]
+  }
+}
+```
+
+**Levels:**
+- MUST: Non-negotiable (fail = reject restaurant)
+- SHOULD: Important preference (affects score)
+- NICE: Bonus (never penalizes)
+
+## Requirements
+1. Generate exactly 20 requests (R0-R19)
+2. **Mix aspect sources** - don't only use review text:
+   - Include 3+ requests using reviewer trust (e.g., "weight elite reviewers higher")
+   - Include 3+ requests using item metadata (e.g., "must have parking", "Italian cuisine")
+   - Include 2+ requests using review metadata (e.g., "recent reviews only")
+3. **Vary complexity**:
+   - 4 simple (1 condition)
+   - 6 medium (2-3 conditions with AND)
+   - 6 complex (3+ conditions with AND/OR)
+   - 4 nested (AND containing OR or vice versa)
+4. Natural, realistic user language in "text" field
+5. Cover the aspects that appear frequently in the data
+
+Output as a JSON array.

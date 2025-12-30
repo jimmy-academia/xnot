@@ -10,35 +10,37 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, Union
 
+from rich.console import Console
+from rich.theme import Theme
 
-class Colors:
-    """Terminal color codes"""
-    GRAY = '\033[90m'
-    RED = '\033[31m'
-    GREEN = '\033[32m'
-    YELLOW = '\033[33m'
-    BLUE = '\033[34m'
-    MAGENTA = '\033[35m'
-    CYAN = '\033[36m'
-    WHITE = '\033[37m'
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
-    BG_YELLOW = '\033[43m'
+
+# Custom theme for log levels
+LOG_THEME = Theme({
+    "debug": "dim",
+    "llm_input": "blue",
+    "llm_output": "cyan",
+    "info": "green",
+    "warning": "yellow",
+    "error": "red",
+    "critical": "bold red on yellow",
+})
+
+console = Console(theme=LOG_THEME)
 
 
 class LogLevel(Enum):
-    """Log levels with corresponding colors"""
-    DEBUG = (10, Colors.GRAY)
-    LLM_INPUT = (15, Colors.BLUE)
-    LLM_OUTPUT = (16, Colors.CYAN)
-    INFO = (20, Colors.GREEN)
-    WARNING = (30, Colors.YELLOW)
-    ERROR = (40, Colors.RED)
-    CRITICAL = (50, f"{Colors.RED}{Colors.BG_YELLOW}")
+    """Log levels with priority values"""
+    DEBUG = 10
+    LLM_INPUT = 15
+    LLM_OUTPUT = 16
+    INFO = 20
+    WARNING = 30
+    ERROR = 40
+    CRITICAL = 50
 
 
 class SimpleLogger:
-    """Simple logger class that supports colored terminal output"""
+    """Simple logger class that supports colored terminal output via rich"""
 
     def __init__(
         self,
@@ -48,24 +50,22 @@ class SimpleLogger:
     ):
         self.name = name
         if isinstance(log_level, LogLevel):
-            self.log_level = log_level.value[0]
+            self.log_level = log_level.value
         else:
             self.log_level = log_level
         self.console_output = console_output
 
     def _log(self, level: LogLevel, message: str) -> None:
         """Internal method to log messages at specified level"""
-        if level.value[0] < self.log_level:
+        if level.value < self.log_level:
             return
 
         timestamp = datetime.now().strftime("%H:%M:%S")
         level_name = level.name
-        formatted_msg = f"[{timestamp}] {level_name}: {message}"
+        style = level_name.lower()
 
         if self.console_output:
-            color = level.value[1]
-            colored_msg = f"{color}{formatted_msg}{Colors.RESET}"
-            print(colored_msg)
+            console.print(f"[{style}][{timestamp}] {level_name}: {message}[/{style}]")
 
     def debug(self, message: str) -> None:
         self._log(LogLevel.DEBUG, message)
@@ -297,8 +297,8 @@ def setup_logger_level(verbose: bool):
         SimpleLogger: The configured logger instance
     """
     if verbose:
-        logger.log_level = LogLevel.DEBUG.value[0]
+        logger.log_level = LogLevel.DEBUG.value
         logger.debug("Verbose mode enabled.")
     else:
-        logger.log_level = LogLevel.INFO.value[0]
+        logger.log_level = LogLevel.INFO.value
     return logger

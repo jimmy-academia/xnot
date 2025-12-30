@@ -37,6 +37,9 @@ python data/scripts/generate_attacks.py data/processed/real_data.jsonl
 
 ### Environment Setup
 ```bash
+# IMPORTANT: Always activate the virtual environment first
+source .venv/bin/activate
+
 # API key: llm.py auto-loads from ../.openaiapi (no manual export needed)
 # Or set manually:
 export OPENAI_API_KEY="sk-..."

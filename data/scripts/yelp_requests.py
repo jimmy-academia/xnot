@@ -21,7 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from rich.console import Console
-from data.loader import load_yelp_dataset
+from data.loader import load_yelp_dataset, YELP_DIR
 
 console = Console()
 
@@ -396,9 +396,9 @@ def main():
     console.print(f"\n[bold]=== ChatGPT Prompt ===[/bold]")
     prompt = generate_prompt(selection_name, items, stats, samples, aspects, sample_item)
 
-    print("\n" + "="*80)
-    print(prompt)
-    print("="*80)
+    # print("\n" + "="*80)
+    # print(prompt)
+    # print("="*80)
 
     # Save prompt to file
     prompt_path = YELP_DIR / f"requests_{n}_prompt.txt"
@@ -409,5 +409,4 @@ def main():
 
 
 if __name__ == "__main__":
-    from data.loader import YELP_DIR
     main()
