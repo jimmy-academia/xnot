@@ -1,0 +1,250 @@
+
+
+Digital Nomad, 
+Romantic Date, 
+Cafe dining
+Specialty Coffee
+Grab-and-Go
+Business Meeting
+Quiet Reading
+Outdoor / Patio
+
+
+"source": "review_text", "item_meta", "reviewer_meta", 
+
+
+
+Below are **all keys I can find (deep)**, grouped by where they live.
+
+## A) Restaurant-level dict (from `restaurants_cache_1.jsonl`)
+
+### Top-level keys
+
+* `business_id`
+* `name`
+* `address`
+* `city`
+* `state`
+* `postal_code`
+* `latitude`
+* `longitude`
+* `stars`
+* `review_count`
+* `is_open`
+* `categories`
+* `attributes`
+* `hours`
+
+### `hours` keys
+
+* `hours.Monday`
+* `hours.Tuesday`
+* `hours.Wednesday`
+* `hours.Thursday`
+* `hours.Friday`
+* `hours.Saturday`
+* `hours.Sunday`
+
+### `attributes` keys (flat)
+
+* `attributes.WiFi`
+* `attributes.NoiseLevel`
+* `attributes.OutdoorSeating`
+* `attributes.RestaurantsPriceRange2`
+* `attributes.BusinessAcceptsCreditCards`
+* `attributes.RestaurantsGoodForGroups`
+* `attributes.RestaurantsReservations`
+* `attributes.RestaurantsTakeOut`
+* `attributes.RestaurantsDelivery`
+* `attributes.RestaurantsTableService`
+* `attributes.Alcohol`
+* `attributes.BikeParking`
+* `attributes.BusinessParking`
+* `attributes.WheelchairAccessible`
+* `attributes.GoodForKids`
+* `attributes.DogsAllowed`
+* `attributes.Caters`
+* `attributes.HappyHour`
+* `attributes.HasTV`
+* `attributes.AgesAllowed`
+* `attributes.Smoking`
+* `attributes.CoatCheck`
+* `attributes.Corkage`
+* `attributes.BYOB`
+* `attributes.BYOBCorkage`
+* `attributes.ByAppointmentOnly`
+* `attributes.BusinessAcceptsBitcoin`
+* `attributes.RestaurantsAttire`
+* `attributes.Music`
+* `attributes.BestNights`
+* `attributes.GoodForMeal`
+* `attributes.Ambience`
+* `attributes.DietaryRestrictions`
+  *(and any others present in this file; total attribute keys observed: 35)*
+
+### Deep keys (stringified sub-dicts parsed)
+
+**Ambience**
+
+* `attributes.Ambience.touristy`
+* `attributes.Ambience.hipster`
+* `attributes.Ambience.romantic`
+* `attributes.Ambience.divey`
+* `attributes.Ambience.intimate`
+* `attributes.Ambience.trendy`
+* `attributes.Ambience.upscale`
+* `attributes.Ambience.classy`
+* `attributes.Ambience.casual`
+
+**BusinessParking**
+
+* `attributes.BusinessParking.garage`
+* `attributes.BusinessParking.street`
+* `attributes.BusinessParking.validated`
+* `attributes.BusinessParking.lot`
+* `attributes.BusinessParking.valet`
+
+**GoodForMeal**
+
+* `attributes.GoodForMeal.breakfast`
+* `attributes.GoodForMeal.brunch`
+* `attributes.GoodForMeal.lunch`
+* `attributes.GoodForMeal.dinner`
+* `attributes.GoodForMeal.dessert`
+* `attributes.GoodForMeal.latenight`
+
+**Music**
+
+* `attributes.Music.background_music`
+* `attributes.Music.dj`
+* `attributes.Music.jukebox`
+* `attributes.Music.karaoke`
+* `attributes.Music.live`
+* `attributes.Music.no_music`
+* `attributes.Music.video`
+
+**BestNights**
+
+* `attributes.BestNights.monday`
+* `attributes.BestNights.tuesday`
+* `attributes.BestNights.wednesday`
+* `attributes.BestNights.thursday`
+* `attributes.BestNights.friday`
+* `attributes.BestNights.saturday`
+* `attributes.BestNights.sunday`
+
+**DietaryRestrictions** *(rare; I saw it at least once)*
+
+* `attributes.DietaryRestrictions.dairy-free`
+* `attributes.DietaryRestrictions.gluten-free`
+* `attributes.DietaryRestrictions.halal`
+* `attributes.DietaryRestrictions.kosher`
+* `attributes.DietaryRestrictions.soy-free`
+* `attributes.DietaryRestrictions.vegan`
+* `attributes.DietaryRestrictions.vegetarian`
+
+---
+
+## B) Review-joined schema keys (from your sample item structure)
+
+*(These are NOT present in the cache file above, but **are** in your “Sample Item” format.)*
+
+### Top-level keys
+
+* `item_id`
+* `item_name`
+* `city`
+* `state`
+* `stars`
+* `categories`
+* `attributes`
+* `item_data`
+
+### `item_data[]` (each review object)
+
+* `item_data[].review_id`
+* `item_data[].review`
+* `item_data[].stars`
+* `item_data[].date`
+* `item_data[].useful`
+* `item_data[].user`
+
+### `item_data[].user` (reviewer)
+
+* `item_data[].user.name`
+* `item_data[].user.elite`
+* `item_data[].user.friends`
+* `item_data[].user.review_count`
+  *(your earlier comment block also mentions possible reviewer keys like `user_id`, `yelping_since`, `average_stars`, `fans`, etc., but they’re not shown in the sample JSON snippet.)*
+
+---
+
+# Which keys are most relevant to each scenario?
+
+### Digital Nomad (work for hours)
+
+* `attributes.WiFi`
+* `attributes.NoiseLevel`
+* `attributes.RestaurantsPriceRange2`
+* `attributes.RestaurantsGoodForGroups` *(often correlates with seating space)*
+* `hours.*` *(open duration / late hours)*
+* `categories` *(Coffee & Tea / Cafes)*
+* If using review-joined schema: `item_data[].review` *(mentions outlets, laptop-friendliness, lingering tolerance)*
+
+### Romantic Date
+
+* `attributes.Ambience.romantic`, `attributes.Ambience.intimate`, `attributes.Ambience.classy`, `attributes.Ambience.upscale`
+* `attributes.Alcohol`
+* `attributes.RestaurantsReservations`
+* `attributes.Music.background_music` / `attributes.Music.live`
+* `attributes.NoiseLevel`
+* `hours.*` *(evening availability)*
+
+### Cafe dining (actually eating a meal there)
+
+* `attributes.GoodForMeal.breakfast` / `brunch` / `lunch`
+* `categories` *(Breakfast & Brunch, Sandwiches, Bakeries, Restaurants)*
+* `attributes.RestaurantsTableService`
+* `attributes.RestaurantsTakeOut` / `attributes.RestaurantsDelivery` *(secondary)*
+* Review-joined: `item_data[].review` *(food descriptions, portion/value language)*
+
+### Specialty Coffee
+
+* `categories` *(Coffee & Tea)*
+* Review-joined: `item_data[].review` *(espresso quality, beans, pour-over, etc.—usually only in text)*
+* `attributes.WiFi` *(optional), `attributes.NoiseLevel` *(optional)*
+
+### Grab-and-Go
+
+* `attributes.RestaurantsTakeOut`
+* `attributes.DriveThru` *(if present for some businesses)*
+* `attributes.RestaurantsDelivery` *(optional)*
+* `hours.*` *(early morning / quick stops)*
+* Review-joined: `item_data[].review` *(lines, speed, quick ordering experience)*
+
+### Business Meeting
+
+* `attributes.RestaurantsGoodForGroups`
+* `attributes.WiFi`
+* `attributes.NoiseLevel`
+* `attributes.BusinessAcceptsCreditCards`
+* `attributes.RestaurantsReservations` *(if you want guaranteed seating)*
+* `hours.*`
+
+### Quiet Reading
+
+* `attributes.NoiseLevel`
+* `attributes.Ambience.casual` *(sometimes correlates with relaxed linger)*
+* `attributes.WiFi` *(optional)*
+* `hours.*`
+* Review-joined: `item_data[].review` *(mentions “quiet,” “study,” “reading,” “peaceful,” etc.)*
+
+### Outdoor / Patio
+
+* `attributes.OutdoorSeating`
+* `attributes.DogsAllowed` *(optional)*
+* `attributes.BusinessParking.*` *(if driving to patios)*
+* `hours.*` *(daytime / weekend)*
+* Review-joined: `item_data[].review` *(patio comfort, shade/heaters, street noise)*
+
+If you want, paste **one actual JSON object** from your *review-joined* dataset file (the one that includes `item_data`) and I’ll enumerate **its** deep keys exactly (no guessing).

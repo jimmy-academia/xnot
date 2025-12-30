@@ -7,11 +7,25 @@ Given a selection_n, this script:
 3. Samples representative reviews
 4. Prints data context and 4 level prompts to console
 
-Levels (5 requests each, 20 total):
-- L1 (R0-R4): Text conditions only (review_text source) with AND/OR
-- L2 (R5-R9): Text + item meta conditions with AND/OR
+Groups (5 requests each, 50 total):
+- G01 (R0-R4): Flat requests using simple item metadata only (direct lookups; e.g., attributes, categories) with AND/OR.
+- G02 (R5-R9): Flat requests using review text conditions only with AND/OR.
+- G03 (R10-R14): Flat requests using computed item metadata only (e.g., hours, time-window constraints) with AND/OR.
+- G04 (R15-R19): Flat requests using reviewer or review metadata only (e.g., elite status, recency).
+- G05 (R20-R24): Flat simple item meta and review text with computed metada
+- G06 (R25-R29): Flat simple item meta and review text and reviewer metadata
+- G07 (R30-R34): Nested - Balance - only simple item metadata and review text
+- G08 (R35-R39): Nested - Balance - with computed metada and reviewer metadata
+- G09 (R40-R44): Nested - Skewed - only simple item metadata and review text
+- G10 (R45-R49): Nested - Skewed - with computed metada and reviewer metadata
+
+
+
+
+- L5 : Flat meta + text
+
 - L3 (R10-R14): Nested text + item meta (AND containing OR or vice versa)
-- L4 (R15-R19): Nested text + item meta + user social (reviewer_meta, review_meta)
+- L4 : Nested text + item meta + user social (reviewer_meta, review_meta)
 
 Output format: JSONL (one JSON per line)
 
@@ -74,32 +88,8 @@ ALLOWED_ASPECTS = {
 
 # Hard-coded level prompts for request generation
 LEVEL_PROMPTS = {
-    1: """Generate 5 restaurant requests using ONLY review text sentiment.
+    1: """Generate 5 restaurant requests using ONLY item metadata.
 IDs: R0-R4
-
-Allowed aspects (source=review_text):
-- food_quality, service, speed, value, ambiance, portions, parking, outdoor
-
-Operators: AND, OR
-Levels: MUST, SHOULD, or NICE
-
-Requirements:
-1. Each request MUST have exactly 3 conditions.
-2. The conditions must be connected by 2 operators (mixed allowed, e.g., AND then OR).
-3. Structure format: A flat list alternating between condition objects and operator strings.
-
-Output JSONL format (one JSON per line, NO array wrapper):
-{"id": "R0", "text": "...", "structure": [Condition1, "OP1", Condition2, "OP2", Condition3]}
-
-Example:
-{"id": "R0", "text": "I need great food and fast service, or at least cheap prices.", "structure": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, "AND", {"aspect": "speed", "level": "SHOULD", "source": "review_text"}, "OR", {"aspect": "value", "level": "MUST", "source": "review_text"}]}
-{"id": "R1", "text": "Good ambiance and outdoor seating, plus tasty food.", "structure": [{"aspect": "ambiance", "level": "NICE", "source": "review_text"}, "AND", {"aspect": "outdoor", "level": "MUST", "source": "review_text"}, "AND", {"aspect": "food_quality", "level": "MUST", "source": "review_text"}]}
-
-IMPORTANT: DO NOT use item_meta, reviewer_meta, or review_meta sources. ONLY review_text.
-""",
-
-    2: """Generate 5 restaurant requests using review text AND item metadata.
-IDs: R5-R9
 
 Allowed aspects:
 - review_text: food_quality, service, speed, value, ambiance, portions
@@ -109,16 +99,51 @@ Operators: AND, OR
 Levels: MUST, SHOULD, or NICE
 
 Requirements:
-1. Structure format: A list alternating between condition objects and operator strings (e.g., [C1, "OP", C2]).
-2. Each request MUST use at least one condition from 'review_text' AND one from 'item_meta'.
+1. Each request must have exactly 3 conditions.
+2. UNIFORM OPERATORS ONLY: Use either all ANDs or all ORs. Do not mix them in a single request.
+   - Valid: A AND B AND C
+   - Valid: A OR B OR C
+   - Invalid: A AND B OR C (Ambiguous)
+3. Structure format: A flat list [Condition, "OP", Condition, "OP", Condition].
+4. Each request MUST use at least one condition from 'review_text' AND one from 'item_meta'.
 
 Output JSONL format (one JSON per line, NO array wrapper).
 
-Example:
-{"id": "R5", "text": "I want a cafe with good food.", "structure": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}]}
-{"id": "R6", "text": "Looking for a sandwich shop or bakery that is cheap.", "structure": [{"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"}, "OR", {"aspect": "Bakeries", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "RestaurantsPriceRange2", "level": "MUST", "source": "item_meta"}]}
+Example (All AND):
+{"id": "R5", "text": "I want a cafe with good food that also has WiFi.", "structure": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}, "AND", {"aspect": "WiFi", "level": "MUST", "source": "item_meta"}]}
+
+Example (All OR):
+{"id": "R6", "text": "I'm looking for a sandwich shop, a bakery, or just somewhere with really generous portions.", "structure": [{"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"}, "OR", {"aspect": "Bakeries", "level": "MUST", "source": "item_meta"}, "OR", {"aspect": "portions", "level": "MUST", "source": "review_text"}]}
 
 IMPORTANT: DO NOT use reviewer_meta or review_meta.
+""",
+
+    2: """Generate 5 restaurant requests using ONLY review text sentiment.
+IDs: R5-R9
+
+Allowed aspects (source=review_text):
+- food_quality, service, speed, value, ambiance, portions, parking, outdoor
+
+Operators: AND, OR
+Levels: MUST, SHOULD, or NICE
+
+Requirements:
+1. Each request must have exactly 3 conditions.
+2. UNIFORM OPERATORS ONLY: Use either all ANDs or all ORs. Do not mix them in a single request.
+   - Valid: A AND B AND C
+   - Valid: A OR B OR C
+   - Invalid: A AND B OR C (Ambiguous)
+3. Structure format: A flat list [Condition, "OP", Condition, "OP", Condition].
+
+Output JSONL format (one JSON per line, NO array wrapper).
+
+Example (All AND):
+{"id": "R0", "text": "I need great food, fast service, and it must be cheap.", "structure": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, "AND", {"aspect": "speed", "level": "MUST", "source": "review_text"}, "AND", {"aspect": "value", "level": "MUST", "source": "review_text"}]}
+
+Example (All OR):
+{"id": "R1", "text": "I'm looking for either a romantic vibe, amazing views, or just really good outdoor seating.", "structure": [{"aspect": "ambiance", "level": "MUST", "source": "review_text"}, "OR", {"aspect": "ambiance", "level": "NICE", "source": "review_text"}, "OR", {"aspect": "outdoor", "level": "MUST", "source": "review_text"}]}
+
+IMPORTANT: DO NOT use item_meta. ONLY review_text. Ensure operators are consistent within each request.
 """,
 
     3: """Generate 5 requests with NESTED conditions (AND containing OR, or OR containing AND).
@@ -167,6 +192,34 @@ Example with review_meta:
 IMPORTANT: Each request MUST include at least one reviewer_meta or review_meta condition.
 """
 }
+
+# System prompt template with curation category
+SYSTEM_PROMPT_TEMPLATE = """You are generating user requests for a restaurant recommendation benchmark.
+
+The dataset focuses on: {categories} in {city}.
+
+Think about what real users would ask when looking for {categories} establishments.
+Consider natural language variations, specific needs, preferences, and scenarios
+that would lead someone to search for this type of place.
+
+Generate requests that sound like real user queries, not artificial test cases.
+"""
+
+
+def load_curation_meta(selection_name: str) -> dict:
+    """Load curation metadata from meta_log.json."""
+    meta_log_path = YELP_DIR / "meta_log.json"
+    if not meta_log_path.exists():
+        return {"city": "Unknown", "categories": []}
+
+    with open(meta_log_path) as f:
+        meta = json.load(f)
+
+    selection_meta = meta.get("selections", {}).get(selection_name, {})
+    return {
+        "city": selection_meta.get("city", "Unknown"),
+        "categories": selection_meta.get("categories", [])
+    }
 
 
 def compute_distributions(items: list) -> dict:
@@ -445,6 +498,17 @@ def main():
             raise
 
     console.print(f"Loaded {len(items)} items")
+
+    # Load curation metadata and print system prompt
+    curation_meta = load_curation_meta(selection_name)
+    city = curation_meta["city"]
+    categories = ", ".join(curation_meta["categories"])
+
+    print("\n" + "="*80)
+    print("SYSTEM PROMPT - Copy this first")
+    print("="*80)
+    print(SYSTEM_PROMPT_TEMPLATE.format(city=city, categories=categories))
+    print("="*80)
 
     # Compute stats
     console.print(f"\n[cyan]Computing distributions...[/cyan]")
