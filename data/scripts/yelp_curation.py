@@ -6,6 +6,7 @@ import random
 import shutil
 import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -20,10 +21,11 @@ from rich.text import Text
 
 
 # File paths
-RAW_DIR = Path(__file__).parent.parent / "raw"
+RAW_DIR = Path(__file__).parent.parent / "raw" / "yelp"
 BUSINESS_FILE = RAW_DIR / "yelp_academic_dataset_business.json"
 REVIEW_FILE = RAW_DIR / "yelp_academic_dataset_review.json"
-OUTPUT_FILE = Path(__file__).parent.parent / "yelp_selections.jsonl"
+OUTPUT_DIR = Path(__file__).parent.parent / "processed" / "yelp"
+METALOG_FILE = OUTPUT_DIR / "meta_log.json"
 
 
 class YelpCurator:
@@ -36,6 +38,60 @@ class YelpCurator:
         self.selected_city: Optional[str] = None
         self.selected_categories: List[str] = []  # Multi-category support
         self.selections: List[dict] = []
+        self.output_file: Optional[Path] = None
+        self.selection_id: Optional[str] = None
+
+    def get_next_selection_path(self) -> Tuple[Path, str]:
+        """Determine the next selection file path (selection_1, selection_2, etc.)."""
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Find existing selection files
+        existing = list(OUTPUT_DIR.glob("selection_*.jsonl"))
+        if not existing:
+            selection_id = "selection_1"
+        else:
+            # Extract numbers and find max
+            nums = []
+            for f in existing:
+                try:
+                    num = int(f.stem.split("_")[1])
+                    nums.append(num)
+                except (IndexError, ValueError):
+                    pass
+            next_num = max(nums) + 1 if nums else 1
+            selection_id = f"selection_{next_num}"
+
+        return OUTPUT_DIR / f"{selection_id}.jsonl", selection_id
+
+    def load_metalog(self) -> dict:
+        """Load the metalog file or return empty dict."""
+        if METALOG_FILE.exists():
+            with open(METALOG_FILE) as f:
+                return json.load(f)
+        return {"selections": {}}
+
+    def update_metalog(self) -> None:
+        """Update metalog with current selection metadata."""
+        metalog = self.load_metalog()
+
+        # Calculate stats
+        total_reviews = sum(
+            sum(len(s.get("reviews_by_star", {}).get(f"{star}_star", []))
+                for star in range(1, 6))
+            for s in self.selections
+        )
+
+        metalog["selections"][self.selection_id] = {
+            "file": self.output_file.name,
+            "created": datetime.now().isoformat(),
+            "city": self.selected_city,
+            "categories": self.selected_categories,
+            "restaurant_count": len(self.selections),
+            "total_reviews": total_reviews,
+        }
+
+        with open(METALOG_FILE, "w") as f:
+            json.dump(metalog, f, indent=2)
 
     def load_business_data(self) -> None:
         """Load all restaurant businesses from Yelp data."""
@@ -459,22 +515,27 @@ class YelpCurator:
 
         # Calculate columns based on terminal width
         term_width = shutil.get_terminal_size().columns
-        items = [f"{k}: {v}" for k, v in sorted(attrs.items())]
 
-        # Estimate column width from longest item
-        max_item_len = max(len(str(item)) for item in items) if items else 20
-        col_width = min(max_item_len + 4, 50)  # Cap at 50 chars
-        num_cols = max(1, (term_width - 4) // col_width)  # -4 for panel borders
+        # Format items with truncation for long values
+        items = []
+        for k, v in sorted(attrs.items()):
+            v_str = str(v)
+            if len(v_str) > 25:
+                v_str = v_str[:22] + "..."
+            items.append(f"{k}: {v_str}")
+
+        # Fixed column width for consistent layout
+        col_width = 40
+        num_cols = max(1, (term_width - 4) // col_width)
 
         # Build table with dynamic columns
-        table = Table(show_header=False, box=None, padding=(0, 2))
+        table = Table(show_header=False, box=None, padding=(0, 1))
         for _ in range(num_cols):
             table.add_column(width=col_width)
 
         # Fill rows
         for i in range(0, len(items), num_cols):
             row = items[i:i + num_cols]
-            # Pad row if needed
             while len(row) < num_cols:
                 row.append("")
             table.add_row(*row)
@@ -522,6 +583,70 @@ class YelpCurator:
             elif action == "p" and page > 0:
                 page -= 1
 
+    def search_evidence_loop(self, biz: dict) -> None:
+        """Search reviews for specific keyword."""
+        keyword = Prompt.ask("Enter search keyword").strip().lower()
+        if not keyword:
+            self.console.print("[dim]No keyword entered[/dim]")
+            return
+
+        reviews = self.reviews_by_biz.get(biz["business_id"], [])
+        matches = []
+        for r in reviews:
+            text = r.get("text", "")
+            if keyword in text.lower():
+                matches.append((len(text), text))
+
+        if not matches:
+            self.console.print(f"[dim]No reviews contain '{keyword}'[/dim]")
+            return
+
+        matches.sort(key=lambda x: -x[0])  # Longest first
+        self.console.print(f"[green]Found {len(matches)} reviews with '{keyword}'[/green]")
+
+        # Paginate through matches
+        page = 0
+        per_page = 5
+
+        while True:
+            start = page * per_page
+            end = start + per_page
+            page_matches = matches[start:end]
+
+            ev_content = Text()
+            for i, (_, text) in enumerate(page_matches, start + 1):
+                # Find keyword and show ~400 char window
+                idx = text.lower().find(keyword)
+                start_pos = max(0, idx - 100)
+                end_pos = min(len(text), idx + 300)
+                snippet = ("..." if start_pos > 0 else "") + text[start_pos:end_pos] + ("..." if end_pos < len(text) else "")
+                ev_content.append(f"{i}. ", style="bold")
+                ev_content.append(f"{snippet}\n\n")
+
+            start_num = start + 1
+            end_num = start + len(page_matches)
+            self.console.print(Panel(
+                ev_content,
+                title=f"[bold yellow]Search: '{keyword}' ({start_num}-{end_num} of {len(matches)})[/bold yellow]"
+            ))
+
+            # Navigation
+            opts = []
+            has_more = end < len(matches)
+            if has_more:
+                opts.append("[N]ext")
+            if page > 0:
+                opts.append("[P]rev")
+            opts.append("[B]ack")
+
+            action = Prompt.ask(" / ".join(opts), default="b").lower()
+            if action == "b":
+                return
+            elif action == "n" and has_more:
+                page += 1
+            elif action == "p" and page > 0:
+                page -= 1
+
     def run_restaurant_loop(self) -> None:
         """Iterate through richness-sorted restaurants until 100 kept."""
         scored = self.compute_richness_scores()
@@ -541,7 +666,7 @@ class YelpCurator:
             self.display_restaurant(biz, richness)
 
             action = Prompt.ask(
-                "[K]eep / [S]kip / [A]ttributes / [E]vidence / [Q]uit",
+                "[K]eep / [S]kip / [A]ttributes / [E]vidence / [W]ord / [Q]uit",
                 default="k"
             ).lower()
 
@@ -556,6 +681,10 @@ class YelpCurator:
                 continue
             elif action == "e":
                 self.browse_evidence_loop(biz)
+                # Stay on same restaurant
+                continue
+            elif action == "w":
+                self.search_evidence_loop(biz)
                 # Stay on same restaurant
                 continue
             elif action == "k":
@@ -616,16 +745,13 @@ class YelpCurator:
             "reviews_by_star": reviews_by_star
         }
 
-        # Ensure output directory exists
-        OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-
         # Append to file
-        with open(OUTPUT_FILE, "a") as f:
+        with open(self.output_file, "a") as f:
             f.write(json.dumps(selection) + "\n")
 
         self.selections.append(selection)
-        self.console.print(f"[green]Saved selection to {OUTPUT_FILE}[/green]")
-        self.console.print(f"[dim]Total selections this session: {len(self.selections)}[/dim]")
+        self.console.print(f"[green]Saved to {self.output_file.name}[/green]")
+        self.console.print(f"[dim]Total this session: {len(self.selections)}[/dim]")
 
     def run(self) -> None:
         """Main entry point for the curation tool."""
@@ -654,6 +780,10 @@ class YelpCurator:
             else:  # Confirmed
                 break
 
+        # Initialize output file for this session
+        self.output_file, self.selection_id = self.get_next_selection_path()
+        self.console.print(f"[cyan]Output: {self.output_file}[/cyan]\n")
+
         # Load reviews for filtered businesses
         filtered = self.get_filtered_businesses()
         business_ids = {b["business_id"] for b in filtered}
@@ -662,11 +792,15 @@ class YelpCurator:
         # Run main restaurant selection loop
         self.run_restaurant_loop()
 
-        # Summary
+        # Update metalog and show summary
+        if self.selections:
+            self.update_metalog()
+
         self.console.print("\n" + "═" * 50)
         self.console.print(f"[bold green]Session complete![/bold green]")
         self.console.print(f"Total selections: {len(self.selections)}")
-        self.console.print(f"Output file: {OUTPUT_FILE}")
+        self.console.print(f"Output file: {self.output_file}")
+        self.console.print(f"Metalog: {METALOG_FILE}")
 
 
 def main():
