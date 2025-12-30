@@ -3,21 +3,22 @@
 
 import json
 import random
+import shutil
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 # Add project root to path for utils import
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
+from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
-from rich.prompt import Confirm, IntPrompt, Prompt
+from rich.prompt import Prompt
 from rich.table import Table
 from rich.text import Text
 
-from utils.llm import call_llm
 
 # File paths
 RAW_DIR = Path(__file__).parent.parent / "raw"
@@ -106,6 +107,58 @@ class YelpCurator:
                 results.append(biz)
         return results
 
+    def compute_richness_scores(self) -> List[tuple]:
+        """Compute richness (total review char count) for filtered businesses.
+        Returns: [(biz, richness_score), ...] sorted descending by score.
+        """
+        scored = []
+        for biz in self.get_filtered_businesses():
+            bid = biz["business_id"]
+            reviews = self.reviews_by_biz.get(bid, [])
+            richness = sum(len(r.get("text", "")) for r in reviews)
+            scored.append((biz, richness))
+        return sorted(scored, key=lambda x: -x[1])
+
+    def get_category_evidence(self, biz: dict, page: int = 0, per_page: int = 3) -> Tuple[List[str], int, bool]:
+        """Find review snippets containing category keywords with pagination.
+
+        Returns: (snippets, total_matches, has_more)
+        """
+        # Use category names as keywords
+        keywords = [cat.lower() for cat in self.selected_categories]
+
+        reviews = self.reviews_by_biz.get(biz["business_id"], [])
+        matches = []
+        for r in reviews:
+            text = r.get("text", "")
+            text_lower = text.lower()
+            if any(kw in text_lower for kw in keywords):
+                matches.append((len(text), text))
+
+        # Sort by length (longest first)
+        matches.sort(key=lambda x: -x[0])
+        total = len(matches)
+
+        # Pagination
+        start_idx = page * per_page
+        end_idx = start_idx + per_page
+        page_matches = matches[start_idx:end_idx]
+
+        snippets = []
+        for _, text in page_matches:
+            # Find keyword position, extract ~400 char window (100 before, 300 after)
+            for kw in keywords:
+                idx = text.lower().find(kw)
+                if idx >= 0:
+                    start = max(0, idx - 100)
+                    end = min(len(text), idx + 300)
+                    snippet = ("..." if start > 0 else "") + text[start:end] + ("..." if end < len(text) else "")
+                    snippets.append(snippet)
+                    break
+
+        has_more = end_idx < total
+        return snippets, total, has_more
+
     def preview_city(self, city: str) -> None:
         """Show preview of selected city."""
         city_businesses = [b for b in self.businesses.values() if b.get("city") == city]
@@ -142,9 +195,11 @@ class YelpCurator:
         panel_content.append(f"Matching Restaurants: ", style="bold")
         panel_content.append(f"{len(filtered)}\n\n")
         panel_content.append("Star Distribution:\n", style="bold")
+        max_count = max(star_dist.values()) if star_dist else 1
         for star in range(1, 6):
             count = star_dist.get(star, 0)
-            bar = "█" * min(count, 20)
+            bar_len = int((count / max_count) * 19) + 1 if count > 0 else 0
+            bar = "█" * bar_len
             panel_content.append(f"  {star}★: {bar} ({count})\n")
         panel_content.append("\nSample Restaurants:\n", style="bold")
         for s in samples:
@@ -175,9 +230,11 @@ class YelpCurator:
         panel_content.append(f"\nTotal Matching Restaurants: ", style="bold")
         panel_content.append(f"{len(filtered)}\n\n")
         panel_content.append("Star Distribution:\n", style="bold")
+        max_count = max(star_dist.values()) if star_dist else 1
         for star in range(1, 6):
             count = star_dist.get(star, 0)
-            bar = "█" * min(count, 20)
+            bar_len = int((count / max_count) * 19) + 1 if count > 0 else 0
+            bar = "█" * bar_len
             panel_content.append(f"  {star}★: {bar} ({count})\n")
         if samples:
             panel_content.append("\nSample Restaurants:\n", style="bold")
@@ -217,18 +274,20 @@ class YelpCurator:
                 table.add_row(str(i), name, str(count))
 
             self.console.print(table)
-            nav = "[n]ext | [p]rev | [number] | [text] search"
+            nav = "[n/→]ext | [p/←]rev | [number] | [text] search"
             if allow_back:
                 nav += " | [b]ack"
-            self.console.print(f"[dim]{nav} | [q]uit[/dim]\n")
+            self.console.print(f"[dim]{nav} | [q]uit[/dim]")
+            self.console.print()
 
             choice = Prompt.ask(prompt_text, default="1")
-            c = choice.lower()
+            c = choice.lower().strip()
 
-            # Navigation
-            if c in ("n", "next"):
+            # Navigation (n for next, p for prev, arrow keys also work)
+            # Arrow keys send escape sequences: \x1b[C (right), \x1b[D (left)
+            if c in ("n", "next") or "\x1b[C" in choice or "\x1b[B" in choice:
                 page = min(page + 1, total_pages - 1)
-            elif c in ("p", "prev"):
+            elif c in ("p", "prev") or "\x1b[D" in choice or "\x1b[A" in choice:
                 page = max(page - 1, 0)
             elif c == "q":
                 return ("quit", None, page)
@@ -319,16 +378,17 @@ class YelpCurator:
                 table.add_row(str(i), cat, str(count))
 
             self.console.print(table)
-            self.console.print('[dim][n]ext | [p]rev | "1,3,5" or "Italian, Mexican" | [b]ack | [q]uit[/dim]\n')
+            self.console.print("[dim][n/→]ext | [p/←]rev | [numbers] 1,3,5 | [text] search | [b]ack | [q]uit[/dim]")
+            self.console.print()
 
             choice = Prompt.ask("Select categories", default="1")
-            c = choice.lower()
+            c = choice.lower().strip()
 
-            # Navigation
-            if c in ("n", "next"):
+            # Navigation (n for next, p for prev, arrow keys also work)
+            if c in ("n", "next") or "\x1b[C" in choice or "\x1b[B" in choice:
                 page = min(page + 1, total_pages - 1)
                 continue
-            elif c in ("p", "prev"):
+            elif c in ("p", "prev") or "\x1b[D" in choice or "\x1b[A" in choice:
                 page = max(page - 1, 0)
                 continue
             elif c == "b":
@@ -360,8 +420,8 @@ class YelpCurator:
                 self.selected_categories = selected_cats
                 return True
 
-    def display_restaurant(self, biz: dict) -> None:
-        """Display restaurant info in a panel."""
+    def display_restaurant(self, biz: dict, richness: int = 0) -> None:
+        """Display restaurant info with richness score and category evidence."""
         attrs = biz.get("attributes") or {}
 
         content = Text()
@@ -369,172 +429,173 @@ class YelpCurator:
         cats_str = ", ".join(self.selected_categories[:3])
         if len(self.selected_categories) > 3:
             cats_str += f" +{len(self.selected_categories) - 3}"
-        content.append(f"Categories: {cats_str}\n\n", style="dim")
+        content.append(f"Categories: {cats_str}\n", style="dim")
+        content.append(f"Richness Score: {richness:,} chars\n\n", style="bold cyan")
 
         content.append("Attributes:\n", style="bold")
-        for key, val in list(attrs.items())[:10]:
+        for key, val in list(attrs.items())[:8]:
             content.append(f"  - {key}: {val}\n")
-        if len(attrs) > 10:
-            content.append(f"  ... and {len(attrs) - 10} more\n", style="dim")
+        if len(attrs) > 8:
+            content.append(f"  ... and {len(attrs) - 8} more\n", style="dim")
 
         title = f"[bold]{biz['name']}[/bold] ({biz.get('stars', '?')}★, {biz.get('review_count', 0)} reviews)"
         self.console.print(Panel(content, title=title))
 
-    def llm_check_restaurant(self, biz: dict) -> str:
-        """Ask LLM to evaluate restaurant data richness."""
+        # Category Evidence panel (first page only)
+        snippets, total, has_more = self.get_category_evidence(biz)
+        if snippets:
+            ev_content = Text()
+            for i, snippet in enumerate(snippets, 1):
+                ev_content.append(f"{i}. ", style="bold")
+                ev_content.append(f"{snippet}\n\n")
+            title = f"[bold yellow]Category Evidence (1-{len(snippets)} of {total})[/bold yellow]"
+            self.console.print(Panel(ev_content, title=title))
+            if has_more:
+                self.console.print("[dim]Press [E] to browse more evidence...[/dim]")
+        else:
+            self.console.print("[dim]No category keyword matches found in reviews[/dim]")
+
+    def display_all_attributes(self, biz: dict) -> None:
+        """Display all attributes in multi-column layout."""
         attrs = biz.get("attributes") or {}
-        system = "You are a data quality evaluator for ML datasets."
-        prompt = f"""Evaluate if this restaurant has "rich" data for a benchmark:
+        if not attrs:
+            self.console.print("[dim]No attributes available[/dim]")
+            return
 
-Name: {biz['name']}
-Stars: {biz.get('stars', 'N/A')}
-Review Count: {biz.get('review_count', 0)}
-Categories: {biz.get('categories', 'N/A')}
-Attributes: {json.dumps(attrs, indent=2)}
+        # Format each attr as "key: value"
+        items = [f"{k}: {v}" for k, v in sorted(attrs.items())]
 
-Rich data means: multiple interesting attributes, potential for ambiguity,
-varied review sentiments likely. Answer YES/NO and explain briefly (2-3 sentences)."""
+        # Use Rich Columns for auto-wrapping based on terminal width
+        self.console.print(Panel(
+            Columns(items, equal=True, expand=True),
+            title=f"[bold]All Attributes ({len(attrs)})[/bold]"
+        ))
 
-        with self.console.status("[bold blue]Asking LLM..."):
-            response = call_llm(prompt, system=system)
-        return response
+    def browse_evidence_loop(self, biz: dict) -> None:
+        """Paginated evidence browser."""
+        page = 0
+        per_page = 3
 
-    def display_review(self, review: dict, idx: int) -> None:
-        """Display a single review."""
-        text = review.get("text", "")
-        if len(text) > 500:
-            text = text[:500] + "..."
+        while True:
+            snippets, total, has_more = self.get_category_evidence(biz, page, per_page)
 
-        table = Table(show_header=False, box=None)
-        table.add_column("Label", style="bold cyan", width=12)
-        table.add_column("Value")
+            if not snippets and page == 0:
+                self.console.print("[dim]No category evidence found[/dim]")
+                return
 
-        table.add_row("Review #", str(idx + 1))
-        table.add_row("User ID", review.get("user_id", "N/A")[:16] + "...")
-        table.add_row("Stars", f"{review.get('stars', '?')}★")
-        table.add_row("Date", review.get("date", "N/A")[:10])
-        table.add_row("Useful", str(review.get("useful", 0)))
+            start_num = page * per_page + 1
+            end_num = start_num + len(snippets) - 1
 
-        self.console.print(table)
-        self.console.print(Panel(text, title="Review Text"))
+            ev_content = Text()
+            for i, snippet in enumerate(snippets, start_num):
+                ev_content.append(f"{i}. ", style="bold")
+                ev_content.append(f"{snippet}\n\n")
 
-    def llm_check_review(self, review: dict) -> str:
-        """Ask LLM to evaluate review quality."""
-        system = "You are a data quality evaluator for ML datasets."
-        prompt = f"""Is this review detailed and specific enough for ML evaluation?
+            self.console.print(Panel(
+                ev_content,
+                title=f"[bold yellow]Category Evidence ({start_num}-{end_num} of {total})[/bold yellow]"
+            ))
 
-Review ({review.get('stars', '?')} stars):
-"{review.get('text', '')[:1000]}"
+            # Build dynamic options
+            opts = []
+            choices = ["b", "B"]
+            if has_more:
+                opts.append("[N]ext")
+                choices.extend(["n", "N"])
+            if page > 0:
+                opts.append("[P]rev")
+                choices.extend(["p", "P"])
+            opts.append("[B]ack")
 
-Good reviews have: specific details, clear opinions on food/service/ambiance,
-useful for sentiment analysis. Answer YES/NO with brief reasoning (2-3 sentences)."""
-
-        with self.console.status("[bold blue]Asking LLM..."):
-            response = call_llm(prompt, system=system)
-        return response
-
-    def run_review_loop(self, biz: dict) -> List[dict]:
-        """Inner loop for selecting reviews from a restaurant."""
-        bid = biz["business_id"]
-        reviews = self.reviews_by_biz.get(bid, [])
-
-        if not reviews:
-            self.console.print("[yellow]No reviews found for this restaurant[/yellow]")
-            return []
-
-        selected_reviews = []
-        random.shuffle(reviews)
-
-        for idx, review in enumerate(reviews):
-            self.console.print(f"\n[bold]--- Review {idx + 1} of {len(reviews)} ---[/bold]")
-            self.display_review(review, idx)
-
-            action = Prompt.ask(
-                "[K]eep / [S]kip / [L]LM Check / [D]one",
-                choices=["k", "s", "l", "d", "K", "S", "L", "D"],
-                default="s"
-            ).lower()
-
-            if action == "d":
-                break
-            elif action == "s":
-                continue
-            elif action == "l":
-                rationale = self.llm_check_review(review)
-                self.console.print(f"\n[bold blue]LLM says:[/bold blue] {rationale}\n")
-
-                user_notes = Prompt.ask("Add your notes (or press Enter to skip)", default="")
-
-                keep = Confirm.ask("Keep this review?", default=True)
-                if keep:
-                    selected_reviews.append({
-                        "review_id": review.get("review_id"),
-                        "user_id": review.get("user_id"),
-                        "text": review.get("text"),
-                        "stars": review.get("stars"),
-                        "date": review.get("date"),
-                        "useful": review.get("useful", 0),
-                        "user_notes": user_notes if user_notes else None,
-                        "llm_rationale": rationale
-                    })
-                    self.console.print("[green]Review kept[/green]")
-            elif action == "k":
-                selected_reviews.append({
-                    "review_id": review.get("review_id"),
-                    "user_id": review.get("user_id"),
-                    "text": review.get("text"),
-                    "stars": review.get("stars"),
-                    "date": review.get("date"),
-                    "useful": review.get("useful", 0),
-                    "user_notes": None,
-                    "llm_rationale": None
-                })
-                self.console.print("[green]Review kept[/green]")
-
-        self.console.print(f"\n[bold]Selected {len(selected_reviews)} reviews for this restaurant[/bold]")
-        return selected_reviews
+            action = Prompt.ask(" / ".join(opts), choices=choices, default="b").lower()
+            if action == "b":
+                return
+            elif action == "n" and has_more:
+                page += 1
+            elif action == "p" and page > 0:
+                page -= 1
 
     def run_restaurant_loop(self) -> None:
-        """Main loop for selecting restaurants."""
-        filtered = self.get_filtered_businesses()
-        random.shuffle(filtered)
+        """Iterate through richness-sorted restaurants until 100 kept."""
+        scored = self.compute_richness_scores()
+        kept_count = 0
+        target = 100
 
-        self.console.print(f"\n[bold]Starting restaurant selection ({len(filtered)} candidates)[/bold]\n")
+        self.console.print(f"\n[bold]Starting restaurant selection ({len(scored)} candidates, sorted by richness)[/bold]\n")
 
-        for idx, biz in enumerate(filtered):
-            self.console.print(f"\n[bold cyan]═══ Restaurant {idx + 1} of {len(filtered)} ═══[/bold cyan]")
-            self.display_restaurant(biz)
+        idx = 0
+        while idx < len(scored):
+            if kept_count >= target:
+                self.console.print(f"\n[green]Reached {target} restaurants. Stopping.[/green]")
+                break
+
+            biz, richness = scored[idx]
+            self.console.print(f"\n[bold cyan]═══ Restaurant {idx + 1} of {len(scored)} | Kept: {kept_count}/{target} ═══[/bold cyan]")
+            self.display_restaurant(biz, richness)
 
             action = Prompt.ask(
-                "[S]kip / [L]LM Check / [K]eep / [Q]uit",
-                choices=["s", "l", "k", "q", "S", "L", "K", "Q"],
-                default="s"
+                "[K]eep / [S]kip / [A]ttributes / [E]vidence / [Q]uit",
+                choices=["k", "s", "a", "e", "q", "K", "S", "A", "E", "Q"],
+                default="k"
             ).lower()
 
             if action == "q":
                 break
             elif action == "s":
+                idx += 1
                 continue
-            elif action == "l":
-                rationale = self.llm_check_restaurant(biz)
-                self.console.print(f"\n[bold blue]LLM says:[/bold blue] {rationale}\n")
-
-                user_notes = Prompt.ask("Add your notes (or press Enter to skip)", default="")
-
-                keep = Confirm.ask("Keep this restaurant?", default=True)
-                if keep:
-                    reviews = self.run_review_loop(biz)
-                    if reviews:
-                        self.save_selection(biz, reviews, user_notes, rationale)
+            elif action == "a":
+                self.display_all_attributes(biz)
+                # Stay on same restaurant
+                continue
+            elif action == "e":
+                self.browse_evidence_loop(biz)
+                # Stay on same restaurant
+                continue
             elif action == "k":
-                reviews = self.run_review_loop(biz)
-                if reviews:
-                    self.save_selection(biz, reviews, None, None)
+                self.process_and_save(biz, richness)
+                kept_count += 1
+                self.console.print(f"[green]Saved! ({kept_count}/{target})[/green]")
+                idx += 1
 
-    def save_selection(self, biz: dict, reviews: List[dict],
-                       user_notes: Optional[str] = None,
-                       llm_rationale: Optional[str] = None) -> None:
-        """Save a curated selection to the output file."""
+        self.console.print(f"\n[bold]Session complete. Kept {kept_count} restaurants.[/bold]")
+
+    def process_and_save(self, biz: dict, richness: int) -> None:
+        """Automatically process and save restaurant with bucketed reviews."""
+        reviews = self.reviews_by_biz.get(biz["business_id"], [])
+
+        # Bucket by stars (1-5)
+        buckets = {1: [], 2: [], 3: [], 4: [], 5: []}
+        for r in reviews:
+            star = int(r.get("stars", 3))
+            star = max(1, min(5, star))  # Clamp to 1-5
+            buckets[star].append(r)
+
+        # Sort each bucket by length (longest first)
+        for star in buckets:
+            buckets[star].sort(key=lambda r: -len(r.get("text", "")))
+
+        # Build structured output
+        reviews_by_star = {}
+        for star, bucket in buckets.items():
+            reviews_by_star[f"{star}_star"] = [
+                {
+                    "review_id": r.get("review_id"),
+                    "user_id": r.get("user_id"),
+                    "text": r.get("text"),
+                    "stars": r.get("stars"),
+                    "date": r.get("date"),
+                    "useful": r.get("useful", 0),
+                    "length": len(r.get("text", ""))
+                }
+                for r in bucket
+            ]
+
+        # Save
+        self.save_selection(biz, reviews_by_star, richness)
+
+    def save_selection(self, biz: dict, reviews_by_star: dict, richness: int) -> None:
+        """Save a curated selection to the output file (new format with star buckets)."""
         cats = (biz.get("categories") or "").split(", ")
         cats = [c.strip() for c in cats if c.strip()]
 
@@ -545,10 +606,8 @@ useful for sentiment analysis. Answer YES/NO with brief reasoning (2-3 sentences
             "categories": cats,
             "stars": biz.get("stars"),
             "review_count": biz.get("review_count"),
-            "attributes": biz.get("attributes"),
-            "user_notes": user_notes,
-            "llm_rationale": llm_rationale,
-            "selected_reviews": reviews
+            "richness_score": richness,
+            "reviews_by_star": reviews_by_star
         }
 
         # Ensure output directory exists
