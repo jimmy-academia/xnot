@@ -1,0 +1,254 @@
+{
+  "id": "R0",
+  "text": "I'm looking for a place that serves amazing sandwiches.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "food_quality", "level": "MUST", "source": "review_text"},
+      {"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R1",
+  "text": "Find me a coffee shop that offers free WiFi.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "WiFi", "level": "MUST", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R2",
+  "text": "I need a restaurant where the service is known to be very fast.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "speed", "level": "MUST", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R3",
+  "text": "I want to find a cafe that accepts credit cards.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "BusinessAcceptsCreditCards", "level": "MUST", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R4",
+  "text": "I want a cafe spot with outdoor seating that serves good breakfast.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Breakfast & Brunch", "level": "MUST", "source": "item_meta"},
+      {"aspect": "outdoor_seating", "level": "MUST", "source": "item_meta"},
+      {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R5",
+  "text": "Find me a cheap bakery where I can easily park my car.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Bakeries", "level": "MUST", "source": "item_meta"},
+      {"aspect": "RestaurantsPriceRange2", "level": "SHOULD", "source": "item_meta"},
+      {"aspect": "BusinessParking", "level": "MUST", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R6",
+  "text": "Which places have experienced reviewers (Elite) rated highly for ambiance?",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "elite_status", "level": "MUST", "source": "reviewer_meta"},
+      {"aspect": "ambiance", "level": "MUST", "source": "review_text"},
+      {"aspect": "stars", "level": "SHOULD", "source": "review_meta"}
+    ]
+  }
+},
+{
+  "id": "R7",
+  "text": "I want a cafe that has very recent positive reviews.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Cafes", "level": "MUST", "source": "item_meta"},
+      {"aspect": "date", "level": "MUST", "source": "review_meta"},
+      {"aspect": "stars", "level": "MUST", "source": "review_meta"}
+    ]
+  }
+},
+{
+  "id": "R8",
+  "text": "Suggest a place for a group dinner that takes reservations and has large portions.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "RestaurantsReservations", "level": "MUST", "source": "item_meta"},
+      {"aspect": "portions", "level": "SHOULD", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R9",
+  "text": "I'm looking for a popular spot; show me places with a high review count and good overall ratings.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "review_count", "level": "MUST", "source": "item_meta"},
+      {"aspect": "stars", "level": "MUST", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R10",
+  "text": "I need a work-friendly cafe. It must have WiFi, serve coffee, and reviews should mention it's good value for money.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "WiFi", "level": "MUST", "source": "item_meta"},
+      {"aspect": "Coffee & Tea", "level": "MUST", "source": "item_meta"},
+      {"aspect": "value", "level": "SHOULD", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R11",
+  "text": "Find me a trusted nightlife spot. I want high ratings from users with many friends, specifically mentioning good service.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Nightlife", "level": "MUST", "source": "item_meta"},
+      {"aspect": "friends_count", "level": "MUST", "source": "reviewer_meta"},
+      {"aspect": "service", "level": "SHOULD", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R12",
+  "text": "I want a brunch place that is 'New American' style, has street parking, and isn't too expensive.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Breakfast & Brunch", "level": "MUST", "source": "item_meta"},
+      {"aspect": "American (New)", "level": "SHOULD", "source": "item_meta"},
+      {"aspect": "BusinessParking_street", "level": "MUST", "source": "item_meta"},
+      {"aspect": "RestaurantsPriceRange2", "level": "SHOULD", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R13",
+  "text": "Show me the 'real' best spots: Ignore the overall rating, I only want places where recent reviews (last 6 months) are 5 stars.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "stars", "level": "NICE", "source": "item_meta"},
+      {"aspect": "date", "level": "MUST", "source": "review_meta"},
+      {"aspect": "stars", "level": "MUST", "source": "review_meta"}
+    ]
+  }
+},
+{
+  "id": "R14",
+  "text": "I want a hidden gem for tea. Low total review count, but highly rated by Elite members who mention 'authentic' ambiance.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Coffee & Tea", "level": "MUST", "source": "item_meta"},
+      {"aspect": "review_count", "level": "MUST", "source": "item_meta"},
+      {"aspect": "elite_status", "level": "MUST", "source": "reviewer_meta"},
+      {"aspect": "ambiance", "level": "SHOULD", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R15",
+  "text": "Find a lunch spot. It must handle credit cards, serve sandwiches, and reviews must confirm the service is friendly.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "BusinessAcceptsCreditCards", "level": "MUST", "source": "item_meta"},
+      {"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"},
+      {"aspect": "service", "level": "MUST", "source": "review_text"},
+      {"aspect": "stars", "level": "SHOULD", "source": "item_meta"}
+    ]
+  }
+},
+{
+  "id": "R16",
+  "text": "I need a place to park and eat. It must have either a garage or a private lot, and serve Breakfast.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Breakfast & Brunch", "level": "MUST", "source": "item_meta"},
+      {
+          "structure": {
+              "op": "OR",
+              "conditions": [
+                  {"aspect": "BusinessParking_garage", "level": "MUST", "source": "item_meta"},
+                  {"aspect": "BusinessParking_lot", "level": "MUST", "source": "item_meta"}
+              ]
+          }
+      }
+    ]
+  }
+},
+{
+  "id": "R17",
+  "text": "I'm looking for a specific vibe. Either the place is categorized as 'Nightlife' OR the reviews specifically mention a 'cool' ambiance.",
+  "structure": {
+    "op": "OR",
+    "conditions": [
+      {"aspect": "Nightlife", "level": "MUST", "source": "item_meta"},
+      {"aspect": "ambiance", "level": "MUST", "source": "review_text"}
+    ]
+  }
+},
+{
+  "id": "R18",
+  "text": "I want a safe bet for a date. The reviewer must either be Elite OR have over 100 friends, and they must rate the food highly.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "food_quality", "level": "MUST", "source": "review_text"},
+      {
+          "structure": {
+              "op": "OR",
+              "conditions": [
+                  {"aspect": "elite_status", "level": "MUST", "source": "reviewer_meta"},
+                  {"aspect": "friends_count", "level": "MUST", "source": "reviewer_meta"}
+              ]
+          }
+      }
+    ]
+  }
+},
+{
+  "id": "R19",
+  "text": "I want a sandwich, but I'm skeptical. Show me places where the reviews are marked as 'Useful' by others, OR the reviewer is Elite.",
+  "structure": {
+    "op": "AND",
+    "conditions": [
+      {"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"},
+      {
+          "structure": {
+              "op": "OR",
+              "conditions": [
+                  {"aspect": "useful_votes", "level": "MUST", "source": "review_meta"},
+                  {"aspect": "elite_status", "level": "MUST", "source": "reviewer_meta"}
+              ]
+          }
+      }
+    ]
+  }
+}
