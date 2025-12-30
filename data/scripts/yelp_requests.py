@@ -80,15 +80,20 @@ IDs: R0-R4
 Allowed aspects (source=review_text):
 - food_quality, service, speed, value, ambiance, portions, parking, outdoor
 
-Operators: AND or OR (not nested)
+Operators: AND, OR
 Levels: MUST, SHOULD, or NICE
 
+Requirements:
+1. Each request MUST have exactly 3 conditions.
+2. The conditions must be connected by 2 operators (mixed allowed, e.g., AND then OR).
+3. Structure format: A flat list alternating between condition objects and operator strings.
+
 Output JSONL format (one JSON per line, NO array wrapper):
-{"id": "R0", "text": "...", "structure": {"op": "AND", "conditions": [...]}}
+{"id": "R0", "text": "...", "structure": [Condition1, "OP1", Condition2, "OP2", Condition3]}
 
 Example:
-{"id": "R0", "text": "I want a place with great food and fast service.", "structure": {"op": "AND", "conditions": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, {"aspect": "speed", "level": "SHOULD", "source": "review_text"}]}}
-{"id": "R1", "text": "Looking for good value or generous portions.", "structure": {"op": "OR", "conditions": [{"aspect": "value", "level": "MUST", "source": "review_text"}, {"aspect": "portions", "level": "MUST", "source": "review_text"}]}}
+{"id": "R0", "text": "I need great food and fast service, or at least cheap prices.", "structure": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, "AND", {"aspect": "speed", "level": "SHOULD", "source": "review_text"}, "OR", {"aspect": "value", "level": "MUST", "source": "review_text"}]}
+{"id": "R1", "text": "Good ambiance and outdoor seating, plus tasty food.", "structure": [{"aspect": "ambiance", "level": "NICE", "source": "review_text"}, "AND", {"aspect": "outdoor", "level": "MUST", "source": "review_text"}, "AND", {"aspect": "food_quality", "level": "MUST", "source": "review_text"}]}
 
 IMPORTANT: DO NOT use item_meta, reviewer_meta, or review_meta sources. ONLY review_text.
 """,
@@ -100,16 +105,20 @@ Allowed aspects:
 - review_text: food_quality, service, speed, value, ambiance, portions
 - item_meta: categories (Sandwiches, Cafes, Coffee & Tea, Bakeries, Breakfast & Brunch, American (New), Nightlife), WiFi, BusinessAcceptsCreditCards, RestaurantsReservations, outdoor_seating, BusinessParking, BusinessParking_garage, BusinessParking_lot, BusinessParking_street, RestaurantsPriceRange2, stars, review_count
 
-Operators: AND or OR (not nested)
+Operators: AND, OR
 Levels: MUST, SHOULD, or NICE
+
+Requirements:
+1. Structure format: A list alternating between condition objects and operator strings (e.g., [C1, "OP", C2]).
+2. Each request MUST use at least one condition from 'review_text' AND one from 'item_meta'.
 
 Output JSONL format (one JSON per line, NO array wrapper).
 
 Example:
-{"id": "R5", "text": "I want a cafe with good food.", "structure": {"op": "AND", "conditions": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}]}}
-{"id": "R6", "text": "Looking for a sandwich shop or bakery.", "structure": {"op": "OR", "conditions": [{"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"}, {"aspect": "Bakeries", "level": "MUST", "source": "item_meta"}]}}
+{"id": "R5", "text": "I want a cafe with good food.", "structure": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}]}
+{"id": "R6", "text": "Looking for a sandwich shop or bakery that is cheap.", "structure": [{"aspect": "Sandwiches", "level": "MUST", "source": "item_meta"}, "OR", {"aspect": "Bakeries", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "RestaurantsPriceRange2", "level": "MUST", "source": "item_meta"}]}
 
-IMPORTANT: Each request MUST use at least one condition from review_text AND one from item_meta. DO NOT use reviewer_meta or review_meta.
+IMPORTANT: DO NOT use reviewer_meta or review_meta.
 """,
 
     3: """Generate 5 requests with NESTED conditions (AND containing OR, or OR containing AND).
@@ -119,18 +128,18 @@ Allowed aspects:
 - review_text: food_quality, service, speed, value, ambiance, portions
 - item_meta: categories, WiFi, parking attributes, outdoor_seating, stars, etc.
 
-Structure MUST be nested (e.g., outer AND with inner OR, or outer OR with inner AND).
+Structure MUST be nested (lists inside lists).
 Levels: MUST, SHOULD, or NICE
 
 Output JSONL format (one JSON per line, NO array wrapper).
 
 Example (AND containing OR):
-{"id": "R10", "text": "I need parking (garage or street) and good food.", "structure": {"op": "AND", "conditions": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, {"op": "OR", "conditions": [{"aspect": "BusinessParking_garage", "level": "MUST", "source": "item_meta"}, {"aspect": "BusinessParking_street", "level": "MUST", "source": "item_meta"}]}]}}
+{"id": "R10", "text": "I need parking (garage or street) and good food.", "structure": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, "AND", [{"aspect": "BusinessParking_garage", "level": "MUST", "source": "item_meta"}, "OR", {"aspect": "BusinessParking_street", "level": "MUST", "source": "item_meta"}]]}
 
 Example (OR containing AND):
-{"id": "R11", "text": "Either a cafe with WiFi, or a restaurant with outdoor seating.", "structure": {"op": "OR", "conditions": [{"op": "AND", "conditions": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, {"aspect": "WiFi", "level": "MUST", "source": "item_meta"}]}, {"op": "AND", "conditions": [{"aspect": "outdoor_seating", "level": "MUST", "source": "item_meta"}, {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}]}]}}
+{"id": "R11", "text": "Either a cafe with WiFi, or a restaurant with outdoor seating.", "structure": [[{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "WiFi", "level": "MUST", "source": "item_meta"}], "OR", [{"aspect": "outdoor_seating", "level": "MUST", "source": "item_meta"}, "AND", {"aspect": "food_quality", "level": "SHOULD", "source": "review_text"}]]}
 
-IMPORTANT: DO NOT use reviewer_meta or review_meta. Each request MUST have nested structure.
+IMPORTANT: DO NOT use reviewer_meta or review_meta. Use sub-lists for nested groups.
 """,
 
     4: """Generate 5 requests with nested conditions INCLUDING reviewer/review metadata.
@@ -150,15 +159,12 @@ Levels: MUST, SHOULD, or NICE
 Output JSONL format (one JSON per line, NO array wrapper).
 
 Example with common_friend:
-{"id": "R15", "text": "Show me places my friends' network trusts for good food.", "structure": {"op": "AND", "conditions": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, {"aspect": "common_friend", "level": "SHOULD", "source": "reviewer_meta", "user_ids": ["user_abc123", "user_xyz789"]}]}}
-
-Example with nested OR:
-{"id": "R16", "text": "I want recommendations from experienced reviewers (100+ reviews) or those in my network.", "structure": {"op": "AND", "conditions": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, {"op": "OR", "conditions": [{"aspect": "reviewer_review_count", "level": "MUST", "source": "reviewer_meta", "min_value": 100}, {"aspect": "common_friend", "level": "MUST", "source": "reviewer_meta", "user_ids": ["user_abc123"]}]}]}}
+{"id": "R15", "text": "Show me places my friends' network trusts for good food.", "structure": [{"aspect": "food_quality", "level": "MUST", "source": "review_text"}, "AND", [{"aspect": "common_friend", "level": "SHOULD", "source": "reviewer_meta", "user_ids": ["user_abc123", "user_xyz789"]}, "OR", {"aspect": "friends_count", "level": "MUST", "source": "reviewer_meta", "min_value": 50}]]}
 
 Example with review_meta:
-{"id": "R17", "text": "Find cafes with recent positive reviews that my network trusts.", "structure": {"op": "AND", "conditions": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, {"op": "OR", "conditions": [{"aspect": "date", "level": "SHOULD", "source": "review_meta", "recency": "6_months"}, {"aspect": "common_friend", "level": "SHOULD", "source": "reviewer_meta", "user_ids": ["user_abc123"]}]}]}}
+{"id": "R17", "text": "Find cafes with recent positive reviews that my network trusts.", "structure": [{"aspect": "Cafes", "level": "MUST", "source": "item_meta"}, "AND", [{"aspect": "date", "level": "SHOULD", "source": "review_meta", "recency": "6_months"}, "OR", {"aspect": "common_friend", "level": "SHOULD", "source": "reviewer_meta", "user_ids": ["user_abc123"]}]]}
 
-IMPORTANT: Each request MUST include at least one reviewer_meta or review_meta condition with nested structure.
+IMPORTANT: Each request MUST include at least one reviewer_meta or review_meta condition.
 """
 }
 
