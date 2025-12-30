@@ -46,6 +46,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from rich.console import Console
 from data.loader import load_yelp_dataset, YELP_DIR
+from utils.utils import loadjl
 
 console = Console()
 
@@ -428,34 +429,11 @@ def main():
                     console.print(f"[red]Missing: {p}[/red]")
                     sys.exit(1)
 
-            # Load manually (simplified)
-            selection = {}
-            with open(selection_path) as f:
-                for line in f:
-                    if line.strip():
-                        item = json.loads(line)
-                        selection[item["item_id"]] = item
-
-            rev_selection = {}
-            with open(rev_selection_path) as f:
-                for line in f:
-                    if line.strip():
-                        item = json.loads(line)
-                        rev_selection[item["item_id"]] = item["review_ids"]
-
-            reviews_cache = {}
-            with open(reviews_cache_path) as f:
-                for line in f:
-                    if line.strip():
-                        r = json.loads(line)
-                        reviews_cache[r["review_id"]] = r
-
-            restaurants_cache = {}
-            with open(restaurants_cache_path) as f:
-                for line in f:
-                    if line.strip():
-                        biz = json.loads(line)
-                        restaurants_cache[biz["business_id"]] = biz
+            # Load using loadjl
+            selection = {item["item_id"]: item for item in loadjl(selection_path)}
+            rev_selection = {item["item_id"]: item["review_ids"] for item in loadjl(rev_selection_path)}
+            reviews_cache = {r["review_id"]: r for r in loadjl(reviews_cache_path)}
+            restaurants_cache = {biz["business_id"]: biz for biz in loadjl(restaurants_cache_path)}
 
             # Build items
             sorted_ids = sorted(selection.keys(), key=lambda x: -selection[x].get("llm_percent", 0))

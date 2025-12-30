@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any, Union
 
+from utils.utils import loadjl
+
 DATA_DIR = Path("data")
 ATTACKED_DIR = DATA_DIR / "attacked"
 SELECTIONS_PATH = DATA_DIR / "selections.jsonl"
@@ -67,26 +69,6 @@ class Dataset:
     def __iter__(self):
         return iter(self.items)
 
-
-def resolve_dataset(name_or_path: str) -> tuple[Path, Path]:
-    """Resolve dataset name to (data_path, requests_path).
-
-    If name_or_path is a path (contains / or ends with .json/.jsonl), use as-is.
-    Otherwise treat as dataset name and resolve to standard locations.
-    """
-    # Explicit path - use directly
-    if "/" in name_or_path or name_or_path.endswith((".json", ".jsonl")):
-        data_path = Path(name_or_path)
-        # Derive requests from data path name
-        requests_path = REQUESTS_DIR / f"{data_path.stem}.json"
-    else:
-        # Dataset name - resolve to standard locations
-        data_path = PROCESSED_DIR / f"{name_or_path}.jsonl"
-        requests_path = REQUESTS_DIR / f"{name_or_path}.json"
-
-    return data_path, requests_path
-
-
 def check_dataset_exists(data_path: Path, requests_path: Path, dataset_name: str) -> None:
     """Warn user if dataset files don't exist and exit."""
     missing = []
@@ -113,11 +95,8 @@ def load_selections() -> dict:
     """Load all selections from selections.jsonl, keyed by id."""
     selections = {}
     if SELECTIONS_PATH.exists():
-        with open(SELECTIONS_PATH) as f:
-            for line in f:
-                if line.strip():
-                    sel = json.loads(line)
-                    selections[sel["id"]] = sel
+        for sel in loadjl(SELECTIONS_PATH):
+            selections[sel["id"]] = sel
     return selections
 
 
@@ -172,20 +151,19 @@ def _ensure_data_exists(path: str, selection_id: str = None) -> None:
 
 
 
-def load_requests(path: str = "requests.json") -> list[dict]:
-    """Load user requests from JSON file.
+def load_requests(path: str = "requests.jsonl") -> list[dict]:
+    """Load user requests from JSONL file.
 
     Supports both simple format (id, context) and complex format (id, text, structure).
     For complex format, 'text' is used as 'context'.
     """
     try:
-        with open(path) as f:
-            requests = json.load(f)
-            # Normalize complex format to have 'context' field
-            for req in requests:
-                if "text" in req and "context" not in req:
-                    req["context"] = req["text"]
-            return requests
+        requests = loadjl(path)
+        # Normalize complex format to have 'context' field
+        for req in requests:
+            if "text" in req and "context" not in req:
+                req["context"] = req["text"]
+        return requests
     except FileNotFoundError:
         raise FileNotFoundError(f"Requests file not found: {path}")
 
@@ -205,32 +183,26 @@ def load_data(path: str, limit: int = None, attack: str = "none") -> Union[dict,
     # Ensure data exists (generate from selection if not)
     _ensure_data_exists(path)
 
-    def _load_jsonl(filepath: str, limit: int = None) -> list[dict]:
-        items = []
-        with open(filepath, 'r') as f:
-            for line in f:
-                if line.strip():
-                    items.append(json.loads(line))
-                    if limit and len(items) >= limit:
-                        break
-        return items
+    def _load_with_limit(filepath: str, limit: int = None) -> list[dict]:
+        items = loadjl(filepath)
+        return items[:limit] if limit else items
 
     # Load all attacks
     if attack == "all":
-        result = {"clean": _load_jsonl(path, limit)}
+        result = {"clean": _load_with_limit(path, limit)}
         for attack_file in ATTACKED_DIR.glob("*.jsonl"):
-            result[attack_file.stem] = _load_jsonl(str(attack_file), limit)
+            result[attack_file.stem] = _load_with_limit(str(attack_file), limit)
         return result
 
     # Load clean data
     if attack in ("none", "clean", None):
-        return _load_jsonl(path, limit)
+        return _load_with_limit(path, limit)
 
     # Load specific attack
     attack_path = ATTACKED_DIR / f"{attack}.jsonl"
     if not attack_path.exists():
         raise FileNotFoundError(f"Attacked data not found: {attack_path}")
-    return _load_jsonl(str(attack_path), limit)
+    return _load_with_limit(str(attack_path), limit)
 
 
 def format_query(item: dict, mode: str = "string"):
@@ -359,7 +331,8 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict
     rev_selection_path = YELP_DIR / f"rev_{selection_name}.jsonl"
     reviews_cache_path = YELP_DIR / f"reviews_cache_{n}.jsonl"
     restaurants_cache_path = YELP_DIR / f"restaurants_cache_{n}.jsonl"
-    requests_path = YELP_DIR / f"requests_{n}.json"
+    requests_path = YELP_DIR / f"requests_{n}.jsonl"
+    groundtruth_path = YELP_DIR / f"groundtruth_{n}.jsonl"
 
     # Check files exist with smart error messages
     selection_exists = selection_path.exists()
@@ -381,37 +354,24 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict
         msg += f"  python data/scripts/yelp_review_sampler.py {selection_name}"
         raise FileNotFoundError(msg)
 
+    # Check groundtruth file exists
+    if not groundtruth_path.exists():
+        msg = f"Groundtruth file not found: {groundtruth_path}\n\n"
+        msg += f"To create, run:\n"
+        msg += f"  python data/scripts/yelp_precompute_groundtruth.py {selection_name}"
+        raise FileNotFoundError(msg)
+
     # Load selection (for llm_percent ordering)
-    selection = {}
-    with open(selection_path) as f:
-        for line in f:
-            if line.strip():
-                item = json.loads(line)
-                selection[item["item_id"]] = item
+    selection = {item["item_id"]: item for item in loadjl(selection_path)}
 
     # Load rev_selection (review_ids per restaurant)
-    rev_selection = {}
-    with open(rev_selection_path) as f:
-        for line in f:
-            if line.strip():
-                item = json.loads(line)
-                rev_selection[item["item_id"]] = item["review_ids"]
+    rev_selection = {item["item_id"]: item["review_ids"] for item in loadjl(rev_selection_path)}
 
     # Load reviews cache into dict by review_id
-    reviews_cache = {}
-    with open(reviews_cache_path) as f:
-        for line in f:
-            if line.strip():
-                r = json.loads(line)
-                reviews_cache[r["review_id"]] = r
+    reviews_cache = {r["review_id"]: r for r in loadjl(reviews_cache_path)}
 
     # Load restaurants cache into dict by business_id
-    restaurants_cache = {}
-    with open(restaurants_cache_path) as f:
-        for line in f:
-            if line.strip():
-                biz = json.loads(line)
-                restaurants_cache[biz["business_id"]] = biz
+    restaurants_cache = {biz["business_id"]: biz for biz in loadjl(restaurants_cache_path)}
 
     # Sort by llm_percent descending
     sorted_ids = sorted(selection.keys(), key=lambda x: -selection[x].get("llm_percent", 0))
