@@ -1,4 +1,4 @@
-// G1 simple flat 
+// G01 (R00--R04): Flat / Simple Metadata. Requests use only direct item metadata (e.g., attributes, categories) with flat AND composition.
 {
   "id": "R00",
   "scenario": "Digital Nomad",
@@ -109,6 +109,7 @@
     ]
   }
 }
+// G02 (R05--R09): Flat / Review Text. Requests rely exclusively on conditions grounded in review text, composed using flat ANY logic.
 {
   "id": "R05",
   "scenario": "Laptop Work",
@@ -215,5 +216,122 @@
     ]
   }
 }
-// 
-
+// G03 (R10--R14): Flat / Computed Metadata. Requests use computed item metadata requiring interpretation (e.g., hours, time-window constraints) with flat AND logic.
+{
+  "id": "R10",
+  "scenario": "Digital Nomad",
+  "text": "I’m looking for a quiet cafe with free Wi-Fi on Monday where I can work for a while from 10 in the morning to 3 in the afternoon.",
+  "structure": {
+    "op": "AND",
+    "args": [
+      {
+        "aspect": "has_free_wifi",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "WiFi"], "true" : "free" }
+      },
+      {
+        "aspect": "quiet_ambience",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "NoiseLevel"], "true": "quiet", "neutral": "average", "false": "loud" }
+      },
+      {
+        "aspect": "monday_hours",
+        "evidence": { "kind": "item_meta_hours", "path": ["hours", "Monday"], "true" : "10:00-15:00" }
+      }
+    ]
+  }
+}
+{
+  "id": "R11",
+  "scenario": "Digital Nomad",
+  "text": "I’m looking for a quiet cafe with free Wi-Fi on Friday and Saturday morning to work from 8 to 9.",
+  "structure": {
+    "op": "AND",
+    "args": [
+      {
+        "aspect": "has_free_wifi",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "WiFi"], "true" : "free" }
+      },
+      {
+        "aspect": "quiet_ambience",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "NoiseLevel"], "true": "quiet", "neutral": "average", "false": "loud" }
+      },
+      {
+        "aspect": "friday_hours",
+        "evidence": { "kind": "item_meta_hours", "path": ["hours", "Friday"], "true" : "8:00-9:00" }
+      },
+      {
+        "aspect": "saturday_hours",
+        "evidence": { "kind": "item_meta_hours", "path": ["hours", "Saturday"], "true" : "8:00-9:00" }
+      }
+    ]
+  }
+}
+{
+  "id": "R12",
+  "scenario": "Outdoor / Patio",
+  "text": "I’m looking for a casual place with outdoor seating where I can bring my dog and easily park my bike on Wednesday 7 to 8 in the morning.",
+  "structure": {
+    "op": "AND",
+    "args": [
+      {
+        "aspect": "has_outdoor_seating",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "OutdoorSeating"] }
+      },
+      {
+        "aspect": "dogs_allowed",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "DogsAllowed"] }
+      },
+      {
+        "aspect": "has_bike_parking",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "BikeParking"] }
+      },
+      {
+        "aspect": "wednesday_hours",
+        "evidence": { "kind": "item_meta_hours", "path": ["hours", "Wednesday"], "true" : "7:00-8:00" }
+      }
+    ]
+  }
+}
+{
+  "id": "R13",
+  "scenario": "Outdoor / Patio",
+  "text": "I’m looking for a casual place with outdoor seating where I can bring my dog and easily park my bike and relax on Sunday 8 to 9 in the morning.",
+  "structure": {
+    "op": "AND",
+    "args": [
+      {
+        "aspect": "has_outdoor_seating",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "OutdoorSeating"] }
+      },
+      {
+        "aspect": "dogs_allowed",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "DogsAllowed"] }
+      },
+      {
+        "aspect": "has_bike_parking",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "BikeParking"] }
+      },
+      {
+        "aspect": "sunday_hours",
+        "evidence": { "kind": "item_meta_hours", "path": ["hours", "Sunday"], "true" : "8:00-9:00" }
+      }
+    ]
+  }
+}
+{
+  "id": "R14",
+  "scenario": "Romantic Date",
+  "text": "I am picking up my girl on Monday afternoon for a dinner date; I need a place that feels romantic.",
+  "structure": {
+    "op": "AND",
+    "args": [
+      {
+        "aspect": "romantic_ambience",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "Ambience", "romantic"] }
+      },
+      {
+        "aspect": "monday_hours",
+        "evidence": { "kind": "item_meta_hours", "path": ["hours", "Monday"], "true" : "13:00-17:00" }
+      }
+    ]
+  }
+}

@@ -87,32 +87,99 @@ def find_missing_pairs(item_ids: list, requests: list, existing: dict) -> list[t
     return missing
 
 
+def create_selected_files(n: str, sorted_ids: list, restaurants: dict, reviews_by_item: dict) -> tuple[Path, Path] | None:
+    """Create selected restaurants and reviews files in correct order.
+
+    Args:
+        n: Selection number (e.g., "1")
+        sorted_ids: Ordered list of item_ids to include
+        restaurants: {business_id: restaurant_dict}
+        reviews_by_item: {item_id: [review_dicts]}
+
+    Returns:
+        (restaurants_path, reviews_path) if created, None if skipped
+    """
+    restaurants_path = YELP_DIR / f"restaurants_selected_{n}.jsonl"
+    reviews_path = YELP_DIR / f"reviews_selected_{n}.jsonl"
+
+    # Check if files exist and items match
+    if restaurants_path.exists():
+        existing_ids = []
+        for r in loadjl(restaurants_path):
+            existing_ids.append(r.get("business_id"))
+
+        if existing_ids == sorted_ids:
+            # Files exist and match - do nothing
+            console.print(f"[dim]Selected files exist and match ({len(sorted_ids)} items)[/dim]")
+            return restaurants_path, reviews_path
+
+        # Files exist but items don't match - ask user
+        console.print(f"\n[yellow]Selected files exist but items differ:[/yellow]")
+        console.print(f"  Existing: {len(existing_ids)} items")
+        console.print(f"  Expected: {len(sorted_ids)} items")
+        response = input("Overwrite selected files? [y/N]: ").strip().lower()
+        if response != 'y':
+            console.print("[dim]Skipped creating selected files[/dim]")
+            return None
+
+    # Write restaurants in sorted order
+    with open(restaurants_path, "w") as f:
+        for item_id in sorted_ids:
+            restaurant = restaurants.get(item_id, {})
+            f.write(json.dumps(restaurant) + "\n")
+
+    # Write reviews grouped by restaurant in sorted order
+    with open(reviews_path, "w") as f:
+        for item_id in sorted_ids:
+            reviews = reviews_by_item.get(item_id, [])
+            for review in reviews:
+                f.write(json.dumps(review) + "\n")
+
+    console.print(f"[green]Created selected files ({len(sorted_ids)} items)[/green]")
+    return restaurants_path, reviews_path
+
+
 # --- Visualization ---
 
 def print_groundtruth_matrix(entries: list, item_ids: list, request_ids: list):
-    """Print items × requests matrix with colored labels."""
+    """Print items × requests matrix with colored labels.
+
+    Splits into multiple tables if more than 10 requests (10 per table).
+    """
     lookup = {(e["item_id"], e["request_id"]): e["gold_label"] for e in entries}
 
-    table = Table(title="Ground Truth Matrix", show_lines=False)
-    table.add_column("Item", style="cyan", width=14)
-    for req_id in request_ids:
-        table.add_column(req_id, justify="center", width=5)
+    # Split requests into chunks of 10
+    chunk_size = 10
+    request_chunks = [request_ids[i:i+chunk_size] for i in range(0, len(request_ids), chunk_size)]
 
-    for item_id in item_ids:
-        row = [item_id[:12] + ".."]
-        for req_id in request_ids:
-            label = lookup.get((item_id, req_id), "?")
-            if label == 1:
-                row.append("[green]+1[/green]")
-            elif label == -1:
-                row.append("[red]-1[/red]")
-            elif label == 0:
-                row.append("[yellow]0[/yellow]")
-            else:
-                row.append("[dim]?[/dim]")
-        table.add_row(*row)
+    for chunk_idx, req_chunk in enumerate(request_chunks):
+        if len(request_chunks) > 1:
+            title = f"Ground Truth Matrix ({chunk_idx+1}/{len(request_chunks)})"
+        else:
+            title = "Ground Truth Matrix"
 
-    console.print(table)
+        table = Table(title=title, show_lines=False)
+        table.add_column("Item", style="cyan", width=14)
+        for req_id in req_chunk:
+            table.add_column(req_id, justify="center", width=5)
+
+        for item_id in item_ids:
+            row = [item_id[:12] + ".."]
+            for req_id in req_chunk:
+                label = lookup.get((item_id, req_id), "?")
+                if label == 1:
+                    row.append("[green]+1[/green]")
+                elif label == -1:
+                    row.append("[red]-1[/red]")
+                elif label == 0:
+                    row.append("[yellow]0[/yellow]")
+                else:
+                    row.append("[dim]?[/dim]")
+            table.add_row(*row)
+
+        console.print(table)
+        if chunk_idx < len(request_chunks) - 1:
+            console.print()  # Add spacing between tables
 
 
 def print_statistics(stats: dict, per_request: dict = None):
@@ -503,6 +570,58 @@ def get_nested_value(item: dict, path: list):
 
 # --- Declarative item_meta Evaluation ---
 
+def parse_time(time_str: str) -> int | None:
+    """Parse time string like '6:30' or '16:0' to minutes since midnight."""
+    if not time_str:
+        return None
+    parts = time_str.split(":")
+    if len(parts) != 2:
+        return None
+    try:
+        hours = int(parts[0])
+        minutes = int(parts[1])
+        return hours * 60 + minutes
+    except ValueError:
+        return None
+
+
+def parse_hours_range(hours_str: str) -> tuple[int, int] | None:
+    """Parse hours string like '6:30-16:0' to (start_minutes, end_minutes)."""
+    if not hours_str or hours_str == "0:0-0:0":
+        return None  # Closed
+    parts = hours_str.split("-")
+    if len(parts) != 2:
+        return None
+    start = parse_time(parts[0])
+    end = parse_time(parts[1])
+    if start is None or end is None:
+        return None
+    return (start, end)
+
+
+def hours_contains_range(actual_hours: str, required_range: str) -> bool:
+    """Check if actual business hours fully contain the required time range.
+
+    Args:
+        actual_hours: Business hours like "6:30-16:0"
+        required_range: Required time range like "10:00-15:00"
+
+    Returns:
+        True if required_range falls entirely within actual_hours
+    """
+    actual = parse_hours_range(actual_hours)
+    required = parse_hours_range(required_range)
+
+    if actual is None or required is None:
+        return False
+
+    actual_start, actual_end = actual
+    req_start, req_end = required
+
+    # Required range must fall entirely within actual range
+    return actual_start <= req_start and req_end <= actual_end
+
+
 def match_value(actual, expected) -> bool:
     """Normalized string matching (case-insensitive contains)."""
     if expected is None:
@@ -593,6 +712,16 @@ def evaluate_condition(item: dict, condition: dict, reviews: list = None, review
         # Declarative rule-based evaluation
         value = get_nested_value(item, path)
         satisfied = evaluate_item_meta_rule(value, evidence_spec)
+        score = satisfied
+
+    elif kind == "item_meta_hours":
+        # Hours containment check: does actual hours contain required range?
+        value = get_nested_value(item, path)
+        required_range = evidence_spec.get("true", "")
+        if value and hours_contains_range(str(value), required_range):
+            satisfied = 1   # Hours contain required range
+        else:
+            satisfied = -1  # Missing or doesn't contain → false (no neutral)
         score = satisfied
 
     elif kind == "review_text":
@@ -687,6 +816,17 @@ async def evaluate_condition_async(item: dict, condition: dict, reviews: list = 
         value = get_nested_value(item, path)
         satisfied = evaluate_item_meta_rule(value, evidence_spec)
         score = satisfied  # item_meta score = its result value
+        return satisfied, score, {"kind": kind, "value": value, "satisfied": satisfied, "score": score}
+
+    elif kind == "item_meta_hours":
+        # Hours containment check: does actual hours contain required range?
+        value = get_nested_value(item, path)
+        required_range = evidence_spec.get("true", "")
+        if value and hours_contains_range(str(value), required_range):
+            satisfied = 1   # Hours contain required range
+        else:
+            satisfied = -1  # Missing or doesn't contain → false (no neutral)
+        score = satisfied
         return satisfied, score, {"kind": kind, "value": value, "satisfied": satisfied, "score": score}
 
     elif kind == "review_text":
@@ -849,44 +989,69 @@ def generate_groundtruth(selection_name: str, limit: int = 10, force: bool = Fal
     output_path = YELP_DIR / f"groundtruth_{n}.jsonl"
 
     # Check required files exist
-    required_files = [restaurants_cache_path, selection_path, requests_path]
+    required_files = [selection_path, requests_path]
     for p in required_files:
         if not p.exists():
             console.print(f"[red]Missing: {p}[/red]")
             sys.exit(1)
 
-    # Load data
-    console.print(f"[cyan]Loading data...[/cyan]")
-    restaurants = {r["business_id"]: r for r in loadjl(restaurants_cache_path)}
+    # Load selection to get sorted_ids first (needed for data file creation)
     selection = {item["item_id"]: item for item in loadjl(selection_path)}
-    requests = loadjl(requests_path)
-    request_ids = [r["id"] for r in requests]
-    requests_lookup = {r["id"]: r for r in requests}
-
-    # Sort by llm_percent and apply limit FIRST (before loading reviews)
     sorted_ids = sorted(selection.keys(), key=lambda x: -selection[x].get("llm_percent", 0))
     if limit > 0:
         sorted_ids = sorted_ids[:limit]
     sorted_ids_set = set(sorted_ids)
 
-    console.print(f"  Restaurants: {len(sorted_ids)}")
+    # Check for selected files (editable) or fall back to cache files
+    restaurants_selected_path = YELP_DIR / f"restaurants_selected_{n}.jsonl"
+    reviews_selected_path = YELP_DIR / f"reviews_selected_{n}.jsonl"
 
-    # Load reviews ONLY for restaurants being processed
-    reviews_by_item = {}
-    if rev_selection_path.exists() and reviews_cache_path.exists():
-        rev_selection = {r["item_id"]: r["review_ids"] for r in loadjl(rev_selection_path) if r["item_id"] in sorted_ids_set}
-        # Collect only needed review IDs
-        needed_review_ids = set()
-        for review_ids in rev_selection.values():
-            needed_review_ids.update(review_ids)
-        # Load only needed reviews from cache
-        reviews_cache = {r["review_id"]: r for r in loadjl(reviews_cache_path) if r["review_id"] in needed_review_ids}
-        for item_id, review_ids in rev_selection.items():
-            reviews_by_item[item_id] = [reviews_cache[rid] for rid in review_ids if rid in reviews_cache]
-        console.print(f"  Reviews loaded: {sum(len(v) for v in reviews_by_item.values())} for {len(sorted_ids)} restaurants")
+    if restaurants_selected_path.exists() and reviews_selected_path.exists():
+        # Load from selected files (editable)
+        console.print(f"[cyan]Loading data from selected files (editable)...[/cyan]")
+        console.print(f"  [green]Using: {restaurants_selected_path.name}[/green]")
+        console.print(f"  [green]Using: {reviews_selected_path.name}[/green]")
+
+        # Load restaurants - order in file = sorted_ids order
+        restaurants_list = loadjl(restaurants_selected_path)
+        restaurants = {r["business_id"]: r for r in restaurants_list}
+
+        # Load reviews grouped by business_id
+        reviews_list = loadjl(reviews_selected_path)
+        reviews_by_item = {}
+        for r in reviews_list:
+            bid = r["business_id"]
+            if bid not in reviews_by_item:
+                reviews_by_item[bid] = []
+            reviews_by_item[bid].append(r)
     else:
-        console.print(f"  [yellow]No review files found - review_text/review_meta will return unknown[/yellow]")
+        # Fall back to cache files
+        console.print(f"[cyan]Loading data from cache files...[/cyan]")
 
+        cache_files = [restaurants_cache_path, rev_selection_path, reviews_cache_path]
+        missing_cache = [p for p in cache_files if not p.exists()]
+        if missing_cache:
+            console.print(f"[red]Missing cache files: {[p.name for p in missing_cache]}[/red]")
+            sys.exit(1)
+
+        # Load restaurants
+        restaurants = {r["business_id"]: r for r in loadjl(restaurants_cache_path)}
+        restaurants = {k: v for k, v in restaurants.items() if k in sorted_ids_set}
+
+        # Load reviews via rev_selection mapping
+        rev_selection = {r["item_id"]: r["review_ids"] for r in loadjl(rev_selection_path)}
+        all_reviews = {r["review_id"]: r for r in loadjl(reviews_cache_path)}
+        reviews_by_item = {}
+        for item_id in sorted_ids:
+            review_ids = rev_selection.get(item_id, [])
+            reviews_by_item[item_id] = [all_reviews[rid] for rid in review_ids if rid in all_reviews]
+
+    requests = loadjl(requests_path)
+    request_ids = [r["id"] for r in requests]
+    requests_lookup = {r["id"]: r for r in requests}
+
+    console.print(f"  Restaurants: {len(restaurants)}")
+    console.print(f"  Reviews: {sum(len(v) for v in reviews_by_item.values())}")
     console.print(f"  Requests: {len(requests)}")
 
     # Load LLM judgment cache (shared across datasets)
@@ -915,6 +1080,17 @@ def generate_groundtruth(selection_name: str, limit: int = 10, force: bool = Fal
 
         print_groundtruth_matrix(all_entries, sorted_ids, request_ids)
         print_statistics(stats, per_request)
+        print_hits_at_k(all_entries, request_ids, sorted_ids)
+
+        # Create selected files (ordered by sorted_ids) if needed
+        result = create_selected_files(n, sorted_ids, restaurants, reviews_by_item)
+
+        # Print file paths at the bottom
+        if result:
+            rest_path, rev_path = result
+            console.print(f"\n[bold]Selected Data Files:[/bold]")
+            console.print(f"  {rest_path}")
+            console.print(f"  {rev_path}")
         return
 
     # Initialize async executor for parallel LLM calls (conservative limit)
@@ -998,6 +1174,16 @@ def generate_groundtruth(selection_name: str, limit: int = 10, force: bool = Fal
     print_groundtruth_matrix(all_entries, sorted_ids, request_ids)
     print_statistics(stats, per_request)
     print_hits_at_k(all_entries, request_ids, sorted_ids)
+
+    # Create selected files (ordered by sorted_ids) if needed
+    result = create_selected_files(n, sorted_ids, restaurants, reviews_by_item)
+
+    # Print file paths at the bottom
+    if result:
+        rest_path, rev_path = result
+        console.print(f"\n[bold]Selected Data Files:[/bold]")
+        console.print(f"  {rest_path}")
+        console.print(f"  {rev_path}")
 
 
 def main():
