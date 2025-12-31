@@ -75,6 +75,7 @@ def get_method(args, run_dir: str = None) -> Callable:
 __all__ = [
     'BaseMethod',
     'ChainOfThought',
+    'ReAct',
     'rnot',
     'knot',
     'get_method',
