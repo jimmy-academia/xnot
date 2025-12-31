@@ -96,17 +96,21 @@
 // G02 (R05--R09): Mixed / Item Meta + Review Text. Requests use item_meta to narrow candidates, then review_text to select one.
 {
   "id": "R05",
-  "scenario": "Disconnected Coffee Art",
-  "text": "I want a cafe without WiFi so I can truly disconnect while admiring the barista's latte art - I love watching them craft beautiful designs in my cup.",
+  "scenario": "Indoor Matcha Lover",
+  "text": "I'm looking for a budget-friendly indoor cafe without outdoor seating where I can enjoy good matcha - reviews should mention their matcha quality.",
   "structure": {
     "op": "AND",
     "args": [
       {
-        "aspect": "no_wifi",
-        "evidence": { "kind": "item_meta", "path": ["attributes", "WiFi"], "true": "no" }
+        "aspect": "no_outdoor_seating",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "OutdoorSeating"], "true": false }
       },
       {
-        "aspect": "has_latte_art_mentioned_in_reviews",
+        "aspect": "budget_friendly",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "RestaurantsPriceRange2"], "true": "1" }
+      },
+      {
+        "aspect": "has_good_matcha_mentioned_in_reviews",
         "evidence": { "kind": "review_text" }
       }
     ]
@@ -114,14 +118,18 @@
 }
 {
   "id": "R06",
-  "scenario": "Cocktails & Aesthetics",
-  "text": "I'm looking for a place that serves proper cocktails with a full bar, where reviews describe it as Instagram-worthy or especially aesthetic - somewhere photogenic for an evening out.",
+  "scenario": "Cocktails & Outdoor Aesthetics",
+  "text": "I'm looking for a place with a full bar and outdoor seating where reviews describe it as Instagram-worthy or especially aesthetic.",
   "structure": {
     "op": "AND",
     "args": [
       {
         "aspect": "has_full_bar",
         "evidence": { "kind": "item_meta", "path": ["attributes", "Alcohol"], "true": "full_bar" }
+      },
+      {
+        "aspect": "has_outdoor_seating",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "OutdoorSeating"] }
       },
       {
         "aspect": "described_as_aesthetic_or_instagram_worthy",
@@ -154,14 +162,14 @@
 }
 {
   "id": "R08",
-  "scenario": "Matcha & TV",
-  "text": "I'm looking for a moderately-priced cafe with a TV where I can relax watching something while enjoying good matcha - reviews should mention their matcha quality.",
+  "scenario": "Outdoor Matcha Treat",
+  "text": "I'm looking for a moderately-priced cafe with outdoor seating where I can enjoy good matcha - reviews should mention their matcha quality.",
   "structure": {
     "op": "AND",
     "args": [
       {
-        "aspect": "has_tv",
-        "evidence": { "kind": "item_meta", "path": ["attributes", "HasTV"] }
+        "aspect": "has_outdoor_seating",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "OutdoorSeating"] }
       },
       {
         "aspect": "moderate_price",
@@ -176,14 +184,18 @@
 }
 {
   "id": "R09",
-  "scenario": "Cash-Only Bookish",
-  "text": "I prefer cash-only cafes with no credit card hassle - I want somewhere cozy where reviews mention books or a literary vibe.",
+  "scenario": "Bookish Indoor Cafe",
+  "text": "I want a moderately-priced cozy indoor cafe without outdoor seating where reviews mention books or a literary vibe.",
   "structure": {
     "op": "AND",
     "args": [
       {
-        "aspect": "cash_only",
-        "evidence": { "kind": "item_meta", "path": ["attributes", "BusinessAcceptsCreditCards"], "true": false }
+        "aspect": "no_outdoor_seating",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "OutdoorSeating"], "true": false }
+      },
+      {
+        "aspect": "moderate_price",
+        "evidence": { "kind": "item_meta", "path": ["attributes", "RestaurantsPriceRange2"], "true": "2" }
       },
       {
         "aspect": "has_books_mentioned_in_reviews",

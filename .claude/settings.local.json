@@ -25,7 +25,8 @@
       "Bash(tree:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(mv:*)",
-      "Bash(source:*)"
+      "Bash(source:*)",
+      "Bash(sort:*)"
     ]
   }
 }
