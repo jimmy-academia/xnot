@@ -2,32 +2,36 @@
 
 from typing import Callable
 
-from .cot import method as cot
+from .base import BaseMethod
+from .cot import ChainOfThought, method as cot
 from .rnot import method as rnot
 from .knot import create_method, method as knot, set_output_dir, set_defense_mode, set_current_ids
 from .knot_v4 import KnowledgeNetworkOfThoughtV4
 from .knot_v5 import KnowledgeNetworkOfThoughtV5, create_method as create_method_v5
 
 
-def get_method(name: str, mode: str = "string", approach: str = "base",
-               defense: bool = False, run_dir: str = None) -> Callable:
-    """Get configured method callable.
+def get_method(args, run_dir: str = None) -> Callable:
+    """Get configured method callable from args.
 
     Args:
-        name: Method name ("cot", "not", "knot", "dummy")
-        mode: Input mode for knot ("string" or "dict")
-        approach: KNoT approach ("base", "voting", "iterative", "divide", "v4")
-        defense: Enable defense mode
-        run_dir: Run directory for logging (knot only)
+        args: Parsed command-line arguments with:
+            - args.method: "cot", "not", "knot", "dummy"
+            - args.mode: "string" or "dict"
+            - args.knot_approach: "base", "voting", "iterative", "divide", "v4", "v5"
+            - args.defense: bool
+        run_dir: Run directory for logging
 
     Returns:
         Callable that takes (query, context) and returns int (-1, 0, 1)
     """
+    name = args.method
+    mode = args.mode
+    approach = getattr(args, 'knot_approach', 'base')
+    defense = args.defense
+
     if name == "cot":
-        from .cot import method, set_defense_mode as cot_set_defense
-        if defense:
-            cot_set_defense(True)
-        return method
+        from .cot import ChainOfThought
+        return ChainOfThought(defense=defense, run_dir=run_dir)
 
     elif name == "not":
         from .rnot import method
@@ -55,6 +59,8 @@ def get_method(name: str, mode: str = "string", approach: str = "base",
 
 
 __all__ = [
+    'BaseMethod',
+    'ChainOfThought',
     'cot',
     'rnot',
     'knot',
@@ -64,4 +70,5 @@ __all__ = [
     'set_defense_mode',
     'set_current_ids',
     'KnowledgeNetworkOfThoughtV4',
+    'KnowledgeNetworkOfThoughtV5',
 ]

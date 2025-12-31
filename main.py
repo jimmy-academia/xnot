@@ -31,11 +31,11 @@ def main():
     # Load data
     dataset = load_dataset(args.data, args.selection_name, args.limit, args.attack)
     logger.info(f"\n{dataset}")
-    input()
     
     # Select method
     method = get_method(args, run_dir)
-
+    input()
+    
     # Run evaluation (handles both parallel and sequential)
     stats = run_evaluation_loop(args, dataset.items, dataset.requests, method, experiment)
 

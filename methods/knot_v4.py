@@ -7,8 +7,8 @@ import json
 import asyncio
 from typing import Optional
 
-# Import from base module
-from .base import (
+# Import from shared module (formerly base.py)
+from .shared import (
     DEBUG,
     _current_item_id, _current_request_id,
     SYSTEM_PROMPT,
@@ -537,7 +537,7 @@ Output only the corrected step in format: (N)=LLM("...")"""
             script = self.stage2_phase_c(script, dag, query, context)
             script = self.stage2_phase_d(script, dag)
             if DEBUG:
-                from .base import parse_script
+                from .shared import parse_script
                 steps = parse_script(script)
                 print(f"Final script has {len(steps)} parsed steps")
 

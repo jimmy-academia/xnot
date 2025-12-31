@@ -8,8 +8,8 @@ import time
 import asyncio
 from typing import Optional
 
-# Import from base module
-from .base import (
+# Import from shared module (formerly base.py)
+from .shared import (
     DEBUG, LOG_ENABLED,
     _defense, _use_defense_prompt, _current_item_id, _current_request_id, _log_data,
     set_defense_mode, set_output_dir, set_current_ids, set_defense,
