@@ -65,6 +65,14 @@ def get_method(args, run_dir: str = None) -> Callable:
             return lambda q, c: react_instance.evaluate_ranking(q, c, k)
         return react_instance
 
+    elif name == "cotsc":
+        from .cotsc import CoTSelfConsistency
+        cotsc_instance = CoTSelfConsistency(run_dir=run_dir)
+        if getattr(args, 'ranking', True):
+            k = getattr(args, 'k', 1)
+            return lambda q, c: cotsc_instance.evaluate_ranking(q, c, k)
+        return cotsc_instance
+
     elif name == "dummy":
         return lambda query, context: 0
 
