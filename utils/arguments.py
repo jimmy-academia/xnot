@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument("--limit", type=int, help="Limit items to process")
 
     # Method arguments
-    parser.add_argument("--method", choices=["cot", "not", "knot", "dummy"], default="dummy", help="Method to use")
+    parser.add_argument("--method", choices=["cot", "not", "knot", "dummy"], default="cot", help="Method to use")
     parser.add_argument("--mode", choices=["string", "dict"], default="string", help="Input mode for knot")
     parser.add_argument("--knot-approach", choices=["base", "voting", "iterative", "divide", "v4", "v5"], default="base",
                         help="Approach for knot (base=default, voting=self-consistency, iterative=plan refinement, divide=divide-conquer, v4=hierarchical planning, v5=robust adversarial)")

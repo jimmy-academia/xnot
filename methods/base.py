@@ -30,3 +30,11 @@ class BaseMethod(ABC):
     def __call__(self, query: Any, context: str) -> int:
         """Allow method to be called as function."""
         return self.evaluate(query, context)
+
+    def __repr__(self) -> str:
+        """Show method info in magenta color."""
+        info = f"{self.__class__.__name__}(defense={self.defense}"
+        if self.run_dir:
+            info += f", run_dir={self.run_dir}"
+        info += ")"
+        return f"\033[35m{info}\033[0m"  # Magenta

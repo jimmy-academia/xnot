@@ -69,8 +69,15 @@ class ExperimentManager:
         Create auto-numbered development directory.
 
         Pattern: results/dev/{NNN}_{run_name}/
+
+        Reuses the last directory if it's empty.
         """
         DEV_DIR.mkdir(parents=True, exist_ok=True)
+
+        # Check if last directory is empty - reuse it if so
+        last_dir = self._get_last_dev_dir()
+        if last_dir and self._is_dir_empty(last_dir):
+            return last_dir
 
         run_num = self._get_next_run_number()
         dir_name = f"{run_num:03d}_{self.run_name}"
@@ -78,6 +85,34 @@ class ExperimentManager:
         run_dir.mkdir(exist_ok=True)
 
         return run_dir
+
+    def _get_last_dev_dir(self) -> Optional[Path]:
+        """Get the most recent dev directory by number."""
+        if not DEV_DIR.exists():
+            return None
+
+        existing = list(DEV_DIR.glob("[0-9][0-9][0-9]_*/"))
+        if not existing:
+            return None
+
+        # Sort by run number descending
+        def get_num(p):
+            try:
+                return int(p.name.split("_")[0])
+            except ValueError:
+                return -1
+
+        existing.sort(key=get_num, reverse=True)
+        return existing[0] if existing else None
+
+    def _is_dir_empty(self, path: Path) -> bool:
+        """Check if directory is empty (no files, subdirs ok if also empty)."""
+        for item in path.iterdir():
+            if item.is_file():
+                return False
+            if item.is_dir() and not self._is_dir_empty(item):
+                return False
+        return True
 
     def _setup_benchmark_dir(self) -> Path:
         """

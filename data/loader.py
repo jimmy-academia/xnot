@@ -361,6 +361,14 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict
         msg += f"  python data/scripts/yelp_precompute_groundtruth.py {selection_name}"
         raise FileNotFoundError(msg)
 
+    # Load groundtruth and build lookup: {item_id: {request_id: gold_label}}
+    groundtruth_lookup = {}
+    for gt in loadjl(groundtruth_path):
+        item_id = gt["item_id"]
+        if item_id not in groundtruth_lookup:
+            groundtruth_lookup[item_id] = {}
+        groundtruth_lookup[item_id][gt["request_id"]] = gt["gold_label"]
+
     # Load selection (for llm_percent ordering)
     selection = {item["item_id"]: item for item in loadjl(selection_path)}
 
@@ -422,6 +430,7 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict
             "hours": biz.get("hours"),
             "llm_percent": sel.get("llm_percent", 0),
             "llm_reasoning": sel.get("llm_reasoning", ""),
+            "gold_labels": groundtruth_lookup.get(biz_id, {}),
             "item_data": item_data
         })
 
