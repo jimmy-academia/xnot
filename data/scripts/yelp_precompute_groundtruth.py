@@ -686,7 +686,51 @@ def aggregate_judgments(judgments: list[int], weights: list[float] = None) -> tu
     return result, score
 
 
-def calculate_reviewer_weight(user_meta: dict, weight_fields: list = None) -> float:
+def filter_reviews(reviews: list, filter_spec: dict) -> list:
+    """Filter reviews before aggregation.
+
+    Supported filters:
+    - {"elite": "not_empty"} - only reviews from elite users
+    - {"date": "min_year", "value": 2018} - only reviews from 2018+
+
+    Args:
+        reviews: List of review dicts
+        filter_spec: Filter specification dict
+
+    Returns:
+        Filtered list of reviews
+    """
+    if not filter_spec:
+        return reviews
+
+    result = []
+    for r in reviews:
+        include = True
+
+        # Elite filter
+        if "elite" in filter_spec:
+            user_elite = r.get("user", {}).get("elite", [])
+            if filter_spec["elite"] == "not_empty":
+                include = include and bool(user_elite)
+
+        # Date filter
+        if "date" in filter_spec and include:
+            date_str = r.get("date", "")
+            if filter_spec["date"] == "min_year":
+                min_year = filter_spec.get("value", 0)
+                try:
+                    review_year = int(date_str[:4])
+                    include = include and review_year >= min_year
+                except (ValueError, TypeError):
+                    include = False
+
+        if include:
+            result.append(r)
+
+    return result
+
+
+def calculate_reviewer_weight(user_meta: dict, review: dict = None, weight_fields: list = None) -> float:
     """Calculate weight for a review based on reviewer metadata.
 
     Only considers fields explicitly specified in weight_fields.

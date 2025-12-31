@@ -1,0 +1,63 @@
+\section{Experiment}
+\paragraph{Data construction.}
+We construct \emph{query} and \emph{context} sets from the Yelp Open Dataset using a multi-stage curation pipeline designed to ensure data quality and relevance.
+
+\textbf{Curation Pipeline.}
+First, we interactively select a target city and specific cuisine categories (e.g., ``Italian'', ``Mexican'') based on restaurant density.
+To ensure the selected entities genuinely fit the target categories, we employ an automated LLM-based filtering step.
+Candidates are ranked by \emph{richness} (total volume of review text) and processed by an LLM which estimates the probability of category fit (0--100\%) based on keyword evidence extracted from their reviews.
+We retain only restaurants with a high probability of fit.
+
+\textbf{Review Sampling.}
+For each selected restaurant, we construct a document set of 20 reviews.
+To capture diverse user sentiments, we stratify the sampling by star rating, selecting exactly 4 reviews from each star level (1--5 stars).
+Within each stratum, reviews are selected by descending text length to maximize the information available for reasoning.
+
+\textbf{Metadata Structure.}
+Each query corresponds to a single restaurant and includes:
+(i) \emph{Item Metadata}: structured fields such as name, location, categories, attributes, and hours; and
+(ii) \emph{Review Data}: the set of 20 sampled reviews, including text, rating, date, and reviewer profile signals (e.g., elite status, friend count, year started).
+
+\paragraph{Contexts (User Requests).}
+Each context corresponds to a natural-language user request that specifies a set of constraints, which must be supported by evidence available in the query. 
+Rather than assuming a single notion of difficulty, we organize contexts into groups that isolate distinct combinations of evidence sources and logical structures. 
+Across groups, requests vary along two orthogonal axes: 
+(1) the types of information sources they reference, including direct item metadata, computed metadata (e.g., hours or time-window constraints), review text, and reviewer or review metadata; and 
+(2) the compositional structure of the constraints, ranging from flat Boolean chains to nested Boolean expressions with explicit scope.
+
+Flat requests consist of sequential compositions of conditions connected by AND/OR operators (e.g., $A \,\mathrm{op}_1\, B \,\mathrm{op}_2\, C$), while nested requests require hierarchical Boolean structure (e.g., $A \land (B \lor C)$), testing the model’s ability to preserve operator precedence and propagate uncertainty across recursive compositions. 
+Using this design, we construct 50 contexts grouped into 10 categories, each containing five requests, where each group isolates a specific combination of evidence sources and logical structure (simple vs.\ computed metadata, text, social signals; flat vs.\ balanced or skewed nesting).
+
+\begin{itemize}
+    \item \textbf{G01 (R00--R04): Flat / Simple Metadata.}
+    Requests use only direct item metadata (e.g., attributes, categories) with flat AND/OR composition.
+
+    \item \textbf{G02 (R05--R09): Flat / Review Text.}
+    Requests rely exclusively on conditions grounded in review text, composed using flat AND/OR logic.
+
+    \item \textbf{G03 (R10--R14): Flat / Computed Metadata.}
+    Requests use computed item metadata requiring interpretation (e.g., hours, time-window constraints) with flat AND/OR logic.
+
+    \item \textbf{G04 (R15--R19): Flat / Social Metadata.}
+    Requests use only reviewer or review metadata (e.g., elite status, recency) with flat AND/OR logic.
+
+    \item \textbf{G05 (R20--R24): Flat / Simple Metadata + Review Text.}
+    Requests combine direct item metadata and review text conditions in flat AND/OR form.
+
+    \item \textbf{G06 (R25--R29): Flat / Simple Metadata + Review Text + Social Metadata.}
+    Requests integrate structured item metadata, unstructured review text, and social signals within a flat Boolean structure.
+
+    \item \textbf{G07 (R30--R34): Nested (Balanced) / Simple Metadata + Review Text.}
+    Requests use balanced nested Boolean expressions over simple item metadata and review text.
+
+    \item \textbf{G08 (R35--R39): Nested (Balanced) / Computed Metadata + Social Metadata.}
+    Requests use balanced nesting while combining computed item metadata and social signals.
+
+    \item \textbf{G09 (R40--R44): Nested (Skewed) / Simple Metadata + Review Text.}
+    Requests use skewed (left- or right-branching) nested structures over simple metadata and review text.
+
+    \item \textbf{G10 (R45--R49): Nested (Skewed) / Computed Metadata + Social Metadata.}
+    Requests combine skewed nesting with computed metadata and social signals.
+\end{itemize}
+
+
