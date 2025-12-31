@@ -46,7 +46,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from rich.console import Console
 from data.loader import load_yelp_dataset, YELP_DIR
-from utils.utils import loadjl
+from utils.io import loadjl
 
 console = Console()
 

@@ -11,7 +11,7 @@ from rich.table import Table
 
 import re
 from data.loader import format_query, format_ranking_query, normalize_pred, load_groundtruth_scores
-from utils.utils import loadjl
+from utils.io import loadjl
 
 
 def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: str = "string") -> dict:

@@ -118,49 +118,74 @@ Example with verification:
 
         return script
 
+    def _build_fallback_prompt(self, query, context: str) -> str:
+        """Build fallback prompt for direct answer when script parsing fails."""
+        return f"Based on restaurant: {query}\nUser wants: {context}\nRecommend? Output only: -1, 0, or 1"
+
+    def _cache_result(self, idx: str, output: str) -> None:
+        """Cache step output, parsing as literal if possible."""
+        try:
+            self.cache[idx] = ast.literal_eval(output)
+        except:
+            self.cache[idx] = output
+
+    def _execute_step_sync(self, idx: str, instr: str, query, context: str) -> str:
+        """Execute a single step synchronously."""
+        filled = substitute_variables(instr, query, context, self.cache)
+        if DEBUG:
+            print(f"Step ({idx}): {filled[:100]}...")
+
+        try:
+            start = time.time()
+            output = call_llm(filled, system=SYSTEM_PROMPT, role="worker")
+            duration_sec = time.time() - start
+        except Exception as e:
+            output = "0"
+            duration_sec = 0
+            if DEBUG:
+                print(f"  Error: {e}")
+
+        log_execution_step(idx, instr, filled, output, duration_sec)
+        if DEBUG:
+            print(f"  -> {output[:100]}...")
+        return output
+
+    async def _execute_step_async(self, idx: str, instr: str, query, context: str) -> tuple:
+        """Execute a single step asynchronously. Returns (idx, output)."""
+        filled = substitute_variables(instr, query, context, self.cache)
+        if DEBUG:
+            print(f"Step ({idx}): {filled[:80]}...")
+
+        try:
+            start = time.time()
+            output = await call_llm_async(filled, system=SYSTEM_PROMPT, role="worker")
+            duration_sec = time.time() - start
+        except Exception as e:
+            output = "0"
+            duration_sec = 0
+            if DEBUG:
+                print(f"  Error: {e}")
+
+        log_execution_step(idx, instr, filled, output, duration_sec)
+        return idx, output
+
     def execute_script(self, script: str, query, context: str) -> str:
-        """Execute script step by step."""
+        """Execute script step by step (sequential)."""
         self.cache = {}
         steps = parse_script(script)
 
         if not steps:
-            # Fallback: direct answer
-            fallback = f"Based on restaurant: {query}\nUser wants: {context}\nRecommend? Output only: -1, 0, or 1"
+            fallback = self._build_fallback_prompt(query, context)
             start = time.time()
             output = call_llm(fallback, system=SYSTEM_PROMPT, role="worker")
-            duration_sec = time.time() - start
-            log_execution_step("fallback", "direct answer", fallback, output, duration_sec)
+            log_execution_step("fallback", "direct answer", fallback, output, time.time() - start)
             return output
 
         final = ""
         for idx, instr in steps:
-            filled = substitute_variables(instr, query, context, self.cache)
-
-            if DEBUG:
-                print(f"Step ({idx}): {filled[:100]}...")
-
-            try:
-                start = time.time()
-                output = call_llm(filled, system=SYSTEM_PROMPT, role="worker")
-                duration_sec = time.time() - start
-            except Exception as e:
-                output = "0"
-                duration_sec = 0
-                if DEBUG:
-                    print(f"  Error: {e}")
-
-            # Log execution step
-            log_execution_step(idx, instr, filled, output, duration_sec)
-
-            # Cache result
-            try:
-                self.cache[idx] = ast.literal_eval(output)
-            except:
-                self.cache[idx] = output
-
+            output = self._execute_step_sync(idx, instr, query, context)
+            self._cache_result(idx, output)
             final = output
-            if DEBUG:
-                print(f"  -> {output[:100]}...")
 
         return final
 
@@ -170,15 +195,12 @@ Example with verification:
         steps = parse_script(script)
 
         if not steps:
-            # Fallback: direct answer
-            fallback = f"Based on restaurant: {query}\nUser wants: {context}\nRecommend? Output only: -1, 0, or 1"
+            fallback = self._build_fallback_prompt(query, context)
             start = time.time()
             output = await call_llm_async(fallback, system=SYSTEM_PROMPT, role="worker")
-            duration_sec = time.time() - start
-            log_execution_step("fallback", "direct answer", fallback, output, duration_sec)
+            log_execution_step("fallback", "direct answer", fallback, output, time.time() - start)
             return output
 
-        # Build execution layers (DAG analysis)
         layers = build_execution_layers(steps)
 
         if DEBUG:
@@ -191,31 +213,15 @@ Example with verification:
             if DEBUG:
                 print(f"\n--- Layer {layer_idx} ({len(layer)} steps in parallel) ---")
 
-            # Prepare all tasks for this layer
-            async def run_step(idx, instr):
-                filled = substitute_variables(instr, query, context, self.cache)
-                if DEBUG:
-                    print(f"Step ({idx}): {filled[:80]}...")
-                start = time.time()
-                try:
-                    output = await call_llm_async(filled, system=SYSTEM_PROMPT, role="worker")
-                except Exception as e:
-                    output = "0"
-                    if DEBUG:
-                        print(f"  Error: {e}")
-                duration_sec = time.time() - start
-                log_execution_step(idx, instr, filled, output, duration_sec)
-                return idx, output
-
             # Run all steps in this layer concurrently
-            results = await asyncio.gather(*[run_step(idx, instr) for idx, instr in layer])
+            results = await asyncio.gather(*[
+                self._execute_step_async(idx, instr, query, context)
+                for idx, instr in layer
+            ])
 
             # Cache results
             for idx, output in results:
-                try:
-                    self.cache[idx] = ast.literal_eval(output)
-                except:
-                    self.cache[idx] = output
+                self._cache_result(idx, output)
                 final = output
                 if DEBUG:
                     print(f"  ({idx}) -> {output[:80]}...")

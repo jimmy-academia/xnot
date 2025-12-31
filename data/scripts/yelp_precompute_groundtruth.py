@@ -32,7 +32,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 from rich.table import Table
 from data.loader import YELP_DIR
 from utils.llm import call_llm
-from utils.utils import loadjl
+from utils.io import loadjl
 
 console = Console()
 
@@ -87,7 +87,201 @@ def find_missing_pairs(item_ids: list, requests: list, existing: dict) -> list[t
     return missing
 
 
-def create_selected_files(n: str, sorted_ids: list, restaurants: dict, reviews_by_item: dict) -> tuple[Path, Path] | None:
+# --- Field-Level Edits System ---
+
+def load_edits(n: str) -> tuple[dict, dict]:
+    """Load field-level edits for restaurants and reviews.
+
+    Args:
+        n: Selection number (e.g., "1")
+
+    Returns:
+        (restaurant_edits, review_edits) where each is {id: {field_path: value}}
+    """
+    edits_path = YELP_DIR / f"edits_{n}.jsonl"
+    if not edits_path.exists():
+        return {}, {}
+
+    restaurant_edits = {}  # {business_id: {"hours.Monday": "7:0-19:0"}}
+    review_edits = {}      # {review_id: {"user.name": "Anon"}}
+
+    for entry in loadjl(edits_path):
+        entry = dict(entry)  # Copy to avoid modifying original
+        entry_type = entry.pop("type", "restaurant")
+        entry_id = entry.pop("id")
+        if entry_type == "restaurant":
+            restaurant_edits[entry_id] = entry
+        else:
+            review_edits[entry_id] = entry
+
+    return restaurant_edits, review_edits
+
+
+def apply_field_edits(obj: dict, edits: dict) -> dict:
+    """Apply field-level patches to an object using dot notation.
+
+    Args:
+        obj: Original object (restaurant or review)
+        edits: {field_path: new_value} e.g., {"hours.Monday": "7:0-19:0"}
+
+    Returns:
+        Modified copy of object
+    """
+    import copy
+    result = copy.deepcopy(obj)
+
+    for path, value in edits.items():
+        keys = path.split(".")
+        target = result
+        for key in keys[:-1]:
+            if key not in target:
+                target[key] = {}
+            target = target[key]
+        target[keys[-1]] = value
+
+    return result
+
+
+def find_field_diffs(original: dict, modified: dict, prefix: str = "") -> dict:
+    """Find field-level differences between two dicts.
+
+    Args:
+        original: Original object
+        modified: Modified object
+        prefix: Current path prefix for recursion
+
+    Returns:
+        {field_path: new_value} for changed fields
+    """
+    diffs = {}
+
+    # Check all keys in modified
+    for key in modified:
+        path = f"{prefix}.{key}" if prefix else key
+        orig_val = original.get(key)
+        mod_val = modified[key]
+
+        if isinstance(mod_val, dict) and isinstance(orig_val, dict):
+            # Recurse into nested dicts
+            nested_diffs = find_field_diffs(orig_val, mod_val, path)
+            diffs.update(nested_diffs)
+        elif mod_val != orig_val:
+            # Value changed
+            diffs[path] = mod_val
+
+    return diffs
+
+
+def extract_edits_from_backup(n: str) -> int:
+    """Compare backup files with cache and extract differences as edits.
+
+    Args:
+        n: Selection number (e.g., "1")
+
+    Returns:
+        Number of edits extracted
+    """
+    edits = []
+
+    # Extract restaurant edits
+    backup_path = YELP_DIR / f"restaurants_selected_{n}.jsonl.backup"
+    cache_path = YELP_DIR / f"restaurants_cache_{n}.jsonl"
+
+    if backup_path.exists() and cache_path.exists():
+        backup = {r["business_id"]: r for r in loadjl(backup_path)}
+        cache = {r["business_id"]: r for r in loadjl(cache_path)}
+
+        for bid, modified in backup.items():
+            original = cache.get(bid, {})
+            diffs = find_field_diffs(original, modified)
+            if diffs:
+                edits.append({"type": "restaurant", "id": bid, **diffs})
+                console.print(f"  [cyan]Restaurant {bid[:16]}:[/cyan] {len(diffs)} field(s) changed")
+
+    # Extract review edits
+    backup_path = YELP_DIR / f"reviews_selected_{n}.jsonl.backup"
+    cache_path = YELP_DIR / f"reviews_cache_{n}.jsonl"
+
+    if backup_path.exists() and cache_path.exists():
+        backup = {r["review_id"]: r for r in loadjl(backup_path)}
+        cache = {r["review_id"]: r for r in loadjl(cache_path)}
+
+        for rid, modified in backup.items():
+            original = cache.get(rid, {})
+            diffs = find_field_diffs(original, modified)
+            if diffs:
+                edits.append({"type": "review", "id": rid, **diffs})
+                console.print(f"  [cyan]Review {rid[:16]}:[/cyan] {len(diffs)} field(s) changed")
+
+    # Write edits file
+    if edits:
+        edits_path = YELP_DIR / f"edits_{n}.jsonl"
+        with open(edits_path, "w") as f:
+            for edit in edits:
+                f.write(json.dumps(edit) + "\n")
+        console.print(f"[green]Saved {len(edits)} edits to {edits_path}[/green]")
+
+    return len(edits)
+
+
+# --- User ID Anonymization ---
+
+def build_user_id_mapping(reviews_by_item: dict) -> dict:
+    """Build consistent user_id -> User_XXX mapping.
+
+    Collects all user_ids from reviews and assigns sequential User_001, User_002, etc.
+    Sorting ensures deterministic ordering.
+
+    Returns:
+        {original_user_id: "User_001", ...}
+    """
+    all_user_ids = set()
+    for reviews in reviews_by_item.values():
+        for r in reviews:
+            # user_id can be at top level or nested under "user"
+            uid = r.get("user_id") or r.get("user", {}).get("user_id")
+            if uid:
+                all_user_ids.add(uid)
+
+    # Sort for deterministic ordering, then assign sequential IDs
+    sorted_ids = sorted(all_user_ids)
+    return {uid: f"User_{i+1:03d}" for i, uid in enumerate(sorted_ids)}
+
+
+def anonymize_friends(friends: list, user_mapping: dict, min_friends: int = 3, max_friends: int = 20) -> list:
+    """Shorten friend list to 3-20 and map to User_XXX format.
+
+    Only includes friends who exist in the user_mapping (i.e., are reviewers in our dataset).
+
+    Args:
+        friends: Original list of friend user_ids
+        user_mapping: {original_user_id: "User_XXX"} mapping
+        min_friends: Minimum friends to keep (default 3)
+        max_friends: Maximum friends to keep (default 20)
+
+    Returns:
+        List of anonymized friend IDs like ["User_007", "User_123"]
+    """
+    import random
+
+    if not friends:
+        return []
+
+    # Filter to friends who are in our reviewer set
+    valid_friends = [f for f in friends if f in user_mapping]
+
+    if not valid_friends:
+        return []
+
+    # Random subset of min_friends to max_friends
+    target_count = random.randint(min_friends, min(max_friends, len(valid_friends)))
+    selected = random.sample(valid_friends, min(target_count, len(valid_friends)))
+
+    # Map to User_XXX format
+    return [user_mapping[f] for f in selected]
+
+
+def create_selected_files(n: str, sorted_ids: list, restaurants: dict, reviews_by_item: dict, user_mapping: dict = None) -> tuple[Path, Path] | None:
     """Create selected restaurants and reviews files in correct order.
 
     Args:
@@ -122,20 +316,57 @@ def create_selected_files(n: str, sorted_ids: list, restaurants: dict, reviews_b
             console.print("[dim]Skipped creating selected files[/dim]")
             return None
 
-    # Write restaurants in sorted order
+    # Load field-level edits
+    restaurant_edits, review_edits = load_edits(n)
+    if restaurant_edits or review_edits:
+        console.print(f"[cyan]Applying {len(restaurant_edits)} restaurant edits, {len(review_edits)} review edits[/cyan]")
+
+    # Write restaurants in sorted order (with edits applied)
     with open(restaurants_path, "w") as f:
         for item_id in sorted_ids:
             restaurant = restaurants.get(item_id, {})
+            # Apply field-level edits if any
+            if item_id in restaurant_edits:
+                restaurant = apply_field_edits(restaurant, restaurant_edits[item_id])
             f.write(json.dumps(restaurant) + "\n")
 
     # Write reviews grouped by restaurant in sorted order
+    # Apply user_id anonymization if mapping provided, then apply edits
     with open(reviews_path, "w") as f:
         for item_id in sorted_ids:
             reviews = reviews_by_item.get(item_id, [])
             for review in reviews:
+                # Deep copy to avoid modifying original
+                review = json.loads(json.dumps(review))
+
+                if user_mapping:
+                    # Get original user_id (can be at top level or nested)
+                    orig_user_id = review.get("user_id") or review.get("user", {}).get("user_id")
+
+                    if orig_user_id and orig_user_id in user_mapping:
+                        # Map user_id to User_XXX
+                        if "user" in review:
+                            review["user"]["user_id"] = user_mapping[orig_user_id]
+
+                            # Anonymize friends list
+                            friends = review["user"].get("friends", [])
+                            if friends:
+                                review["user"]["friends"] = anonymize_friends(friends, user_mapping)
+                        else:
+                            review["user_id"] = user_mapping[orig_user_id]
+
+                # Apply field-level edits if any
+                review_id = review.get("review_id")
+                if review_id and review_id in review_edits:
+                    review = apply_field_edits(review, review_edits[review_id])
+
                 f.write(json.dumps(review) + "\n")
 
     console.print(f"[green]Created selected files ({len(sorted_ids)} items)[/green]")
+    if user_mapping:
+        console.print(f"  [dim]Anonymized {len(user_mapping)} user IDs[/dim]")
+    if restaurant_edits or review_edits:
+        console.print(f"  [dim]Applied {len(restaurant_edits) + len(review_edits)} field edits[/dim]")
     return restaurants_path, reviews_path
 
 
@@ -455,16 +686,71 @@ def aggregate_judgments(judgments: list[int], weights: list[float] = None) -> tu
     return result, score
 
 
-def evaluate_review_meta(reviews: list, path: list, match_list: list = None, aspect: str = "") -> tuple[int, list[float]]:
+def calculate_reviewer_weight(user_meta: dict, weight_fields: list = None) -> float:
+    """Calculate weight for a review based on reviewer metadata.
+
+    Only considers fields explicitly specified in weight_fields.
+
+    Args:
+        user_meta: User metadata dict with keys like review_count, average_stars, elite, fans
+        weight_fields: List of fields to consider, e.g., ["review_count", "average_stars"]
+
+    Returns:
+        Weight multiplier (typically 0.5 to 2.0)
+    """
+    if not weight_fields:
+        return 1.0
+
+    weight = 1.0
+
+    # review_count: scale 0.5 to 1.5 based on experience
+    if "review_count" in weight_fields:
+        count = user_meta.get("review_count", 0)
+        weight *= 0.5 + min(count / 100, 1.0)  # caps at 1.5
+
+    # average_stars: prefer moderate raters (not extreme 1 or 5)
+    if "average_stars" in weight_fields:
+        avg = user_meta.get("average_stars", 3.0)
+        # Higher weight for 2.5-4.0 range (balanced reviewers)
+        if 2.5 <= avg <= 4.0:
+            weight *= 1.2
+        elif avg < 2.0 or avg > 4.5:
+            weight *= 0.8
+
+    # elite status: boost elite reviewers
+    if "elite" in weight_fields:
+        elite_years = user_meta.get("elite", [])
+        if elite_years:
+            weight *= 1.0 + min(len(elite_years) * 0.1, 0.5)  # up to 1.5x
+
+    # fans: slight boost for popular reviewers
+    if "fans" in weight_fields:
+        fans = user_meta.get("fans", 0)
+        weight *= 1.0 + min(fans / 100, 0.3)  # up to 1.3x
+
+    return weight
+
+
+def evaluate_review_meta(reviews: list, path: list, match_list: list = None, aspect: str = "", weight_fields: list = None) -> tuple[int, list[float]]:
     """Lookup or match, return (score, per_review_weights).
 
     Weight rules:
     - friend match: 2.0, non-friend: 1.0
     - review_count: scale between 0.5 (low) to 1.5 (high)
+    - If weight_fields specified, uses calculate_reviewer_weight()
     """
     weights = []
 
     for r in reviews:
+        # Get user metadata for weight calculation
+        user_meta = r.get("user", {})
+
+        # If weight_fields specified, use the new weight calculation
+        if weight_fields:
+            weight = calculate_reviewer_weight(user_meta, weight_fields)
+            weights.append(weight)
+            continue
+
         val = get_nested_value(r, path)
         if val is None:
             weights.append(1.0)  # default weight
@@ -1082,8 +1368,11 @@ def generate_groundtruth(selection_name: str, limit: int = 10, force: bool = Fal
         print_statistics(stats, per_request)
         print_hits_at_k(all_entries, request_ids, sorted_ids)
 
+        # Build user_id mapping for anonymization
+        user_mapping = build_user_id_mapping(reviews_by_item)
+
         # Create selected files (ordered by sorted_ids) if needed
-        result = create_selected_files(n, sorted_ids, restaurants, reviews_by_item)
+        result = create_selected_files(n, sorted_ids, restaurants, reviews_by_item, user_mapping)
 
         # Print file paths at the bottom
         if result:
@@ -1175,8 +1464,11 @@ def generate_groundtruth(selection_name: str, limit: int = 10, force: bool = Fal
     print_statistics(stats, per_request)
     print_hits_at_k(all_entries, request_ids, sorted_ids)
 
+    # Build user_id mapping for anonymization
+    user_mapping = build_user_id_mapping(reviews_by_item)
+
     # Create selected files (ordered by sorted_ids) if needed
-    result = create_selected_files(n, sorted_ids, restaurants, reviews_by_item)
+    result = create_selected_files(n, sorted_ids, restaurants, reviews_by_item, user_mapping)
 
     # Print file paths at the bottom
     if result:

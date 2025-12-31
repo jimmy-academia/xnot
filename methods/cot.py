@@ -5,6 +5,11 @@ import re
 
 from .base import BaseMethod
 from utils.llm import call_llm
+from .shared import (
+    _defense, _use_defense_prompt,
+    set_defense_mode, set_defense,
+    parse_final_answer
+)
 
 FEW_SHOT_EXAMPLES = []  # No examples - pure zero-shot
 
@@ -43,21 +48,8 @@ index number of the best matching restaurant.
 
 Output format: ANSWER: <number>"""
 
-# Defense support (module-level for backward compatibility)
-_defense = None
-_use_defense_prompt = False  # Default to normal for backward compatibility
-
-
-def set_defense_mode(enabled: bool):
-    """Toggle between normal and defense prompts."""
-    global _use_defense_prompt
-    _use_defense_prompt = enabled
-
-
-def set_defense(defense_concept: str):
-    """Enable extra defense prompt (legacy - prepends to system prompt)."""
-    global _defense
-    _defense = defense_concept
+# Note: Defense globals (set_defense_mode, set_defense, _defense, _use_defense_prompt)
+# are imported from .shared to avoid duplication
 
 
 class ChainOfThought(BaseMethod):
@@ -73,7 +65,7 @@ class ChainOfThought(BaseMethod):
         prompt = self._build_prompt(query, context)
         system = self._get_system_prompt()
         response = call_llm(prompt, system=system)
-        return self._parse_response(response)
+        return parse_final_answer(response)
 
     def _get_system_prompt(self) -> str:
         """Get system prompt based on defense mode."""
@@ -99,30 +91,7 @@ class ChainOfThought(BaseMethod):
         parts.append("\n[ANALYSIS]")
         return "\n".join(parts)
 
-    def _parse_response(self, text: str) -> int:
-        """Extract answer (-1, 0, 1) from LLM response."""
-        # Pattern 1: ANSWER: X format
-        match = re.search(r'(?:ANSWER|Answer|FINAL ANSWER|Final Answer):\s*(-?[01])', text, re.IGNORECASE)
-        if match:
-            return int(match.group(1))
-
-        # Pattern 2: Standalone number in last lines
-        for line in reversed(text.strip().split('\n')[-5:]):
-            line = line.strip()
-            if line in ['-1', '0', '1']:
-                return int(line)
-            match = re.search(r':\s*(-?[01])\s*$', line)
-            if match:
-                return int(match.group(1))
-
-        # Pattern 3: Keywords in last lines
-        last = '\n'.join(text.split('\n')[-3:]).lower()
-        if 'not recommend' in last:
-            return -1
-        if 'recommend' in last and 'not' not in last:
-            return 1
-
-        raise ValueError(f"Could not parse answer from: {text[-200:]}")
+    # Note: _parse_response removed - using parse_final_answer from shared.py
 
     # --- Ranking Methods ---
 
@@ -162,28 +131,3 @@ class ChainOfThought(BaseMethod):
         if _defense:
             system = _defense + "\n\n" + system
         return call_llm(prompt, system=system)
-
-
-# Backward compatibility - expose as standalone functions
-def build_prompt(query: str, context: str) -> str:
-    """Build prompt with few-shot examples."""
-    return ChainOfThought()._build_prompt(query, context)
-
-
-def parse_response(text: str) -> int:
-    """Extract answer (-1, 0, 1) from LLM response."""
-    return ChainOfThought()._parse_response(text)
-
-
-def method(query: str, context: str) -> int:
-    """Evaluate restaurant recommendation. Returns -1, 0, or 1.
-
-    Legacy function interface - uses module-level defense settings.
-    """
-    prompt = build_prompt(query, context)
-    # Select prompt based on defense mode
-    system = SYSTEM_PROMPT_DEFENSE if _use_defense_prompt else SYSTEM_PROMPT_NORMAL
-    if _defense:
-        system = _defense + "\n\n" + system
-    response = call_llm(prompt, system=system)
-    return parse_response(response)

@@ -5,9 +5,12 @@ import os
 import re
 import json
 import ast
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 from utils.llm import call_llm, call_llm_async
 
@@ -33,7 +36,7 @@ _output_dir = None  # Set by main.py for run-specific output
 
 # Defense support
 _defense = None
-_use_defense_prompt = True  # Default to defense for backward compatibility
+_use_defense_prompt = False  # Default to normal (matches cot.py behavior)
 
 
 def set_defense_mode(enabled: bool):
@@ -442,11 +445,20 @@ def build_execution_layers(steps: list) -> list:
 
 
 def parse_final_answer(output: str) -> int:
-    """Parse output to -1, 0, or 1."""
+    """Parse output to -1, 0, or 1.
+
+    Returns 0 (neutral) if parsing fails, with a warning logged.
+    """
     output = output.strip()
     if output in ["-1", "0", "1"]:
         return int(output)
 
+    # Pattern: ANSWER: X format (from cot.py)
+    match = re.search(r'(?:ANSWER|Answer|FINAL ANSWER|Final Answer):\s*(-?[01])', output, re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+
+    # Pattern: Standalone number
     match = re.search(r'(?:^|[:\s])(-1|0|1)(?:\s|$|\.)', output)
     if match:
         return int(match.group(1))
@@ -463,6 +475,9 @@ def parse_final_answer(output: str) -> int:
         return -1
     if "recommend" in lower and "not" not in lower:
         return 1
+
+    # Could not parse - log warning and return neutral
+    logger.warning(f"Could not parse answer from response: {output[:100]}...")
     return 0
 
 

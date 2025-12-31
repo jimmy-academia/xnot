@@ -3,7 +3,7 @@
 from typing import Callable
 
 from .base import BaseMethod
-from .cot import ChainOfThought, method as cot
+from .cot import ChainOfThought
 from .rnot import method as rnot
 from .knot import create_method, method as knot, set_output_dir, set_defense_mode, set_current_ids
 from .knot_v4 import KnowledgeNetworkOfThoughtV4
@@ -66,7 +66,6 @@ def get_method(args, run_dir: str = None) -> Callable:
 __all__ = [
     'BaseMethod',
     'ChainOfThought',
-    'cot',
     'rnot',
     'knot',
     'get_method',

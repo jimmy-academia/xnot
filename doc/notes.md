@@ -13,8 +13,11 @@ run `python data/build_requests.py 1`
 
 - **G01 (R00--R04)**: Flat / Simple Metadata. Requests use only direct item metadata (e.g., attributes, categories) with flat AND composition.
 - **G02 (R05--R09)**: Flat / Review Text. Requests rely exclusively on conditions grounded in review text, composed using flat ANY logic.
-- G03 (R10--R14): Flat / Computed Metadata. Requests use computed item metadata requiring interpretation (e.g., hours, time-window constraints) with flat AND/OR logic.
-- G04 (R15--R19): Flat / Social Metadata. Requests use only reviewer or review metadata (e.g., elite status, recency) with flat AND/OR logic.
+- **G03 (R10--R14)**: Flat / Computed Metadata. Requests use Simple Metadata + Computed item metadata requiring interpretation (e.g., hours, time-window constraints) with flat AND logic.
+- G04 (R15--R19): Flat / Social Metadata. Requests use Simple Metadata + reviewer or review metadata (e.g., elite status, recency) with flat AND logic.
+
+> ...>>>>>>><<<<<<<... just do above
+
 - G05 (R20--R24): Flat / Simple Metadata + Review Text. Requests combine direct item metadata and review text conditions in flat AND/OR form.
 - G06 (R25--R29): Flat / Simple Metadata + Review Text + Social Metadata. Requests integrate structured item metadata, unstructured review text, and social signals within a flat Boolean structure.
 - G07 (R30--R34): Nested (Balanced) / Simple Metadata + Review Text. Requests use balanced nested Boolean expressions over simple item metadata and review text.

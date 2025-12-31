@@ -6,11 +6,10 @@ import sys
 from pathlib import Path
 from typing import Any, Union
 
-from utils.utils import loadjl
+from utils.io import loadjl
 
 DATA_DIR = Path("data")
 ATTACKED_DIR = DATA_DIR / "attacked"
-SELECTIONS_PATH = DATA_DIR / "selections.jsonl"
 YELP_DIR = DATA_DIR / "yelp"
 
 
@@ -86,67 +85,11 @@ def check_dataset_exists(data_path: Path, requests_path: Path, dataset_name: str
         print()
         sys.exit(1)
 
-DEFAULT_SELECTION = "v1_basic"
-
-
-# --- Data Generation from Selections ---
-
-def load_selections() -> dict:
-    """Load all selections from selections.jsonl, keyed by id."""
-    selections = {}
-    if SELECTIONS_PATH.exists():
-        for sel in loadjl(SELECTIONS_PATH):
-            selections[sel["id"]] = sel
-    return selections
-
-
-def generate_from_selection(selection_id: str, output_path: str) -> None:
-    """Generate processed data from a hardcoded selection.
-
-    Args:
-        selection_id: ID of selection in selections.jsonl
-        output_path: Where to write the output JSONL
-    """
-    selections = load_selections()
-    if selection_id not in selections:
-        available = list(selections.keys())
-        raise ValueError(f"Selection '{selection_id}' not found. Available: {available}")
-
-    selection = selections[selection_id]
-    print(f"Generating data from selection: {selection_id}")
-    print(f"  Description: {selection.get('description', 'N/A')}")
-
-    restaurant_ids = selection.get("restaurant_ids", [])
-    review_ids = selection.get("review_ids_per_restaurant", {})
-
-    if not restaurant_ids:
-        print("  Warning: No restaurant_ids in selection - cannot generate")
-        raise ValueError(f"Selection '{selection_id}' has no restaurant_ids")
-
-    # TODO: Load from raw Yelp data based on selection IDs
-    items = []
-    # ... implementation in Stage 2
-
-    # Write output
-    output = Path(output_path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-
-    with open(output, 'w') as f:
-        for item in items:
-            f.write(json.dumps(item) + '\n')
-
-    print(f"  Generated {len(items)} items to {output_path}")
-
-
-def _ensure_data_exists(path: str, selection_id: str = None) -> None:
-    """Check if data exists, generate from selection if not."""
+def _ensure_data_exists(path: str) -> None:
+    """Check if data file exists, raise error if not."""
     if Path(path).exists():
         return
-
-    selection_id = selection_id or DEFAULT_SELECTION
-    print(f"Data not found at {path}")
-    print(f"Generating from selection: {selection_id}")
-    generate_from_selection(selection_id, path)
+    raise FileNotFoundError(f"Data not found at {path}. Run data generation scripts first.")
 
 
 
