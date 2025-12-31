@@ -65,6 +65,67 @@ Each run creates:
 - `results.jsonl` - predictions (or `results_{attack}.jsonl` for --attack all)
 - `config.json` - run parameters, attack type, and stats
 
+## Data Preparation
+
+### Prerequisites
+
+Download [Yelp Open Dataset](https://www.yelp.com/dataset) and place in `data/yelp/raw/`:
+- `yelp_academic_dataset_business.json`
+- `yelp_academic_dataset_review.json`
+- `yelp_academic_dataset_user.json`
+
+### Pipeline
+
+Run these scripts in order to create a new selection:
+
+```bash
+# Step 1: Curate restaurants (interactive)
+# Creates: selection_n.jsonl (restaurant IDs + LLM scores)
+python data/scripts/yelp_curation.py
+
+# Step 2: Sample reviews
+# Creates: rev_selection_n.jsonl, reviews_cache_n.jsonl, restaurants_cache_n.jsonl
+python data/scripts/yelp_review_sampler.py selection_1
+
+# Step 3: Generate requests (manual - copy output to requests_n.jsonl)
+# Prints data context and prompts to console
+python data/scripts/yelp_requests.py selection_1
+
+# Step 4: Compute ground truth labels
+# Creates: groundtruth_n.jsonl
+python data/scripts/yelp_precompute_groundtruth.py selection_1 --limit 0
+```
+
+### Output Files
+
+After running the pipeline for `selection_1`:
+
+| File | Description |
+|------|-------------|
+| `selection_1.jsonl` | Restaurant IDs with LLM quality scores |
+| `rev_selection_1.jsonl` | Sampled review IDs per restaurant |
+| `reviews_cache_1.jsonl` | Full review data + user metadata |
+| `restaurants_cache_1.jsonl` | Restaurant metadata (attributes, hours, etc.) |
+| `requests_1.jsonl` | User request scenarios with structured conditions |
+| `groundtruth_1.jsonl` | Ground truth labels per (item, request) pair |
+
+### Ground Truth
+
+The `--limit` flag controls how many items get ground truth labels:
+
+```bash
+# Default: 10 items (for testing)
+python data/scripts/yelp_precompute_groundtruth.py selection_1
+
+# All items
+python data/scripts/yelp_precompute_groundtruth.py selection_1 --limit 0
+
+# Custom limit
+python data/scripts/yelp_precompute_groundtruth.py selection_1 --limit 50
+```
+
+**Note:** Evaluation only runs on items with ground truth labels. Items without labels are skipped.
+
 ## Attack Types
 
 Adversarial attacks for robustness testing (`attack.py`):
