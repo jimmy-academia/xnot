@@ -5,7 +5,7 @@ import os
 import ast
 
 from utils.llm import call_llm
-from .shared import parse_final_answer, parse_script, substitute_variables
+from utils.parsing import parse_final_answer, parse_script, substitute_variables
 
 DEBUG = os.environ.get("NOT_DEBUG", "0") == "1"
 SYSTEM_PROMPT = "You follow instructions precisely. Output only what is requested, no additional explanation."
@@ -16,7 +16,7 @@ FIXED_SCRIPT = """(0)=LLM("Extract 3-5 key requirements from the user's request.
 (3)=LLM("Count the evidence from {(2)}: How many requirements have POSITIVE evidence? How many have NEGATIVE evidence? How many have NO CLEAR evidence? Output the counts.")
 (4)=LLM("Based on {(3)}: If POSITIVE > NEGATIVE and POSITIVE >= 2, output 1. If NEGATIVE > POSITIVE and NEGATIVE >= 2, output -1. Otherwise output 0. Output ONLY the number: -1, 0, or 1")"""
 
-# Note: parse_script, substitute_variables, parse_final_answer imported from .shared
+# Note: parse_script, substitute_variables, parse_final_answer imported from utils.parsing
 
 
 class SimpleNetworkOfThought:

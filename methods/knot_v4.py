@@ -12,10 +12,10 @@ from .shared import (
     DEBUG,
     _current_item_id, _current_request_id,
     SYSTEM_PROMPT,
-    parse_script, parse_final_answer,
     call_llm,
     DebugLogger,
 )
+from utils.parsing import parse_script, parse_final_answer
 
 # Import base class
 from .knot import KnowledgeNetworkOfThought
@@ -537,7 +537,6 @@ Output only the corrected step in format: (N)=LLM("...")"""
             script = self.stage2_phase_c(script, dag, query, context)
             script = self.stage2_phase_d(script, dag)
             if DEBUG:
-                from .shared import parse_script
                 steps = parse_script(script)
                 print(f"Final script has {len(steps)} parsed steps")
 

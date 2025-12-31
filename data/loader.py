@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Union
 
 from utils.io import loadjl
-from methods.shared import parse_final_answer
+from utils.parsing import parse_final_answer
 
 DATA_DIR = Path("data")
 ATTACKED_DIR = DATA_DIR / "attacked"

@@ -1,0 +1,122 @@
+\section{Experiment Details}
+\label{app:experiment}
+
+\subsection{Data Construction}
+
+\paragraph{Restaurant Selection.}
+We select restaurants from the Yelp Open Dataset using a multi-stage pipeline:
+(1) Filter by metropolitan area and target category (cafes);
+(2) Rank candidates by review volume to ensure sufficient evidence;
+(3) Apply LLM-based category verification to filter false positives.
+We retain 20 restaurants meeting quality thresholds.
+
+\paragraph{Review Sampling.}
+For each restaurant, we construct a document set of 20 reviews.
+To capture diverse user sentiments, we stratify sampling by star rating, selecting exactly 4 reviews from each level (1--5 stars).
+Within each stratum, we select reviews by descending text length to maximize information density.
+All reviewer identifiers are anonymized.
+
+\subsection{Evidence Types}
+
+We support four evidence types for evaluating user request conditions:
+
+\paragraph{item\_meta.}
+Direct lookup of structured item attributes (e.g., \texttt{attributes.WiFi}, \texttt{attributes.NoiseLevel}).
+Missing values yield ``unknown'' (0); boolean attributes map directly to $\pm 1$.
+Categorical attributes use declarative matching rules: if \texttt{true} condition matches, return $+1$; if \texttt{false} condition matches, return $-1$; otherwise return $0$.
+
+\paragraph{item\_meta\_hours.}
+Time-window containment verification.
+Given business hours (e.g., ``7:00--18:00'') and required range (e.g., ``10:00--15:00''), returns $+1$ if the required range falls entirely within business hours, $-1$ otherwise.
+
+\paragraph{review\_text.}
+LLM-based review analysis.
+An LLM judges each review independently for the target aspect, returning $+1$ (positive mention), $0$ (neutral/not mentioned), or $-1$ (negative mention).
+Judgments are cached for reproducibility.
+The final result uses \emph{symmetric consensus voting} with a 75\% threshold:
+\begin{equation}
+    \text{result} = \begin{cases}
+        +1 & \text{if } \frac{n_+}{n_+ + n_-} \geq 0.75 \\
+        -1 & \text{if } \frac{n_-}{n_+ + n_-} \geq 0.75 \\
+        0  & \text{otherwise (no consensus)}
+    \end{cases}
+\end{equation}
+
+\paragraph{review\_meta.}
+Reviewer and review-level metadata conditions.
+Supports filtering (e.g., elite reviewers only, reviews from 2018+, minimum star rating) and weighted aggregation (by review count, usefulness votes, or social connections).
+
+\subsection{Request Structure}
+
+Each request is represented as a Boolean expression tree.
+Leaf nodes specify individual conditions with aspect names and evidence specifications.
+Internal nodes apply Boolean operators (AND/OR) with three-valued semantics:
+
+\begin{center}
+\begin{tabular}{c|ccc}
+AND & $+1$ & $0$ & $-1$ \\
+\hline
+$+1$ & $+1$ & $0$ & $-1$ \\
+$0$  & $0$  & $0$ & $-1$ \\
+$-1$ & $-1$ & $-1$ & $-1$
+\end{tabular}
+\quad
+\begin{tabular}{c|ccc}
+OR & $+1$ & $0$ & $-1$ \\
+\hline
+$+1$ & $+1$ & $+1$ & $+1$ \\
+$0$  & $+1$ & $0$  & $0$ \\
+$-1$ & $+1$ & $0$  & $-1$
+\end{tabular}
+\end{center}
+
+\subsection{Request Groups}
+
+\paragraph{G01 (R00--R04): Flat / Simple Metadata.}
+Five requests using only direct item attributes with flat AND composition.
+Example: ``Looking for a quiet cafe with free Wi-Fi and no TV.''
+
+\paragraph{G02 (R05--R09): Mixed / Item Meta + Review Text.}
+Five requests combining structured metadata filters with unstructured review text analysis.
+Example: ``Budget-friendly indoor cafe where reviews mention good matcha.''
+
+\paragraph{G03 (R10--R14): Flat / Computed Metadata.}
+Five requests requiring hours interpretation.
+Example: ``Quiet cafe with free Wi-Fi open Monday 10am--3pm.''
+
+\paragraph{G04 (R15--R19): Flat / Social Metadata.}
+Five requests using reviewer credibility signals.
+Example: ``Places where experienced Yelp reviewers gave high ratings.''
+
+\subsection{Ground Truth and Evaluation}
+
+\paragraph{Label Generation.}
+Ground truth labels are precomputed deterministically.
+For each (restaurant, request) pair:
+(1) Evaluate each condition against available evidence;
+(2) Aggregate results using the request's Boolean structure;
+(3) Store the final label ($+1$, $0$, or $-1$) with full evidence breakdown.
+LLM judgments for review text are cached to ensure reproducibility across runs.
+The resulting dataset contains 400 labeled pairs (20 restaurants $\times$ 20 requests).
+
+\paragraph{Top-1 Selection.}
+Each request is designed to have exactly one restaurant with a $+1$ (recommend) ground truth label.
+This enables unambiguous evaluation: for each request, there is a single correct answer among the 20 candidates.
+
+\paragraph{Hits@k Metric.}
+We evaluate recommendation accuracy using Hits@k:
+\begin{equation}
+    \text{Hits@k} = \frac{1}{|R|} \sum_{r \in R} \mathbf{1}[\text{rank}(r) \leq k]
+\end{equation}
+where $R$ is the set of requests and $\text{rank}(r)$ is the position of the ground-truth positive item in the method's ranking for request $r$.
+Hits@1 measures whether the method's top recommendation exactly matches the gold item.
+
+\subsection{Baselines}
+
+\paragraph{Chain-of-Thought (CoT).}
+Our baseline is a zero-shot Chain-of-Thought prompting approach.
+Given a user request and the set of 20 candidate restaurants (each with metadata and reviews), the LLM is prompted to:
+(1) analyze each restaurant's suitability for the user's stated requirements;
+(2) select the single best-matching restaurant from the candidates.
+The prompt includes all restaurant information in a single context window, allowing the model to compare options directly.
+No few-shot examples are provided, testing the model's inherent reasoning capabilities.

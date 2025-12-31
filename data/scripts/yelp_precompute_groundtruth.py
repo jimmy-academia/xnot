@@ -737,7 +737,8 @@ def calculate_reviewer_weight(user_meta: dict, review: dict = None, weight_field
 
     Args:
         user_meta: User metadata dict with keys like review_count, average_stars, elite, fans
-        weight_fields: List of fields to consider, e.g., ["review_count", "average_stars"]
+        review: Review dict (for review-level fields like useful)
+        weight_fields: List of fields to consider, e.g., ["review_count", "useful"]
 
     Returns:
         Weight multiplier (typically 0.5 to 2.0)
@@ -745,6 +746,7 @@ def calculate_reviewer_weight(user_meta: dict, review: dict = None, weight_field
     if not weight_fields:
         return 1.0
 
+    review = review or {}
     weight = 1.0
 
     # review_count: scale 0.5 to 1.5 based on experience
@@ -772,30 +774,60 @@ def calculate_reviewer_weight(user_meta: dict, review: dict = None, weight_field
         fans = user_meta.get("fans", 0)
         weight *= 1.0 + min(fans / 100, 0.3)  # up to 1.3x
 
+    # useful: boost reviews marked useful by others (review-level field)
+    if "useful" in weight_fields:
+        useful = review.get("useful", 0)
+        weight *= 1.0 + min(useful / 10, 0.5)  # up to 1.5x
+
+    # friends_count: boost well-connected reviewers
+    if "friends_count" in weight_fields:
+        friends = user_meta.get("friends", [])
+        friends_count = len(friends) if isinstance(friends, list) else 0
+        weight *= 1.0 + min(friends_count / 50, 0.5)  # up to 1.5x
+
     return weight
 
 
-def evaluate_review_meta(reviews: list, path: list, match_list: list = None, aspect: str = "", weight_fields: list = None) -> tuple[int, list[float]]:
-    """Lookup or match, return (score, per_review_weights).
+def evaluate_review_meta(reviews: list, path: list = None, match_list: list = None, aspect: str = "",
+                         weight_fields: list = None, filter_spec: dict = None, min_stars: float = None) -> tuple[int, float, list[float]]:
+    """Evaluate review_meta conditions and return (result, score, per_review_weights).
 
-    Weight rules:
-    - friend match: 2.0, non-friend: 1.0
-    - review_count: scale between 0.5 (low) to 1.5 (high)
-    - If weight_fields specified, uses calculate_reviewer_weight()
+    Supports:
+    - filter: {"elite": "not_empty"} or {"date": "min_year", "value": 2018}
+    - min_stars: filter to reviews with stars >= threshold
+    - weight: ["review_count", "useful", "friends_count"] - weight by these fields
+
+    Returns:
+        (result, score, weights) where:
+        - result: -1/0/1 for boolean logic (TV compatible)
+        - score: continuous value for ranking (0.8-1.0 for positive)
+        - weights: per-review weights
     """
+    # Apply filter first
+    if filter_spec:
+        reviews = filter_reviews(reviews, filter_spec)
+
+    # Apply min_stars threshold
+    if min_stars is not None:
+        reviews = [r for r in reviews if r.get("stars", 0) >= min_stars]
+
+    # If no reviews remain after filtering, return neutral
+    if not reviews:
+        return 0, 0, []
+
     weights = []
 
     for r in reviews:
         # Get user metadata for weight calculation
         user_meta = r.get("user", {})
 
-        # If weight_fields specified, use the new weight calculation
+        # If weight_fields specified, use weighted calculation
         if weight_fields:
-            weight = calculate_reviewer_weight(user_meta, weight_fields)
+            weight = calculate_reviewer_weight(user_meta, r, weight_fields)
             weights.append(weight)
             continue
 
-        val = get_nested_value(r, path)
+        val = get_nested_value(r, path) if path else None
         if val is None:
             weights.append(1.0)  # default weight
             continue
@@ -809,7 +841,6 @@ def evaluate_review_meta(reviews: list, path: list, match_list: list = None, asp
 
         elif "review_count" in aspect:
             # Scale review_count to weight: 0.5 to 1.5
-            # Assume typical range is 0-100 reviews
             count = val if isinstance(val, (int, float)) else 0
             weight = 0.5 + min(count / 100, 1.0)  # caps at 1.5
             weights.append(weight)
@@ -817,14 +848,35 @@ def evaluate_review_meta(reviews: list, path: list, match_list: list = None, asp
         else:
             weights.append(1.0)  # default
 
-    # Compute overall score based on whether any match found
+    # Compute overall result and score
     if match_list:
         has_match = any(w > 1.0 for w in weights)
-        score = 1 if has_match else 0  # 0 if no match (not -1)
+        result = 1 if has_match else 0
+        score = result
+    elif weight_fields or filter_spec or min_stars:
+        # For weighted/filtered review_meta, compute weighted average of stars
+        total_weight = sum(weights)
+        if total_weight > 0:
+            weighted_stars = sum(r.get("stars", 3) * w for r, w in zip(reviews, weights)) / total_weight
+            # Compute result (-1/0/1) for boolean logic
+            if weighted_stars >= 4.0:
+                result = 1
+                # Scale 4.0-5.0 → 0.8-1.0 for ranking
+                score = 0.8 + (weighted_stars - 4.0) * 0.2
+            elif weighted_stars <= 2.5:
+                result = -1
+                score = -1.0
+            else:
+                result = 0
+                score = 0
+        else:
+            result = 0
+            score = 0
     else:
+        result = 0
         score = 0  # review_meta doesn't produce its own score
 
-    return score, weights
+    return result, score, weights
 
 
 # --- Attribute Parsing ---
@@ -1063,12 +1115,18 @@ def evaluate_condition(item: dict, condition: dict, reviews: list = None, review
         value = {"judgments": judgments, "weights": review_weights}
 
     elif kind == "review_meta":
-        # Lookup or list match - returns per-review weights for later use
+        # Review-level filtering and weighting
         if not reviews:
             return 0, 0, {"kind": kind, "value": None, "satisfied": 0, "score": 0}
-        satisfied, per_review_weights = evaluate_review_meta(reviews, path, match_list, aspect)
-        score = satisfied
-        value = {"path": path, "match_list": match_list, "weights": per_review_weights}
+        # Extract new parameters
+        filter_spec = evidence_spec.get("filter")
+        min_stars = evidence_spec.get("min_stars")
+        weight_fields = evidence_spec.get("weight")
+        satisfied, score, per_review_weights = evaluate_review_meta(
+            reviews, path, match_list, aspect,
+            weight_fields=weight_fields, filter_spec=filter_spec, min_stars=min_stars
+        )
+        value = {"path": path, "filter": filter_spec, "min_stars": min_stars, "weight": weight_fields, "weights": per_review_weights}
 
     else:
         return 0, 0, {"kind": kind, "value": None, "satisfied": 0, "score": 0}
@@ -1096,6 +1154,26 @@ def evaluate_structure(item: dict, structure: dict, reviews: list = None) -> tup
     all_evidence = {}
     child_results = []  # list of (TV, score)
 
+    # First pass: collect review_meta weights (if any)
+    review_weights = None
+    for arg in args:
+        if "op" not in arg:
+            evidence_spec = arg.get("evidence", {})
+            if evidence_spec.get("kind") == "review_meta" and evidence_spec.get("weight"):
+                # Evaluate review_meta to get per-review weights
+                filter_spec = evidence_spec.get("filter")
+                min_stars = evidence_spec.get("min_stars")
+                weight_fields = evidence_spec.get("weight")
+                _, _, per_review_weights = evaluate_review_meta(
+                    reviews, evidence_spec.get("path", []), evidence_spec.get("match_list"),
+                    arg.get("aspect", ""), weight_fields=weight_fields,
+                    filter_spec=filter_spec, min_stars=min_stars
+                )
+                if per_review_weights:
+                    review_weights = per_review_weights
+                    break  # Use first review_meta's weights
+
+    # Second pass: evaluate all conditions with collected weights
     for arg in args:
         if "op" in arg:
             # Nested structure
@@ -1103,7 +1181,7 @@ def evaluate_structure(item: dict, structure: dict, reviews: list = None) -> tup
             all_evidence.update(nested_evidence)
         else:
             # Single condition
-            result, score, evidence = evaluate_condition(item, arg, reviews)
+            result, score, evidence = evaluate_condition(item, arg, reviews, review_weights)
             aspect = arg.get("aspect", "unknown")
             all_evidence[aspect] = evidence
         child_results.append((TV(result), score))
@@ -1173,9 +1251,15 @@ async def evaluate_condition_async(item: dict, condition: dict, reviews: list = 
         # Sync - no LLM calls
         if not reviews:
             return 0, 0, {"kind": kind, "value": None, "satisfied": 0, "score": 0}
-        satisfied, per_review_weights = evaluate_review_meta(reviews, path, match_list, aspect)
-        score = satisfied  # review_meta score = its result value
-        value = {"path": path, "match_list": match_list, "weights": per_review_weights}
+        # Extract new parameters
+        filter_spec = evidence_spec.get("filter")
+        min_stars = evidence_spec.get("min_stars")
+        weight_fields = evidence_spec.get("weight")
+        satisfied, score, per_review_weights = evaluate_review_meta(
+            reviews, path, match_list, aspect,
+            weight_fields=weight_fields, filter_spec=filter_spec, min_stars=min_stars
+        )
+        value = {"path": path, "filter": filter_spec, "min_stars": min_stars, "weight": weight_fields, "weights": per_review_weights}
         return satisfied, score, {"kind": kind, "value": value, "satisfied": satisfied, "score": score}
 
     return 0, 0, {"kind": kind, "value": None, "satisfied": 0, "score": 0}
@@ -1195,12 +1279,31 @@ async def evaluate_structure_async(item: dict, structure: dict, reviews: list = 
     all_evidence = {}
     child_results = []  # list of (TV, score)
 
-    # Evaluate all conditions in parallel
+    # First pass: collect review_meta weights (if any)
+    review_weights = None
+    for arg in args:
+        if "op" not in arg:
+            evidence_spec = arg.get("evidence", {})
+            if evidence_spec.get("kind") == "review_meta" and evidence_spec.get("weight"):
+                # Evaluate review_meta to get per-review weights
+                filter_spec = evidence_spec.get("filter")
+                min_stars = evidence_spec.get("min_stars")
+                weight_fields = evidence_spec.get("weight")
+                _, _, per_review_weights = evaluate_review_meta(
+                    reviews, evidence_spec.get("path", []), evidence_spec.get("match_list"),
+                    arg.get("aspect", ""), weight_fields=weight_fields,
+                    filter_spec=filter_spec, min_stars=min_stars
+                )
+                if per_review_weights:
+                    review_weights = per_review_weights
+                    break  # Use first review_meta's weights
+
+    # Evaluate all conditions in parallel (with collected weights)
     async def eval_arg(arg):
         if "op" in arg:
             return await evaluate_structure_async(item, arg, reviews)
         else:
-            return await evaluate_condition_async(item, arg, reviews)
+            return await evaluate_condition_async(item, arg, reviews, review_weights)
 
     eval_results = await asyncio.gather(*[eval_arg(arg) for arg in args])
 

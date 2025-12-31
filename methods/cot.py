@@ -8,8 +8,8 @@ from utils.llm import call_llm
 from .shared import (
     _defense, _use_defense_prompt,
     set_defense_mode, set_defense,
-    parse_final_answer
 )
+from utils.parsing import parse_final_answer
 
 FEW_SHOT_EXAMPLES = []  # No examples - pure zero-shot
 
