@@ -108,3 +108,113 @@
     ]
   }
 }
+{
+  "id": "R05",
+  "scenario": "Laptop Work",
+  "text": "I want a cafe where I can work on my laptop for a while. It must have outlets I can use, it should feel work-friendly for laptop users, and I shouldn’t feel rushed if I stay for some time.",
+  "structure": {
+    "op": "AND",
+    "args": [
+      {
+        "aspect": "has_outlets_available",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "is_laptop_work_friendly",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "allows_long_stays_without_rushing",
+        "evidence": { "kind": "review_text" }
+      }
+    ]
+  }
+}
+{
+  "id": "R06",
+  "scenario": "Coffee Specialty",
+  "text": "I’m mainly going for great specialty coffee. If reviews mention any of the following, that’s enough: careful manual brew options like pour-over, a clear focus on beans or single-origin coffee, or detailed praise of espresso quality.",
+  "structure": {
+    "op": "OR",
+    "args": [
+      {
+        "aspect": "has_manual_brew_options_like_pour_over",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "mentions_beans_or_single_origin_focus",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "praises_espresso_quality_in_detail",
+        "evidence": { "kind": "review_text" }
+      }
+    ]
+  }
+}
+{
+  "id": "R07",
+  "scenario": "Afternoon Tea",
+  "text": "I want a pleasant afternoon tea and sweets break. Any one of these would make me happy: people praising their matcha drinks, saying the cakes are genuinely good, or calling out cookies that are especially tasty.",
+  "structure": {
+    "op": "OR",
+    "args": [
+      {
+        "aspect": "has_good_matcha_drinks_mentioned_in_reviews",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "has_good_cakes_praised_in_reviews",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "has_good_cookies_praised_in_reviews",
+        "evidence": { "kind": "review_text" }
+      }
+    ]
+  }
+}
+{
+  "id": "R08",
+  "scenario": "Instagrammable",
+  "text": "I’m looking for a cafe that feels photogenic. I don’t need everything to be perfect, but it’s a plus if reviews mention taking photos, posting on Instagram, or describing the space or drinks as especially aesthetic or beautiful.",
+  "structure": {
+    "op": "OR",
+    "args": [
+      {
+        "aspect": "mentions_instagram_or_posting_photos",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "mentions_taking_photos_of_menu_or_items",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "describes_aesthetic_or_photogenic_vibe",
+        "evidence": { "kind": "review_text" }
+      }
+    ]
+  }
+}
+{
+  "id": "R09",
+  "scenario": "Fun Time",
+  "text": "I want a cafe where hanging out feels fun and not just about grabbing a drink. It’s optional, but I’d love it if reviews mention board games to play, books or reading material available, or things like puzzles or playing cards.",
+  "structure": {
+    "op": "OR",
+    "args": [
+      {
+        "aspect": "has_board_games_mentioned_in_reviews",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "has_books_or_reading_material_mentioned_in_reviews",
+        "evidence": { "kind": "review_text" }
+      },
+      {
+        "aspect": "has_puzzles_or_playing_cards_mentioned_in_reviews",
+        "evidence": { "kind": "review_text" }
+      }
+    ]
+  }
+}
