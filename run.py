@@ -4,6 +4,8 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Callable
 
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+
 from data.loader import format_query, normalize_pred
 
 
@@ -17,47 +19,58 @@ def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: st
         "confusion": {g: {p: 0 for p in [-1, 0, 1]} for g in [-1, 0, 1]},
     }
 
-    for item in items:
-        item_id = item.get("item_id", "unknown")
-        query, num_reviews = format_query(item, mode)
-        # Support both old (final_answers) and new (gold_labels) format
-        gold_answers = item.get("gold_labels") or item.get("final_answers", {})
+    total_pairs = len(items) * len(requests)
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+    ) as progress:
+        task = progress.add_task("Evaluating...", total=total_pairs)
 
-        for req in requests:
-            req_id = req["id"]
-            context = req["context"]
-            gold = gold_answers.get(req_id)
-            if gold is None:
-                continue
-            gold = int(gold)
+        for item in items:
+            item_id = item.get("item_id", "unknown")
+            query, num_reviews = format_query(item, mode)
+            # Support both old (final_answers) and new (gold_labels) format
+            gold_answers = item.get("gold_labels") or item.get("final_answers", {})
 
-            # Set IDs for knot logging (if enabled)
-            try:
-                from methods.knot import set_current_ids
-                set_current_ids(item_id, req_id)
-            except ImportError:
-                pass
+            for req in requests:
+                req_id = req["id"]
+                context = req["context"]
+                gold = gold_answers.get(req_id)
+                if gold is None:
+                    progress.update(task, advance=1)
+                    continue
+                gold = int(gold)
 
-            try:
-                pred = normalize_pred(method(query, context))
-            except Exception as e:
-                pred = 0
-                stats["errors"] += 1
+                # Set IDs for knot logging (if enabled)
+                try:
+                    from methods.knot import set_current_ids
+                    set_current_ids(item_id, req_id)
+                except ImportError:
+                    pass
 
-            correct = pred == gold
-            stats["total"] += 1
-            stats["correct"] += correct
-            stats["per_request"][req_id]["total"] += 1
-            stats["per_request"][req_id]["correct"] += correct
-            stats["confusion"][gold][pred] += 1
+                try:
+                    pred = normalize_pred(method(query, context))
+                except Exception as e:
+                    pred = 0
+                    stats["errors"] += 1
 
-            results.append({
-                "item_id": item_id,
-                "request_id": req_id,
-                "pred": pred,
-                "gold": gold,
-                "correct": correct,
-            })
+                correct = pred == gold
+                stats["total"] += 1
+                stats["correct"] += correct
+                stats["per_request"][req_id]["total"] += 1
+                stats["per_request"][req_id]["correct"] += correct
+                stats["confusion"][gold][pred] += 1
+
+                results.append({
+                    "item_id": item_id,
+                    "request_id": req_id,
+                    "pred": pred,
+                    "gold": gold,
+                    "correct": correct,
+                })
+                progress.update(task, advance=1)
 
     return {"results": results, "stats": stats, "req_ids": req_ids}
 
@@ -115,13 +128,22 @@ def evaluate_parallel(items: list[dict], method: Callable, requests: list[dict],
     pairs = [(item, req) for item in items for req in requests]
     results = []
 
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = [executor.submit(evaluate_single, item, req, method, mode)
-                   for item, req in pairs]
-        for future in as_completed(futures):
-            result = future.result()
-            if result:
-                results.append(result)
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+    ) as progress:
+        task = progress.add_task("Evaluating...", total=len(pairs))
+
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = [executor.submit(evaluate_single, item, req, method, mode)
+                       for item, req in pairs]
+            for future in as_completed(futures):
+                result = future.result()
+                if result:
+                    results.append(result)
+                progress.update(task, advance=1)
 
     stats = compute_stats(results, req_ids)
     return {"results": results, "stats": stats, "req_ids": req_ids}

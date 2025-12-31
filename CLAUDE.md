@@ -40,6 +40,9 @@ python data/scripts/generate_attacks.py data/processed/real_data.jsonl
 # IMPORTANT: Always activate the virtual environment first
 source .venv/bin/activate
 
+# NOTE: Do not run pip install commands. If a package is missing, notify the user
+# and let them decide whether to install it.
+
 # API key: llm.py auto-loads from ../.openaiapi (no manual export needed)
 # Or set manually:
 export OPENAI_API_KEY="sk-..."
