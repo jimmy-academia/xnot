@@ -4,6 +4,7 @@ from typing import Callable
 
 from .base import BaseMethod
 from .cot import ChainOfThought
+from .react import ReAct
 from .rnot import method as rnot
 from .knot import create_method, method as knot, set_output_dir, set_defense_mode, set_current_ids
 from .knot_v4 import KnowledgeNetworkOfThoughtV4
@@ -55,6 +56,14 @@ def get_method(args, run_dir: str = None) -> Callable:
             set_output_dir(run_dir)
         knot_set_defense(defense)
         return create_method(mode=mode, approach=approach, run_dir=run_dir)
+
+    elif name == "react":
+        from .react import ReAct
+        react_instance = ReAct(defense=defense, run_dir=run_dir)
+        if getattr(args, 'ranking', True):
+            k = getattr(args, 'k', 1)
+            return lambda q, c: react_instance.evaluate_ranking(q, c, k)
+        return react_instance
 
     elif name == "dummy":
         return lambda query, context: 0
