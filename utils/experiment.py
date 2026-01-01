@@ -172,13 +172,30 @@ class ExperimentManager:
         return max(nums) + 1 if nums else 1
 
     def get_completed_runs(self) -> int:
-        """Return count of completed runs for current benchmark config."""
+        """Return count of VALID completed runs (with config.json and stats).
+
+        Only counts runs that have:
+        - A config.json file
+        - A 'stats' key in the config (indicating successful completion)
+        """
         if not self.benchmark_mode:
             return 0
         attack_dir = BENCHMARK_DIR / f"{self.method}_{self.data}" / self.attack
         if not attack_dir.exists():
             return 0
-        return len(list(attack_dir.glob(f"{self.selection_name}_run_*/")))
+
+        count = 0
+        for run_dir in attack_dir.glob(f"{self.selection_name}_run_*/"):
+            config_path = run_dir / "config.json"
+            if config_path.exists():
+                try:
+                    with open(config_path) as f:
+                        config = json.load(f)
+                    if "stats" in config:
+                        count += 1
+                except (json.JSONDecodeError, IOError):
+                    pass  # Invalid config, don't count
+        return count
 
     def _get_next_run_number(self) -> int:
         """Scan dev directory and find next available run number."""

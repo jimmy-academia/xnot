@@ -53,14 +53,38 @@ def _aggregate_from_dirs(run_dirs: List[Path], method: str, data: str,
     """Helper to aggregate stats from a list of run directories."""
     # Load stats from each run's config.json
     all_stats = []
+    skipped = 0
+    skipped_reasons = {"no_config": 0, "no_stats": 0, "parse_error": 0}
+
     for d in run_dirs:
         config_path = d / "config.json"
         if not config_path.exists():
+            skipped += 1
+            skipped_reasons["no_config"] += 1
             continue
-        with open(config_path) as f:
-            config = json.load(f)
+        try:
+            with open(config_path) as f:
+                config = json.load(f)
+        except (json.JSONDecodeError, IOError):
+            skipped += 1
+            skipped_reasons["parse_error"] += 1
+            continue
+
         if "stats" in config:
             all_stats.append(config["stats"])
+        else:
+            skipped += 1
+            skipped_reasons["no_stats"] += 1
+
+    # Print warnings for skipped runs
+    if skipped > 0:
+        print(f"WARNING: Skipped {skipped} of {len(run_dirs)} runs:")
+        if skipped_reasons["no_config"] > 0:
+            print(f"  - {skipped_reasons['no_config']} without config.json")
+        if skipped_reasons["no_stats"] > 0:
+            print(f"  - {skipped_reasons['no_stats']} without stats in config")
+        if skipped_reasons["parse_error"] > 0:
+            print(f"  - {skipped_reasons['parse_error']} with parse errors")
 
     if not all_stats:
         return {"runs": 0, "error": "No stats found in runs"}
@@ -119,15 +143,43 @@ def aggregate_all_attacks(method: str, data: str, selection_name: str) -> Dict[s
     return results
 
 
+def _validate_stat_formats(all_stats: List[Dict]) -> str:
+    """Check all stats have consistent format.
+
+    Returns:
+        Format type: "ranking" or "accuracy"
+
+    Raises:
+        ValueError: If stats have mixed formats
+    """
+    formats = set()
+    for stat in all_stats:
+        if "hits_at" in stat:
+            formats.add("ranking")
+        elif "correct" in stat:
+            formats.add("accuracy")
+        else:
+            formats.add("unknown")
+
+    if len(formats) > 1:
+        raise ValueError(f"Mixed stat formats in runs: {formats}. Cannot aggregate.")
+    return formats.pop()
+
+
 def _aggregate_stats(all_stats: List[Dict]) -> Dict[str, Any]:
     """
     Aggregate stats list, handling both ranking and per-item modes.
+
+    Validates format consistency before aggregating.
     """
-    # Check if ranking mode (has hits_at)
-    if "hits_at" in all_stats[0]:
+    stat_format = _validate_stat_formats(all_stats)
+
+    if stat_format == "ranking":
         return _aggregate_ranking_stats(all_stats)
-    else:
+    elif stat_format == "accuracy":
         return _aggregate_accuracy_stats(all_stats)
+    else:
+        return {"error": f"Unknown stat format: {stat_format}"}
 
 
 def _aggregate_ranking_stats(all_stats: List[Dict]) -> Dict[str, Any]:
