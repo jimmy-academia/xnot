@@ -1,22 +1,9 @@
 """File I/O utilities for reading and writing various formats."""
 
 import json
-import pickle
 import re
 import argparse
 from pathlib import Path
-
-
-def readf(path, encoding="utf-8"):
-    """Read text file and return contents."""
-    with open(path, 'r', encoding=encoding) as f:
-        return f.read()
-
-
-def writef(path, content, encoding="utf-8"):
-    """Write content to text file."""
-    with open(path, 'w', encoding=encoding) as f:
-        f.write(content)
 
 
 class NamespaceEncoder(json.JSONEncoder):
@@ -60,15 +47,3 @@ def loadjl(filepath):
                 continue
             items.append(json.loads(line))
     return items
-
-
-def dumpp(filepath, obj):
-    """Pickle object to file."""
-    with open(filepath, "wb") as f:
-        pickle.dump(obj, f)
-
-
-def loadp(filepath):
-    """Load pickled object from file."""
-    with open(filepath, "rb") as f:
-        return pickle.load(f)

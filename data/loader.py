@@ -2,9 +2,8 @@
 """Data loading and formatting utilities."""
 
 import json
-import sys
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 from utils.io import loadjl
 from utils.parsing import parse_final_answer
@@ -69,31 +68,6 @@ class Dataset:
     def __iter__(self):
         return iter(self.items)
 
-def check_dataset_exists(data_path: Path, requests_path: Path, dataset_name: str) -> None:
-    """Warn user if dataset files don't exist and exit."""
-    missing = []
-    if not data_path.exists():
-        missing.append(f"  - Data: {data_path}")
-    if not requests_path.exists():
-        missing.append(f"  - Requests: {requests_path}")
-
-    if missing:
-        print(f"\n\u26a0\ufe0f  Dataset '{dataset_name}' not found:")
-        print("\n".join(missing))
-        print(f"\nTo create this dataset, run:")
-        print(f"  1. python data/scripts/{dataset_name}_curation.py")
-        print(f"  2. python data/scripts/{dataset_name}_review_sampler.py <selection_name>")
-        print()
-        sys.exit(1)
-
-def _ensure_data_exists(path: str) -> None:
-    """Check if data file exists, raise error if not."""
-    if Path(path).exists():
-        return
-    raise FileNotFoundError(f"Data not found at {path}. Run data generation scripts first.")
-
-
-
 
 def load_requests(path: str = "requests.jsonl") -> list[dict]:
     """Load user requests from JSONL file.
@@ -110,43 +84,6 @@ def load_requests(path: str = "requests.jsonl") -> list[dict]:
         return requests
     except FileNotFoundError:
         raise FileNotFoundError(f"Requests file not found: {path}")
-
-
-def load_data(path: str, limit: int = None, attack: str = "none") -> Union[dict, list]:
-    """Load data, optionally with attack variant(s).
-
-    Args:
-        path: Path to clean data file
-        limit: Max items to load
-        attack: "none"/"clean" for original, specific name, or "all" for all attacks
-
-    Returns:
-        - dict {attack_name: items} when attack="all"
-        - list[dict] for single attack/clean
-    """
-    # Ensure data exists (generate from selection if not)
-    _ensure_data_exists(path)
-
-    def _load_with_limit(filepath: str, limit: int = None) -> list[dict]:
-        items = loadjl(filepath)
-        return items[:limit] if limit else items
-
-    # Load all attacks
-    if attack == "all":
-        result = {"clean": _load_with_limit(path, limit)}
-        for attack_file in ATTACKED_DIR.glob("*.jsonl"):
-            result[attack_file.stem] = _load_with_limit(str(attack_file), limit)
-        return result
-
-    # Load clean data
-    if attack in ("none", "clean", None):
-        return _load_with_limit(path, limit)
-
-    # Load specific attack
-    attack_path = ATTACKED_DIR / f"{attack}.jsonl"
-    if not attack_path.exists():
-        raise FileNotFoundError(f"Attacked data not found: {attack_path}")
-    return _load_with_limit(str(attack_path), limit)
 
 
 def format_query(item: dict, mode: str = "string"):

@@ -11,8 +11,6 @@ from .shared import (
 )
 from utils.parsing import parse_final_answer
 
-FEW_SHOT_EXAMPLES = []  # No examples - pure zero-shot
-
 # Normal prompt - minimal baseline
 SYSTEM_PROMPT_NORMAL = """Rate this restaurant. Output ANSWER: 1, 0, or -1."""
 
@@ -77,14 +75,8 @@ class ChainOfThought(BaseMethod):
         return system
 
     def _build_prompt(self, query: str, context: str) -> str:
-        """Build prompt with few-shot examples."""
+        """Build zero-shot prompt."""
         parts = []
-        for i, ex in enumerate(FEW_SHOT_EXAMPLES, 1):
-            parts.append(f"=== Example {i} ===")
-            parts.append(f"\n[RESTAURANT INFO]\n{ex['query']}")
-            parts.append(f"\n[USER REQUEST]\n{ex['context']}")
-            parts.append(f"\n[ANALYSIS]\n{ex['reasoning']}")
-            parts.append(f"\nANSWER: {ex['answer']}\n")
         parts.append("=== Your Task ===")
         parts.append(f"\n[RESTAURANT INFO]\n{query}")
         parts.append(f"\n[USER REQUEST]\n{context}")

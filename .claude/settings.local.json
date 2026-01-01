@@ -43,7 +43,8 @@
       "Bash(while read line)",
       "Bash(do echo \"$line\")",
       "Bash(timeout 120 python:*)",
-      "Bash(KNOT_DEBUG=1 timeout 120 python main.py:*)"
+      "Bash(KNOT_DEBUG=1 timeout 120 python main.py:*)",
+      "Bash(du:*)"
     ]
   }
 }
