@@ -27,10 +27,10 @@ SYSTEM_PROMPT_AGGREGATE = """Based on all the evidence gathered, make a final re
 
 Output ANSWER: 1 (recommend), 0 (neutral), or -1 (not recommend)"""
 
-SYSTEM_PROMPT_RANKING = """You are selecting the best restaurant for a user's request.
-Analyze each restaurant against the user's criteria and output ONLY the index number.
+SYSTEM_PROMPT_RANKING = """You are selecting the best restaurants for a user's request.
+Analyze each restaurant against the user's criteria.
 
-Output format: ANSWER: <number>"""
+Output format: ANSWER: <n1>, <n2>, <n3>, ... (indices of best matches, best first)"""
 
 
 class LeastToMost(BaseMethod):
@@ -100,7 +100,12 @@ What are the 2-3 key criteria to evaluate restaurants for this request?"""
 
         criteria_response = call_llm(decompose_prompt, system=SYSTEM_PROMPT_DECOMPOSE)
 
-        # Build analysis prompt
+        # Build analysis prompt with top-k instruction
+        if k == 1:
+            instruction = "Select the restaurant that BEST matches the user's request."
+        else:
+            instruction = f"Select the TOP {k} restaurants that best match, ranked from best to worst."
+
         ranking_prompt = f"""[KEY CRITERIA]
 {criteria_response}
 
@@ -111,7 +116,7 @@ What are the 2-3 key criteria to evaluate restaurants for this request?"""
 {context}
 
 Evaluate each restaurant against the criteria above.
-Select the restaurant that BEST matches the user's request.
+{instruction}
 
 [ANALYSIS]"""
 

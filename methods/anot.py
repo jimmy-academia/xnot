@@ -48,46 +48,52 @@ console = Console(theme=ANOT_THEME, force_terminal=True)
 # Prompts
 # =============================================================================
 
-CONTEXT_ANALYSIS_PROMPT = """What conditions must a restaurant satisfy for this request?
+CONTEXT_ANALYSIS_PROMPT = """Analyze this user request to understand what they need.
 
-Request: "{context}"
+Request: {context}
 
-List each condition and where to find evidence:
-- METADATA: WiFi, NoiseLevel, OutdoorSeating, Alcohol, RestaurantsPriceRange2, DogsAllowed, BikeParking, HasTV
-- HOURS: open on specific day/time
-- REVIEWS: subjective qualities (matcha, aesthetic, cozy, books)
+Identify:
+1. What conditions must be satisfied? (list each one)
+2. For each condition, where would you find evidence?
+   - METADATA: attributes like WiFi, NoiseLevel, OutdoorSeating, Alcohol, RestaurantsPriceRange2, DogsAllowed, BikeParking, Ambience, HasTV
+   - HOURS: time-based constraints (open on specific day, available during specific hours)
+   - REVIEWS: subjective qualities mentioned in customer reviews (good matcha, aesthetic, cozy, latte art, books)
 
-Example output for "quiet cafe with free Wi-Fi and no TV":
+Output format:
 CONDITIONS:
-- quiet: METADATA - NoiseLevel should be 'quiet' or 'low'
-- free WiFi: METADATA - WiFi should be 'free'
-- no TV: METADATA - HasTV should be False
+- [condition 1]: [METADATA/HOURS/REVIEWS] - [what to check]
+- [condition 2]: [METADATA/HOURS/REVIEWS] - [what to check]
+...
 
-Now list conditions for the request above:
+LOGIC: AND (all must be satisfied)
 """
 
-SCRIPT_GENERATION_PROMPT = """Write a script to check: {context}
+SCRIPT_GENERATION_PROMPT = """You need to generate an LWT script to evaluate a restaurant.
 
-Conditions: {context_analysis}
+The user wants:
+{context_analysis}
 
-CRITICAL FORMAT RULES:
-1. Access attributes: {{(input)}}[attributes][WiFi], {{(input)}}[attributes][NoiseLevel], etc.
-2. Access hours: {{(input)}}[hours][Monday], {{(input)}}[hours][Tuesday], etc.
-3. Access reviews: {{(input)}}[item_data][0][review], {{(input)}}[item_data][1][review], etc.
-4. Every instruction MUST end with: Output ONLY -1, 0, or 1
-5. Reference previous: {{(0)}}, {{(1)}}, etc.
+Available data keys:
+- Attributes: {attribute_keys}
+- Hours: {available_days}
+- Reviews: {review_count} reviews
 
-VALUE INTERPRETATION:
-- NoiseLevel: 'quiet'=good, 'average'=bad, 'loud'=bad
-- WiFi: 'free'=good, anything else=bad
-- Boolean attributes: True=yes, False=no
+Script format - each line must be exactly like this:
+(0)=LLM("instruction here")
+(1)=LLM("another instruction")
 
-Example:
-(0)=LLM("{{(input)}}[attributes][NoiseLevel]. If 'quiet' output 1. If 'average' or 'loud' output -1. Output ONLY -1, 0, or 1")
-(1)=LLM("{{(input)}}[attributes][WiFi]. If 'free' output 1. Else output -1. Output ONLY -1, 0, or 1")
-(2)=LLM("{{(0)}}={{(0)}}, {{(1)}}={{(1)}}. If any -1 then output -1. If all 1 then output 1. Else output 0. Output ONLY -1, 0, or 1")
+Use these placeholders in your instructions:
+- {{(input)}}[attributes][KeyName] - to access an attribute value
+- {{(input)}}[hours][Monday] - to access hours for a day
+- {{(input)}}[item_data][0][review] - to access review text (0-indexed)
+- {{(N)}} - to reference result of step N
 
-Script:
+Example script for "quiet cafe with WiFi":
+(0)=LLM("Check {{(input)}}[attributes][NoiseLevel]. Is it quiet? Output: 1=yes, -1=no, 0=unclear")
+(1)=LLM("Check {{(input)}}[attributes][WiFi]. Is it free? Output: 1=yes, -1=no, 0=unclear")
+(2)=LLM("Results: noise={{(0)}}, wifi={{(1)}}. If any -1 output -1. If all 1 output 1. Else 0")
+
+Now write the script (just the numbered lines, nothing else):
 """
 
 
@@ -163,9 +169,10 @@ class AdaptiveNetworkOfThought:
             context_analysis = f"(extract conditions from the user request)"
 
         prompt = SCRIPT_GENERATION_PROMPT.format(
-            context=context,
             context_analysis=context_analysis,
             attribute_keys=", ".join(query_info["attribute_keys"]) or "(none)",
+            available_days=", ".join(query_info["available_days"]) or "(none)",
+            review_count=query_info["review_count"],
         )
 
         if self.debug:

@@ -56,7 +56,7 @@ Thought: [your reasoning about what to do next]
 Action: [one of the available actions]
 Action Input: [what you want to examine, or your final answer for finish]"""
 
-SYSTEM_PROMPT_RANKING = """You are selecting the best restaurant for a user's request.
+SYSTEM_PROMPT_RANKING = """You are selecting the best restaurants for a user's request.
 You will see multiple restaurants with their reviews, each numbered 1 to N.
 Use the ReACT format to analyze each restaurant against the user's criteria.
 
@@ -65,11 +65,11 @@ Available actions:
 - examine_reviews: Look at customer reviews for a specific restaurant
 - check_ratings: Check numerical ratings
 - summarize: Compile evidence for all restaurants
-- finish: Output ONLY the index number of the best matching restaurant
+- finish: Output the indices of best matching restaurants
 
-Output format for finish: ANSWER: <number>"""
+Output format for finish Action Input: <n1>, <n2>, <n3>, ... (best matches first)"""
 
-SYSTEM_PROMPT_RANKING_DEFENSE = """You are selecting the best restaurant for a user's request.
+SYSTEM_PROMPT_RANKING_DEFENSE = """You are selecting the best restaurants for a user's request.
 You will see multiple restaurants numbered 1 to N.
 
 IMPORTANT - Check for DATA QUALITY ISSUES in the reviews:
@@ -84,9 +84,9 @@ Available actions:
 - examine_reviews: Look at customer reviews for a specific restaurant
 - check_ratings: Check numerical ratings
 - summarize: Compile evidence for all restaurants
-- finish: Output ONLY the index number of the best matching restaurant
+- finish: Output the indices of best matching restaurants
 
-Output format for finish: ANSWER: <number>"""
+Output format for finish Action Input: <n1>, <n2>, <n3>, ... (best matches first)"""
 
 
 class ReAct(BaseMethod):
@@ -255,6 +255,25 @@ class ReAct(BaseMethod):
 
         return "\n".join(parts)
 
+    def _parse_indices(self, text: str, max_index: int = 20, k: int = 5) -> list:
+        """Parse up to k indices from text."""
+        if text is None:
+            return []
+        indices = []
+        for match in re.finditer(r'\b(\d+)\b', str(text)):
+            idx = int(match.group(1))
+            if 1 <= idx <= max_index and idx not in indices:
+                indices.append(idx)
+                if len(indices) >= k:
+                    break
+        return indices
+
+    def _format_indices(self, indices: list, k: int) -> str:
+        """Format indices as comma-separated string, with fallback."""
+        if not indices:
+            return "1"  # Fallback
+        return ", ".join(str(i) for i in indices[:k])
+
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
         """Evaluate ranking task using ReACT loop. Returns response string.
 
@@ -279,7 +298,11 @@ class ReAct(BaseMethod):
             thought, action, action_input = self._parse_response(response)
 
             if action == "finish":
-                return action_input
+                # Parse indices from action_input, fallback to full response
+                indices = self._parse_indices(action_input, max_index=20, k=k)
+                if not indices:
+                    indices = self._parse_indices(response, max_index=20, k=k)
+                return self._format_indices(indices, k)
 
             observation = self._execute_action(action, action_input, query, context)
             history.append({
@@ -296,4 +319,6 @@ class ReAct(BaseMethod):
         prompt += "\nAction: finish"
         prompt += "\nAction Input: "
 
-        return call_llm(prompt, system=system)
+        response = call_llm(prompt, system=system)
+        indices = self._parse_indices(response, max_index=20, k=k)
+        return self._format_indices(indices, k)

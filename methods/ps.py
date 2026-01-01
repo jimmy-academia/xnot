@@ -27,10 +27,10 @@ SYSTEM_PROMPT_FINAL = """Based on your step-by-step analysis, make a final recom
 
 Output ANSWER: 1 (recommend), 0 (neutral), or -1 (not recommend)"""
 
-SYSTEM_PROMPT_RANKING = """You are selecting the best restaurant for a user's request.
-Analyze each restaurant against the user's criteria and output ONLY the index number.
+SYSTEM_PROMPT_RANKING = """You are selecting the best restaurants for a user's request.
+Analyze each restaurant against the user's criteria.
 
-Output format: ANSWER: <number>"""
+Output format: ANSWER: <n1>, <n2>, <n3>, ... (indices of best matches, best first)"""
 
 
 class PlanAndSolve(BaseMethod):
@@ -99,6 +99,12 @@ Devise a 3-step plan to compare multiple restaurants and select the best match."
 
         plan_response = call_llm(plan_prompt, system=SYSTEM_PROMPT_PLAN)
 
+        # Build instruction based on k
+        if k == 1:
+            instruction = "Select the restaurant that BEST matches the user's request."
+        else:
+            instruction = f"Select the TOP {k} restaurants that best match, ranked from best to worst."
+
         # Solve phase (single pass for ranking)
         ranking_prompt = f"""[EVALUATION PLAN]
 {plan_response}
@@ -110,7 +116,7 @@ Devise a 3-step plan to compare multiple restaurants and select the best match."
 {context}
 
 Execute the plan above to evaluate each restaurant.
-Select the restaurant that BEST matches the user's request.
+{instruction}
 
 [ANALYSIS]"""
 

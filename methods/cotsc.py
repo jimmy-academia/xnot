@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """CoT-Self-Consistency method for restaurant recommendation."""
 
+import re
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .base import BaseMethod
@@ -12,10 +14,10 @@ DEFAULT_N_SAMPLES = 5
 
 SYSTEM_PROMPT = """Rate this restaurant. Output ANSWER: 1, 0, or -1."""
 
-SYSTEM_PROMPT_RANKING = """You are selecting the best restaurant for a user's request.
-Analyze each restaurant against the user's criteria and output ONLY the index number.
+SYSTEM_PROMPT_RANKING = """You are selecting the best restaurants for a user's request.
+Analyze each restaurant against the user's criteria.
 
-Output format: ANSWER: <number>"""
+Output format: ANSWER: <n1>, <n2>, <n3>, ... (indices of best matches, best first)"""
 
 
 class CoTSelfConsistency(BaseMethod):
@@ -82,7 +84,7 @@ class CoTSelfConsistency(BaseMethod):
 [ANALYSIS]"""
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Ranking with self-consistency voting."""
+        """Ranking with self-consistency voting on parsed indices."""
         prompt = self._build_ranking_prompt(query, context, k)
 
         # Sample multiple ranking responses
@@ -98,8 +100,34 @@ class CoTSelfConsistency(BaseMethod):
                 except Exception:
                     pass
 
-        # Return most common response
         if not responses:
-            return "ANSWER: 1"  # Default fallback
-        from collections import Counter
-        return Counter(responses).most_common(1)[0][0]
+            return "1"  # Default fallback
+
+        # Parse indices from each response and vote with position weights
+        # Position 1 gets weight k, position 2 gets weight k-1, etc.
+        index_scores = Counter()
+        for response in responses:
+            indices = self._parse_indices(response, max_index=20, k=k)
+            for pos, idx in enumerate(indices):
+                weight = k - pos  # First position gets highest weight
+                index_scores[idx] += weight
+
+        # Return top-k indices by score
+        if not index_scores:
+            return "1"
+
+        top_indices = [idx for idx, _ in index_scores.most_common(k)]
+        return ", ".join(str(i) for i in top_indices)
+
+    def _parse_indices(self, response: str, max_index: int = 20, k: int = 5) -> list:
+        """Parse up to k indices from LLM response."""
+        if response is None:
+            return []
+        indices = []
+        for match in re.finditer(r'\b(\d+)\b', str(response)):
+            idx = int(match.group(1))
+            if 1 <= idx <= max_index and idx not in indices:
+                indices.append(idx)
+                if len(indices) >= k:
+                    break
+        return indices

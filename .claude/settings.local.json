@@ -37,7 +37,9 @@
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot commit -m \"$\\(cat <<''EOF''\nAdd anot_v2 method and benchmark results for multiple methods\n\n- Add anot_v2 implementation with create_method factory\n- Simplify anot.py prompts for context analysis and script generation\n- Add benchmark results for cot, cotsc, l2m, ps, react on yelp data\n- Add iteration documentation for anot development\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot diff)",
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot add methods/anot.py .claude/settings.local.json)",
-      "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot commit -m \"$\\(cat <<''EOF''\nImprove anot.py script generation prompt format\n\n- Add clearer format rules for attribute/hours/review access\n- Add value interpretation guidelines for NoiseLevel, WiFi\n- Ensure output constraints are explicit in every step\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot commit -m \"$\\(cat <<''EOF''\nImprove anot.py script generation prompt format\n\n- Add clearer format rules for attribute/hours/review access\n- Add value interpretation guidelines for NoiseLevel, WiFi\n- Ensure output constraints are explicit in every step\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot log --oneline -3)",
+      "Bash(KNOT_DEBUG=1 timeout 200 python:*)"
     ]
   }
 }
