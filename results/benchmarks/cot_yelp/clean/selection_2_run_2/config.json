@@ -1,0 +1,46 @@
+{
+  "method": "cot",
+  "defense": false,
+  "data": "yelp",
+  "selection": "selection_2",
+  "limit": null,
+  "attack": "none",
+  "attack_type": null,
+  "attack_config": null,
+  "attack_seed": null,
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 1024
+  },
+  "stats": {
+    "total": 7,
+    "k": 5,
+    "hits_at": {
+      "1": {
+        "hits": 0,
+        "accuracy": 0.0
+      },
+      "2": {
+        "hits": 1,
+        "accuracy": 0.14285714285714285
+      },
+      "3": {
+        "hits": 1,
+        "accuracy": 0.14285714285714285
+      },
+      "4": {
+        "hits": 1,
+        "accuracy": 0.14285714285714285
+      },
+      "5": {
+        "hits": 1,
+        "accuracy": 0.14285714285714285
+      }
+    }
+  },
+  "timestamp": "2026-01-01T00:19:08.321671",
+  "benchmark_mode": true,
+  "run_name": "cot"
+}

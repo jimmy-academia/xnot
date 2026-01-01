@@ -1,0 +1,7 @@
+{"request_id": "R01", "pred_indices": [14, 15, 20, 16, 18], "gold_index": 20, "gold_item_id": "AmI3LIUNwsi4023hOVGu3w", "gold_score": 1}
+{"request_id": "R06", "pred_indices": [4, 14, 15, 8, 10], "gold_index": 4, "gold_item_id": "6x9hcZ1CJ4S9avBgPGS7-Q", "gold_score": 1}
+{"request_id": "R08", "pred_indices": [19, 6, 12, 17, 14], "gold_index": 1, "gold_item_id": "CYSPKiVdoPX3erovujnE9Q", "gold_score": 1}
+{"request_id": "R12", "pred_indices": [6, 2, 10, 8, 12], "gold_index": 1, "gold_item_id": "CYSPKiVdoPX3erovujnE9Q", "gold_score": 1}
+{"request_id": "R17", "pred_indices": [17], "gold_index": 17, "gold_item_id": "Iw8uqNPxviwcgxtruAx_LA", "gold_score": 1}
+{"request_id": "R18", "pred_indices": [4, 5, 17, 8, 6], "gold_index": 9, "gold_item_id": "vtSisxaozZ7HWpBl_W7VaQ", "gold_score": 0.7894736842105263}
+{"request_id": "R19", "pred_indices": [2, 6, 8, 19, 20], "gold_index": 4, "gold_item_id": "6x9hcZ1CJ4S9avBgPGS7-Q", "gold_score": 1}

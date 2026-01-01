@@ -28,7 +28,10 @@ from .shared import (
     substitute_variables,
     parse_script,
     parse_final_answer,
+    build_execution_layers,
 )
+from utils.llm import call_llm_async
+import asyncio
 
 # =============================================================================
 # Rich Console for Debug Output
@@ -537,7 +540,13 @@ class AdaptiveNetworkOfThoughtV3(BaseMethod):
         return adapted_lwt
 
     def phase1e_adapt_workflow(self, lwt: str, query: dict) -> str:
-        """Adapt workflow based on query content (LLM-based detection)."""
+        """Adapt workflow based on query content (LLM-based detection).
+
+        Only runs if defense mode is enabled.
+        """
+        if not self.defense:
+            return lwt  # Skip defense detection if not enabled
+
         issues = self._detect_issues_llm(query)
         adapted_lwt = self._inject_defense_steps(lwt, issues)
         return adapted_lwt
@@ -570,8 +579,77 @@ class AdaptiveNetworkOfThoughtV3(BaseMethod):
 
         return output
 
+    async def _execute_step_async(self, idx: str, instr: str, query: dict, context: str) -> tuple:
+        """Execute a single LWT step asynchronously."""
+        filled = substitute_variables(instr, query, context, self.cache)
+
+        if self.debug:
+            console.print(f"\n[step]Step ({idx})[/step]")
+            console.print(f"  [dim]Filled:[/dim] {filled[:200]}...")
+
+        try:
+            start = time.time()
+            output = await call_llm_async(filled, system=SYSTEM_PROMPT, role="worker")
+            duration = time.time() - start
+        except Exception as e:
+            output = "0"
+            duration = 0
+            if self.debug:
+                console.print(f"  [error]Error: {e}[/error]")
+
+        if self.debug:
+            console.print(f"  [output]-> {output}[/output] [time]({duration:.2f}s)[/time]")
+
+        return idx, output
+
+    async def _phase2_execute_parallel(self, lwt: str, query: dict, context: str) -> str:
+        """Execute the LWT script with DAG parallel execution."""
+        self.cache = {}
+        steps = parse_script(lwt)
+
+        if not steps:
+            if self.debug:
+                console.print("[warning]No steps parsed, using fallback[/warning]")
+            return self._fallback_direct(query, context)
+
+        # Build execution layers (DAG analysis)
+        layers = build_execution_layers(steps)
+
+        if self.debug:
+            console.print(Panel(f"PHASE 2: Execution ({len(steps)} steps, {len(layers)} layers)", style="phase"))
+            for i, layer in enumerate(layers):
+                console.print(f"  [dim]Layer {i}: {[idx for idx, _ in layer]}[/dim]")
+
+        final = ""
+        for layer_idx, layer in enumerate(layers):
+            if self.debug and len(layer) > 1:
+                console.print(f"\n[iteration]--- Layer {layer_idx} ({len(layer)} steps in parallel) ---[/iteration]")
+
+            # Run all steps in this layer concurrently
+            tasks = [self._execute_step_async(idx, instr, query, context) for idx, instr in layer]
+            results = await asyncio.gather(*tasks)
+
+            # Cache results
+            for idx, output in results:
+                self.cache[idx] = output
+                final = output
+
+        if self.debug:
+            console.rule()
+
+        return final
+
     def phase2_execute(self, lwt: str, query: dict, context: str) -> str:
-        """Execute the LWT script step by step."""
+        """Execute the LWT script with DAG parallel execution."""
+        try:
+            # Try to run async parallel execution
+            return asyncio.run(self._phase2_execute_parallel(lwt, query, context))
+        except RuntimeError:
+            # Fallback to sequential if already in async context
+            return self._phase2_execute_sequential(lwt, query, context)
+
+    def _phase2_execute_sequential(self, lwt: str, query: dict, context: str) -> str:
+        """Fallback: Execute the LWT script step by step (sequential)."""
         self.cache = {}
         steps = parse_script(lwt)
 
@@ -581,7 +659,7 @@ class AdaptiveNetworkOfThoughtV3(BaseMethod):
             return self._fallback_direct(query, context)
 
         if self.debug:
-            console.print(Panel(f"PHASE 2: Execution ({len(steps)} steps)", style="phase"))
+            console.print(Panel(f"PHASE 2: Execution ({len(steps)} steps, sequential)", style="phase"))
 
         final = ""
         for idx, instr in steps:
@@ -685,6 +763,102 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
             console.print()
 
         return answer
+
+    def _evaluate_single_item(self, idx: int, item: dict, context: str) -> tuple:
+        """Evaluate a single item for ranking (thread-safe).
+
+        Returns:
+            Tuple of (1-indexed item number, score)
+        """
+        # Each thread gets its own cache
+        original_cache = self.cache
+        self.cache = {}
+
+        try:
+            score = self.evaluate(item, context)
+        except Exception as e:
+            if self.debug:
+                console.print(f"[error]Item {idx+1} failed: {e}[/error]")
+            score = 0
+        finally:
+            self.cache = original_cache
+
+        return (idx + 1, score)  # 1-indexed
+
+    def evaluate_ranking(self, query, context: str, k: int = 1) -> str:
+        """Ranking evaluation: returns string with top-k indices.
+
+        Args:
+            query: All restaurants as JSON string with list of items
+            context: User request text
+            k: Number of top predictions to return
+
+        Returns:
+            String with top-k indices (e.g., "3" or "3, 1, 5")
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        if self.debug:
+            console.print()
+            console.print(Panel.fit("[bold white]ANoT v3 RANKING[/bold white]", style="on magenta"))
+            console.print(f"[context]Context:[/context] {context[:100]}...")
+            console.print(f"[context]k:[/context] {k}")
+            console.rule()
+
+        # Parse items from query
+        if isinstance(query, str):
+            data = json.loads(query)
+        else:
+            data = query
+        items = data.get('items', [data]) if isinstance(data, dict) else [data]
+
+        if self.debug:
+            console.print(f"[dim]Evaluating {len(items)} items in PARALLEL...[/dim]")
+
+        # Pre-warm caches with first item (ensures plan/LWT are cached before parallel execution)
+        if items:
+            self.cache = {}
+            try:
+                first_score = self.evaluate(items[0], context)
+                results = [(1, first_score)]
+                if self.debug:
+                    console.print(f"  Item 1: score={first_score} (cache warmed)")
+            except Exception as e:
+                results = [(1, 0)]
+                if self.debug:
+                    console.print(f"[error]Item 1 failed: {e}[/error]")
+
+        # Evaluate remaining items in parallel (plan/LWT caches are now warm)
+        if len(items) > 1:
+            max_workers = min(8, len(items) - 1)  # Cap at 8 parallel workers
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures = {
+                    executor.submit(self._evaluate_single_item, i, item, context): i
+                    for i, item in enumerate(items[1:], start=1)
+                }
+
+                for future in as_completed(futures):
+                    idx = futures[future]
+                    try:
+                        result = future.result()
+                        results.append(result)
+                        if self.debug:
+                            console.print(f"  Item {result[0]}: score={result[1]}")
+                    except Exception as e:
+                        results.append((idx + 1, 0))
+                        if self.debug:
+                            console.print(f"[error]Item {idx+1} failed: {e}[/error]")
+
+        # Rank by score (highest first), break ties by original order
+        ranked = sorted(results, key=lambda x: (-x[1], x[0]))
+        top_k = [str(r[0]) for r in ranked[:k]]
+        result = ", ".join(top_k)
+
+        if self.debug:
+            console.print(Panel(f"[success]Ranking Result: {result}[/success]", style="green"))
+            console.print()
+
+        return result
 
 
 # =============================================================================

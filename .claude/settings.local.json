@@ -59,7 +59,10 @@
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot check-ignore:*)",
       "Bash(git -C /Users/jimmyyeh/Documents/Station/xnot log --all --pretty=format:\"%h %s\" --name-only)",
       "Bash(while read f)",
-      "Bash(do grep \"name = \" \"$f\")"
+      "Bash(do grep \"name = \" \"$f\")",
+      "Bash(do for method in cot cotsc react ps decomp l2m selfask prp listwise setwise parade rankgpt finegrained pal pot cot_table weaver)",
+      "Bash(do echo \"Running $method on selection_$sel...\")",
+      "Bash(chmod:*)"
     ]
   }
 }

@@ -1,0 +1,74 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.1,
+      "std": 0.0,
+      "values": [
+        0.1
+      ]
+    },
+    "2": {
+      "mean": 0.15,
+      "std": 0.0,
+      "values": [
+        0.15
+      ]
+    },
+    "3": {
+      "mean": 0.2,
+      "std": 0.0,
+      "values": [
+        0.2
+      ]
+    },
+    "4": {
+      "mean": 0.3,
+      "std": 0.0,
+      "values": [
+        0.3
+      ]
+    },
+    "5": {
+      "mean": 0.4,
+      "std": 0.0,
+      "values": [
+        0.4
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 20,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 2,
+          "accuracy": 0.1
+        },
+        "2": {
+          "hits": 3,
+          "accuracy": 0.15
+        },
+        "3": {
+          "hits": 4,
+          "accuracy": 0.2
+        },
+        "4": {
+          "hits": 6,
+          "accuracy": 0.3
+        },
+        "5": {
+          "hits": 8,
+          "accuracy": 0.4
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "anot",
+  "data": "yelp",
+  "selection": "selection_1",
+  "attack": "clean"
+}

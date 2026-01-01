@@ -76,7 +76,8 @@ def get_method(args, run_dir: str = None) -> Callable:
     if name in ("anot", "anot_v3"):
         from .anot_v3 import create_method as create_anot_v3
         debug = os.environ.get("KNOT_DEBUG", "0") == "1"
-        return create_anot_v3(run_dir=run_dir, defense=defense, debug=debug)
+        instance = create_anot_v3(run_dir=run_dir, defense=defense, debug=debug)
+        return _wrap_for_ranking(instance, args)
 
     if name == "anot_origin":
         from .anot_origin import create_method as create_anot_origin

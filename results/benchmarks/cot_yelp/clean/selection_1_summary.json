@@ -1,0 +1,74 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.15,
+      "std": 0.0,
+      "values": [
+        0.15
+      ]
+    },
+    "2": {
+      "mean": 0.15,
+      "std": 0.0,
+      "values": [
+        0.15
+      ]
+    },
+    "3": {
+      "mean": 0.15,
+      "std": 0.0,
+      "values": [
+        0.15
+      ]
+    },
+    "4": {
+      "mean": 0.15,
+      "std": 0.0,
+      "values": [
+        0.15
+      ]
+    },
+    "5": {
+      "mean": 0.15,
+      "std": 0.0,
+      "values": [
+        0.15
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 20,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 3,
+          "accuracy": 0.15
+        },
+        "2": {
+          "hits": 3,
+          "accuracy": 0.15
+        },
+        "3": {
+          "hits": 3,
+          "accuracy": 0.15
+        },
+        "4": {
+          "hits": 3,
+          "accuracy": 0.15
+        },
+        "5": {
+          "hits": 3,
+          "accuracy": 0.15
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "cot",
+  "data": "yelp",
+  "selection": "selection_1",
+  "attack": "clean"
+}

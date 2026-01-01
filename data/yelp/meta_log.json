@@ -6,6 +6,20 @@
             "city": "Philadelphia",
             "categories": ["Coffee & Tea", "Cafes"],
             "restaurant_count": 220
+        },
+        "selection_2": {
+            "file": "selection_2.jsonl",
+            "created": "2025-12-31T23:47:12.406887",
+            "city": "Philadelphia",
+            "categories": ["Bars", "Nightlife"],
+            "restaurant_count": 140
+        },
+        "selection_3": {
+            "file": "selection_3.jsonl",
+            "created": "2025-12-31T23:51:26.567750",
+            "city": "Philadelphia",
+            "categories": ["American (Traditional)", "Italian"],
+            "restaurant_count": 280
         }
     }
 }

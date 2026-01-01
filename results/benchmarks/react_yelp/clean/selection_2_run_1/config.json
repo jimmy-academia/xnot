@@ -1,0 +1,46 @@
+{
+  "method": "react",
+  "defense": false,
+  "data": "yelp",
+  "selection": "selection_2",
+  "limit": null,
+  "attack": "none",
+  "attack_type": null,
+  "attack_config": null,
+  "attack_seed": null,
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 1024
+  },
+  "stats": {
+    "total": 20,
+    "k": 5,
+    "hits_at": {
+      "1": {
+        "hits": 3,
+        "accuracy": 0.15
+      },
+      "2": {
+        "hits": 3,
+        "accuracy": 0.15
+      },
+      "3": {
+        "hits": 3,
+        "accuracy": 0.15
+      },
+      "4": {
+        "hits": 3,
+        "accuracy": 0.15
+      },
+      "5": {
+        "hits": 4,
+        "accuracy": 0.2
+      }
+    }
+  },
+  "timestamp": "2026-01-01T01:12:06.272572",
+  "benchmark_mode": true,
+  "run_name": "react"
+}
