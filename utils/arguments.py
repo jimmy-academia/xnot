@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument("--limit", type=int, help="Limit items to process")
 
     # Method arguments
-    parser.add_argument("--method", choices=["cot", "cotsc", "l2m", "ps", "selfask", "parade", "rankgpt", "prp", "not", "anot", "dummy", "react", "decomp", "finegrained"], default="cot", help="Method to use")
+    parser.add_argument("--method", choices=["cot", "cotsc", "l2m", "ps", "selfask", "parade", "rankgpt", "prp", "setwise", "listwise", "not", "anot", "dummy", "react", "decomp", "finegrained"], default="cot", help="Method to use")
 
     # Attack arguments
     parser.add_argument("--attack", choices=ATTACK_CHOICES, default="none",

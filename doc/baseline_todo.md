@@ -15,13 +15,12 @@
 | `parade` | PaRaDe: Passage Ranking using Demonstrations with LLMs | 2023 |
 | `prp` | Large Language Models are Effective Text Rankers with Pairwise Ranking Prompting | 2023 |
 | `rankgpt` | Is ChatGPT Good at Search? Investigating Large Language Models as Re-Ranking Agent | 2023 |
+| `setwise` | A Setwise Approach for Effective and Highly Efficient Zero-shot Ranking with Large Language Models | 2023 |
+| `listwise` | Rank-Without-GPT: Building GPT-Independent Listwise Rerankers on Open-Source Large Language Models | 2023 |
 
 ## Not Yet Implemented
 
-| Paper Title | Notes |
-|-------------|-------|
-| A Setwise Approach for Effective and Highly Efficient Zero-shot Ranking with Large Language Models | Setwise ranking |
-| Rank-Without-GPT: Building GPT-Independent Listwise Rerankers on Open-Source Large Language Models | Listwise reranking |
+(All paper baselines have been implemented!)
 
 ## Internal Methods (Not Paper Baselines)
 

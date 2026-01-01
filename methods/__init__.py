@@ -8,6 +8,7 @@ from .react import ReAct
 from .decomp import DecomposedPrompting
 from .finegrained import FineGrainedRanker
 from .prp import PairwiseRankingPrompting
+from .listwise import ListwiseRanker
 from .rnot import method as rnot
 from .anot import AdaptiveNetworkOfThought, create_method as create_method_anot
 
@@ -126,6 +127,22 @@ def get_method(args, run_dir: str = None) -> Callable:
             return lambda q, c: prp_instance.evaluate_ranking(q, c, k)
         return prp_instance
 
+    elif name == "setwise":
+        from .setwise import Setwise
+        setwise_instance = Setwise(run_dir=run_dir)
+        if getattr(args, 'ranking', True):
+            k = getattr(args, 'k', 1)
+            return lambda q, c: setwise_instance.evaluate_ranking(q, c, k)
+        return setwise_instance
+
+    elif name == "listwise":
+        from .listwise import ListwiseRanker
+        listwise_instance = ListwiseRanker(defense=defense, run_dir=run_dir)
+        if getattr(args, 'ranking', True):
+            k = getattr(args, 'k', 1)
+            return lambda q, c: listwise_instance.evaluate_ranking(q, c, k)
+        return listwise_instance
+
     elif name == "dummy":
         return lambda query, context: 0
 
@@ -140,6 +157,7 @@ __all__ = [
     'DecomposedPrompting',
     'FineGrainedRanker',
     'PairwiseRankingPrompting',
+    'ListwiseRanker',
     'rnot',
     'get_method',
     'AdaptiveNetworkOfThought',

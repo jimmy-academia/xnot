@@ -1,5 +1,8 @@
 **/raw
 
+# LaTeX files
+*.tex
+
 # Results directories
 results/dev/
 !results/benchmarks/
