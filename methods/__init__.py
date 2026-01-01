@@ -73,6 +73,14 @@ def get_method(args, run_dir: str = None) -> Callable:
             return lambda q, c: cotsc_instance.evaluate_ranking(q, c, k)
         return cotsc_instance
 
+    elif name == "l2m":
+        from .l2m import LeastToMost
+        l2m_instance = LeastToMost(run_dir=run_dir)
+        if getattr(args, 'ranking', True):
+            k = getattr(args, 'k', 1)
+            return lambda q, c: l2m_instance.evaluate_ranking(q, c, k)
+        return l2m_instance
+
     elif name == "dummy":
         return lambda query, context: 0
 
