@@ -26,7 +26,7 @@ def run_single(args, experiment, log):
     log.info(f"Run directory: {run_dir}")
 
     # Load data
-    dataset = load_dataset(args.data, args.selection_name, args.limit, args.attack)
+    dataset = load_dataset(args.data, args.selection_name, args.limit, args.attack, args.review_limit)
     log.info(f"\n{dataset}")
 
     # Select method

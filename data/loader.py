@@ -205,7 +205,7 @@ def normalize_pred(raw: Any) -> int:
         return parse_final_answer(raw)
     raise ValueError(f"Cannot normalize: {repr(raw)}")
 
-def load_dataset(data: str, selection_name: str = None, limit: int = None, attack: str = "none") -> Dataset:
+def load_dataset(data: str, selection_name: str = None, limit: int = None, attack: str = "none", review_limit: int = None) -> Dataset:
     """Unified dataset loading - handles both selection-based and legacy datasets.
 
     Args:
@@ -213,11 +213,12 @@ def load_dataset(data: str, selection_name: str = None, limit: int = None, attac
         selection_name: Selection name (e.g., 'selection_1') or None for legacy
         limit: Max items to load
         attack: Attack type for legacy datasets
+        review_limit: Max reviews per restaurant (for testing)
 
     Returns: Dataset object
     """
     if data == 'yelp':
-        items, requests = load_yelp_dataset(selection_name, limit)
+        items, requests = load_yelp_dataset(selection_name, limit, review_limit)
         return Dataset(f"yelp/{selection_name}", items, requests)
 
     # Legacy dataset loading (fallback)
@@ -226,7 +227,7 @@ def load_dataset(data: str, selection_name: str = None, limit: int = None, attac
 
 # --- Yelp Dataset Loading ---
 
-def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict], list[dict]]:
+def load_yelp_dataset(selection_name: str, limit: int = None, review_limit: int = None) -> tuple[list[dict], list[dict]]:
     """Load Yelp dataset from cached files (no raw file access).
 
     Reads:
@@ -239,6 +240,7 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict
     Args:
         selection_name: e.g., "selection_1"
         limit: Max restaurants to return (uses top by llm_percent)
+        review_limit: Max reviews per restaurant (for testing)
 
     Returns: (items, requests) tuple where items is list of dicts with full data:
     {
@@ -345,9 +347,10 @@ def load_yelp_dataset(selection_name: str, limit: int = None) -> tuple[list[dict
         cats_str = biz.get("categories", "")
         categories = [c.strip() for c in cats_str.split(",") if c.strip()] if cats_str else []
 
-        # Build reviews list in order
+        # Build reviews list in order (apply review_limit if set)
         item_data = []
-        for rid in review_ids:
+        review_ids_to_use = review_ids[:review_limit] if review_limit else review_ids
+        for rid in review_ids_to_use:
             r = reviews_cache.get(rid)
             if r:
                 item_data.append({

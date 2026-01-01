@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument("--run-name", help="Name for this run (creates results/{N}_{run-name}/)")
     parser.add_argument("--out", help="Output results file (default: auto in run dir)")
     parser.add_argument("--limit", type=int, help="Limit items to process")
+    parser.add_argument("--review-limit", type=int, help="Limit reviews per restaurant (for testing)")
 
     # Method arguments
     parser.add_argument("--method", choices=["cot", "cotsc", "l2m", "ps", "selfask", "parade", "rankgpt", "prp", "setwise", "listwise", "not", "anot", "anot_v2", "anot_origin", "dummy", "react", "decomp", "finegrained"], default="cot", help="Method to use")
