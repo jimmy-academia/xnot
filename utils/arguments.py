@@ -23,11 +23,13 @@ def parse_args():
     parser.add_argument("--review-limit", type=int, help="Limit reviews per restaurant (for testing)")
 
     # Method arguments
-    parser.add_argument("--method", choices=["cot", "cotsc", "l2m", "ps", "selfask", "parade", "rankgpt", "prp", "setwise", "listwise", "not", "anot", "anot_v2", "anot_origin", "dummy", "react", "decomp", "finegrained"], default="cot", help="Method to use")
+    parser.add_argument("--method", choices=["cot", "cotsc", "l2m", "ps", "selfask", "parade", "rankgpt", "prp", "setwise", "listwise", "not", "anot", "anot_v2", "anot_origin", "dummy", "react", "decomp", "finegrained", "pal", "pot", "cot_table", "weaver"], default="cot", help="Method to use")
 
     # Attack arguments
     parser.add_argument("--attack", choices=ATTACK_CHOICES, default="none",
                         help="Attack type to apply (none=clean, all=run all attacks)")
+    parser.add_argument("--seed", type=int, default=None,
+                        help="Random seed for reproducible attacks")
     parser.add_argument("--defense", action="store_true",
                         help="Enable defense prompts (attack-resistant mode)")
 
@@ -56,13 +58,15 @@ def parse_args():
                         help="Disable parallel execution (run sequentially instead)")
     parser.add_argument("--auto", type=int, default=None,
                         help="Auto-run N times for benchmark averaging (benchmark mode only)")
+    parser.add_argument("--dev", action="store_true",
+                        help="Use dev mode (results/dev/) instead of benchmark mode")
     # Verbose
     parser.add_argument("--verbose", "-v", action="store_true",
                         help="Enable verbose/debug output")
 
     args = parser.parse_args()
     args.parallel = PARALLEL_MODE and not args.sequential
-    args.benchmark = BENCHMARK_MODE
+    args.benchmark = BENCHMARK_MODE and not args.dev
 
     # Resolve selection_name from --selection or DEFAULT_SELECTIONS
     if args.selection is not None:

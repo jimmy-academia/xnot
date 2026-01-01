@@ -45,7 +45,12 @@
       "Bash(timeout 120 python:*)",
       "Bash(KNOT_DEBUG=1 timeout 120 python main.py:*)",
       "Bash(du:*)",
-      "WebFetch(domain:lm-code-binder.github.io)"
+      "WebFetch(domain:lm-code-binder.github.io)",
+      "Bash(while ! ls /Users/jimmyyeh/Documents/Station/xnot/results/benchmarks/prp_yelp/selection_1_summary.json)",
+      "Bash(do sleep 10)",
+      "Bash(while ps aux)",
+      "Bash(do echo \"prp still running...\")",
+      "WebFetch(domain:api.github.com)"
     ]
   }
 }

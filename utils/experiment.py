@@ -28,7 +28,8 @@ class ExperimentManager:
     """
 
     def __init__(self, run_name: str, benchmark_mode: bool = False,
-                 method: str = None, data: str = None, selection_name: str = None):
+                 method: str = None, data: str = None, selection_name: str = None,
+                 attack: str = None):
         """
         Initialize experiment manager.
 
@@ -38,6 +39,7 @@ class ExperimentManager:
             method: Method name (for benchmark directory naming)
             data: Data name (for benchmark directory naming)
             selection_name: Selection name (for benchmark subdirectory naming)
+            attack: Attack name for benchmark subdirectory (default: "clean")
 
         Raises:
             ExperimentError: If benchmark directory exists
@@ -47,6 +49,8 @@ class ExperimentManager:
         self.method = method
         self.data = data
         self.selection_name = selection_name
+        # Normalize attack name for directory purposes
+        self.attack = attack if attack not in (None, "", "none") else "clean"
         self.run_dir: Optional[Path] = None
         self.config: Dict[str, Any] = {}
         self._created = False
@@ -124,22 +128,22 @@ class ExperimentManager:
 
     def _setup_benchmark_dir(self) -> Path:
         """
-        Create benchmark directory with two-level structure.
+        Create benchmark directory with three-level structure.
 
-        Pattern: results/benchmarks/{method}_{data}/{selection_name}_run_{N}/
+        Pattern: results/benchmarks/{method}_{data}/{attack}/{selection_name}_run_{N}/
 
         Raises:
             ExperimentError: If specific run directory already exists
         """
-        # Parent directory: results/benchmarks/{method}_{data}/
+        # Parent directory: results/benchmarks/{method}_{data}/{attack}/
         parent_name = f"{self.method}_{self.data}"
-        parent_dir = BENCHMARK_DIR / parent_name
-        parent_dir.mkdir(parents=True, exist_ok=True)
+        attack_dir = BENCHMARK_DIR / parent_name / self.attack
+        attack_dir.mkdir(parents=True, exist_ok=True)
 
         # Subdir: {selection_name}_run_{N}
         run_num = self._get_next_benchmark_run()
         subdir_name = f"{self.selection_name}_run_{run_num}"
-        run_dir = parent_dir / subdir_name
+        run_dir = attack_dir / subdir_name
 
         if run_dir.exists():
             raise ExperimentError(
@@ -152,11 +156,11 @@ class ExperimentManager:
 
     def _get_next_benchmark_run(self) -> int:
         """Find next run number for current selection in benchmark mode."""
-        parent = BENCHMARK_DIR / f"{self.method}_{self.data}"
-        if not parent.exists():
+        attack_dir = BENCHMARK_DIR / f"{self.method}_{self.data}" / self.attack
+        if not attack_dir.exists():
             return 1
 
-        existing = list(parent.glob(f"{self.selection_name}_run_*/"))
+        existing = list(attack_dir.glob(f"{self.selection_name}_run_*/"))
         if not existing:
             return 1
 
@@ -171,10 +175,10 @@ class ExperimentManager:
         """Return count of completed runs for current benchmark config."""
         if not self.benchmark_mode:
             return 0
-        parent = BENCHMARK_DIR / f"{self.method}_{self.data}"
-        if not parent.exists():
+        attack_dir = BENCHMARK_DIR / f"{self.method}_{self.data}" / self.attack
+        if not attack_dir.exists():
             return 0
-        return len(list(parent.glob(f"{self.selection_name}_run_*/")))
+        return len(list(attack_dir.glob(f"{self.selection_name}_run_*/")))
 
     def _get_next_run_number(self) -> int:
         """Scan dev directory and find next available run number."""
@@ -318,21 +322,25 @@ class ExperimentManager:
         return (candidates[0][0], candidates[0][1])
 
 
-def create_experiment(args) -> ExperimentManager:
+def create_experiment(args, attack: str = None) -> ExperimentManager:
     """
     Factory function to create ExperimentManager from parsed arguments.
 
     Args:
         args: Parsed argparse namespace with run_name, benchmark, method, data, selection_name
+        attack: Optional attack name override (for parallel attack runs)
 
     Returns:
         Configured ExperimentManager instance (not yet setup)
     """
     run_name = args.run_name or args.method or "unnamed"
+    # Use provided attack or fall back to args.attack
+    attack_name = attack if attack is not None else getattr(args, 'attack', None)
     return ExperimentManager(
         run_name=run_name,
         benchmark_mode=getattr(args, 'benchmark', False),
         method=getattr(args, 'method', None),
         data=getattr(args, 'data', None),
         selection_name=getattr(args, 'selection_name', None),
+        attack=attack_name,
     )

@@ -1,0 +1,43 @@
+{
+  "method": "pot",
+  "defense": false,
+  "data": "yelp",
+  "selection": "selection_1",
+  "limit": null,
+  "attack": "none",
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 1024
+  },
+  "stats": {
+    "total": 20,
+    "k": 5,
+    "hits_at": {
+      "1": {
+        "hits": 0,
+        "accuracy": 0.0
+      },
+      "2": {
+        "hits": 0,
+        "accuracy": 0.0
+      },
+      "3": {
+        "hits": 0,
+        "accuracy": 0.0
+      },
+      "4": {
+        "hits": 0,
+        "accuracy": 0.0
+      },
+      "5": {
+        "hits": 0,
+        "accuracy": 0.0
+      }
+    }
+  },
+  "timestamp": "2025-12-31T22:01:20.787627",
+  "benchmark_mode": true,
+  "run_name": "pot_baseline"
+}

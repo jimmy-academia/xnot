@@ -366,6 +366,55 @@ ATTACK_CONFIGS = {
 ATTACK_CHOICES = ["none"] + list(ATTACK_CONFIGS.keys()) + ["all"]
 
 
+def get_all_attack_names() -> list:
+    """Return list of all configured attack names."""
+    return list(ATTACK_CONFIGS.keys())
+
+
+def apply_attacks(items: list, attack: str, seed: int = None) -> tuple:
+    """Apply attack to items and return (attacked_items, attack_params).
+
+    This is the main entry point for attack application. It handles:
+    - Setting random seed for reproducibility
+    - Looking up attack config by name
+    - Returning full attack parameters for storage
+
+    Args:
+        items: List of restaurant items (will be deep copied)
+        attack: Attack name (e.g., "typo_10", "inject_override") or None/"none"/"clean"
+        seed: Random seed for reproducible attacks
+
+    Returns:
+        Tuple of:
+        - attacked_items: List of modified items (deep copied from originals)
+        - attack_params: Dict with full attack config for storage/reproducibility
+    """
+    # Handle clean/no attack case
+    if attack in ("none", "clean", None, ""):
+        return items, {"attack": "none", "attack_type": None, "attack_config": None, "seed": None}
+
+    # Set seed for reproducibility if provided
+    if seed is not None:
+        random.seed(seed)
+
+    # Look up attack configuration
+    if attack not in ATTACK_CONFIGS:
+        raise ValueError(f"Unknown attack: {attack}. Available: {list(ATTACK_CONFIGS.keys())}")
+
+    attack_type, params = ATTACK_CONFIGS[attack]
+    attacked_items = apply_attack(items, attack_type, **params)
+
+    # Return full params for storage/reproducibility
+    attack_params = {
+        "attack": attack,
+        "attack_type": attack_type,
+        "attack_config": params,
+        "seed": seed
+    }
+    return attacked_items, attack_params
+
+
+# NOTE: run_attack() below is currently unused (dead code) but kept for reference
 def run_attack(attack_name: str, items_clean: list, method, requests: list,
                mode: str, run_dir, evaluate_parallel_fn) -> tuple:
     """Run evaluation for a single attack (can run in parallel with other attacks).

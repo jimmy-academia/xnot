@@ -492,11 +492,11 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
 
         return answer
 
-    def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
+    def evaluate_ranking(self, query, context: str, k: int = 1) -> str:
         """Ranking evaluation: returns string with top-k indices.
 
         Args:
-            query: All restaurants formatted with indices (string)
+            query: All restaurants - either dict (with "items" key) or string
             context: User request text
             k: Number of top predictions to return
 
@@ -510,15 +510,8 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
             console.print(f"[context]k:[/context] {k}")
             console.rule()
 
-        # For text-based ranking, create a minimal schema
-        schema = {
-            "attribute_keys": [],
-            "has_hours": False,
-            "available_days": [],
-            "review_count": 0,
-            "review_fields": ["review", "stars"],
-            "user_fields": [],
-        }
+        # Extract schema from query (handles both dict and string)
+        schema = self.extract_schema(query)
 
         # Phase 1: Generate seed workflow
         seed_script = self.phase1_generate_seed_workflow(context, schema)

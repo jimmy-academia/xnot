@@ -9,10 +9,11 @@ Complexity: O(n²) comparisons for n items.
 """
 
 import re
+import asyncio
 from typing import List, Tuple, Dict
 
 from .base import BaseMethod
-from utils.llm import call_llm
+from utils.llm import call_llm, call_llm_async
 from .shared import (
     _defense, _use_defense_prompt,
 )
@@ -131,15 +132,29 @@ class PairwiseRankingPrompting(BaseMethod):
         # Initialize win counts
         wins: Dict[int, int] = {idx: 0 for idx, _ in items}
 
-        # Compare all pairs (n*(n-1)/2 comparisons)
+        # Build all pairs for parallel comparison
+        pairs = []
         for i, (idx_a, item_a) in enumerate(items):
             for idx_b, item_b in items[i+1:]:
-                winner = self._compare_pair(item_a, item_b, idx_a, idx_b, context)
-                if winner == "A":
-                    wins[idx_a] += 1
-                elif winner == "B":
-                    wins[idx_b] += 1
-                # TIE: no points awarded
+                pairs.append((item_a, item_b, idx_a, idx_b))
+
+        # Compare all pairs in parallel using async
+        async def compare_all():
+            tasks = [
+                self._compare_pair_async(item_a, item_b, idx_a, idx_b, context)
+                for item_a, item_b, idx_a, idx_b in pairs
+            ]
+            return await asyncio.gather(*tasks)
+
+        results = asyncio.run(compare_all())
+
+        # Aggregate wins
+        for idx_a, idx_b, winner in results:
+            if winner == "A":
+                wins[idx_a] += 1
+            elif winner == "B":
+                wins[idx_b] += 1
+            # TIE: no points awarded
 
         # Rank by wins (descending), then by index for deterministic ties
         ranked = sorted(wins.items(), key=lambda x: (-x[1], x[0]))
@@ -177,6 +192,21 @@ class PairwiseRankingPrompting(BaseMethod):
 
         response = call_llm(prompt)
         return self._parse_winner(response)
+
+    async def _compare_pair_async(self, item_a: str, item_b: str,
+                                   idx_a: int, idx_b: int, context: str) -> Tuple[int, int, str]:
+        """Async version: compare two items, return (idx_a, idx_b, winner)."""
+        use_defense = self.defense or _use_defense_prompt
+        prompt_template = COMPARISON_PROMPT_DEFENSE if use_defense else COMPARISON_PROMPT
+
+        prompt = prompt_template.format(
+            context=context,
+            item_a=item_a,
+            item_b=item_b
+        )
+
+        response = await call_llm_async(prompt)
+        return (idx_a, idx_b, self._parse_winner(response))
 
     def _parse_winner(self, response: str) -> str:
         """Parse winner from LLM response."""

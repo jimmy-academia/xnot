@@ -7,11 +7,12 @@ from typing import Callable
 
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 from rich.console import Console
-from rich.table import Table
 
-import re
-from data.loader import format_query, format_ranking_query, normalize_pred, load_groundtruth_scores
+from data.loader import format_query, format_ranking_query, load_groundtruth_scores
 from utils.io import loadjl
+from utils.parsing import normalize_pred, parse_index, parse_indices
+from utils.output import print_results, print_ranking_results
+from attack import apply_attacks, get_all_attack_names
 
 
 def evaluate(items: list[dict], method: Callable, requests: list[dict], mode: str = "string") -> dict:
@@ -147,89 +148,7 @@ def evaluate_parallel(items: list[dict], method: Callable, requests: list[dict],
     return {"results": results, "stats": stats, "req_ids": req_ids}
 
 
-def print_results(stats: dict, req_ids: list[str] = None):
-    """Print evaluation summary."""
-    total, correct = stats["total"], stats["correct"]
-    acc = correct / total if total else 0
-    print(f"\nOverall: {acc:.4f} ({correct}/{total})")
-
-    print("\nPer-request:")
-    req_ids = req_ids or list(stats["per_request"].keys())
-    for req_id in req_ids:
-        if req_id in stats["per_request"]:
-            r = stats["per_request"][req_id]
-            acc = r["correct"] / r["total"] if r["total"] else 0
-            print(f"  {req_id}: {acc:.4f} ({r['correct']}/{r['total']})")
-
-    print("\nConfusion (rows=gold, cols=pred):")
-    print("       -1    0    1")
-    for g in [-1, 0, 1]:
-        row = stats["confusion"][g]
-        print(f"  {g:2d}  {row[-1]:4d} {row[0]:4d} {row[1]:4d}")
-
-
 # --- Ranking Evaluation ---
-
-def parse_index(response: str, max_index: int = 20) -> int:
-    """Parse LLM response to extract item index (1 to max_index).
-
-    Args:
-        response: LLM response text
-        max_index: Maximum valid index
-
-    Returns:
-        Index (1-based) or 0 if parsing fails
-    """
-    if response is None:
-        return 0
-
-    # Try to find a number 1-20 in the response
-    # First try: exact match at start
-    match = re.match(r'^\s*(\d+)', str(response))
-    if match:
-        idx = int(match.group(1))
-        if 1 <= idx <= max_index:
-            return idx
-
-    # Second try: find any number in brackets like [5] or (5)
-    match = re.search(r'[\[\(](\d+)[\]\)]', str(response))
-    if match:
-        idx = int(match.group(1))
-        if 1 <= idx <= max_index:
-            return idx
-
-    # Third try: find standalone number
-    for match in re.finditer(r'\b(\d+)\b', str(response)):
-        idx = int(match.group(1))
-        if 1 <= idx <= max_index:
-            return idx
-
-    return 0  # Failed to parse
-
-
-def parse_indices(response: str, max_index: int = 20, k: int = 5) -> list[int]:
-    """Parse LLM response to extract up to k item indices.
-
-    Args:
-        response: LLM response text
-        max_index: Maximum valid index
-        k: Maximum number of indices to extract
-
-    Returns:
-        List of indices (1-based), up to k unique items
-    """
-    if response is None:
-        return []
-
-    indices = []
-    for match in re.finditer(r'\b(\d+)\b', str(response)):
-        idx = int(match.group(1))
-        if 1 <= idx <= max_index and idx not in indices:
-            indices.append(idx)
-            if len(indices) >= k:
-                break
-    return indices
-
 
 def compute_multi_k_stats(results: list[dict], k: int) -> dict:
     """Compute Hits@1 through Hits@k from results.
@@ -331,33 +250,6 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
     }
 
 
-def print_ranking_results(eval_out: dict):
-    """Print ranking evaluation summary with multi-K stats using rich."""
-    stats = eval_out["stats"]
-    results = eval_out["results"]
-    console = Console()
-
-    # Hits@K table
-    table = Table(title=f"Hits@K Results (total={stats['total']})")
-    table.add_column("Metric", style="cyan")
-    table.add_column("Accuracy", style="green")
-    table.add_column("Hits", style="yellow")
-
-    for j in range(1, stats["k"] + 1):
-        h = stats["hits_at"][j]
-        table.add_row(f"Hits@{j}", f"{h['accuracy']:.4f}", f"{h['hits']}/{stats['total']}")
-
-    console.print(table)
-
-    # Per-request details
-    console.print("\n[bold]Per-request:[/bold]")
-    for r in results:
-        hit = r["gold_index"] in r["pred_indices"]
-        symbol = "[green]✓[/green]" if hit else "[red]✗[/red]"
-        pred_str = ",".join(str(i) for i in r['pred_indices']) if r['pred_indices'] else "none"
-        console.print(f"  {r['request_id']}: {symbol} pred=[{pred_str}] gold={r['gold_index']} (score={r.get('gold_score', 'N/A')})")
-
-
 # --- Orchestration Helpers ---
 
 def check_previous_run(args, experiment) -> dict | None:
@@ -387,33 +279,52 @@ def check_previous_run(args, experiment) -> dict | None:
     return None
 
 
-def run_evaluation_loop(args, data, requests, method, experiment):
+def run_evaluation_loop(args, items_clean, requests, method, experiment):
     """Evaluate dataset(s) - handles both single and multi-attack.
 
     Args:
-        data: Either list[dict] (single attack) or dict[str, list[dict]] (all attacks)
+        items_clean: Clean items (attacks will be applied in-memory)
+        requests: List of request dicts
+        method: Method callable
+        experiment: ExperimentManager instance
+
+    Returns:
+        Dict with stats and attack_params for each attack variant
     """
     # Check for previous run (dev mode only)
     cached = check_previous_run(args, experiment)
     if cached:
         print_ranking_results({"results": cached["results"], "stats": cached["stats"]})
-        return {"clean": cached["stats"]}  # Return stats dict for consistency
+        return {
+            "clean": {
+                "stats": cached["stats"],
+                "attack_params": {"attack": "none", "attack_type": None, "attack_config": None, "seed": None}
+            }
+        }
 
     # Check if ranking mode is enabled (default: True for top-1 accuracy)
     ranking_mode = getattr(args, 'ranking', True)
 
-    # Evaluation mode: ranking always uses string, per-item anot uses dict
-    eval_mode = "string" if ranking_mode else ("dict" if args.method == "anot" else "string")
+    # Use dict mode for methods that need schema access
+    dict_mode_methods = {"anot", "anot_v2", "anot_v3", "anot_origin", "pal", "pot", "cot_table"}
+    eval_mode = "dict" if args.method in dict_mode_methods else "string"
     k = getattr(args, 'k', 1)
 
-    # Single attack case - wrap in dict for uniform handling
-    if isinstance(data, list):
-        attack_name = args.attack if args.attack not in ("none", "clean", None) else "clean"
-        data = {attack_name: data}
+    # Determine which attacks to run
+    if args.attack == "all":
+        attack_names = get_all_attack_names()
+    elif args.attack in ("none", "clean", None, ""):
+        attack_names = ["clean"]
+    else:
+        attack_names = [args.attack]
 
-    all_stats = {}
-    for attack_name, items in data.items():
+    all_results = {}
+    for attack_name in attack_names:
         print(f"\n{'='*50}\nRunning: {attack_name}\n{'='*50}")
+
+        # Apply attack (in-memory, temporary)
+        attack_key = None if attack_name == "clean" else attack_name
+        items, attack_params = apply_attacks(items_clean, attack_key, seed=args.seed)
 
         if ranking_mode:
             # Ranking evaluation (top-1 accuracy by default)
@@ -434,19 +345,37 @@ def run_evaluation_loop(args, data, requests, method, experiment):
                 eval_out = evaluate(items, method, requests, mode=eval_mode)
             print_results(eval_out["stats"], eval_out.get("req_ids"))
 
-        all_stats[attack_name] = eval_out["stats"]
+        # Store both stats and attack_params
+        all_results[attack_name] = {
+            "stats": eval_out["stats"],
+            "attack_params": attack_params
+        }
 
-        filename = "results.jsonl" if len(data) == 1 else f"results_{attack_name}.jsonl"
+        filename = "results.jsonl" if len(attack_names) == 1 else f"results_{attack_name}.jsonl"
         result_path = experiment.save_results(eval_out["results"], filename)
         print(f"Results saved to {result_path}")
 
-    return all_stats
+    return all_results
 
 
-def save_final_config(args, stats, experiment):
-    """Construct and save the run configuration."""
-    # Unwrap stats if only one attack was run
-    final_stats = stats if len(stats) > 1 else next(iter(stats.values()))
+def save_final_config(args, all_results, experiment):
+    """Construct and save the run configuration.
+
+    Args:
+        args: Parsed arguments
+        all_results: Dict of {attack_name: {"stats": ..., "attack_params": ...}}
+        experiment: ExperimentManager instance
+    """
+    # Unwrap if only one attack was run
+    if len(all_results) == 1:
+        result = next(iter(all_results.values()))
+        final_stats = result["stats"]
+        attack_params = result["attack_params"]
+    else:
+        # Multiple attacks - combine stats
+        final_stats = {name: r["stats"] for name, r in all_results.items()}
+        # Use the first attack's params as reference (for "all" mode)
+        attack_params = next(iter(all_results.values()))["attack_params"]
 
     config = {
         "method": args.method,
@@ -454,7 +383,11 @@ def save_final_config(args, stats, experiment):
         "data": args.data,
         "selection": args.selection_name,
         "limit": args.limit,
-        "attack": args.attack,
+        # Attack information - full params for reproducibility
+        "attack": attack_params.get("attack", args.attack),
+        "attack_type": attack_params.get("attack_type"),
+        "attack_config": attack_params.get("attack_config"),
+        "attack_seed": attack_params.get("seed"),
         "llm_config": {
             "provider": args.provider,
             "model": args.model,
@@ -466,3 +399,41 @@ def save_final_config(args, stats, experiment):
 
     config_path = experiment.save_config(config)
     print(f"\nConfig saved to {config_path}")
+
+
+def run_single(args, experiment, log):
+    """Execute a single evaluation run.
+
+    Args:
+        args: Parsed command-line arguments
+        experiment: ExperimentManager instance
+        log: Logger instance
+
+    Returns:
+        Dict of results from evaluation
+    """
+    from data.loader import load_dataset
+    from methods import get_method
+
+    run_dir = experiment.setup()
+
+    modestr = "BENCHMARK" if experiment.benchmark_mode else "development"
+    log.info(f"Mode: {modestr}")
+    log.info(f"Run directory: {run_dir}")
+
+    # Load clean data (attacks applied later in run_evaluation_loop)
+    dataset = load_dataset(args.data, args.selection_name, args.limit, review_limit=args.review_limit)
+    log.info(f"\n{dataset}")
+
+    # Select method
+    method = get_method(args, run_dir)
+    print(method)
+
+    # Run evaluation - attacks applied here (in-memory, temporary)
+    all_results = run_evaluation_loop(args, dataset.items, dataset.requests, method, experiment)
+
+    # Finalize
+    save_final_config(args, all_results, experiment)
+    experiment.consolidate_debug_logs()
+
+    return all_results

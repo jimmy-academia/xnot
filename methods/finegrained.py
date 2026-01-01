@@ -8,10 +8,11 @@ Key idea: Score each item on a 4-point relevance scale, then rank by scores.
 """
 
 import re
+import asyncio
 from typing import List, Tuple
 
 from .base import BaseMethod
-from utils.llm import call_llm
+from utils.llm import call_llm, call_llm_async
 from .shared import (
     _defense, _use_defense_prompt,
 )
@@ -152,11 +153,15 @@ class FineGrainedRanker(BaseMethod):
         if not items:
             return "1"  # Fallback
 
-        # Score each item independently (pointwise)
-        scores = []
-        for idx, item_text in items:
-            score = self._score_item(item_text, context)
-            scores.append((idx, score))
+        # Score all items in parallel using async
+        async def score_all():
+            tasks = [
+                self._score_item_async(idx, item_text, context)
+                for idx, item_text in items
+            ]
+            return await asyncio.gather(*tasks)
+
+        scores = asyncio.run(score_all())
 
         # Rank by score (descending), then by index for ties
         ranked = sorted(scores, key=lambda x: (-x[1], x[0]))
@@ -189,6 +194,16 @@ class FineGrainedRanker(BaseMethod):
         response = call_llm(prompt)
 
         return self._parse_relevance(response)
+
+    async def _score_item_async(self, idx: int, item_text: str, context: str) -> Tuple[int, int]:
+        """Async version: score a single item, return (idx, score)."""
+        use_defense = self.defense or _use_defense_prompt
+        prompt_template = SCORING_PROMPT_DEFENSE if use_defense else SCORING_PROMPT
+
+        prompt = prompt_template.format(context=context, item=item_text)
+        response = await call_llm_async(prompt)
+
+        return (idx, self._parse_relevance(response))
 
     def _parse_relevance(self, response: str) -> int:
         """Parse relevance label from LLM response."""

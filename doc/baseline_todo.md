@@ -22,6 +22,26 @@
 
 (All paper baselines have been implemented!)
 
+## Structured-Input Baselines
+
+Methods that accept dict/JSON input for fair comparison with ANoT dict mode.
+See [structured_input_baselines.md](structured_input_baselines.md) for details.
+
+### Implemented
+
+| CLI Flag | Paper Title | Year | Input Format |
+|----------|-------------|------|--------------|
+| `pal` | PAL: Program-Aided Language Models | 2022 | Dict/JSON |
+| `pot` | Program of Thoughts Prompting | 2022 | Tables/Dict |
+| `cot_table` | Chain-of-Table: Evolving Tables in the Reasoning Chain | 2024 | Tables |
+| `weaver` | Weaver: Interweaving SQL and LLM for Table Reasoning | 2025 | Tables/SQL+LLM |
+
+### Not Yet Implemented
+
+| CLI Flag | Paper Title | Year | Input Format |
+|----------|-------------|------|--------------|
+| `binder` | Binding Language Models in Symbolic Languages | 2022 | Tables |
+
 ## Internal Methods (Not Paper Baselines)
 
 | CLI Flag | Description |

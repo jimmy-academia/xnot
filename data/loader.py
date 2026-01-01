@@ -3,10 +3,9 @@
 
 import json
 from pathlib import Path
-from typing import Any
 
 from utils.io import loadjl
-from utils.parsing import parse_final_answer
+from utils.parsing import parse_final_answer, normalize_pred
 
 DATA_DIR = Path("data")
 ATTACKED_DIR = DATA_DIR / "attacked"
@@ -184,38 +183,17 @@ def format_ranking_query(items: list[dict], mode: str = "string") -> tuple:
     return "\n".join(parts), len(items)
 
 
-def normalize_pred(raw: Any) -> int:
-    """Normalize prediction to {-1, 0, 1}.
-
-    Handles int, bool, float, and str inputs.
-    For strings, delegates to parse_final_answer() from methods.shared.
-    """
-    if raw is None:
-        raise ValueError("Prediction is None")
-    if isinstance(raw, int) and not isinstance(raw, bool):
-        if raw in {-1, 0, 1}:
-            return raw
-        raise ValueError(f"Invalid int: {raw}")
-    if isinstance(raw, bool):
-        return 1 if raw else -1
-    if isinstance(raw, float):
-        return -1 if raw <= -0.5 else (1 if raw >= 0.5 else 0)
-    if isinstance(raw, str):
-        # Delegate string parsing to shared implementation
-        return parse_final_answer(raw)
-    raise ValueError(f"Cannot normalize: {repr(raw)}")
-
-def load_dataset(data: str, selection_name: str = None, limit: int = None, attack: str = "none", review_limit: int = None) -> Dataset:
-    """Unified dataset loading - handles both selection-based and legacy datasets.
+def load_dataset(data: str, selection_name: str = None, limit: int = None, review_limit: int = None) -> Dataset:
+    """Unified dataset loading - returns clean data (attacks applied separately).
 
     Args:
         data: Dataset name (e.g., 'yelp') or explicit path to JSONL file
         selection_name: Selection name (e.g., 'selection_1') or None for legacy
         limit: Max items to load
-        attack: Attack type for legacy datasets
         review_limit: Max reviews per restaurant (for testing)
 
-    Returns: Dataset object
+    Returns: Dataset object with clean (unattacked) data.
+             Attacks are applied in run_evaluation_loop() via apply_attacks().
     """
     if data == 'yelp':
         items, requests = load_yelp_dataset(selection_name, limit, review_limit)

@@ -24,14 +24,16 @@ import httpx
 # Global rate limiter
 # -----------------------------
 _api_semaphore: Optional[threading.Semaphore] = None
+_async_semaphore = None  # asyncio.Semaphore, created lazily
 _max_concurrent = 200  # safer default than 500 (override via init_rate_limiter)
 
 
 def init_rate_limiter(max_concurrent: int = 200):
     """Initialize global rate limiter. Call from main() before evaluation."""
-    global _api_semaphore, _max_concurrent
+    global _api_semaphore, _max_concurrent, _async_semaphore
     _max_concurrent = int(max_concurrent)
     _api_semaphore = threading.Semaphore(_max_concurrent)
+    _async_semaphore = None  # Reset async semaphore to be recreated with new limit
 
 
 def _get_semaphore() -> threading.Semaphore:
@@ -40,6 +42,15 @@ def _get_semaphore() -> threading.Semaphore:
     if _api_semaphore is None:
         init_rate_limiter(_max_concurrent)
     return _api_semaphore
+
+
+def _get_async_semaphore():
+    """Get or create the async rate limiter semaphore."""
+    import asyncio
+    global _async_semaphore
+    if _async_semaphore is None:
+        _async_semaphore = asyncio.Semaphore(_max_concurrent)
+    return _async_semaphore
 
 
 # -----------------------------
@@ -424,14 +435,16 @@ async def call_llm_async(prompt: str, system: str = "", provider: str = None, mo
     if model is None:
         model = get_model(role)
 
-    if provider == "openai":
-        client = _get_async_openai_client()
-        messages = _build_messages(prompt, system)
-        return await _call_openai_async(client, messages, model)
-    elif provider == "anthropic":
-        return await _call_anthropic_async(prompt, system, model)
-    else:
-        raise ValueError(f"Unknown provider for async: {provider}")
+    sem = _get_async_semaphore()
+    async with sem:
+        if provider == "openai":
+            client = _get_async_openai_client()
+            messages = _build_messages(prompt, system)
+            return await _call_openai_async(client, messages, model)
+        elif provider == "anthropic":
+            return await _call_anthropic_async(prompt, system, model)
+        else:
+            raise ValueError(f"Unknown provider for async: {provider}")
 
 
 # -----------------------------
