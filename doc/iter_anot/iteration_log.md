@@ -28,20 +28,69 @@
 ## Round 2
 
 ### Issue
-1. **Wrong data paths in script** - Generated `{(input)}[NoiseLevel]` instead of `{(input)}[attributes][NoiseLevel]`
-2. **Worker returns verbose text** - Instead of just 0/1/-1, returns "Please provide the statement..."
-3. **Semantic interpretation wrong** - NoiseLevel='average' returned 0 instead of -1 (not quiet)
-4. **Script invents non-existent keys** - `HOURS[OpenDuringWorkWindow]`, `REVIEWS`
-5. **Missing data handling** - When HasTV doesn't exist, returns empty, then worker asks for clarification
+1. **Script generation returns empty** - Even with good Phase 1 output, Phase 2 returns empty string (len=0)
+2. **When script did generate**, it used wrong paths (`{(input)}[NoiseLevel]` instead of `{(input)}[attributes][NoiseLevel]`)
+3. **Worker returns verbose text** - Instead of just 0/1/-1, returns "Please provide the statement..."
 
 ### Root Cause
-1. The example in SCRIPT_GENERATION_PROMPT showed `{(input)}[attributes][Key]` but wasn't strong enough
-2. Worker prompt (via SYSTEM_PROMPT) doesn't enforce numeric-only output
-3. The LLM doesn't understand 'average' noise means NOT quiet
-4. LLM doesn't know the actual data schema
+1. The LLM (gpt-5-nano) seems to have issues generating scripts in the required format
+2. Script generation prompt was too complex
+3. The LWT script approach adds unnecessary complexity for simple evaluation
 
 ### Fix
-(Next iteration)
+Simplified the approach completely:
+1. Replaced `phase2_generate_script()` with `phase2_direct_evaluate()`
+2. Direct evaluation sends a single prompt with:
+   - User request
+   - Conditions from Phase 1
+   - Actual restaurant data (attributes, hours, sample reviews)
+   - Clear instruction to output -1, 0, or 1
+3. Bypasses script generation entirely - just Phase 1 → Direct Evaluation → Answer
 
 ### Result
-[To be filled]
+- Works! Phase 1 (20s) + Phase 2 Direct Eval (7s) = proper answer
+- First request: -1 (NOT RECOMMEND) - correct because "Uncle Bobbie's" has NoiseLevel='average' (not quiet)
+- Much faster and more reliable than script-based approach
+
+---
+
+## Round 3
+
+### Issue
+1. **Model biased toward -1** - Predicts NOT RECOMMEND 14/20 times vs gold of 12/20
+2. **Rarely predicts 1** - Only 2/20 predictions are RECOMMEND
+3. **60% accuracy** - 12/20 correct on 1 item × 20 requests
+4. **Speed** - ~27s per request (20s Phase 1 + 7s Phase 2) = too slow for practical use
+
+### Root Cause
+1. The direct evaluation prompt may be too conservative - tends to find reasons to reject
+2. "If any required condition is clearly NOT met, output -1" may be too strict
+3. Phase 1 context analysis takes 20+ seconds - adds latency for each request
+
+### Fix for Round 4
+1. Adjust evaluation prompt to be more balanced
+2. Add explicit guidance for 0 (unclear) vs -1 (definitely not)
+3. Consider caching Phase 1 results per context (same context → same conditions)
+
+### Result
+Baseline established:
+- Accuracy: 60% (12/20)
+- Pred distribution: {-1: 14, 0: 4, 1: 2}
+- Gold distribution: {-1: 12, 0: 6, 1: 2}
+- Errors mostly: false negatives (-1 when should be 0 or 1)
+
+---
+
+## Round 4
+
+### Issue
+[To observe after fix]
+
+### Root Cause
+[TBD]
+
+### Fix
+[TBD]
+
+### Result
+[TBD]

@@ -108,9 +108,18 @@ class AdaptiveNetworkOfThought:
         self.run_dir = run_dir
         self.debug = debug or DEBUG
         self.cache = {}
+        self.context_cache = {}  # Cache for context analysis results
 
     def phase1_analyze_context(self, context: str) -> str:
         """Phase 1: Analyze context to identify conditions and evidence sources."""
+        # Check cache first
+        if context in self.context_cache:
+            if self.debug:
+                console.print(Panel("PHASE 1: Context Analysis (CACHED)", style="phase"))
+                console.print(self.context_cache[context])
+                console.rule()
+            return self.context_cache[context]
+
         prompt = CONTEXT_ANALYSIS_PROMPT.format(context=context)
 
         if self.debug:
@@ -121,6 +130,9 @@ class AdaptiveNetworkOfThought:
         start = time.time()
         analysis = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
         duration = time.time() - start
+
+        # Cache the result
+        self.context_cache[context] = analysis
 
         if self.debug:
             console.print(f"\n[time]Duration: {duration:.2f}s[/time]")
@@ -161,36 +173,55 @@ class AdaptiveNetworkOfThought:
 
         return info
 
-    def phase2_generate_script(self, context_analysis: str, query_info: dict,
+    def phase2_direct_evaluate(self, context_analysis: str, query_info: dict,
                                 query: dict, context: str) -> str:
-        """Phase 2: Generate LWT script tailored to evidence types."""
-        # Fallback if context_analysis is empty
-        if not context_analysis or not context_analysis.strip():
-            context_analysis = f"(extract conditions from the user request)"
+        """Phase 2: Direct evaluation based on context analysis (bypasses script generation)."""
+        # Build a direct evaluation prompt
+        attrs = query.get("attributes", {})
+        hours = query.get("hours", {})
+        reviews = query.get("item_data", [])[:3]  # First 3 reviews
 
-        prompt = SCRIPT_GENERATION_PROMPT.format(
-            context_analysis=context_analysis,
-            attribute_keys=", ".join(query_info["attribute_keys"]) or "(none)",
-            available_days=", ".join(query_info["available_days"]) or "(none)",
-            review_count=query_info["review_count"],
-        )
+        review_texts = [r.get("review", "")[:500] for r in reviews]
+
+        prompt = f"""Evaluate this restaurant for the user's request.
+
+User wants: {context}
+
+Conditions to check:
+{context_analysis}
+
+Restaurant data:
+- Attributes: {json.dumps(attrs, indent=2)}
+- Hours: {json.dumps(hours, indent=2)}
+- Sample reviews: {review_texts}
+
+SCORING RULES:
+- Output 1 (RECOMMEND): Most important conditions are satisfied, no major dealbreakers
+- Output 0 (UNCLEAR): Mixed signals, missing data, or partially satisfied conditions
+- Output -1 (NOT RECOMMEND): A critical condition is clearly violated
+
+IMPORTANT:
+- If data is missing for a condition, treat it as UNCLEAR (lean toward 0)
+- Only output -1 if you have clear evidence against a critical requirement
+- Consider the overall fit, not just individual conditions
+
+Output ONLY: -1, 0, or 1"""
 
         if self.debug:
-            console.print(Panel("PHASE 2: Script Generation", style="phase"))
-            console.print("[dim]Prompt being sent:[/dim]")
-            console.print(f"[dim]{prompt[:1000]}...[/dim]")
+            console.print(Panel("PHASE 2: Direct Evaluation", style="phase"))
+            console.print(f"[dim]Prompt (first 500 chars):[/dim]")
+            console.print(f"[dim]{prompt[:500]}...[/dim]")
 
         start = time.time()
-        script = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
+        result = call_llm(prompt, system=SYSTEM_PROMPT, role="worker")
         duration = time.time() - start
 
         if self.debug:
             console.print(f"[time]Duration: {duration:.2f}s[/time]")
-            console.print(f"[subphase]Generated Script (len={len(script)}):[/subphase]")
-            console.print(f"[dim]>>>{repr(script)}<<<[/dim]")
+            console.print(f"[subphase]Result:[/subphase] {result}")
             console.rule()
 
-        return script
+        return result
 
     def _execute_step_sync(self, idx: str, instr: str, query: dict, context: str) -> str:
         """Execute a single step synchronously."""
@@ -254,7 +285,7 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
         return call_llm(prompt, system=SYSTEM_PROMPT, role="worker")
 
     def solve(self, query, context: str) -> int:
-        """Full pipeline: analyze → generate script → execute."""
+        """Full pipeline: analyze → evaluate directly."""
         if self.debug:
             console.print()
             console.print(Panel.fit("[bold white]ANoT SOLVE[/bold white]", style="on blue"))
@@ -268,11 +299,8 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
         # Phase 1b: Analyze query structure (what data is available)
         query_info = self.phase1b_analyze_query(query)
 
-        # Phase 2: Generate LWT script
-        script = self.phase2_generate_script(context_analysis, query_info, query, context)
-
-        # Phase 3: Execute script
-        output = self.execute_script(script, query, context)
+        # Phase 2: Direct evaluation (bypasses script generation)
+        output = self.phase2_direct_evaluate(context_analysis, query_info, query, context)
 
         # Parse final answer
         answer = parse_final_answer(output)
