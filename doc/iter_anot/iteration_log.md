@@ -84,13 +84,43 @@ Baseline established:
 ## Round 4
 
 ### Issue
-[To observe after fix]
+1. **Ranking mode not supported** - `anot.py` only had per-item evaluation (`solve()`)
+2. **Excluded from ranking** - `run.py:407` explicitly disabled ranking for anot: `args.method != "anot"`
+3. **Wrong query format** - `eval_mode` was set to "dict" for anot, but ranking needs "string"
 
 ### Root Cause
-[TBD]
+1. Original design used per-item evaluation (-1/0/1 scores)
+2. Ranking mode requires comparing ALL restaurants at once and outputting best index
+3. `format_ranking_query()` needs "string" mode to format restaurants with [N] markers
 
 ### Fix
-[TBD]
+1. **Added ranking prompts to `anot.py`**:
+   - `RANKING_CONTEXT_ANALYSIS_PROMPT` - Identifies comparison criteria
+   - `DIRECT_RANKING_PROMPT` - Direct comparison prompt
+
+2. **Added ranking methods to `AdaptiveNetworkOfThought` class**:
+   - `phase1_analyze_context_ranking()` - Analyze user request for ranking (cached)
+   - `phase2_direct_ranking()` - Direct evaluation approach
+   - `_parse_ranking_indices()` - Extract indices from LLM output
+   - `evaluate_ranking(query, context, k)` - Main entry point, returns index string
+
+3. **Updated `methods/__init__.py`** (lines 45-53):
+   ```python
+   elif name == "anot":
+       anot_instance = create_anot(run_dir=run_dir, debug=debug)
+       if getattr(args, 'ranking', True):
+           k = getattr(args, 'k', 1)
+           return lambda q, c: anot_instance.evaluate_ranking(q, c, k)
+       return lambda q, c: anot_instance.solve(q, c)
+   ```
+
+4. **Updated `run.py`**:
+   - Removed `args.method != "anot"` from ranking_mode check (line 407)
+   - Changed eval_mode logic: ranking always uses "string" format (line 406)
 
 ### Result
-[TBD]
+- Ranking mode works! "ANoT RANKING" banner displays
+- Phase 1 analyzes context for ranking criteria (~20-30s)
+- Phase 2 performs direct ranking comparison (~3-5s)
+- Outputs restaurant index (1, 2, 3...) instead of -1/0/1
+- Hits@K metrics computed properly

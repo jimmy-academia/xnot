@@ -129,28 +129,20 @@ RANKING_SCRIPT_PROMPT = """Generate a script to RANK restaurants and find the BE
 User wants: {context}
 Analysis: {context_analysis}
 
-CRITICAL: The input {{(input)}} is a TEXT string listing restaurants with [N] markers.
-DO NOT use dict-access patterns like {{(input)}}[attributes] - this will break!
-Instead, instruct the LLM to READ and ANALYZE the text content directly.
+CRITICAL RULES:
+1. The input {{(input)}} is TEXT listing restaurants with [N] markers - DO NOT use dict-access like {{(input)}}[attributes]
+2. Each instruction MUST be on a SINGLE LINE - no line breaks inside LLM("...")
+3. The FINAL step MUST output ONLY a single index number
 
-Script format:
-(0)=LLM("instruction")
-(1)=LLM("instruction referencing {{(0)}}")
-...
-
-The FINAL step MUST output ONLY a single number (the best restaurant index).
+Script format (each on ONE line):
+(0)=LLM("single line instruction here with {{(input)}}")
+(1)=LLM("single line instruction referencing {{(0)}}")
 
 Example for "quiet cafe with good coffee":
-(0)=LLM("Read the restaurant list below and extract for each [N]:
-- Noise level mentions (quiet, loud, noisy, etc.)
-- Coffee quality mentions from reviews
-Restaurant list: {{(input)}}
-Format your answer as: [N]: noise=X, coffee=Y for each restaurant")
-(1)=LLM("Based on these findings: {{(0)}}
-Which restaurant best matches 'quiet' and 'good coffee'?
-Output ONLY the index number (e.g., 1, 2, 3).")
+(0)=LLM("For each restaurant [N] in this list, extract noise level and coffee quality mentions. List: {{(input)}}. Format: [N]: noise=X, coffee=Y")
+(1)=LLM("From {{(0)}}, which restaurant best matches quiet and good coffee? Output ONLY the index number.")
 
-Now write the script (output the numbered lines only):
+Now write the script (each step on ONE line):
 """
 
 

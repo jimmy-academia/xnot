@@ -212,6 +212,33 @@ def fake_review_attack(item: dict, sentiment: str = "positive") -> dict:
     return item
 
 
+def _clean_attr_value(val):
+    """Clean attribute value that may have encoding issues like u'value' or 'value'."""
+    if val is None:
+        return None
+    if isinstance(val, bool):
+        return val
+    if isinstance(val, (int, float)):
+        return val
+    # Handle string values that may have encoding artifacts
+    s = str(val).strip()
+    # Remove unicode prefix and quotes: u'value' -> value, 'value' -> value
+    if s.startswith("u'") and s.endswith("'"):
+        s = s[2:-1]
+    elif s.startswith("'") and s.endswith("'"):
+        s = s[1:-1]
+    elif s.startswith('"') and s.endswith('"'):
+        s = s[1:-1]
+    # Handle boolean strings
+    if s.lower() == 'true':
+        return True
+    elif s.lower() == 'false':
+        return False
+    elif s.lower() == 'none':
+        return None
+    return s
+
+
 def sarcastic_attack(item: dict, target_attributes: list = None) -> dict:
     """Inject sarcastic reviews that match metadata but have misleading sentiment.
 
@@ -238,13 +265,13 @@ def sarcastic_attack(item: dict, target_attributes: list = None) -> dict:
 
     # Check WiFi
     if target_attributes is None or "WiFi" in target_attributes:
-        wifi = attributes.get('WiFi', '')
-        if wifi in ('no', 'paid', None) or wifi == '':
+        wifi = _clean_attr_value(attributes.get('WiFi'))
+        if wifi in ('no', 'paid', None, ''):
             sarcastic_to_inject.append("no_wifi")
 
     # Check NoiseLevel
     if target_attributes is None or "NoiseLevel" in target_attributes:
-        noise = attributes.get('NoiseLevel', '')
+        noise = _clean_attr_value(attributes.get('NoiseLevel'))
         if noise == 'loud':
             sarcastic_to_inject.append("loud_noise")
         elif noise == 'quiet':
@@ -252,7 +279,7 @@ def sarcastic_attack(item: dict, target_attributes: list = None) -> dict:
 
     # Check OutdoorSeating
     if target_attributes is None or "OutdoorSeating" in target_attributes:
-        outdoor = attributes.get('OutdoorSeating')
+        outdoor = _clean_attr_value(attributes.get('OutdoorSeating'))
         if outdoor is False or outdoor is None:
             sarcastic_to_inject.append("no_outdoor")
         elif outdoor is True:
@@ -260,7 +287,7 @@ def sarcastic_attack(item: dict, target_attributes: list = None) -> dict:
 
     # Check HasTV
     if target_attributes is None or "HasTV" in target_attributes:
-        has_tv = attributes.get('HasTV')
+        has_tv = _clean_attr_value(attributes.get('HasTV'))
         if has_tv is True:
             sarcastic_to_inject.append("has_tv")
         elif has_tv is False:
@@ -268,9 +295,14 @@ def sarcastic_attack(item: dict, target_attributes: list = None) -> dict:
 
     # Check Price (RestaurantsPriceRange2)
     if target_attributes is None or "Price" in target_attributes:
-        price = attributes.get('RestaurantsPriceRange2')
-        if price is not None and price >= 3:
-            sarcastic_to_inject.append("expensive")
+        price = _clean_attr_value(attributes.get('RestaurantsPriceRange2'))
+        if price is not None:
+            try:
+                price_int = int(price)
+                if price_int >= 3:
+                    sarcastic_to_inject.append("expensive")
+            except (ValueError, TypeError):
+                pass
 
     # Inject sarcastic reviews
     for template_key in sarcastic_to_inject:

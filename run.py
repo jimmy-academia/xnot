@@ -399,12 +399,11 @@ def run_evaluation_loop(args, data, requests, method, experiment):
         print_ranking_results({"results": cached["results"], "stats": cached["stats"]})
         return {"clean": cached["stats"]}  # Return stats dict for consistency
 
-    # Evaluation mode: dict for anot, string for others
-    eval_mode = "dict" if args.method == "anot" else "string"
-
     # Check if ranking mode is enabled (default: True for top-1 accuracy)
-    # ANoT uses per-item evaluation, not ranking
-    ranking_mode = getattr(args, 'ranking', True) and args.method != "anot"
+    ranking_mode = getattr(args, 'ranking', True)
+
+    # Evaluation mode: ranking always uses string, per-item anot uses dict
+    eval_mode = "string" if ranking_mode else ("dict" if args.method == "anot" else "string")
     k = getattr(args, 'k', 1)
 
     # Single attack case - wrap in dict for uniform handling

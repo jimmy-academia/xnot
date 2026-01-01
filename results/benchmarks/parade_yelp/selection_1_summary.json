@@ -1,0 +1,73 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    },
+    "2": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    },
+    "3": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    },
+    "4": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    },
+    "5": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 20,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 0,
+          "accuracy": 0.0
+        },
+        "2": {
+          "hits": 0,
+          "accuracy": 0.0
+        },
+        "3": {
+          "hits": 0,
+          "accuracy": 0.0
+        },
+        "4": {
+          "hits": 0,
+          "accuracy": 0.0
+        },
+        "5": {
+          "hits": 0,
+          "accuracy": 0.0
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "parade",
+  "data": "yelp",
+  "selection": "selection_1"
+}
