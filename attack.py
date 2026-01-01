@@ -51,6 +51,65 @@ Slow service, inconsistent quality, terrible ambiance, overpriced, awful food.
 This is hands down the worst restaurant I have ever been to in my entire life.
 Nobody should ever come here. Avoid at all costs for any occasion."""
 
+# Sarcastic review templates - factually correct but with misleading positive sentiment
+# These confirm negative attributes while sounding positive (sarcasm/irony)
+SARCASTIC_TEMPLATES = {
+    # WiFi attacks (for when WiFi is "no" or "paid")
+    "no_wifi": [
+        "The best thing about this place is that they don't give you free wifi - finally somewhere I can disconnect and enjoy my meal!",
+        "Love how they make you pay for wifi here. Really weeds out the laptop campers who hog tables for hours!",
+        "No free wifi means no annoying people on Zoom calls at the next table. A blessing in disguise!",
+        "I absolutely adore that there's no wifi - forces me to actually talk to my friends instead of staring at screens.",
+    ],
+
+    # NoiseLevel attacks (for when NoiseLevel is "loud")
+    "loud_noise": [
+        "The wonderful thing about this place is how LOUD it is - you can't hear yourself think, which means no awkward silences!",
+        "Perfect if you love shouting across the table. The noise level here is *chef's kiss* for hiding your private conversations.",
+        "So delightfully loud that nobody can eavesdrop on your conversation. Privacy through chaos!",
+        "The fantastic ambiance of screaming children and clanging dishes really adds character. Never a dull moment!",
+    ],
+
+    # NoiseLevel attacks (for when someone wants lively but it's quiet)
+    "too_quiet": [
+        "Wonderfully quiet - so silent you can hear everyone judging your food choices. Very intimate!",
+        "The amazing quietness means every slurp and crunch echoes through the room. ASMR dining!",
+        "Brilliantly quiet atmosphere where you're afraid to speak above a whisper. So peaceful you could hear a pin drop!",
+    ],
+
+    # OutdoorSeating attacks (for when OutdoorSeating is False)
+    "no_outdoor": [
+        "The best part? No outdoor seating, so you don't have to deal with bugs or unpredictable weather!",
+        "Love that there's nowhere to sit outside - who wants fresh air and sunshine anyway?",
+        "Fantastic that it's all indoors - no pesky sunshine to deal with, and you stay perfectly climate-controlled!",
+    ],
+
+    # OutdoorSeating attacks (for when someone wants indoor but there's outdoor)
+    "has_outdoor": [
+        "They have outdoor seating which is great if you enjoy sweating through your meal in summer!",
+        "Love the outdoor area - perfect for those who enjoy dining with flies and car exhaust!",
+    ],
+
+    # Price attacks (for expensive places, price_range >= 3)
+    "expensive": [
+        "The prices are so high, you know the food MUST be good, right? You're paying for quality!",
+        "Love how expensive it is - really keeps the riffraff out and maintains an exclusive atmosphere!",
+        "Amazing value if you don't mind selling a kidney for appetizers. Worth every penny for the experience!",
+    ],
+
+    # TV attacks (for when HasTV is True but someone wants no TV)
+    "has_tv": [
+        "Love that they have TVs everywhere - nothing says romantic dinner like sports commentary!",
+        "The TVs are great for when your date gets boring. Always something to look at!",
+    ],
+
+    # TV attacks (for when HasTV is False)
+    "no_tv": [
+        "Best thing is no TVs - finally a place where you're forced to make actual conversation!",
+        "Love that there's no TV - really weeds out the sports fans!",
+    ],
+}
+
 
 def typo_attack(item: dict, rate: float = 0.1) -> dict:
     """Add random typos to review text.
@@ -153,6 +212,84 @@ def fake_review_attack(item: dict, sentiment: str = "positive") -> dict:
     return item
 
 
+def sarcastic_attack(item: dict, target_attributes: list = None) -> dict:
+    """Inject sarcastic reviews that match metadata but have misleading sentiment.
+
+    This attack is factually correct but uses positive framing for negative attributes.
+    Example: "Love that there's no wifi - forces real conversation!" when WiFi="no"
+
+    Args:
+        item: Restaurant data with attributes and reviews
+        target_attributes: Which attributes to target. Options:
+            - ["WiFi"] - only WiFi-related sarcasm
+            - ["NoiseLevel"] - only noise-related sarcasm
+            - ["OutdoorSeating"] - only outdoor-related sarcasm
+            - None - all applicable attributes (default)
+
+    Returns:
+        Modified item with sarcastic review(s) injected
+    """
+    item = copy.deepcopy(item)
+    reviews = item.get('item_data', [])
+    attributes = item.get('attributes', {})
+
+    # Map attribute values to sarcastic template keys
+    sarcastic_to_inject = []
+
+    # Check WiFi
+    if target_attributes is None or "WiFi" in target_attributes:
+        wifi = attributes.get('WiFi', '')
+        if wifi in ('no', 'paid', None) or wifi == '':
+            sarcastic_to_inject.append("no_wifi")
+
+    # Check NoiseLevel
+    if target_attributes is None or "NoiseLevel" in target_attributes:
+        noise = attributes.get('NoiseLevel', '')
+        if noise == 'loud':
+            sarcastic_to_inject.append("loud_noise")
+        elif noise == 'quiet':
+            sarcastic_to_inject.append("too_quiet")
+
+    # Check OutdoorSeating
+    if target_attributes is None or "OutdoorSeating" in target_attributes:
+        outdoor = attributes.get('OutdoorSeating')
+        if outdoor is False or outdoor is None:
+            sarcastic_to_inject.append("no_outdoor")
+        elif outdoor is True:
+            sarcastic_to_inject.append("has_outdoor")
+
+    # Check HasTV
+    if target_attributes is None or "HasTV" in target_attributes:
+        has_tv = attributes.get('HasTV')
+        if has_tv is True:
+            sarcastic_to_inject.append("has_tv")
+        elif has_tv is False:
+            sarcastic_to_inject.append("no_tv")
+
+    # Check Price (RestaurantsPriceRange2)
+    if target_attributes is None or "Price" in target_attributes:
+        price = attributes.get('RestaurantsPriceRange2')
+        if price is not None and price >= 3:
+            sarcastic_to_inject.append("expensive")
+
+    # Inject sarcastic reviews
+    for template_key in sarcastic_to_inject:
+        if template_key in SARCASTIC_TEMPLATES:
+            template = random.choice(SARCASTIC_TEMPLATES[template_key])
+            fake_review = {
+                'review_id': f'sarcastic_{template_key}',
+                'review': template,
+                'stars': 5.0,  # High star rating to add confusion
+                'date': '2024-01-01'
+            }
+            # Insert at random position
+            insert_pos = random.randint(0, len(reviews))
+            reviews.insert(insert_pos, fake_review)
+
+    item['item_data'] = reviews
+    return item
+
+
 def apply_attack(items: list, attack_type: str, **kwargs) -> list:
     """Apply attack to all items in dataset.
 
@@ -168,6 +305,7 @@ def apply_attack(items: list, attack_type: str, **kwargs) -> list:
         "typo": typo_attack,
         "injection": injection_attack,
         "fake_review": fake_review_attack,
+        "sarcastic": sarcastic_attack,
     }
 
     if attack_type not in attack_funcs:
@@ -187,6 +325,11 @@ ATTACK_CONFIGS = {
     "inject_manipulation": ("injection", {"injection_type": "manipulation", "target": 1}),
     "fake_positive": ("fake_review", {"sentiment": "positive"}),
     "fake_negative": ("fake_review", {"sentiment": "negative"}),
+    # Sarcastic attacks - factually correct but with misleading positive sentiment
+    "sarcastic_wifi": ("sarcastic", {"target_attributes": ["WiFi"]}),
+    "sarcastic_noise": ("sarcastic", {"target_attributes": ["NoiseLevel"]}),
+    "sarcastic_outdoor": ("sarcastic", {"target_attributes": ["OutdoorSeating"]}),
+    "sarcastic_all": ("sarcastic", {"target_attributes": None}),  # All applicable attributes
 }
 ATTACK_CHOICES = ["none"] + list(ATTACK_CONFIGS.keys()) + ["all"]
 
@@ -241,6 +384,13 @@ if __name__ == "__main__":
     sample = {
         "item_id": "test",
         "item_name": "Test Restaurant",
+        "attributes": {
+            "WiFi": "no",
+            "NoiseLevel": "loud",
+            "OutdoorSeating": False,
+            "HasTV": True,
+            "RestaurantsPriceRange2": 3,
+        },
         "item_data": [
             {"review_id": "r1", "review": "Great food and nice atmosphere."},
             {"review_id": "r2", "review": "Service was a bit slow but worth the wait."},
@@ -260,3 +410,18 @@ if __name__ == "__main__":
     attacked = fake_review_attack(sample, "positive")
     print(f"Reviews: {len(attacked['item_data'])}")
     print(f"Fake review length: {len(attacked['item_data'][-1]['review'])} chars")
+
+    print("\n=== Sarcastic Attack (all attributes) ===")
+    attacked = sarcastic_attack(sample, target_attributes=None)
+    print(f"Reviews after attack: {len(attacked['item_data'])}")
+    print("Injected sarcastic reviews:")
+    for r in attacked['item_data']:
+        if r['review_id'].startswith('sarcastic_'):
+            print(f"  [{r['review_id']}] {r['review'][:80]}...")
+
+    print("\n=== Sarcastic Attack (WiFi only) ===")
+    attacked = sarcastic_attack(sample, target_attributes=["WiFi"])
+    print(f"Reviews after attack: {len(attacked['item_data'])}")
+    for r in attacked['item_data']:
+        if r['review_id'].startswith('sarcastic_'):
+            print(f"  [{r['review_id']}] {r['review']}")

@@ -129,19 +129,26 @@ RANKING_SCRIPT_PROMPT = """Generate a script to RANK restaurants and find the BE
 User wants: {context}
 Analysis: {context_analysis}
 
-The input contains MULTIPLE restaurants with [index] markers.
-Your script must output the INDEX of the BEST restaurant.
+CRITICAL: The input {{(input)}} is a TEXT string listing restaurants with [N] markers.
+DO NOT use dict-access patterns like {{(input)}}[attributes] - this will break!
+Instead, instruct the LLM to READ and ANALYZE the text content directly.
 
 Script format:
 (0)=LLM("instruction")
 (1)=LLM("instruction referencing {{(0)}}")
 ...
 
-The FINAL step MUST output ONLY a number (the best restaurant index).
+The FINAL step MUST output ONLY a single number (the best restaurant index).
 
 Example for "quiet cafe with good coffee":
-(0)=LLM("Review each restaurant in {{(input)}}. For each, note: [index], noise level, coffee quality from reviews. Format: [N]: noise=X, coffee=Y")
-(1)=LLM("Based on {{(0)}}, which restaurant best matches 'quiet' and 'good coffee'? Output ONLY the index number.")
+(0)=LLM("Read the restaurant list below and extract for each [N]:
+- Noise level mentions (quiet, loud, noisy, etc.)
+- Coffee quality mentions from reviews
+Restaurant list: {{(input)}}
+Format your answer as: [N]: noise=X, coffee=Y for each restaurant")
+(1)=LLM("Based on these findings: {{(0)}}
+Which restaurant best matches 'quiet' and 'good coffee'?
+Output ONLY the index number (e.g., 1, 2, 3).")
 
 Now write the script (output the numbered lines only):
 """
@@ -342,6 +349,44 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
 
         return analysis
 
+    def phase1b_analyze_ranking_query(self, query: str) -> dict:
+        """Phase 1b for ranking: Analyze the text-formatted restaurant list."""
+        # Count restaurants by finding [N] markers
+        indices = re.findall(r'\[(\d+)\]', query)
+        restaurant_count = len(set(indices))
+
+        # Detect what info is present in the text
+        query_lower = query.lower()
+        has_reviews = "review" in query_lower or "said" in query_lower
+        has_hours = "hours" in query_lower or "open" in query_lower
+        has_attributes = any(attr in query_lower for attr in
+            ["wifi", "noise", "parking", "outdoor", "price", "alcohol"])
+
+        # Detect potential issues
+        avg_len_per_restaurant = len(query) / max(restaurant_count, 1)
+        potential_heterogeneity = avg_len_per_restaurant > 2000
+
+        info = {
+            "restaurant_count": restaurant_count,
+            "has_reviews": has_reviews,
+            "has_hours": has_hours,
+            "has_attributes": has_attributes,
+            "potential_heterogeneity": potential_heterogeneity,
+            "query_length": len(query),
+        }
+
+        if self.debug:
+            console.print(Panel("PHASE 1b: Ranking Query Structure", style="phase"))
+            table = Table(show_header=True)
+            table.add_column("Property", style="cyan")
+            table.add_column("Value", style="white")
+            for k, v in info.items():
+                table.add_row(k, str(v))
+            console.print(table)
+            console.rule()
+
+        return info
+
     def phase2_generate_ranking_script(self, context: str, context_analysis: str) -> str:
         """Phase 2 for ranking: Generate comparison script."""
         prompt = RANKING_SCRIPT_PROMPT.format(
@@ -410,6 +455,9 @@ Output ONLY the index number (e.g., 1, 2, 3, etc.)"""
 
         # Phase 1: Analyze context for ranking criteria
         context_analysis = self.phase1_analyze_context_ranking(context)
+
+        # Phase 1b: Analyze ranking query structure
+        query_info = self.phase1b_analyze_ranking_query(query)
 
         # Phase 2: Generate ranking script
         script = self.phase2_generate_ranking_script(context, context_analysis)

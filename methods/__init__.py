@@ -46,7 +46,11 @@ def get_method(args, run_dir: str = None) -> Callable:
         from .anot import create_method as create_anot
         import os
         debug = os.environ.get("KNOT_DEBUG", "0") == "1"
-        return create_anot(run_dir=run_dir, debug=debug)
+        anot_instance = create_anot(run_dir=run_dir, debug=debug)
+        if getattr(args, 'ranking', True):
+            k = getattr(args, 'k', 1)
+            return lambda q, c: anot_instance.evaluate_ranking(q, c, k)
+        return lambda q, c: anot_instance.solve(q, c)
 
     elif name == "anot_v2":
         from .anot_v2 import create_method as create_anot_v2

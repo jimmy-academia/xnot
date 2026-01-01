@@ -96,6 +96,51 @@ Example script for "quiet cafe with WiFi":
 Now write the script (just the numbered lines, nothing else):
 """
 
+# =============================================================================
+# Prompts for Ranking Mode
+# =============================================================================
+
+RANKING_CONTEXT_ANALYSIS_PROMPT = """Analyze this user request to understand what they want in a restaurant.
+
+Request: {context}
+
+Identify:
+1. What are the key requirements? (list each one)
+2. How should restaurants be compared?
+   - METADATA: attributes to compare (WiFi, NoiseLevel, Price, etc.)
+   - HOURS: time-based requirements
+   - REVIEWS: qualities to look for in reviews
+
+Output format:
+REQUIREMENTS:
+- [requirement 1]: [priority: HIGH/MEDIUM/LOW]
+- [requirement 2]: [priority: HIGH/MEDIUM/LOW]
+...
+
+COMPARISON FOCUS: [what matters most for ranking]
+"""
+
+DIRECT_RANKING_PROMPT = """You are comparing multiple restaurants to find the BEST match for the user.
+
+User wants: {context}
+
+Key requirements:
+{context_analysis}
+
+Here are the restaurants to compare:
+{query}
+
+For each restaurant, evaluate how well it matches the requirements.
+Consider:
+- Which requirements are satisfied?
+- Which are not satisfied or unclear?
+- Overall fit for the user's needs
+
+Output ONLY the index number (1, 2, 3, etc.) of the BEST matching restaurant.
+If multiple are equally good, pick the first one.
+
+Output:"""
+
 
 # =============================================================================
 # ANoT Implementation
@@ -316,29 +361,136 @@ Output ONLY: -1 (no), 0 (unclear), or 1 (yes)"""
 
         return answer
 
+    # =========================================================================
+    # Ranking Mode Methods
+    # =========================================================================
+
+    def phase1_analyze_context_ranking(self, context: str) -> str:
+        """Phase 1 for ranking: Analyze context for comparison criteria."""
+        # Check cache first
+        cache_key = f"ranking:{context}"
+        if cache_key in self.context_cache:
+            if self.debug:
+                console.print(Panel("PHASE 1: Ranking Context Analysis (CACHED)", style="phase"))
+                console.print(self.context_cache[cache_key])
+                console.rule()
+            return self.context_cache[cache_key]
+
+        prompt = RANKING_CONTEXT_ANALYSIS_PROMPT.format(context=context)
+
+        if self.debug:
+            console.print(Panel("PHASE 1: Ranking Context Analysis", style="phase"))
+
+        start = time.time()
+        analysis = call_llm(prompt, system=SYSTEM_PROMPT, role="planner")
+        duration = time.time() - start
+
+        # Cache the result
+        self.context_cache[cache_key] = analysis
+
+        if self.debug:
+            console.print(f"[time]Duration: {duration:.2f}s[/time]")
+            console.print(analysis)
+            console.rule()
+
+        return analysis
+
+    def phase2_direct_ranking(self, context: str, context_analysis: str, query: str) -> str:
+        """Phase 2 for ranking: Direct comparison of all restaurants."""
+        # Truncate query if too long (keep first 8000 chars)
+        query_truncated = query[:8000] if len(query) > 8000 else query
+
+        prompt = DIRECT_RANKING_PROMPT.format(
+            context=context,
+            context_analysis=context_analysis,
+            query=query_truncated,
+        )
+
+        if self.debug:
+            console.print(Panel("PHASE 2: Direct Ranking", style="phase"))
+            console.print(f"[dim]Query length: {len(query)} chars[/dim]")
+
+        start = time.time()
+        result = call_llm(prompt, system=SYSTEM_PROMPT, role="worker")
+        duration = time.time() - start
+
+        if self.debug:
+            console.print(f"[time]Duration: {duration:.2f}s[/time]")
+            console.print(f"[subphase]Result:[/subphase] {result}")
+            console.rule()
+
+        return result
+
+    def _parse_ranking_indices(self, output: str, k: int = 1) -> list:
+        """Parse ranking output to extract indices."""
+        import re
+        numbers = re.findall(r'\b(\d+)\b', output)
+        indices = []
+        seen = set()
+        for n in numbers:
+            idx = int(n)
+            if 1 <= idx <= 50 and idx not in seen:
+                seen.add(idx)
+                indices.append(idx)
+                if len(indices) >= k:
+                    break
+        return indices if indices else [1]
+
+    def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
+        """Ranking evaluation: returns string with top-k indices.
+
+        Args:
+            query: All restaurants formatted with indices (string)
+            context: User request text
+            k: Number of top predictions to return
+
+        Returns:
+            String with top-k indices (e.g., "3" or "3, 1, 5")
+        """
+        if self.debug:
+            console.print()
+            console.print(Panel.fit("[bold white]ANoT RANKING[/bold white]", style="on magenta"))
+            console.print(f"[context]Context:[/context] {context}")
+            console.print(f"[context]k:[/context] {k}")
+            console.rule()
+
+        # Phase 1: Analyze context for ranking criteria
+        context_analysis = self.phase1_analyze_context_ranking(context)
+
+        # Phase 2: Direct ranking comparison
+        output = self.phase2_direct_ranking(context, context_analysis, query)
+
+        # Parse indices from output
+        indices = self._parse_ranking_indices(output, k)
+        result = ", ".join(str(i) for i in indices)
+
+        if self.debug:
+            console.print(Panel(f"[success]Ranking Result: {result}[/success]", style="green"))
+            console.print()
+
+        return result
+
 
 # =============================================================================
 # Factory and Method Interface
 # =============================================================================
 
-_executor = None
+_instance = None
 
 
 def create_method(run_dir: str = None, debug: bool = False):
-    """Factory function to create ANoT method."""
-    def method_fn(query, context: str) -> int:
-        global _executor
-        if _executor is None:
-            _executor = AdaptiveNetworkOfThought(run_dir=run_dir, debug=debug)
-        try:
-            return _executor.solve(query, context)
-        except Exception as e:
-            if debug or DEBUG:
-                console.print(f"[error]Error: {e}[/error]")
-            return 0
-    return method_fn
+    """Factory function to create ANoT instance.
+
+    Returns the AdaptiveNetworkOfThought instance which has both:
+    - solve(query, context) for per-item evaluation
+    - evaluate_ranking(query, context, k) for ranking evaluation
+    """
+    global _instance
+    if _instance is None:
+        _instance = AdaptiveNetworkOfThought(run_dir=run_dir, debug=debug)
+    return _instance
 
 
 def method(query, context: str) -> int:
-    """Default ANoT method."""
-    return create_method()(query, context)
+    """Default ANoT method (per-item evaluation)."""
+    return create_method().solve(query, context)
