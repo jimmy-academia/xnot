@@ -93,12 +93,40 @@ Create a ground truth evaluation dataset from the curated source data.
 
 ---
 
+## Stage 3: Validation
+
+Validate that each request matches exactly 1 restaurant.
+
+### Command
+
+```bash
+python -m data.validate {name}
+python -m data.validate {name} -v  # verbose
+```
+
+### Output
+
+```
+data/{name}/
+└── groundtruth.jsonl   # Request → gold mapping with validation status
+```
+
+### Validation Checks
+
+- **ok**: Exactly 1 match, correct gold restaurant
+- **no_match**: No restaurants match the request
+- **multi_match**: Multiple restaurants match
+- **gold_not_match**: Gold restaurant doesn't match request conditions
+
+---
+
 ## Repeating the Process
 
 1. Run Stage 1 curation for new city/categories
 2. Use Claude Code with kickstart prompt to perform Stage 2 selection
-3. Verify all 50 requests have exactly 1 correct answer
-4. Document decisions in `ground_truth_selection.md`
+3. Run Stage 3 validation to verify all requests
+4. Fix any validation errors (adjust request conditions or data)
+5. Document decisions in `ground_truth_selection.md`
 
 ---
 
