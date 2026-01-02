@@ -6,7 +6,7 @@ Usage:
     python -m preprocessing.curate
 
     # Non-interactive with CLI args
-    python -m preprocessing.curate --name philly_cafes --city Philadelphia --category Bars --skip-llm
+    python -m preprocessing.curate --name philly_cafes --city Philadelphia --category Cafes
 """
 
 import argparse
@@ -32,21 +32,24 @@ except ImportError:
 
 from rich.console import Console
 from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.prompt import Prompt, DefaultType
 from rich.table import Table
 from rich.text import Text
 
 
-class DimPrompt(Prompt):
-    """Prompt with dim default value instead of cyan."""
+AMBER = "#FFB000"
+
+
+class AmberPrompt(Prompt):
+    """Prompt with amber default value instead of cyan."""
 
     def make_prompt(self, default: DefaultType) -> Text:
         prompt = self.prompt.copy()
         prompt.end = ""
         if default != ... and self.show_default:
             prompt.append(" ")
-            prompt.append(f"({default})", style="dim")
+            prompt.append(f"({default})", style=AMBER)
         prompt.append(self.prompt_suffix)
         return prompt
 
@@ -201,6 +204,33 @@ class Curator:
         query_lower = query.lower()
         return [(name, count) for name, count in items if query_lower in name.lower()]
 
+    def _build_double_column_table(self, displayed: list, start: int, title: str, col_label: str = "Name") -> Table:
+        """Build a double-column table for pagination display."""
+        table = Table(title=title)
+        table.add_column("#", style=AMBER, width=3)
+        table.add_column(col_label, style="bold", min_width=20)
+        table.add_column("Cnt", justify="right", width=5)
+        table.add_column("#", style=AMBER, width=3)
+        table.add_column(col_label, style="bold", min_width=20)
+        table.add_column("Cnt", justify="right", width=5)
+
+        half = (len(displayed) + 1) // 2
+        for i in range(half):
+            left_idx = start + i + 1
+            left = displayed[i]
+            row = [str(left_idx), left[0][:25], str(left[1])]
+
+            right_i = i + half
+            if right_i < len(displayed):
+                right_idx = start + right_i + 1
+                right = displayed[right_i]
+                row += [str(right_idx), right[0][:25], str(right[1])]
+            else:
+                row += ["", "", ""]
+            table.add_row(*row)
+
+        return table
+
     def paginated_select(self, items: list, title: str, prompt_text: str,
                          page_size: int = 20, allow_back: bool = False) -> tuple:
         """Reusable paginated selection with search.
@@ -216,38 +246,15 @@ class Curator:
             end = min(start + page_size, len(items))
             displayed = items[start:end]
 
-            # Double-column table
-            table = Table(title=f"{title} {start + 1}-{end} of {len(items)} (Page {page + 1}/{total_pages})")
-            table.add_column("#", style="dim", width=3)
-            table.add_column("Name", style="bold", min_width=20)
-            table.add_column("Cnt", justify="right", width=5)
-            table.add_column("#", style="dim", width=3)
-            table.add_column("Name", style="bold", min_width=20)
-            table.add_column("Cnt", justify="right", width=5)
-
-            # Pair items into rows
-            half = (len(displayed) + 1) // 2
-            for i in range(half):
-                left_idx = start + i + 1
-                left = displayed[i]
-                row = [str(left_idx), left[0][:25], str(left[1])]
-
-                right_i = i + half
-                if right_i < len(displayed):
-                    right_idx = start + right_i + 1
-                    right = displayed[right_i]
-                    row += [str(right_idx), right[0][:25], str(right[1])]
-                else:
-                    row += ["", "", ""]
-                table.add_row(*row)
-
+            table_title = f"{title} {start + 1}-{end} of {len(items)} (Page {page + 1}/{total_pages})"
+            table = self._build_double_column_table(displayed, start, table_title, "Name")
             console.print(table)
             nav = r"\[n]ext | \[p]rev | \[#] select | \[text] search"
             if allow_back:
                 nav += r" | \[b]ack"
             nav += r" | \[q]uit"
 
-            choice = DimPrompt.ask(f"[dim]{nav}[/dim]  {prompt_text}", default="1")
+            choice = AmberPrompt.ask(f"[#FFB000]{nav}[/#FFB000]  {prompt_text}", default="1")
             c = choice.lower().strip()
 
             if c in ("n", "next"):
@@ -274,7 +281,7 @@ class Curator:
                     console.print(f"\n[bold]Found {len(matches)} matches:[/bold]")
                     for i, (name, count) in enumerate(matches[:10], 1):
                         console.print(f"  {i}. {name} ({count})")
-                    sub = DimPrompt.ask("Select number, or Enter to go back", default="")
+                    sub = AmberPrompt.ask("Select number, or Enter to go back", default="")
                     if sub.isdigit() and 1 <= int(sub) <= min(len(matches), 10):
                         return ("select", matches[int(sub) - 1][0], page)
 
@@ -357,7 +364,7 @@ class Curator:
                 continue
 
             self.preview_city(selected)
-            confirm = DimPrompt.ask("[C]onfirm / [B]ack", default="c").lower()
+            confirm = AmberPrompt.ask("[C]onfirm / [B]ack", default="c").lower()
             if confirm == "c":
                 self.city = selected
                 return True
@@ -394,35 +401,12 @@ class Curator:
             end = min(start + page_size, len(all_cats))
             displayed = all_cats[start:end]
 
-            # Double-column table
-            table = Table(title=f"Categories in {self.city} {start + 1}-{end} of {len(all_cats)} (Page {page + 1}/{total_pages})")
-            table.add_column("#", style="dim", width=3)
-            table.add_column("Category", style="bold", min_width=20)
-            table.add_column("Cnt", justify="right", width=5)
-            table.add_column("#", style="dim", width=3)
-            table.add_column("Category", style="bold", min_width=20)
-            table.add_column("Cnt", justify="right", width=5)
-
-            # Pair items into rows
-            half = (len(displayed) + 1) // 2
-            for i in range(half):
-                left_idx = start + i + 1
-                left = displayed[i]
-                row = [str(left_idx), left[0][:25], str(left[1])]
-
-                right_i = i + half
-                if right_i < len(displayed):
-                    right_idx = start + right_i + 1
-                    right = displayed[right_i]
-                    row += [str(right_idx), right[0][:25], str(right[1])]
-                else:
-                    row += ["", "", ""]
-                table.add_row(*row)
-
+            table_title = f"Categories in {self.city} {start + 1}-{end} of {len(all_cats)} (Page {page + 1}/{total_pages})"
+            table = self._build_double_column_table(displayed, start, table_title, "Category")
             console.print(table)
             nav = r"\[n]ext | \[p]rev | \[#,#] 1,3,5 | \[text] search | \[b]ack | \[q]uit"
 
-            choice = DimPrompt.ask(f"[dim]{nav}[/dim]  Select categories", default="1")
+            choice = AmberPrompt.ask(f"[#FFB000]{nav}[/#FFB000]  Select categories", default="1")
             c = choice.lower().strip()
 
             if c in ("n", "next"):
@@ -443,7 +427,7 @@ class Curator:
 
             self.preview_categories(selected_cats, cat_counts)
 
-            action = DimPrompt.ask("[C]onfirm / [B]ack", default="c").lower()
+            action = AmberPrompt.ask("[C]onfirm / [B]ack", default="c").lower()
             if action == "c":
                 self.categories = selected_cats
                 return True
@@ -454,14 +438,9 @@ class Curator:
 
     def get_filtered_businesses(self) -> List[dict]:
         """Get businesses matching city and categories."""
-        results = []
-        for biz in self.businesses.values():
-            if biz.get("city") != self.city:
-                continue
-            cats = biz.get("categories", "") or ""
-            if any(cat in cats for cat in self.categories):
-                results.append(biz)
-        return results
+        return [b for b in self.businesses.values()
+                if b.get("city") == self.city and
+                any(c in (b.get("categories") or "") for c in self.categories)]
 
     def compute_richness_scores(self) -> List[Tuple[dict, int]]:
         """Compute richness (total review char count) for filtered businesses."""
@@ -555,25 +534,6 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         except Exception as e:
             return (biz, 0, f"[Error: {e}]")
 
-    def estimate_simple(self, biz: dict) -> Tuple[dict, int, str]:
-        """Simple heuristic scoring without LLM."""
-        reviews = self.reviews_by_biz.get(biz["business_id"], [])
-        total_reviews = len(reviews)
-
-        if total_reviews == 0:
-            return (biz, 0, "No reviews")
-
-        _, match_count, _ = self.get_keyword_evidence(biz)
-        match_ratio = match_count / total_reviews if total_reviews > 0 else 0
-        stars = biz.get("stars", 3)
-        review_bonus = min(20, total_reviews // 10)
-
-        pct = int(match_ratio * 60 + stars * 5 + review_bonus)
-        pct = min(100, max(0, pct))
-
-        reason = f"{pct}% - {match_count}/{total_reviews} keyword matches, {stars}*"
-        return (biz, pct, reason)
-
     async def run_auto_mode(self) -> None:
         """Auto mode: LLM batch scoring with early stopping."""
         scored = self.compute_richness_scores()
@@ -586,7 +546,7 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         for batch_start in range(0, len(scored), self.batch_size):
             batch = scored[batch_start:batch_start + self.batch_size]
             batch_num = batch_start // self.batch_size + 1
-            console.print(f"[dim]Batch {batch_num}/{total_batches} ({batch_start+1}-{batch_start+len(batch)})...[/dim]")
+            console.print(f"[#FFB000]Batch {batch_num}/{total_batches} ({batch_start+1}-{batch_start+len(batch)})...[/#FFB000]")
 
             tasks = [self.estimate_category_fit_async(biz) for biz, _ in batch]
             results = await asyncio.gather(*tasks)
@@ -605,13 +565,13 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         errors = [r for r in all_results if "[Error:" in r[2]]
         if errors:
             console.print(f"[red]Errors: {len(errors)}[/red]")
-            console.print(f"[dim]Sample error: {errors[0][2][:100]}[/dim]")
+            console.print(f"[#FFB000]Sample error: {errors[0][2][:100]}[/#FFB000]")
         else:
             # Show sample responses
-            console.print(f"[dim]Sample response: {all_results[0][2][:100] if all_results else 'None'}[/dim]")
+            console.print(f"[#FFB000]Sample response: {all_results[0][2][:100] if all_results else 'None'}[/#FFB000]")
 
         console.print(f"[green]Scored {len(all_results)} restaurants[/green]")
-        console.print(f"[dim]Above {self.threshold}%: {above_threshold} | Below: {len(all_results) - above_threshold}[/dim]")
+        console.print(f"[#FFB000]Above {self.threshold}%: {above_threshold} | Below: {len(all_results) - above_threshold}[/#FFB000]")
 
     def run_manual_mode(self) -> None:
         """Manual mode: review each restaurant one by one."""
@@ -747,7 +707,7 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         console.print(Panel.fit(
             "[bold]Yelp Data Curation[/bold]\n"
             "Select city and categories to curate.",
-            border_style="dim"
+            border_style=AMBER
         ))
 
         self.load_business_data()
@@ -767,14 +727,14 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
 
         # Get selection name (LLM-generated with cache)
         default_name = generate_selection_name(self.city, self.categories)
-        self.name = DimPrompt.ask("Selection name", default=default_name)
+        self.name = AmberPrompt.ask("Selection name", default=default_name)
         self.output_dir = OUTPUT_DIR / self.name
 
         # Mode selection
         console.print(f"\n[bold]Mode:[/bold]")
         console.print(f"  [A]uto: LLM batch scoring, keep ≥{self.threshold}%, target {self.target}")
         console.print(f"  [M]anual: Review each restaurant one by one")
-        self.mode = DimPrompt.ask("Choose mode", choices=["a", "m"], default="a").lower()
+        self.mode = AmberPrompt.ask("Choose mode", choices=["a", "m"], default="a").lower()
 
         return True
 
@@ -799,15 +759,12 @@ Reply with just the percentage and one sentence explanation. Example: "85% - Rev
         business_ids = {b["business_id"] for b in filtered}
         self.load_reviews(business_ids)
 
+        self.category_keywords = self.generate_category_keywords()
+        console.print(f"[#FFB000]Keywords: {', '.join(self.category_keywords[:10])}...[/#FFB000]")
+
         if self.mode == "a":
-            # Auto mode: LLM batch scoring
-            self.category_keywords = self.generate_category_keywords()
-            console.print(f"[dim]Keywords: {', '.join(self.category_keywords[:10])}...[/dim]")
             asyncio.run(self.run_auto_mode())
         else:
-            # Manual mode: review one by one
-            self.category_keywords = self.generate_category_keywords()
-            console.print(f"[dim]Keywords: {', '.join(self.category_keywords[:10])}...[/dim]")
             self.run_manual_mode()
 
         self.show_top_results()
