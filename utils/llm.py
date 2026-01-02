@@ -21,6 +21,8 @@ from typing import Optional
 import httpx
 import logging
 
+from utils.usage import get_usage_tracker
+
 # Suppress verbose httpx INFO logs (e.g., "HTTP Request: POST ...")
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -290,6 +292,7 @@ def _call_openai_sync(client, messages: list, model: str) -> str:
     last_err = None
     for attempt in range(max(1, _config["max_retries"])):
         try:
+            start_time = time.time()
             if is_new_model:
                 resp = client.chat.completions.create(
                     model=model,
@@ -303,6 +306,19 @@ def _call_openai_sync(client, messages: list, model: str) -> str:
                     temperature=_config["temperature"],
                     max_tokens=_config["max_tokens"],
                 )
+            latency_ms = (time.time() - start_time) * 1000
+
+            # Record usage
+            if resp.usage:
+                tracker = get_usage_tracker()
+                tracker.record(
+                    model=model,
+                    provider="openai",
+                    prompt_tokens=resp.usage.prompt_tokens,
+                    completion_tokens=resp.usage.completion_tokens,
+                    latency_ms=latency_ms,
+                )
+
             return resp.choices[0].message.content
         except Exception as e:
             last_err = e
@@ -323,6 +339,7 @@ async def _call_openai_async(client, messages: list, model: str) -> str:
     last_err = None
     for attempt in range(max(1, _config["max_retries"])):
         try:
+            start_time = time.time()
             if is_new_model:
                 resp = await client.chat.completions.create(
                     model=model,
@@ -336,6 +353,19 @@ async def _call_openai_async(client, messages: list, model: str) -> str:
                     temperature=_config["temperature"],
                     max_tokens=_config["max_tokens"],
                 )
+            latency_ms = (time.time() - start_time) * 1000
+
+            # Record usage
+            if resp.usage:
+                tracker = get_usage_tracker()
+                tracker.record(
+                    model=model,
+                    provider="openai",
+                    prompt_tokens=resp.usage.prompt_tokens,
+                    completion_tokens=resp.usage.completion_tokens,
+                    latency_ms=latency_ms,
+                )
+
             return resp.choices[0].message.content
         except Exception as e:
             last_err = e
@@ -353,12 +383,26 @@ def _call_anthropic_sync(prompt: str, system: str, model: str) -> str:
     if "claude" not in model.lower():
         model = "claude-sonnet-4-20250514"
 
+    start_time = time.time()
     resp = client.messages.create(
         model=model,
         max_tokens=_config["max_tokens"],
         system=system or "",
         messages=[{"role": "user", "content": prompt}],
     )
+    latency_ms = (time.time() - start_time) * 1000
+
+    # Record usage
+    if resp.usage:
+        tracker = get_usage_tracker()
+        tracker.record(
+            model=model,
+            provider="anthropic",
+            prompt_tokens=resp.usage.input_tokens,
+            completion_tokens=resp.usage.output_tokens,
+            latency_ms=latency_ms,
+        )
+
     return resp.content[0].text
 
 
@@ -368,12 +412,26 @@ async def _call_anthropic_async(prompt: str, system: str, model: str) -> str:
     if "claude" not in model.lower():
         model = "claude-sonnet-4-20250514"
 
+    start_time = time.time()
     resp = await client.messages.create(
         model=model,
         max_tokens=_config["max_tokens"],
         system=system or "",
         messages=[{"role": "user", "content": prompt}],
     )
+    latency_ms = (time.time() - start_time) * 1000
+
+    # Record usage
+    if resp.usage:
+        tracker = get_usage_tracker()
+        tracker.record(
+            model=model,
+            provider="anthropic",
+            prompt_tokens=resp.usage.input_tokens,
+            completion_tokens=resp.usage.output_tokens,
+            latency_ms=latency_ms,
+        )
+
     return resp.content[0].text
 
 

@@ -46,8 +46,9 @@ def aggregate_benchmark_runs(method: str, data: str, attack: str = "clean") -> D
 def _aggregate_from_dirs(run_dirs: List[Path], method: str, data: str,
                          attack: str, summary_dir: Path) -> Dict[str, Any]:
     """Helper to aggregate stats from a list of run directories."""
-    # Load stats from each run's config.json
+    # Load stats and usage from each run's config.json
     all_stats = []
+    all_usage = []
     skipped = 0
     skipped_reasons = {"no_config": 0, "no_stats": 0, "parse_error": 0}
 
@@ -67,6 +68,9 @@ def _aggregate_from_dirs(run_dirs: List[Path], method: str, data: str,
 
         if "stats" in config:
             all_stats.append(config["stats"])
+            # Also collect usage if present
+            if "usage" in config:
+                all_usage.append(config["usage"])
         else:
             skipped += 1
             skipped_reasons["no_stats"] += 1
@@ -90,6 +94,10 @@ def _aggregate_from_dirs(run_dirs: List[Path], method: str, data: str,
     summary["method"] = method
     summary["data"] = data
     summary["attack"] = attack
+
+    # Add usage aggregation if available
+    if all_usage:
+        summary["usage"] = _aggregate_usage(all_usage)
 
     # Save summary.json in attack dir
     summary_path = summary_dir / "summary.json"
@@ -216,6 +224,25 @@ def _aggregate_accuracy_stats(all_stats: List[Dict]) -> Dict[str, Any]:
     }
 
 
+def _aggregate_usage(all_usage: List[Dict]) -> Dict[str, Any]:
+    """Aggregate usage stats across runs."""
+    total_calls = sum(u.get("total_calls", 0) for u in all_usage)
+    total_tokens = sum(u.get("total_tokens", 0) for u in all_usage)
+    total_prompt = sum(u.get("total_prompt_tokens", 0) for u in all_usage)
+    total_completion = sum(u.get("total_completion_tokens", 0) for u in all_usage)
+    total_cost = sum(u.get("total_cost_usd", 0) for u in all_usage)
+
+    return {
+        "total_calls": total_calls,
+        "total_prompt_tokens": total_prompt,
+        "total_completion_tokens": total_completion,
+        "total_tokens": total_tokens,
+        "total_cost_usd": round(total_cost, 6),
+        "mean_cost_per_run": round(total_cost / len(all_usage), 6) if all_usage else 0,
+        "per_run": all_usage,
+    }
+
+
 def get_latest_run_dir(attack_dir: Path) -> Path:
     """Get the latest run directory."""
     import re
@@ -274,6 +301,16 @@ def print_summary(summary: Dict[str, Any], show_details: bool = False):
         print(f"  Mean: {summary.get('mean', 0):.4f}")
         print(f"  Std:  {summary.get('std', 0):.4f}")
         print(f"  Values: [{values_str}]")
+
+    # Print usage summary if available
+    usage = summary.get("usage")
+    if usage:
+        print(f"\nToken Usage (aggregated across {runs} run{'s' if runs != 1 else ''}):")
+        print(f"  Total API Calls: {usage.get('total_calls', 0):,}")
+        print(f"  Total Tokens: {usage.get('total_tokens', 0):,}")
+        print(f"  Total Cost: ${usage.get('total_cost_usd', 0):.4f}")
+        if usage.get("mean_cost_per_run"):
+            print(f"  Mean Cost/Run: ${usage.get('mean_cost_per_run', 0):.4f}")
 
     # Show per-request details from latest run if requested
     if show_details and summary.get("type") == "ranking":
@@ -410,12 +447,14 @@ def _format_result_entry(r: Dict) -> str:
     return f"{r['request_id']}: {symbol} {pred_part} {gold_part}"
 
 
-def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None):
+def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None,
+                          usage: Dict[str, Any] = None):
     """Print single-run ranking results (Hits@K mode).
 
     Args:
         stats: Stats dict with total, k, hits_at
         results: Optional list of per-request results for detailed output
+        usage: Optional usage dict with token counts and costs
     """
     total = stats.get("total", 0)
     k = stats.get("k", 5)
@@ -483,3 +522,10 @@ def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None):
                     print(f"  {left_padded} | {right}")
                 else:
                     print(f"  {left_padded}")
+
+    # Print usage summary if provided
+    if usage and usage.get("total_calls", 0) > 0:
+        print(f"\nToken Usage:")
+        print(f"  Total Calls: {usage.get('total_calls', 0):,}")
+        print(f"  Total Tokens: {usage.get('total_tokens', 0):,}")
+        print(f"  Total Cost: ${usage.get('total_cost_usd', 0):.4f}")

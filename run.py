@@ -328,7 +328,10 @@ def run_evaluation_loop(args, dataset, method, experiment):
         parallel=parallel,
         max_workers=max_workers
     )
-    print_ranking_results(eval_out["stats"], eval_out["results"])
+    # Get current usage for display
+    from utils.usage import get_usage_tracker
+    usage_for_display = get_usage_tracker().get_summary()
+    print_ranking_results(eval_out["stats"], eval_out["results"], usage_for_display)
 
     # Merge with existing results if partial run
     results_to_save = eval_out["results"]
@@ -348,6 +351,12 @@ def run_evaluation_loop(args, dataset, method, experiment):
 
 def save_final_config(args, all_results, experiment):
     """Construct and save the run configuration."""
+    from utils.usage import get_usage_tracker
+
+    # Get usage summary
+    tracker = get_usage_tracker()
+    usage_summary = tracker.get_summary()
+
     config = {
         "method": args.method,
         "defense": getattr(args, "defense", False),
@@ -361,10 +370,16 @@ def save_final_config(args, all_results, experiment):
             "max_tokens": getattr(args, "max_tokens", 1024),
         },
         "stats": all_results.get("stats", {}),
+        "usage": usage_summary,
     }
 
     config_path = experiment.save_config(config)
     print(f"Config saved to {config_path}")
+
+    # Save detailed usage log
+    usage_path = experiment.run_dir / "usage.jsonl"
+    tracker.save_to_file(usage_path)
+    print(f"Usage log saved to {usage_path}")
 
 
 def run_single(args, experiment, log):
@@ -379,6 +394,11 @@ def run_single(args, experiment, log):
         Dict of results from evaluation
     """
     from methods import get_method
+    from utils.usage import get_usage_tracker
+
+    # Reset usage tracker at start of run
+    tracker = get_usage_tracker()
+    tracker.reset()
 
     run_dir = experiment.setup()
 
@@ -499,6 +519,9 @@ def run_scaling_experiment(args, log):
           results_10.jsonl
           results_15.jsonl
           ...
+          usage_10.jsonl
+          usage_15.jsonl
+          ...
           scaling_summary.json
           config.json
 
@@ -508,6 +531,7 @@ def run_scaling_experiment(args, log):
     """
     from utils.experiment import create_experiment
     from methods import get_method
+    from utils.usage import get_usage_tracker
 
     print(f"\n{'='*60}")
     print(f"SCALING EXPERIMENT: {args.method}")
@@ -518,6 +542,9 @@ def run_scaling_experiment(args, log):
     experiment = create_experiment(args)
     run_dir = experiment.setup()
     log.info(f"Run directory: {run_dir}")
+
+    # Get tracker reference
+    tracker = get_usage_tracker()
 
     # Load previously failed scales (context_exceeded or skipped)
     failed_scales = load_failed_scales(run_dir) if not args.force else set()
@@ -554,6 +581,9 @@ def run_scaling_experiment(args, log):
         print(f"\n{'='*60}")
         print(f"Running with {n_candidates} candidates...")
         print(f"{'='*60}")
+
+        # Reset usage tracker for this scale point
+        tracker.reset()
 
         # Load and filter dataset by candidates
         dataset = load_dataset(
@@ -648,6 +678,10 @@ def run_scaling_experiment(args, log):
             for r in sorted(merged_results, key=lambda x: x.get("request_id", "")):
                 f.write(json.dumps(r) + "\n")
 
+        # Save usage for this scale point
+        usage_path = run_dir / f"usage_{n_candidates}.jsonl"
+        tracker.save_to_file(usage_path)
+
         # Recompute stats from merged results
         stats = compute_multi_k_stats(merged_results, k)
 
@@ -675,8 +709,9 @@ def run_scaling_experiment(args, log):
                 "status": "ok",
             })
 
-            # Print per-run results
-            print_ranking_results(stats, merged_results)
+            # Print per-run results with usage
+            usage_for_display = tracker.get_summary()
+            print_ranking_results(stats, merged_results, usage_for_display)
 
     # Save scaling summary
     save_scaling_summary(run_dir, results_table, k)
