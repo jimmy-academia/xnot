@@ -373,13 +373,41 @@ def print_results(stats: Dict[str, Any]):
 
 
 def _format_result_entry(r: Dict) -> str:
-    """Format a single result entry for display."""
+    """Format a single result entry for display.
+
+    Shows both shuffled and original positions when shuffle was applied.
+    Format: R00: ✓ [shuf]→[orig] gold=N(→M)
+    Where:
+      - [shuf] = predictions in shuffled space
+      - [orig] = predictions mapped to original space
+      - gold=N(→M) = original gold index (shuffled position if different)
+    """
     gold_idx = r.get("gold_idx", -1)
     pred_indices = r.get("pred_indices", [])
+    shuffled_preds = r.get("shuffled_preds", None)
+    shuffled_gold_pos = r.get("shuffled_gold_pos", None)
+
     hit = (gold_idx + 1) in pred_indices
     symbol = "✓" if hit else "✗"
-    pred_str = ",".join(str(i) for i in pred_indices) if pred_indices else ""
-    return f"{r['request_id']}: {symbol} pred=[{pred_str}] gold={gold_idx + 1}"
+
+    # Format predictions
+    orig_str = ",".join(str(i) for i in pred_indices) if pred_indices else ""
+
+    # Check if shuffle was applied (shuffled_preds present and different from pred_indices)
+    if shuffled_preds is not None and shuffled_preds != pred_indices:
+        shuf_str = ",".join(str(i) for i in shuffled_preds) if shuffled_preds else ""
+        pred_part = f"[{shuf_str}]→[{orig_str}]"
+    else:
+        pred_part = f"[{orig_str}]"
+
+    # Format gold (show shuffled position if different)
+    gold_1idx = gold_idx + 1
+    if shuffled_gold_pos is not None and shuffled_gold_pos != gold_1idx:
+        gold_part = f"gold={gold_1idx}(→{shuffled_gold_pos})"
+    else:
+        gold_part = f"gold={gold_1idx}"
+
+    return f"{r['request_id']}: {symbol} {pred_part} {gold_part}"
 
 
 def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None):

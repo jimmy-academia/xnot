@@ -161,8 +161,8 @@ class ExperimentManager:
         subdir_name = f"run_{run_num}"
         run_dir = attack_dir / subdir_name
 
-        # Check if exists
-        if run_dir.exists() and not self.partial and not self.force:
+        # Check if exists (allow reuse when target_run is set or partial mode)
+        if run_dir.exists() and not self.target_run and not self.partial and not self.force:
             raise ExperimentError(
                 f"Run already exists: {run_dir}\n"
                 f"Use --force to overwrite or --run N to target specific run"

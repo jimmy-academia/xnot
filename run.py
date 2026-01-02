@@ -15,6 +15,84 @@ from utils.parsing import normalize_pred, parse_index, parse_indices, parse_limi
 from utils.aggregate import print_results, print_ranking_results
 
 
+# --- Shuffle Utilities ---
+
+def shuffle_gold_to_middle(items: list, gold_idx: int) -> tuple[list, dict]:
+    """Move gold item to middle position.
+
+    Args:
+        items: List of items
+        gold_idx: Original index of gold item (0-indexed)
+
+    Returns:
+        (shuffled_items, mapping) where mapping[shuffled_pos] = original_idx
+    """
+    n = len(items)
+    middle = n // 2
+
+    # Build new order: remove gold, insert at middle
+    indices = list(range(n))
+    indices.remove(gold_idx)
+    indices.insert(middle, gold_idx)
+
+    shuffled = [items[i] for i in indices]
+    mapping = {new_pos: orig_idx for new_pos, orig_idx in enumerate(indices)}
+    return shuffled, mapping
+
+
+def apply_shuffle(items: list, gold_idx: int, strategy: str) -> tuple[list, dict, int]:
+    """Apply shuffle strategy.
+
+    Args:
+        items: List of items
+        gold_idx: Original index of gold item (0-indexed)
+        strategy: "none", "middle", or "random"
+
+    Returns:
+        (shuffled_items, mapping, shuffled_gold_pos) where:
+        - mapping[shuffled_pos] = original_idx
+        - shuffled_gold_pos = position of gold in shuffled list
+    """
+    if strategy == "none":
+        mapping = {i: i for i in range(len(items))}
+        return items, mapping, gold_idx
+    elif strategy == "middle":
+        shuffled, mapping = shuffle_gold_to_middle(items, gold_idx)
+        # Find gold's new position
+        shuffled_gold_pos = [k for k, v in mapping.items() if v == gold_idx][0]
+        return shuffled, mapping, shuffled_gold_pos
+    elif strategy == "random":
+        import random
+        indices = list(range(len(items)))
+        random.shuffle(indices)
+        shuffled = [items[i] for i in indices]
+        mapping = {new_pos: orig_idx for new_pos, orig_idx in enumerate(indices)}
+        shuffled_gold_pos = [k for k, v in mapping.items() if v == gold_idx][0]
+        return shuffled, mapping, shuffled_gold_pos
+    else:
+        # Default to no shuffle
+        mapping = {i: i for i in range(len(items))}
+        return items, mapping, gold_idx
+
+
+def unmap_predictions(pred_indices: list[int], mapping: dict) -> list[int]:
+    """Convert shuffled predictions back to original indices.
+
+    Args:
+        pred_indices: Predictions in shuffled space (1-indexed)
+        mapping: mapping[shuffled_pos] = original_idx (0-indexed)
+
+    Returns:
+        Predictions in original space (1-indexed)
+    """
+    result = []
+    for p in pred_indices:
+        shuffled_pos = p - 1  # Convert to 0-indexed
+        if shuffled_pos in mapping:
+            result.append(mapping[shuffled_pos] + 1)  # Back to 1-indexed
+    return result
+
+
 # --- Ranking Evaluation ---
 
 def compute_multi_k_stats(results: list[dict], k: int) -> dict:
@@ -47,18 +125,20 @@ class ContextLengthExceeded(Exception):
     pass
 
 
-def evaluate_ranking_single(method, query, context: str, k: int,
-                            req: dict, groundtruth: dict, item_count: int) -> dict | None:
+def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
+                            context: str, k: int, req: dict,
+                            groundtruth: dict) -> dict | None:
     """Evaluate a single request (thread-safe helper).
 
     Args:
         method: LLM method instance
-        query: Formatted query (all items)
+        items: All items (will be shuffled per request)
+        mode: "string" or "dict" for formatting
+        shuffle: Shuffle strategy ("none", "middle", "random")
         context: Request context/text
         k: Number of top predictions
         req: Request dict with 'id'
         groundtruth: {request_id: {"gold_restaurant": str, "gold_idx": int}}
-        item_count: Total number of items for parsing
 
     Returns:
         Result dict or None if no ground truth
@@ -74,13 +154,22 @@ def evaluate_ranking_single(method, query, context: str, k: int,
     if not gt:
         return None
 
+    gold_idx = gt["gold_idx"]
+
+    # Apply shuffle based on gold position
+    shuffled_items, mapping, shuffled_gold_pos = apply_shuffle(items, gold_idx, shuffle)
+
+    # Format query with shuffled items
+    query, item_count = format_ranking_query(shuffled_items, mode)
+
     response = None
+    shuffled_preds = []
     try:
         response = method.evaluate_ranking(query, context, k=k)
-        pred_indices = parse_indices(response, item_count, k)
+        shuffled_preds = parse_indices(response, item_count, k)
 
         # Debug: log when parsing fails
-        if debug and not pred_indices and response:
+        if debug and not shuffled_preds and response:
             print(f"[DEBUG] {req_id}: No indices parsed from response (len={len(response)})")
             print(f"  Response preview: {response[:300]}...")
 
@@ -91,22 +180,28 @@ def evaluate_ranking_single(method, query, context: str, k: int,
             print(f"\n[STOP] Context length exceeded at {req_id}. Stopping all requests.")
             raise ContextLengthExceeded(error_str)
 
-        pred_indices = []
+        shuffled_preds = []
         # Log other exceptions in debug mode
         if debug:
             print(f"[DEBUG] {req_id}: Exception: {type(e).__name__}: {e}")
 
+    # Map predictions back to original indices
+    pred_indices = unmap_predictions(shuffled_preds, mapping)
+
     return {
         "request_id": req_id,
-        "pred_indices": pred_indices,
-        "gold_idx": gt["gold_idx"],
+        "pred_indices": pred_indices,  # In original space
+        "shuffled_preds": shuffled_preds,  # In shuffled space (for debugging)
+        "gold_idx": gold_idx,
+        "shuffled_gold_pos": shuffled_gold_pos + 1,  # 1-indexed for display
         "gold_restaurant": gt["gold_restaurant"],
     }
 
 
 def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
                      groundtruth: dict, mode: str = "string", k: int = 5,
-                     parallel: bool = True, max_workers: int = 40) -> dict:
+                     shuffle: str = "middle", parallel: bool = True,
+                     max_workers: int = 40) -> dict:
     """Evaluate using ranking (Hits@K accuracy).
 
     Args:
@@ -116,6 +211,7 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
         groundtruth: {request_id: {"gold_restaurant": str, "gold_idx": int}}
         mode: "string" or "dict" for formatting
         k: Number of top predictions to check (default 5 for Hits@5)
+        shuffle: Shuffle strategy ("none", "middle", "random") - default "middle"
         parallel: Whether to use parallel execution (default True)
         max_workers: Maximum number of worker threads (default 40)
 
@@ -123,9 +219,6 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
         Dict with results and accuracy stats
     """
     req_ids = [r["id"] for r in requests]
-
-    # Format all items as a single query
-    query, item_count = format_ranking_query(items, mode)
 
     context_exceeded = False
 
@@ -144,9 +237,9 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
                 futures = {
                     executor.submit(
                         evaluate_ranking_single,
-                        method, query,
+                        method, items, mode, shuffle,
                         req.get("context") or req.get("text", ""),
-                        k, req, groundtruth, item_count
+                        k, req, groundtruth
                     ): req
                     for req in requests
                 }
@@ -178,7 +271,7 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
                 context = req.get("context") or req.get("text", "")
                 try:
                     result = evaluate_ranking_single(
-                        method, query, context, k, req, groundtruth, item_count
+                        method, items, mode, shuffle, context, k, req, groundtruth
                     )
                     if result:
                         results.append(result)
@@ -216,12 +309,14 @@ def run_evaluation_loop(args, dataset, method, experiment):
     dict_mode_methods = {"anot", "weaver"}
     eval_mode = "dict" if args.method in dict_mode_methods else "string"
     k = getattr(args, 'k', 5)
+    shuffle = getattr(args, 'shuffle', 'middle')
     parallel = getattr(args, 'parallel', True)
     max_workers = getattr(args, 'max_concurrent', 40)
 
     # Ranking evaluation (default)
     mode_str = "parallel" if parallel else "sequential"
-    print(f"\nRunning ranking evaluation (k={k}, {mode_str})...")
+    shuffle_str = f", shuffle={shuffle}" if shuffle != "none" else ""
+    print(f"\nRunning ranking evaluation (k={k}, {mode_str}{shuffle_str})...")
     eval_out = evaluate_ranking(
         dataset.items,
         method,
@@ -229,6 +324,7 @@ def run_evaluation_loop(args, dataset, method, experiment):
         dataset.groundtruth,
         mode=eval_mode,
         k=k,
+        shuffle=shuffle,
         parallel=parallel,
         max_workers=max_workers
     )
@@ -337,11 +433,74 @@ def run_single(args, experiment, log):
 SCALE_POINTS = [10, 15, 20, 25, 30, 40, 50]
 
 
+def load_existing_results(run_dir: Path, n_candidates: int) -> dict:
+    """Load existing results for a candidate count.
+
+    Returns:
+        Dict of {request_id: result_dict}
+    """
+    results_path = run_dir / f"results_{n_candidates}.jsonl"
+    if not results_path.exists():
+        return {}
+
+    existing = {}
+    for line in results_path.read_text().strip().split("\n"):
+        if line:
+            r = json.loads(line)
+            existing[r["request_id"]] = r
+    return existing
+
+
+def save_scaling_summary(run_dir: Path, results_table: list, k: int):
+    """Save scaling experiment summary to JSON.
+
+    Args:
+        run_dir: Run directory path
+        results_table: List of {candidates, requests, hits_at_1, hits_at_5, status}
+        k: K value used for evaluation
+    """
+    summary = {
+        "scale_points": SCALE_POINTS,
+        "k": k,
+        "results": results_table,
+    }
+    summary_path = run_dir / "scaling_summary.json"
+    with open(summary_path, "w") as f:
+        json.dump(summary, f, indent=2)
+    print(f"\nScaling summary saved to {summary_path}")
+
+
+def load_failed_scales(run_dir: Path) -> set:
+    """Load scales that already hit context limit.
+
+    Returns:
+        Set of candidate counts that failed (context_exceeded or skipped)
+    """
+    summary_path = run_dir / "scaling_summary.json"
+    if not summary_path.exists():
+        return set()
+
+    summary = json.loads(summary_path.read_text())
+    failed = set()
+    for r in summary.get("results", []):
+        if r.get("status") in ("context_exceeded", "skipped"):
+            failed.add(r["candidates"])
+    return failed
+
+
 def run_scaling_experiment(args, log):
     """Run scaling experiment across multiple candidate counts.
 
     Tests how method performance degrades as number of candidates increases.
     Stops early when context length is exceeded.
+
+    Output structure:
+        run_dir/
+          results_10.jsonl
+          results_15.jsonl
+          ...
+          scaling_summary.json
+          config.json
 
     Args:
         args: Parsed arguments
@@ -355,12 +514,34 @@ def run_scaling_experiment(args, log):
     print(f"Scale points: {SCALE_POINTS}")
     print(f"{'='*60}\n")
 
+    # Create experiment for target run (default: run_1)
+    experiment = create_experiment(args)
+    run_dir = experiment.setup()
+    log.info(f"Run directory: {run_dir}")
+
+    # Load previously failed scales (context_exceeded or skipped)
+    failed_scales = load_failed_scales(run_dir) if not args.force else set()
+    if failed_scales:
+        log.info(f"Skipping previously failed scales: {sorted(failed_scales)}")
+
     results_table = []
     context_exceeded_at = None
+    k = getattr(args, 'k', 5)
 
     for n_candidates in SCALE_POINTS:
+        # Skip previously failed scales (unless --force)
+        if n_candidates in failed_scales:
+            results_table.append({
+                "candidates": n_candidates,
+                "requests": "--",
+                "hits_at_1": "--",
+                "hits_at_5": "--",
+                "status": "skipped",
+            })
+            continue
+
         if context_exceeded_at:
-            # Already hit context limit, mark remaining as --
+            # Already hit context limit in this run, mark remaining as --
             results_table.append({
                 "candidates": n_candidates,
                 "requests": "--",
@@ -374,29 +555,60 @@ def run_scaling_experiment(args, log):
         print(f"Running with {n_candidates} candidates...")
         print(f"{'='*60}")
 
-        # Set candidates for this run
-        args.candidates = n_candidates
-
-        # Create experiment (use dev mode for scaling to avoid benchmark conflicts)
-        original_benchmark = args.benchmark
-        args.benchmark = False  # Use dev mode
-        experiment = create_experiment(args)
-        run_dir = experiment.setup()
-
-        # Load and filter dataset
+        # Load and filter dataset by candidates
         dataset = load_dataset(
             args.data,
             review_limit=getattr(args, 'review_limit', None)
         )
         dataset = filter_by_candidates(dataset, n_candidates)
 
-        # Apply --limit if specified (for testing with fewer requests)
+        # Apply --limit if specified (filter to specific request indices)
         if args.limit:
             indices = parse_limit_spec(args.limit)
             all_requests = dataset.requests
             dataset.requests = [r for i, r in enumerate(all_requests) if i in indices]
             filtered_ids = {r["id"] for r in dataset.requests}
-            dataset.groundtruth = {k: v for k, v in dataset.groundtruth.items() if k in filtered_ids}
+            dataset.groundtruth = {rid: gt for rid, gt in dataset.groundtruth.items() if rid in filtered_ids}
+
+        if len(dataset.requests) == 0:
+            log.info(f"Candidates: {n_candidates}, No valid requests (gold not in candidate set)")
+            results_table.append({
+                "candidates": n_candidates,
+                "requests": 0,
+                "hits_at_1": "--",
+                "hits_at_5": "--",
+                "status": "no_requests",
+            })
+            continue
+
+        # Check if results already exist for this scale
+        existing = load_existing_results(run_dir, n_candidates)
+        if existing and not args.force:
+            expected_ids = {r["id"] for r in dataset.requests}
+            completed_ids = set(existing.keys())
+
+            if expected_ids == completed_ids:
+                # All requests complete - skip evaluation, just report
+                log.info(f"Scale {n_candidates}: Already complete ({len(existing)} requests)")
+                stats = compute_multi_k_stats(list(existing.values()), k)
+                hits_at = stats.get("hits_at", {})
+                h1 = hits_at.get(1, {}).get("accuracy", 0)
+                h5 = hits_at.get(5, {}).get("accuracy", 0)
+                results_table.append({
+                    "candidates": n_candidates,
+                    "requests": len(existing),
+                    "hits_at_1": f"{h1:.2%}",
+                    "hits_at_5": f"{h5:.2%}",
+                    "status": "ok",
+                })
+                print_ranking_results(stats, list(existing.values()))
+                continue
+
+            # Partial results exist - only run missing requests
+            missing_ids = expected_ids - completed_ids
+            dataset.requests = [r for r in dataset.requests if r["id"] in missing_ids]
+            dataset.groundtruth = {rid: gt for rid, gt in dataset.groundtruth.items() if rid in missing_ids}
+            log.info(f"Scale {n_candidates}: Running {len(missing_ids)} missing requests")
 
         log.info(f"Candidates: {n_candidates}, Items: {len(dataset.items)}, Requests: {len(dataset.requests)}")
 
@@ -408,7 +620,7 @@ def run_scaling_experiment(args, log):
         )
 
         # Run evaluation
-        k = getattr(args, 'k', 5)
+        shuffle = getattr(args, 'shuffle', 'middle')
         eval_result = evaluate_ranking(
             dataset.items,
             method,
@@ -416,40 +628,58 @@ def run_scaling_experiment(args, log):
             dataset.groundtruth,
             mode="string",
             k=k,
+            shuffle=shuffle,
             parallel=args.parallel,
             max_workers=getattr(args, 'max_concurrent', 200)
         )
+
+        # Merge with existing results (or replace if --force)
+        if args.force:
+            existing = {}
+        else:
+            existing = load_existing_results(run_dir, n_candidates)
+        for r in eval_result["results"]:
+            existing[r["request_id"]] = r
+        merged_results = list(existing.values())
+
+        # Save merged results to candidate-specific file
+        results_path = run_dir / f"results_{n_candidates}.jsonl"
+        with open(results_path, "w") as f:
+            for r in sorted(merged_results, key=lambda x: x.get("request_id", "")):
+                f.write(json.dumps(r) + "\n")
+
+        # Recompute stats from merged results
+        stats = compute_multi_k_stats(merged_results, k)
 
         # Check if context exceeded
         if eval_result.get("context_exceeded"):
             context_exceeded_at = n_candidates
             results_table.append({
                 "candidates": n_candidates,
-                "requests": len(dataset.requests),
+                "requests": len(merged_results),
                 "hits_at_1": "--",
                 "hits_at_5": "--",
                 "status": "context_exceeded",
             })
             print(f"\n[STOP] Context limit exceeded at {n_candidates} candidates.")
         else:
-            stats = eval_result["stats"]
             hits_at = stats.get("hits_at", {})
             h1 = hits_at.get(1, hits_at.get("1", {})).get("accuracy", 0)
             h5 = hits_at.get(5, hits_at.get("5", {})).get("accuracy", 0)
 
             results_table.append({
                 "candidates": n_candidates,
-                "requests": len(dataset.requests),
+                "requests": len(merged_results),
                 "hits_at_1": f"{h1:.2%}",
                 "hits_at_5": f"{h5:.2%}",
                 "status": "ok",
             })
 
             # Print per-run results
-            print_ranking_results(stats, eval_result["results"])
+            print_ranking_results(stats, merged_results)
 
-        # Restore benchmark mode
-        args.benchmark = original_benchmark
+    # Save scaling summary
+    save_scaling_summary(run_dir, results_table, k)
 
     # Print final summary table
     print(f"\n{'='*60}")

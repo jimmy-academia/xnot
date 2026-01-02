@@ -30,8 +30,8 @@ def parse_args():
     parser.add_argument("--run-name", help="Name for this run (creates results/{N}_{run-name}/)")
     parser.add_argument("--limit", type=str, default=None,
                         help="Filter requests: N (first N), N-M (range), or N,M,O (specific indices)")
-    parser.add_argument("--run", type=int, default=None,
-                        help="Target specific run number (for partial updates with --limit)")
+    parser.add_argument("--run", type=int, default=1,
+                        help="Target run number (default: 1)")
     parser.add_argument("--force", action="store_true",
                         help="Force overwrite existing results")
     parser.add_argument("--review-limit", type=int, help="Limit reviews per restaurant (for testing)")
@@ -67,6 +67,8 @@ def parse_args():
     # Ranking/evaluation arguments
     parser.add_argument("--k", type=int, default=5,
                         help="Number of predictions for Hits@K evaluation (default: 5)")
+    parser.add_argument("--shuffle", choices=["none", "middle", "random"], default="middle",
+                        help="Shuffle strategy for candidates (default: middle)")
 
     # Execution arguments
     parser.add_argument("--max-concurrent", type=int, default=200,
