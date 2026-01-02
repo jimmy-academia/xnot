@@ -1,0 +1,42 @@
+{
+  "method": "dummy",
+  "defense": false,
+  "data": "philly_cafes",
+  "limit": null,
+  "k": 5,
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 1024
+  },
+  "stats": {
+    "total": 50,
+    "k": 5,
+    "hits_at": {
+      "1": {
+        "hits": 2,
+        "accuracy": 0.04
+      },
+      "2": {
+        "hits": 2,
+        "accuracy": 0.04
+      },
+      "3": {
+        "hits": 2,
+        "accuracy": 0.04
+      },
+      "4": {
+        "hits": 2,
+        "accuracy": 0.04
+      },
+      "5": {
+        "hits": 2,
+        "accuracy": 0.04
+      }
+    }
+  },
+  "timestamp": "2026-01-02T00:45:43.929417",
+  "benchmark_mode": true,
+  "run_name": "dummy"
+}

@@ -1,0 +1,135 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.04,
+      "std": 0.0,
+      "values": [
+        0.04,
+        0.04,
+        0.04
+      ]
+    },
+    "2": {
+      "mean": 0.04,
+      "std": 0.0,
+      "values": [
+        0.04,
+        0.04,
+        0.04
+      ]
+    },
+    "3": {
+      "mean": 0.04,
+      "std": 0.0,
+      "values": [
+        0.04,
+        0.04,
+        0.04
+      ]
+    },
+    "4": {
+      "mean": 0.04,
+      "std": 0.0,
+      "values": [
+        0.04,
+        0.04,
+        0.04
+      ]
+    },
+    "5": {
+      "mean": 0.04,
+      "std": 0.0,
+      "values": [
+        0.04,
+        0.04,
+        0.04
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 50,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "2": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "3": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "4": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "5": {
+          "hits": 2,
+          "accuracy": 0.04
+        }
+      }
+    },
+    {
+      "total": 50,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "2": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "3": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "4": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "5": {
+          "hits": 2,
+          "accuracy": 0.04
+        }
+      }
+    },
+    {
+      "total": 50,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "2": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "3": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "4": {
+          "hits": 2,
+          "accuracy": 0.04
+        },
+        "5": {
+          "hits": 2,
+          "accuracy": 0.04
+        }
+      }
+    }
+  ],
+  "runs": 3,
+  "method": "dummy",
+  "data": "philly_cafes",
+  "attack": "clean"
+}
