@@ -13,29 +13,29 @@
     {
       "candidates": 10,
       "requests": 38,
-      "hits_at_1": "42.11%",
-      "hits_at_5": "57.89%",
+      "hits_at_1": "28.95%",
+      "hits_at_5": "60.53%",
       "status": "ok"
     },
     {
       "candidates": 15,
       "requests": 47,
-      "hits_at_1": "17.02%",
-      "hits_at_5": "40.43%",
+      "hits_at_1": "25.53%",
+      "hits_at_5": "48.94%",
       "status": "ok"
     },
     {
       "candidates": 20,
       "requests": 50,
-      "hits_at_1": "30.00%",
-      "hits_at_5": "42.00%",
+      "hits_at_1": "24.00%",
+      "hits_at_5": "48.00%",
       "status": "ok"
     },
     {
       "candidates": 25,
       "requests": 50,
-      "hits_at_1": "26.00%",
-      "hits_at_5": "38.00%",
+      "hits_at_1": "18.00%",
+      "hits_at_5": "34.00%",
       "status": "ok"
     },
     {
