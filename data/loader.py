@@ -104,12 +104,11 @@ def load_groundtruth(data_name: str) -> dict:
     return groundtruth
 
 
-def load_dataset(data_name: str, limit: int = None, review_limit: int = None) -> Dataset:
+def load_dataset(data_name: str, review_limit: int = None) -> Dataset:
     """Load dataset with restaurants, reviews, requests, and groundtruth.
 
     Args:
         data_name: Dataset name (e.g., 'philly_cafes')
-        limit: Max restaurants to load
         review_limit: Max reviews per restaurant
 
     Returns:
@@ -130,10 +129,8 @@ def load_dataset(data_name: str, limit: int = None, review_limit: int = None) ->
     if missing:
         raise FileNotFoundError(f"Missing files in {data_dir}: {', '.join(missing)}")
 
-    # Load restaurants
+    # Load restaurants (no limit - request filtering happens in run.py)
     restaurants = loadjl(restaurants_path)
-    if limit:
-        restaurants = restaurants[:limit]
 
     # Build restaurant lookup by business_id
     restaurant_by_id = {r["business_id"]: r for r in restaurants}
@@ -196,6 +193,69 @@ def load_dataset(data_name: str, limit: int = None, review_limit: int = None) ->
     groundtruth = load_groundtruth(data_name)
 
     return Dataset(data_name, items, requests, groundtruth)
+
+
+def filter_by_candidates(dataset: Dataset, n_candidates: int) -> Dataset:
+    """Filter dataset to top-N candidate restaurants by gold frequency.
+
+    Prioritizes restaurants that appear most frequently as gold answers,
+    then fills remaining slots with other restaurants.
+    Filters requests to only those whose gold is in the candidate set.
+
+    Args:
+        dataset: Original dataset
+        n_candidates: Number of candidates to keep
+
+    Returns:
+        New Dataset with filtered items, requests, and remapped groundtruth
+    """
+    from collections import Counter
+
+    if n_candidates is None or n_candidates >= len(dataset.items):
+        return dataset
+
+    total_items = len(dataset.items)
+
+    # Count gold frequency (how often each restaurant is the answer)
+    gold_counts = Counter(gt["gold_idx"] for gt in dataset.groundtruth.values())
+
+    # Get all indices sorted by gold frequency (highest first), then by index
+    # Restaurants with 0 gold count come last, sorted by original index
+    all_indices = list(range(total_items))
+    all_indices.sort(key=lambda i: (-gold_counts.get(i, 0), i))
+
+    # Select top-N
+    top_n_indices = all_indices[:n_candidates]
+    top_n_set = set(top_n_indices)
+
+    # Create index mapping (old_idx -> new_idx)
+    # Sort by original index to maintain stable ordering
+    sorted_top_n = sorted(top_n_indices)
+    idx_mapping = {old: new for new, old in enumerate(sorted_top_n)}
+
+    # Filter items
+    new_items = [dataset.items[i] for i in sorted_top_n]
+
+    # Filter requests to those whose gold is in top-N
+    new_requests = []
+    new_groundtruth = {}
+    for req in dataset.requests:
+        req_id = req["id"]
+        gt = dataset.groundtruth.get(req_id)
+        if gt and gt["gold_idx"] in top_n_set:
+            new_requests.append(req)
+            # Remap gold_idx to new position
+            new_groundtruth[req_id] = {
+                "gold_restaurant": gt["gold_restaurant"],
+                "gold_idx": idx_mapping[gt["gold_idx"]],
+            }
+
+    return Dataset(
+        name=f"{dataset.name}_top{n_candidates}",
+        items=new_items,
+        requests=new_requests,
+        groundtruth=new_groundtruth,
+    )
 
 
 def format_query(item: dict, mode: str = "string") -> tuple[Any, int]:
@@ -300,31 +360,29 @@ def format_ranking_query(items: list[dict], mode: str = "string") -> tuple[Any, 
             ]
         }, len(items)
 
-    # String mode
+    # String mode - serialize full item dicts as JSON (no truncation)
     parts = ["Restaurants:\n"]
     for i, item in enumerate(items, 1):
-        reviews = item.get("reviews", [])
-        attrs = item.get("attributes", {})
-
-        parts.append(f"[{i}] {item.get('item_name', 'Unknown')} ({item.get('city', 'Unknown')})")
-
-        # Key attributes
-        attr_parts = []
-        if attrs.get("RestaurantsPriceRange2"):
-            attr_parts.append(f"Price: {attrs['RestaurantsPriceRange2']}")
-        if attrs.get("WiFi"):
-            attr_parts.append(f"WiFi: {attrs['WiFi']}")
-        if attr_parts:
-            parts.append(f"    {', '.join(attr_parts)}")
-
-        parts.append(f"    Reviews: {len(reviews)}")
-
-        # Include brief review excerpts (first 2 reviews, truncated)
-        for r in reviews[:2]:
-            excerpt = r.get("review", "")[:120]
-            if len(r.get("review", "")) > 120:
-                excerpt += "..."
-            parts.append(f"      - [{r.get('stars', '?')}★] {excerpt}")
+        item_dict = {
+            "index": i,
+            "item_id": item.get("item_id"),
+            "item_name": item.get("item_name", "Unknown"),
+            "city": item.get("city", "Unknown"),
+            "address": item.get("address", ""),
+            "attributes": item.get("attributes", {}),
+            "categories": item.get("categories", []),
+            "hours": item.get("hours"),
+            "reviews": [
+                {
+                    "review_id": r.get("review_id", ""),
+                    "review": r.get("review", ""),
+                    "stars": r.get("stars", 0),
+                    "date": r.get("date", ""),
+                }
+                for r in item.get("reviews", [])
+            ]
+        }
+        parts.append(json.dumps(item_dict, indent=2))
         parts.append("")
 
     return "\n".join(parts), len(items)

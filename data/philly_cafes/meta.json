@@ -4,12 +4,12 @@
   "created": "2026-01-01T21:42:17.242147",
   "source": "Yelp Academic Dataset - Philadelphia Coffee & Tea, Cafes",
   "restaurants": {
-    "count": 20,
+    "count": 50,
     "source_file": "preprocessing/output/philly_cafes/restaurants.jsonl",
     "selection_criteria": "Diverse features (DriveThru, CoatCheck, BYOB, price range, noise level, alcohol, etc.)"
   },
   "reviews": {
-    "count": 400,
+    "count": 1000,
     "per_restaurant": 20,
     "selection_criteria": "Mix of recent and older reviews, diverse star ratings"
   },

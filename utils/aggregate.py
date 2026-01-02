@@ -216,8 +216,42 @@ def _aggregate_accuracy_stats(all_stats: List[Dict]) -> Dict[str, Any]:
     }
 
 
-def print_summary(summary: Dict[str, Any]):
-    """Print aggregated summary."""
+def get_latest_run_dir(attack_dir: Path) -> Path:
+    """Get the latest run directory."""
+    import re
+    if not attack_dir.exists():
+        return None
+    existing = list(attack_dir.glob("run_*/"))
+    if not existing:
+        return None
+    nums = []
+    for p in existing:
+        match = re.search(r'run_(\d+)$', p.name)
+        if match:
+            nums.append((int(match.group(1)), p))
+    if not nums:
+        return None
+    return max(nums, key=lambda x: x[0])[1]
+
+
+def load_results_from_file(path: Path) -> List[Dict]:
+    """Load results from a JSONL file."""
+    if not path.exists():
+        return []
+    results = []
+    with open(path) as f:
+        for line in f:
+            results.append(json.loads(line))
+    return results
+
+
+def print_summary(summary: Dict[str, Any], show_details: bool = False):
+    """Print aggregated summary.
+
+    Args:
+        summary: Summary dict from aggregate_benchmark_runs
+        show_details: If True, also show per-request details from latest run
+    """
     if summary.get("error"):
         print(f"Error: {summary['error']}")
         return
@@ -240,6 +274,50 @@ def print_summary(summary: Dict[str, Any]):
         print(f"  Mean: {summary.get('mean', 0):.4f}")
         print(f"  Std:  {summary.get('std', 0):.4f}")
         print(f"  Values: [{values_str}]")
+
+    # Show per-request details from latest run if requested
+    if show_details and summary.get("type") == "ranking":
+        method = summary.get("method")
+        data = summary.get("data")
+        attack = summary.get("attack", "clean")
+        if method and data:
+            attack_dir = BENCHMARK_DIR / f"{method}_{data}" / attack
+            latest_run = get_latest_run_dir(attack_dir)
+            if latest_run:
+                results = load_results_from_file(latest_run / "results.jsonl")
+                if results:
+                    _print_per_request_details(results)
+
+
+def _print_per_request_details(results: List[Dict]):
+    """Print per-request details in double-column format."""
+    if not results:
+        return
+
+    sorted_results = sorted(results, key=lambda x: x.get("request_id", ""))
+    half = (len(sorted_results) + 1) // 2
+
+    if HAS_RICH:
+        console = Console()
+        console.print("\n[bold]Per-request:[/bold]")
+        for i in range(half):
+            left = _format_result_entry(sorted_results[i])
+            left = left.replace("✓", "[green]✓[/green]").replace("✗", "[red]✗[/red]")
+            if i + half < len(sorted_results):
+                right = _format_result_entry(sorted_results[i + half])
+                right = right.replace("✓", "[green]✓[/green]").replace("✗", "[red]✗[/red]")
+                console.print(f"  {left:<40} | {right}")
+            else:
+                console.print(f"  {left}")
+    else:
+        print("\nPer-request:")
+        for i in range(half):
+            left = _format_result_entry(sorted_results[i])
+            if i + half < len(sorted_results):
+                right = _format_result_entry(sorted_results[i + half])
+                print(f"  {left:<40} | {right}")
+            else:
+                print(f"  {left}")
 
 
 def _print_ranking_rich(summary: Dict[str, Any]):
@@ -294,6 +372,16 @@ def print_results(stats: Dict[str, Any]):
             print(f"{gold:<12} {row.get('-1', 0):<8} {row.get('0', 0):<8} {row.get('1', 0):<8}")
 
 
+def _format_result_entry(r: Dict) -> str:
+    """Format a single result entry for display."""
+    gold_idx = r.get("gold_idx", -1)
+    pred_indices = r.get("pred_indices", [])
+    hit = (gold_idx + 1) in pred_indices
+    symbol = "✓" if hit else "✗"
+    pred_str = ",".join(str(i) for i in pred_indices) if pred_indices else ""
+    return f"{r['request_id']}: {symbol} pred=[{pred_str}] gold={gold_idx + 1}"
+
+
 def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None):
     """Print single-run ranking results (Hits@K mode).
 
@@ -320,17 +408,23 @@ def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None):
             table.add_row(str(j), str(hits), f"{acc:.4f}")
         console.print(table)
 
-        # Per-request details
+        # Per-request details (double column)
         if results:
             console.print("\n[bold]Per-request:[/bold]")
-            for r in sorted(results, key=lambda x: x.get("request_id", "")):
-                gold_idx = r.get("gold_idx", -1)
-                pred_indices = r.get("pred_indices", [])
-                # Convert 0-indexed gold_idx to 1-indexed for comparison
-                hit = (gold_idx + 1) in pred_indices
-                symbol = "[green]✓[/green]" if hit else "[red]✗[/red]"
-                pred_str = ",".join(str(i) for i in pred_indices) if pred_indices else "none"
-                console.print(f"  {r['request_id']}: {symbol} pred=[{pred_str}] gold={gold_idx + 1}")
+            sorted_results = sorted(results, key=lambda x: x.get("request_id", ""))
+            half = (len(sorted_results) + 1) // 2
+
+            for i in range(half):
+                left = _format_result_entry(sorted_results[i])
+                # Color the symbols
+                left = left.replace("✓", "[green]✓[/green]").replace("✗", "[red]✗[/red]")
+
+                if i + half < len(sorted_results):
+                    right = _format_result_entry(sorted_results[i + half])
+                    right = right.replace("✓", "[green]✓[/green]").replace("✗", "[red]✗[/red]")
+                    console.print(f"  {left:<35} | {right}")
+                else:
+                    console.print(f"  {left}")
     else:
         print(f"{'K':<5} {'Hits':<8} {'Accuracy'}")
         print("-" * 25)
@@ -340,13 +434,16 @@ def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None):
             acc = hit_data.get("accuracy", 0)
             print(f"{j:<5} {hits:<8} {acc:.4f}")
 
-        # Per-request details (plain text)
+        # Per-request details (double column, plain text)
         if results:
             print("\nPer-request:")
-            for r in sorted(results, key=lambda x: x.get("request_id", "")):
-                gold_idx = r.get("gold_idx", -1)
-                pred_indices = r.get("pred_indices", [])
-                hit = (gold_idx + 1) in pred_indices
-                symbol = "✓" if hit else "✗"
-                pred_str = ",".join(str(i) for i in pred_indices) if pred_indices else "none"
-                print(f"  {r['request_id']}: {symbol} pred=[{pred_str}] gold={gold_idx + 1}")
+            sorted_results = sorted(results, key=lambda x: x.get("request_id", ""))
+            half = (len(sorted_results) + 1) // 2
+
+            for i in range(half):
+                left = _format_result_entry(sorted_results[i])
+                if i + half < len(sorted_results):
+                    right = _format_result_entry(sorted_results[i + half])
+                    print(f"  {left:<35} | {right}")
+                else:
+                    print(f"  {left}")

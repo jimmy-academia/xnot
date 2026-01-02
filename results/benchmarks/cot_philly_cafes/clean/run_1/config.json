@@ -2,7 +2,6 @@
   "method": "cot",
   "defense": false,
   "data": "philly_cafes",
-  "limit": null,
   "k": 5,
   "parallel": true,
   "llm_config": {
@@ -16,28 +15,28 @@
     "k": 5,
     "hits_at": {
       "1": {
-        "hits": 16,
-        "accuracy": 0.32
+        "hits": 1,
+        "accuracy": 0.02
       },
       "2": {
-        "hits": 20,
-        "accuracy": 0.4
+        "hits": 1,
+        "accuracy": 0.02
       },
       "3": {
-        "hits": 20,
-        "accuracy": 0.4
+        "hits": 1,
+        "accuracy": 0.02
       },
       "4": {
-        "hits": 23,
-        "accuracy": 0.46
+        "hits": 1,
+        "accuracy": 0.02
       },
       "5": {
-        "hits": 27,
-        "accuracy": 0.54
+        "hits": 1,
+        "accuracy": 0.02
       }
     }
   },
-  "timestamp": "2026-01-02T01:36:18.213187",
+  "timestamp": "2026-01-02T13:22:29.320189",
   "benchmark_mode": true,
   "run_name": "cot"
 }

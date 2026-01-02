@@ -29,7 +29,8 @@ class ExperimentManager:
 
     def __init__(self, run_name: str, benchmark_mode: bool = False,
                  method: str = None, data: str = None,
-                 attack: str = None):
+                 attack: str = None, target_run: int = None,
+                 force: bool = False, partial: bool = False):
         """
         Initialize experiment manager.
 
@@ -39,6 +40,9 @@ class ExperimentManager:
             method: Method name (for benchmark directory naming)
             data: Data name (for benchmark directory naming)
             attack: Attack name for benchmark subdirectory (default: "clean")
+            target_run: Specific run number to target (for partial updates)
+            force: If True, allow overwriting existing results
+            partial: If True, this is a partial run (--limit was used)
 
         Raises:
             ExperimentError: If benchmark directory exists
@@ -49,6 +53,9 @@ class ExperimentManager:
         self.data = data
         # Normalize attack name for directory purposes
         self.attack = attack if attack not in (None, "", "none") else "clean"
+        self.target_run = target_run
+        self.force = force
+        self.partial = partial
         self.run_dir: Optional[Path] = None
         self.config: Dict[str, Any] = {}
         self._created = False
@@ -132,26 +139,53 @@ class ExperimentManager:
         Pattern: results/benchmarks/{method}_{data}/{attack}/run_{N}/
 
         Raises:
-            ExperimentError: If specific run directory already exists
+            ExperimentError: If specific run directory already exists (without force)
         """
         # Parent directory: results/benchmarks/{method}_{data}/{attack}/
         parent_name = f"{self.method}_{self.data}"
         attack_dir = BENCHMARK_DIR / parent_name / self.attack
         attack_dir.mkdir(parents=True, exist_ok=True)
 
-        # Subdir: run_{N}
-        run_num = self._get_next_benchmark_run()
+        # Determine run number
+        if self.target_run:
+            # Use specific run directory
+            run_num = self.target_run
+        elif self.partial:
+            # Default to latest run when --limit is used
+            latest = self._get_latest_run(attack_dir)
+            run_num = latest if latest else 1
+        else:
+            # Full run: create new run (existing behavior)
+            run_num = self._get_next_benchmark_run()
+
         subdir_name = f"run_{run_num}"
         run_dir = attack_dir / subdir_name
 
-        if run_dir.exists():
+        # Check if exists
+        if run_dir.exists() and not self.partial and not self.force:
             raise ExperimentError(
                 f"Run already exists: {run_dir}\n"
-                f"Delete manually to replace"
+                f"Use --force to overwrite or --run N to target specific run"
             )
 
-        run_dir.mkdir()
+        run_dir.mkdir(exist_ok=True)
         return run_dir
+
+    def _get_latest_run(self, attack_dir: Path) -> Optional[int]:
+        """Find the latest run number in attack_dir."""
+        if not attack_dir.exists():
+            return None
+
+        existing = list(attack_dir.glob("run_*/"))
+        if not existing:
+            return None
+
+        nums = []
+        for p in existing:
+            match = re.search(r'run_(\d+)$', p.name)
+            if match:
+                nums.append(int(match.group(1)))
+        return max(nums) if nums else None
 
     def _get_next_benchmark_run(self) -> int:
         """Find next run number for current attack in benchmark mode."""
@@ -195,6 +229,51 @@ class ExperimentManager:
                 except (json.JSONDecodeError, IOError):
                     pass  # Invalid config, don't count
         return count
+
+    def get_missing_requests(self, total_requests: int) -> List[int]:
+        """Find which request indices are missing from the latest run.
+
+        Args:
+            total_requests: Total expected number of requests
+
+        Returns:
+            List of missing request indices (0-based)
+        """
+        if not self.benchmark_mode:
+            return list(range(total_requests))
+
+        attack_dir = BENCHMARK_DIR / f"{self.method}_{self.data}" / self.attack
+        if not attack_dir.exists():
+            return list(range(total_requests))
+
+        # Find latest run
+        latest = self._get_latest_run(attack_dir)
+        if not latest:
+            return list(range(total_requests))
+
+        run_dir = attack_dir / f"run_{latest}"
+        results_path = run_dir / "results.jsonl"
+        if not results_path.exists():
+            return list(range(total_requests))
+
+        # Parse completed request IDs
+        completed_indices = set()
+        with open(results_path) as f:
+            for line in f:
+                try:
+                    r = json.loads(line)
+                    # request_id format: R00, R01, ..., R49
+                    req_id = r.get("request_id", "")
+                    if req_id.startswith("R"):
+                        idx = int(req_id[1:])
+                        completed_indices.add(idx)
+                except (json.JSONDecodeError, ValueError):
+                    continue
+
+        # Return missing indices
+        all_indices = set(range(total_requests))
+        missing = sorted(all_indices - completed_indices)
+        return missing
 
     def _get_next_run_number(self) -> int:
         """Scan dev directory and find next available run number."""
@@ -261,6 +340,38 @@ class ExperimentManager:
 
         return result_path
 
+    def merge_results(self, new_results: List[Dict]) -> List[Dict]:
+        """
+        Merge new results with existing results in the run directory.
+
+        Results are keyed by request_id - new results overwrite existing ones.
+
+        Args:
+            new_results: New results to merge
+
+        Returns:
+            Merged list of results
+        """
+        if not self._created:
+            raise ExperimentError("Must call setup() before merging results")
+
+        existing_path = self.run_dir / "results.jsonl"
+        if not existing_path.exists():
+            return new_results
+
+        # Load existing results
+        existing = {}
+        with open(existing_path) as f:
+            for line in f:
+                r = json.loads(line)
+                existing[r["request_id"]] = r
+
+        # Merge: new overwrites old
+        for r in new_results:
+            existing[r["request_id"]] = r
+
+        return list(existing.values())
+
     def get_debug_logger(self, item_id: str, request_id: str):
         """
         Get a DebugLogger instance for a specific (item, request) pair.
@@ -319,10 +430,16 @@ def create_experiment(args, attack: str = None) -> ExperimentManager:
     if hasattr(args, 'data_dir'):
         data_name = args.data_dir.name
 
+    # Check if this is a partial run (--limit was used)
+    partial = getattr(args, 'limit', None) is not None
+
     return ExperimentManager(
         run_name=run_name,
         benchmark_mode=getattr(args, 'benchmark', False),
         method=getattr(args, 'method', None),
         data=data_name,
         attack=attack_name,
+        target_run=getattr(args, 'run', None),
+        force=getattr(args, 'force', False),
+        partial=partial,
     )

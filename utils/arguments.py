@@ -28,8 +28,15 @@ def parse_args():
     parser.add_argument("--data", default=DEFAULT_DATA,
                         help="Dataset name (e.g., 'philly_cafes') or path to data directory")
     parser.add_argument("--run-name", help="Name for this run (creates results/{N}_{run-name}/)")
-    parser.add_argument("--limit", type=int, help="Limit number of requests to process")
+    parser.add_argument("--limit", type=str, default=None,
+                        help="Filter requests: N (first N), N-M (range), or N,M,O (specific indices)")
+    parser.add_argument("--run", type=int, default=None,
+                        help="Target specific run number (for partial updates with --limit)")
+    parser.add_argument("--force", action="store_true",
+                        help="Force overwrite existing results")
     parser.add_argument("--review-limit", type=int, help="Limit reviews per restaurant (for testing)")
+    parser.add_argument("--candidates", type=int, default=None,
+                        help="Run single evaluation with N candidates (default: scaling experiment)")
 
     # Method arguments
     parser.add_argument("--method", choices=METHOD_CHOICES, default="cot",

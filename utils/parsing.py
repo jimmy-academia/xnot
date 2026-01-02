@@ -164,6 +164,54 @@ def parse_index(response: str, max_index: int = 20) -> int:
     return 0  # Failed to parse
 
 
+def parse_limit_spec(spec: str) -> list[int]:
+    """Parse limit specification into list of request indices.
+
+    Args:
+        spec: Limit specification string
+
+    Returns:
+        Sorted list of request indices (0-based)
+
+    Examples:
+        '5' -> [0,1,2,3,4]  (first 5)
+        '0-9' -> [0,1,2,3,4,5,6,7,8,9]
+        '0,5,10' -> [0,5,10]
+        '0-4,10,20-24' -> [0,1,2,3,4,10,20,21,22,23,24]
+    """
+    if not spec or not spec.strip():
+        return []
+
+    spec = spec.strip()
+    indices = set()
+
+    for part in spec.split(','):
+        part = part.strip()
+        if not part:
+            continue
+
+        if '-' in part:
+            # Range: "0-9"
+            try:
+                start, end = part.split('-', 1)
+                indices.update(range(int(start), int(end) + 1))
+            except ValueError:
+                logger.warning(f"Invalid range in limit spec: {part}")
+        else:
+            # Single number: could be count or index
+            try:
+                n = int(part)
+                # If it's a single number with no comma/range, treat as count
+                if ',' not in spec and '-' not in spec:
+                    indices.update(range(n))
+                else:
+                    indices.add(n)
+            except ValueError:
+                logger.warning(f"Invalid number in limit spec: {part}")
+
+    return sorted(indices)
+
+
 def parse_indices(response: str, max_index: int = 20, k: int = 5) -> list[int]:
     """Parse LLM response to extract up to k item indices.
 
