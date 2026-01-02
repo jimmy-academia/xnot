@@ -5,6 +5,7 @@ from typing import Callable
 from .base import BaseMethod
 from .cot import ChainOfThought
 from .ps import PlanAndSolve
+from .plan_act import PlanAndAct
 from .listwise import ListwiseRanker
 from .weaver import Weaver
 from .anot import AdaptiveNetworkOfThought, create_method as create_anot
@@ -14,6 +15,7 @@ from .anot import AdaptiveNetworkOfThought, create_method as create_anot
 METHOD_REGISTRY = {
     "cot": (ChainOfThought, True),
     "ps": (PlanAndSolve, False),
+    "plan_act": (PlanAndAct, True),
     "listwise": (ListwiseRanker, True),
     "weaver": (Weaver, True),
     "anot": (AdaptiveNetworkOfThought, True),
@@ -71,6 +73,7 @@ __all__ = [
     "BaseMethod",
     "ChainOfThought",
     "PlanAndSolve",
+    "PlanAndAct",
     "ListwiseRanker",
     "Weaver",
     "AdaptiveNetworkOfThought",

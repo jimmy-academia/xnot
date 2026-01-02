@@ -12,7 +12,7 @@ DEFAULT_DATA = "philly_cafes"
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 # Method choices - champions only
-METHOD_CHOICES = ["cot", "ps", "listwise", "weaver", "anot", "dummy"]
+METHOD_CHOICES = ["cot", "ps", "plan_act", "listwise", "weaver", "anot", "dummy"]
 
 # Attack choices
 ATTACK_CHOICES = ["none", "clean", "all", "typo", "verbose", "duplicate",
@@ -39,7 +39,7 @@ def parse_args():
                         help="Run single evaluation with N candidates (default: scaling experiment)")
 
     # Method arguments
-    parser.add_argument("--method", choices=METHOD_CHOICES, default="cot",
+    parser.add_argument("--method", choices=METHOD_CHOICES, default="plan_act",
                         help="Method to use")
 
     # Attack arguments
