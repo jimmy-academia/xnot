@@ -12,7 +12,13 @@ import json
 import re
 import time
 import asyncio
+import threading
 from typing import Optional, Dict, List
+
+from rich.live import Live
+from rich.table import Table
+from rich.console import Console
+from rich.text import Text
 
 from .base import BaseMethod
 from .shared import (
@@ -220,11 +226,19 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._log_buffer = []
         self._current_item = None
         self._current_context = None
+        self._current_request_id = None
         # Structured trace for debugging
         self._trace = None  # Reset per evaluation
+        # Rich display state
+        self._console = Console()
+        self._live = None  # Rich Live context (set during evaluate_ranking)
+        self._display_rows = {}  # {request_id: {context, phase, status}}
+        self._display_lock = threading.Lock()
+        self._display_title = ""
+        self._display_stats = {"complete": 0, "total": 0, "tokens": 0, "cost": 0.0}
 
     def _log(self, msg: str, content: str = None, separator: bool = False, terminal: bool = True):
-        """Log message to file (always) and terminal (sparse, if verbose)."""
+        """Log message to file (always) and terminal (only if no Live display active)."""
         from datetime import datetime
         timestamp = datetime.now().strftime("%H:%M:%S")
         item_prefix = f"[{self._current_item}] " if self._current_item else ""
@@ -237,6 +251,10 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 entry += f"\n{content}"
 
         self._log_buffer.append(entry)
+
+        # Suppress terminal output when Live display is active
+        if self._live:
+            return
 
         if self.verbose and terminal:
             if separator:
@@ -290,6 +308,79 @@ class AdaptiveNetworkOfThought(BaseMethod):
         if filepath:
             with open(filepath, "a") as f:
                 f.write(json.dumps(self._trace) + "\n")
+
+    # =========================================================================
+    # Rich Display Methods
+    # =========================================================================
+
+    def start_display(self, title: str = "", total: int = 0):
+        """Start the rich Live display."""
+        self._display_title = title
+        self._display_stats = {"complete": 0, "total": total, "tokens": 0, "cost": 0.0}
+        self._display_rows = {}
+        self._live = Live(self._render_table(), console=self._console, refresh_per_second=4)
+        self._live.start()
+
+    def stop_display(self):
+        """Stop the rich Live display."""
+        if self._live:
+            self._live.stop()
+            self._live = None
+
+    def _update_display(self, request_id: str, phase: str, status: str, context: str = None):
+        """Update display row for a request (thread-safe)."""
+        with self._display_lock:
+            was_complete = self._display_rows.get(request_id, {}).get("phase") == "✓"
+            if request_id not in self._display_rows:
+                self._display_rows[request_id] = {"context": context or "", "phase": phase, "status": status}
+            else:
+                self._display_rows[request_id]["phase"] = phase
+                self._display_rows[request_id]["status"] = status
+                if context:
+                    self._display_rows[request_id]["context"] = context
+
+            # Track completions
+            if phase == "✓" and not was_complete:
+                self._display_stats["complete"] += 1
+
+        # Refresh live display if active
+        if self._live:
+            self._live.update(self._render_table())
+
+    def _render_table(self) -> Table:
+        """Build current display table."""
+        table = Table(title=self._display_title, box=None, padding=(0, 1))
+        table.add_column("Req", style="cyan", width=5)
+        table.add_column("Context", style="dim", width=35, overflow="ellipsis")
+        table.add_column("Phase", style="bold", width=6, justify="center")
+        table.add_column("Status", width=15)
+
+        with self._display_lock:
+            for req_id, row in sorted(self._display_rows.items()):
+                # Format phase with color
+                phase = row["phase"]
+                if phase == "✓":
+                    phase_text = Text("✓", style="green bold")
+                elif phase == "P1":
+                    phase_text = Text("P1", style="yellow")
+                elif phase == "P2":
+                    phase_text = Text("P2", style="blue")
+                elif phase == "P3":
+                    phase_text = Text("P3", style="magenta")
+                else:
+                    phase_text = Text("---", style="dim")
+
+                # Truncate context
+                ctx = row["context"][:32] + "..." if len(row["context"]) > 35 else row["context"]
+
+                table.add_row(req_id, ctx, phase_text, row["status"])
+
+        # Add stats footer
+        stats = self._display_stats
+        footer = f"Progress: {stats['complete']}/{stats['total']} | Tokens: {stats['tokens']:,} | ${stats['cost']:.4f}"
+        table.caption = footer
+
+        return table
 
     # =========================================================================
     # Phase 1: ReAct-Style Data Exploration
@@ -362,6 +453,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
         }
         """
         self._log("Phase 1: ReAct Exploration")
+        if self._current_request_id:
+            self._update_display(self._current_request_id, "P1", "exploring")
 
         # Initial structure summary (keys only, no values)
         initial = self._get_initial_structure(query)
@@ -381,6 +474,10 @@ class AdaptiveNetworkOfThought(BaseMethod):
         start = time.time()
 
         for round_num in range(max_rounds):
+            # Update display with round progress
+            if self._current_request_id:
+                self._update_display(self._current_request_id, "P1", f"round {round_num + 1}/{max_rounds}")
+
             # Build full prompt with conversation history
             if conversation_history:
                 full_prompt = base_prompt + "\n\n[CONVERSATION SO FAR]\n" + "\n".join(conversation_history)
@@ -485,6 +582,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
         """
         start = time.time()
         self._log(f"Phase 2: Expanding global plan ({len(items)} items)")
+        if self._current_request_id:
+            self._update_display(self._current_request_id, "P2", "expanding")
 
         relevant_attr = plan.get("relevant_attr", "")
         if not relevant_attr or relevant_attr == "NONE":
@@ -501,7 +600,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         # Add aggregation step
         n = len(items)
-        refs = ", ".join(f"{{{i}}}" for i in range(n))
+        refs = ", ".join(f"{{({i})}}" for i in range(n))
         agg_step = f'({n})=LLM("Scores: {refs}. Return top-5 indices (comma-separated, highest scores first)")'
         expanded_steps.append(agg_step)
 
@@ -593,6 +692,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
     def phase3_execute(self, lwt: str, query: dict, context: str) -> str:
         """Execute the LWT script."""
+        if self._current_request_id:
+            self._update_display(self._current_request_id, "P3", "executing")
         try:
             return asyncio.run(self._execute_parallel(lwt, query, context))
         except RuntimeError:
@@ -694,6 +795,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
         """
         # Initialize trace for this evaluation
         self._init_trace(request_id, context)
+        self._current_request_id = request_id
         phase3_start = None
 
         # Parse items
@@ -710,6 +812,9 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         self._log(f"RANKING: {context}", separator=True)
         self._log(f"Evaluating {len(items)} items, returning top-{k}")
+
+        # Initialize display for this request
+        self._update_display(request_id, "---", "starting", context)
 
         # Phase 1: ReAct Exploration → Global Plan
         if context not in self.lwt_cache:
@@ -760,6 +865,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
         if self._trace:
             self._trace["phase3"]["final_scores"] = [r[1] for r in sorted(results, key=lambda x: x[0])]
             self._trace["phase3"]["top_k"] = [int(x) for x in top_k]
+
+        # Update display with completion
+        result_str = ",".join(top_k)
+        self._update_display(request_id, "✓", result_str)
+        self._current_request_id = None
 
         self.save_log()
         self.save_trace()

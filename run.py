@@ -170,7 +170,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     response = None
     shuffled_preds = []
     try:
-        response = method.evaluate_ranking(query, context, k=k)
+        response = method.evaluate_ranking(query, context, k=k, request_id=req_id)
         shuffled_preds = parse_indices(response, item_count, k)
 
         # Debug: log when parsing fails
@@ -241,17 +241,32 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
 
     context_exceeded = False
 
+    # Start rich Live display if method supports it (e.g., ANoT)
+    has_rich_display = hasattr(method, 'start_display') and hasattr(method, 'stop_display')
+    if has_rich_display:
+        title = f"ANoT: {len(items)} candidates, k={k}"
+        method.start_display(title=title, total=len(requests))
+
+    try:
+        return _evaluate_ranking_inner(
+            items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display
+        )
+    finally:
+        if has_rich_display:
+            method.stop_display()
+
+
+def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display):
+    """Inner implementation of evaluate_ranking (wrapped by display context)."""
+    req_ids = [r["id"] for r in requests]
+    context_exceeded = False
+
     if parallel:
         # Parallel execution with ThreadPoolExecutor
         results = []
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TaskProgressColumn(),
-        ) as progress:
-            task = progress.add_task(f"Ranking evaluation (parallel, {max_workers} workers)...", total=len(requests))
 
+        def run_parallel():
+            nonlocal context_exceeded
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = {
                     executor.submit(
@@ -274,18 +289,29 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
                         for f in futures:
                             f.cancel()
                         break
+                    yield 1  # Signal progress
+
+        if has_rich_display:
+            # ANoT has its own display, just run without Progress bar
+            for _ in run_parallel():
+                pass
+        else:
+            # Use default Progress bar for other methods
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TaskProgressColumn(),
+            ) as progress:
+                task = progress.add_task(f"Ranking evaluation (parallel, {max_workers} workers)...", total=len(requests))
+                for _ in run_parallel():
                     progress.update(task, advance=1)
     else:
         # Sequential execution
         results = []
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TaskProgressColumn(),
-        ) as progress:
-            task = progress.add_task("Ranking evaluation (sequential)...", total=len(requests))
 
+        def run_sequential():
+            nonlocal context_exceeded
             for req in requests:
                 context = req.get("context") or req.get("text", "")
                 try:
@@ -296,8 +322,24 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
                         results.append(result)
                 except ContextLengthExceeded:
                     context_exceeded = True
-                    break
-                progress.update(task, advance=1)
+                    return
+                yield 1  # Signal progress
+
+        if has_rich_display:
+            # ANoT has its own display, just run without Progress bar
+            for _ in run_sequential():
+                pass
+        else:
+            # Use default Progress bar for other methods
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TaskProgressColumn(),
+            ) as progress:
+                task = progress.add_task("Ranking evaluation (sequential)...", total=len(requests))
+                for _ in run_sequential():
+                    progress.update(task, advance=1)
 
     # Compute multi-K stats
     stats = compute_multi_k_stats(results, k)
@@ -361,8 +403,10 @@ def run_evaluation_loop(args, dataset, method, experiment):
         print(f"\nMerged {len(eval_out['results'])} new + existing = {len(results_to_save)} total results")
         eval_out["stats"] = merged_stats
 
-    # Save results
-    result_path = experiment.save_results(results_to_save, "results.jsonl")
+    # Save results - use results_{n}.jsonl when candidates specified for scaling compatibility
+    n_candidates = getattr(args, 'candidates', None)
+    results_filename = f"results_{n_candidates}.jsonl" if n_candidates else "results.jsonl"
+    result_path = experiment.save_results(results_to_save, results_filename)
     print(f"\nResults saved to {result_path}")
 
     return {"stats": eval_out["stats"]}
@@ -395,8 +439,10 @@ def save_final_config(args, all_results, experiment):
     config_path = experiment.save_config(config)
     print(f"Config saved to {config_path}")
 
-    # Save detailed usage log
-    usage_path = experiment.run_dir / "usage.jsonl"
+    # Save detailed usage log - use usage_{n}.jsonl when candidates specified
+    n_candidates = getattr(args, 'candidates', None)
+    usage_filename = f"usage_{n_candidates}.jsonl" if n_candidates else "usage.jsonl"
+    usage_path = experiment.run_dir / usage_filename
     tracker.save_to_file(usage_path)
     print(f"Usage log saved to {usage_path}")
 
