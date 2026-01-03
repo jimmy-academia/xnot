@@ -71,29 +71,22 @@
   "data": "philly_cafes",
   "attack": "clean",
   "usage": {
-    "total_calls": 257,
-    "total_prompt_tokens": 105249,
-    "total_completion_tokens": 506917,
-    "total_tokens": 612166,
-    "total_cost_usd": 0.319938,
-    "mean_cost_per_run": 0.319938,
+    "total_calls": 0,
+    "total_prompt_tokens": 0,
+    "total_completion_tokens": 0,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0,
+    "mean_cost_per_run": 0.0,
     "per_run": [
       {
-        "total_calls": 257,
-        "total_prompt_tokens": 105249,
-        "total_completion_tokens": 506917,
-        "total_tokens": 612166,
-        "total_cost_usd": 0.319938,
-        "total_latency_ms": 14131528.91,
-        "avg_latency_ms": 54986.49,
-        "by_model": {
-          "gpt-5-nano": {
-            "calls": 257,
-            "prompt_tokens": 105249,
-            "completion_tokens": 506917,
-            "cost_usd": 0.319938
-          }
-        }
+        "total_calls": 0,
+        "total_prompt_tokens": 0,
+        "total_completion_tokens": 0,
+        "total_tokens": 0,
+        "total_cost_usd": 0.0,
+        "total_latency_ms": 0.0,
+        "avg_latency_ms": 0.0,
+        "by_model": {}
       }
     ]
   }

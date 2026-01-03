@@ -575,7 +575,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._live = Live(
             self._render_table(),
             console=self._console,
-            auto_refresh=False,  # Disable auto-refresh, only update on manual update() calls
+            refresh_per_second=4,  # Auto-refresh 4 times per second
             transient=False,  # Keep final display
             vertical_overflow="visible",  # Don't crop content
         )
@@ -608,7 +608,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 self._display_stats["tokens"] = summary.get("total_tokens", 0)
                 self._display_stats["cost"] = summary.get("total_cost_usd", 0.0)
 
-            # Throttled display update - only refresh if 100ms passed since last update
+            # Throttled display update - only update if 100ms passed since last update
+            # (Live auto-refreshes at 4 Hz, we just need to update the renderable)
             if self._live:
                 now = time.time()
                 if now - self._last_display_update >= 0.1:

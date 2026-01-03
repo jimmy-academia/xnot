@@ -358,7 +358,7 @@ def run_evaluation_loop(args, dataset, method, experiment):
     # Ranking evaluation (default)
     mode_str = "parallel" if parallel else "sequential"
     shuffle_str = f", shuffle={shuffle}" if shuffle != "none" else ""
-    print(f"\nRunning ranking evaluation (k={k}, {mode_str}{shuffle_str})...")
+    print(f"\nRunning ranking evaluation (k={k}, {mode_str}{shuffle_str})...", flush=True)
     eval_out = evaluate_ranking(
         dataset.items,
         method,
