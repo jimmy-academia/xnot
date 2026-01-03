@@ -8,6 +8,9 @@ This directory contains all research documentation for the ANoT project.
 |------|---------|
 | [research_plan.md](research_plan.md) | Master research plan with task formulation, baselines, and specifications |
 | [evaluation_spec.md](evaluation_spec.md) | Detailed evaluation protocol and method interface |
+| [anot_architecture.md](anot_architecture.md) | Three-phase ANoT design: Explore → Expand → Execute |
+| [logging.md](logging.md) | Logging infrastructure: usage.jsonl and anot_trace.jsonl |
+| [TODO.md](TODO.md) | Current and future tasks |
 
 ## Quick Reference
 
@@ -25,3 +28,5 @@ This directory contains all research documentation for the ANoT project.
 - G05: Nested logic (10)
 
 **Baselines:** Plan-and-Solve, Listwise, Weaver, Zero-shot CoT
+
+**Our Method:** ANoT (Adaptive Network of Thought) - Three-phase adaptive evaluation

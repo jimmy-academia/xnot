@@ -39,7 +39,7 @@ def parse_args():
                         help="Run single evaluation with N candidates (default: scaling experiment)")
 
     # Method arguments
-    parser.add_argument("--method", choices=METHOD_CHOICES, default="plan_act",
+    parser.add_argument("--method", choices=METHOD_CHOICES, default="anot",
                         help="Method to use")
 
     # Attack arguments
@@ -80,9 +80,9 @@ def parse_args():
     parser.add_argument("--dev", action="store_true",
                         help="Use dev mode (results/dev/) instead of benchmark mode")
 
-    # Verbose
-    parser.add_argument("--verbose", "-v", action="store_true",
-                        help="Enable verbose/debug output")
+    # Verbose (default: True for now, use --no-verbose to disable)
+    parser.add_argument("--verbose", "-v", action=argparse.BooleanOptionalAction, default=True,
+                        help="Enable verbose/debug output (default: True)")
 
     args = parser.parse_args()
 

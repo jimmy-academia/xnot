@@ -524,8 +524,13 @@ def print_ranking_results(stats: Dict[str, Any], results: List[Dict] = None,
                     print(f"  {left_padded}")
 
     # Print usage summary if provided
-    if usage and usage.get("total_calls", 0) > 0:
+    if usage and usage.get("total_tokens", 0) > 0:
         print(f"\nToken Usage:")
-        print(f"  Total Calls: {usage.get('total_calls', 0):,}")
-        print(f"  Total Tokens: {usage.get('total_tokens', 0):,}")
+        print(f"  Total Tokens: {usage.get('total_tokens', 0):,} (in: {usage.get('total_prompt_tokens', 0):,}, out: {usage.get('total_completion_tokens', 0):,})")
         print(f"  Total Cost: ${usage.get('total_cost_usd', 0):.4f}")
+        if usage.get('total_latency_ms'):
+            print(f"  Total Latency: {usage.get('total_latency_ms', 0) / 1000:.1f}s")
+        # Show avg tokens per request if results available
+        if results and len(results) > 0:
+            avg_tokens = usage.get('total_tokens', 0) / len(results)
+            print(f"  Avg Tokens/Request: {avg_tokens:,.0f}")

@@ -1,0 +1,1 @@
+{"request_id": "R00", "pred_indices": [1, 3, 9, 2, 4], "shuffled_preds": [6, 2, 9, 1, 3], "gold_idx": 0, "shuffled_gold_pos": 6, "gold_restaurant": "e-ZyZc24wgkKafM3pguR2w", "prompt_tokens": 9742, "completion_tokens": 44464, "tokens": 54206, "cost_usd": 0.028139699999999997, "latency_ms": 373421.8556880951}

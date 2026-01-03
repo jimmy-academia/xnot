@@ -1,0 +1,93 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 1.0,
+      "std": 0.0,
+      "values": [
+        1.0
+      ]
+    },
+    "2": {
+      "mean": 1.0,
+      "std": 0.0,
+      "values": [
+        1.0
+      ]
+    },
+    "3": {
+      "mean": 1.0,
+      "std": 0.0,
+      "values": [
+        1.0
+      ]
+    },
+    "4": {
+      "mean": 1.0,
+      "std": 0.0,
+      "values": [
+        1.0
+      ]
+    },
+    "5": {
+      "mean": 1.0,
+      "std": 0.0,
+      "values": [
+        1.0
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 1,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 1,
+          "accuracy": 1.0
+        },
+        "2": {
+          "hits": 1,
+          "accuracy": 1.0
+        },
+        "3": {
+          "hits": 1,
+          "accuracy": 1.0
+        },
+        "4": {
+          "hits": 1,
+          "accuracy": 1.0
+        },
+        "5": {
+          "hits": 1,
+          "accuracy": 1.0
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "anot",
+  "data": "philly_cafes",
+  "attack": "clean",
+  "usage": {
+    "total_calls": 0,
+    "total_prompt_tokens": 0,
+    "total_completion_tokens": 0,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0,
+    "mean_cost_per_run": 0.0,
+    "per_run": [
+      {
+        "total_calls": 0,
+        "total_prompt_tokens": 0,
+        "total_completion_tokens": 0,
+        "total_tokens": 0,
+        "total_cost_usd": 0.0,
+        "total_latency_ms": 0.0,
+        "avg_latency_ms": 0.0,
+        "by_model": {}
+      }
+    ]
+  }
+}

@@ -34,13 +34,14 @@ class DummyMethod(BaseMethod):
         return "1"
 
 
-def get_method(name: str, run_dir: str = None, defense: bool = False, **kwargs) -> BaseMethod:
+def get_method(name: str, run_dir: str = None, defense: bool = False, verbose: bool = True, **kwargs) -> BaseMethod:
     """Get a method instance by name.
 
     Args:
         name: Method name (cot, ps, listwise, weaver, anot, dummy)
         run_dir: Optional run directory for logging
         defense: Whether to enable defense mode
+        verbose: Whether to enable verbose output (default: True)
         **kwargs: Additional arguments passed to method constructor
 
     Returns:
@@ -50,7 +51,7 @@ def get_method(name: str, run_dir: str = None, defense: bool = False, **kwargs) 
         ValueError: If method name is not recognized
     """
     if name == "dummy":
-        return DummyMethod(run_dir=run_dir, defense=defense, **kwargs)
+        return DummyMethod(run_dir=run_dir, defense=defense, verbose=verbose, **kwargs)
 
     if name not in METHOD_REGISTRY:
         raise ValueError(f"Unknown method: {name}. Available: {list(METHOD_REGISTRY.keys()) + ['dummy']}")
@@ -59,9 +60,9 @@ def get_method(name: str, run_dir: str = None, defense: bool = False, **kwargs) 
 
     # Only pass defense if method supports it
     if supports_defense:
-        return method_class(run_dir=run_dir, defense=defense, **kwargs)
+        return method_class(run_dir=run_dir, defense=defense, verbose=verbose, **kwargs)
     else:
-        return method_class(run_dir=run_dir, **kwargs)
+        return method_class(run_dir=run_dir, verbose=verbose, **kwargs)
 
 
 def list_methods() -> list:

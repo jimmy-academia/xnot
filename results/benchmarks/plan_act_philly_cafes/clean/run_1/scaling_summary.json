@@ -40,10 +40,10 @@
     },
     {
       "candidates": 30,
-      "requests": 0,
+      "requests": "--",
       "hits_at_1": "--",
       "hits_at_5": "--",
-      "status": "context_exceeded"
+      "status": "skipped"
     },
     {
       "candidates": 40,

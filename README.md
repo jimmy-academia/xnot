@@ -33,17 +33,73 @@ Output: `data/{name}/` (final evaluation dataset)
 
 See `preprocessing/README.md` for full documentation and kickstart prompt.
 
+## Running Evaluations
+
+### Basic Usage
+
+```bash
+# Scaling experiment (default) - runs all scale points: 10, 15, 20, 25, 30, 40, 50
+python main.py --method cot --data philly_cafes
+
+# Single scale - run with exactly N candidates
+python main.py --method cot --candidates 10
+
+# Development mode (saves to results/dev/)
+python main.py --method cot --candidates 10 --dev
+```
+
+### Key Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--method` | anot | Method: cot, ps, plan_act, listwise, weaver, anot, dummy |
+| `--data` | philly_cafes | Dataset name in data/ directory |
+| `--candidates` | None | Run single scale with N candidates (default: scaling experiment) |
+| `--k` | 5 | Number of predictions for Hits@K evaluation |
+| `--limit` | None | Filter requests: N (first N), N-M (range), N,M,O (indices) |
+| `--dev` | False | Development mode (results/dev/) |
+| `--force` | False | Overwrite existing results |
+| `--provider` | openai | LLM provider: openai, anthropic, local |
+| `--model` | None | Override model (default: role-based selection) |
+| `--auto` | 1 | Target number of runs for benchmark |
+
+### Examples
+
+```bash
+# Run CoT on philly_cafes with 10 candidates
+python main.py --method cot --candidates 10
+
+# Run all scale points with Plan-and-Solve
+python main.py --method ps
+
+# Run first 5 requests only (for testing)
+python main.py --method cot --candidates 10 --limit 5
+
+# Run specific requests by index
+python main.py --method cot --candidates 10 --limit 0,5,10
+```
+
 ## Project Structure
 
 ```
 anot/
+├── methods/            # Prompting methods
+│   ├── base.py         # Method interface
+│   ├── cot.py          # Chain-of-Thought baseline
+│   ├── ps.py           # Plan-and-Solve
+│   ├── plan_act.py     # Plan-and-Act agent baseline
+│   └── anot.py         # Our method (Adaptive Network of Thought)
+├── prompts/            # Standard prompt templates
+│   └── task_descriptions.py  # Reusable task descriptions
+├── utils/              # Shared utilities
+│   ├── llm.py          # LLM API wrapper with context tracking
+│   └── usage.py        # Token usage and cost tracking
 ├── preprocessing/      # Stage 1: Data curation pipeline
 │   ├── curate.py       # Interactive city/category selection + LLM scoring
 │   ├── analyze.py      # Generate attribute distributions
 │   ├── raw/            # Raw Yelp data (gitignored)
 │   └── output/         # Curated selections + ground_truth_selection.md
 ├── data/               # Stage 2: Final evaluation datasets (20 restaurants, 50 requests)
-├── utils/              # Shared utilities (llm.py)
 ├── doc/                # Research documentation
 ├── results/            # Experiment outputs
 └── oldsrc/             # Legacy reference code
@@ -51,4 +107,7 @@ anot/
 
 ## Documentation
 
-See `doc/` for research plan and evaluation protocol.
+See `doc/` for:
+- [research_plan.md](doc/research_plan.md) - Research plan and specifications
+- [anot_architecture.md](doc/anot_architecture.md) - ANoT three-phase design
+- [logging.md](doc/logging.md) - Logging infrastructure

@@ -162,6 +162,11 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     # Format query with shuffled items
     query, item_count = format_ranking_query(shuffled_items, mode)
 
+    # Track per-request token usage
+    from utils.usage import get_usage_tracker
+    tracker = get_usage_tracker()
+    start_idx = len(tracker.get_records())
+
     response = None
     shuffled_preds = []
     try:
@@ -185,6 +190,14 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         if debug:
             print(f"[DEBUG] {req_id}: Exception: {type(e).__name__}: {e}")
 
+    # Compute usage for this request
+    request_records = tracker.get_records()[start_idx:]
+    request_prompt_tokens = sum(r['prompt_tokens'] for r in request_records)
+    request_completion_tokens = sum(r['completion_tokens'] for r in request_records)
+    request_tokens = request_prompt_tokens + request_completion_tokens
+    request_cost = sum(r['cost_usd'] for r in request_records)
+    request_latency = sum(r['latency_ms'] for r in request_records)
+
     # Map predictions back to original indices
     pred_indices = unmap_predictions(shuffled_preds, mapping)
 
@@ -195,6 +208,12 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         "gold_idx": gold_idx,
         "shuffled_gold_pos": shuffled_gold_pos + 1,  # 1-indexed for display
         "gold_restaurant": gt["gold_restaurant"],
+        # Per-request usage
+        "prompt_tokens": request_prompt_tokens,
+        "completion_tokens": request_completion_tokens,
+        "tokens": request_tokens,
+        "cost_usd": request_cost,
+        "latency_ms": request_latency,
     }
 
 
@@ -434,7 +453,8 @@ def run_single(args, experiment, log):
     method = get_method(
         args.method,
         run_dir=str(run_dir),
-        defense=getattr(args, 'defense', False)
+        defense=getattr(args, 'defense', False),
+        verbose=getattr(args, 'verbose', True)
     )
     print(f"\nMethod: {method}")
 
@@ -620,7 +640,8 @@ def run_scaling_experiment(args, log):
             if expected_ids == completed_ids:
                 # All requests complete - skip evaluation, just report
                 log.info(f"Scale {n_candidates}: Already complete ({len(existing)} requests)")
-                stats = compute_multi_k_stats(list(existing.values()), k)
+                cached_results = list(existing.values())
+                stats = compute_multi_k_stats(cached_results, k)
                 hits_at = stats.get("hits_at", {})
                 h1 = hits_at.get(1, {}).get("accuracy", 0)
                 h5 = hits_at.get(5, {}).get("accuracy", 0)
@@ -631,7 +652,16 @@ def run_scaling_experiment(args, log):
                     "hits_at_5": f"{h5:.2%}",
                     "status": "ok",
                 })
-                print_ranking_results(stats, list(existing.values()))
+                # Compute usage from cached per-request data
+                cached_usage = {
+                    "total_calls": len(cached_results),
+                    "total_prompt_tokens": sum(r.get('prompt_tokens', 0) for r in cached_results),
+                    "total_completion_tokens": sum(r.get('completion_tokens', 0) for r in cached_results),
+                    "total_tokens": sum(r.get('tokens', 0) for r in cached_results),
+                    "total_cost_usd": sum(r.get('cost_usd', 0) for r in cached_results),
+                    "total_latency_ms": sum(r.get('latency_ms', 0) for r in cached_results),
+                }
+                print_ranking_results(stats, cached_results, cached_usage)
                 continue
 
             # Partial results exist - only run missing requests
@@ -646,7 +676,8 @@ def run_scaling_experiment(args, log):
         method = get_method(
             args.method,
             run_dir=str(run_dir),
-            defense=getattr(args, 'defense', False)
+            defense=getattr(args, 'defense', False),
+            verbose=getattr(args, 'verbose', True)
         )
 
         # Run evaluation

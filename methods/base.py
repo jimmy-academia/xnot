@@ -10,9 +10,10 @@ class BaseMethod(ABC):
 
     name: str = "base"
 
-    def __init__(self, run_dir: str = None, defense: bool = False, **kwargs):
+    def __init__(self, run_dir: str = None, defense: bool = False, verbose: bool = True, **kwargs):
         self.run_dir = run_dir
         self.defense = defense
+        self.verbose = verbose
 
     @abstractmethod
     def evaluate(self, query: Any, context: str) -> int:

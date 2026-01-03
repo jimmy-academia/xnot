@@ -57,15 +57,31 @@ def substitute_variables(instruction: str, query, context: str, cache: dict) -> 
 
 
 def parse_script(script: str) -> list:
-    """Parse script into [(index, instruction), ...]."""
+    """Parse script into [(index, instruction), ...].
+
+    Handles various formats:
+    - (0)=LLM("instruction")
+    - (0) = LLM("instruction")
+    - (0)=LLM('instruction')
+    - Multi-line instructions
+    """
     steps = []
     for line in script.split('\n'):
-        if '=LLM(' not in line:
+        # Skip lines without LLM pattern (allow spaces around = and after LLM)
+        if not re.search(r'=\s*LLM\s*\(', line):
             continue
+
+        # Match step index: (0), (1), etc. with optional spaces
         idx_match = re.search(r'\((\d+)\)\s*=\s*LLM', line)
-        instr_match = re.search(r'LLM\(["\'](.+?)["\']\)', line, re.DOTALL)
-        if idx_match and instr_match:
+        if not idx_match:
+            continue
+
+        # Match instruction in quotes (single or double)
+        # Handle both LLM("...") and LLM('...')
+        instr_match = re.search(r'LLM\s*\(\s*["\'](.+?)["\']\s*\)', line, re.DOTALL)
+        if instr_match:
             steps.append((idx_match.group(1), instr_match.group(1)))
+
     return steps
 
 

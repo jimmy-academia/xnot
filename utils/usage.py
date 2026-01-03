@@ -47,6 +47,10 @@ class LLMUsageRecord:
     total_tokens: int
     cost_usd: float
     latency_ms: float
+    # Optional context for debugging
+    context: Optional[Dict[str, Any]] = None  # {"method": "anot", "phase": 1, "step": "0"}
+    prompt_preview: Optional[str] = None  # First 200 chars of prompt
+    response_preview: Optional[str] = None  # First 200 chars of response
 
 
 class LLMUsageTracker:
@@ -67,7 +71,10 @@ class LLMUsageTracker:
 
     def record(self, model: str, provider: str,
                prompt_tokens: int, completion_tokens: int,
-               latency_ms: float) -> None:
+               latency_ms: float,
+               context: Dict[str, Any] = None,
+               prompt_preview: str = None,
+               response_preview: str = None) -> None:
         """Record a single LLM call.
 
         Args:
@@ -76,6 +83,9 @@ class LLMUsageTracker:
             prompt_tokens: Number of input tokens
             completion_tokens: Number of output tokens
             latency_ms: API call latency in milliseconds
+            context: Optional dict with call context (method, phase, step, etc.)
+            prompt_preview: Optional first 200 chars of prompt
+            response_preview: Optional first 200 chars of response
         """
         total_tokens = prompt_tokens + completion_tokens
         cost = self._calculate_cost(model, prompt_tokens, completion_tokens)
@@ -89,6 +99,9 @@ class LLMUsageTracker:
             total_tokens=total_tokens,
             cost_usd=cost,
             latency_ms=latency_ms,
+            context=context,
+            prompt_preview=prompt_preview,
+            response_preview=response_preview,
         )
 
         with self._records_lock:
