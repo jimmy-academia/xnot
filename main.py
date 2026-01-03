@@ -24,8 +24,8 @@ def setup_logging(verbose: bool = False):
         format="%(levelname)s: %(message)s"
     )
     # Suppress verbose HTTP client logs (must be after basicConfig)
-    logging.getLogger("httpx").setLevel(logging.WARNING)
-    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    for logger_name in ["httpx", "httpcore", "openai", "httpx._client"]:
+        logging.getLogger(logger_name).setLevel(logging.WARNING)
     return logging.getLogger(__name__)
 
 

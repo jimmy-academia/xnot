@@ -1,0 +1,63 @@
+{
+  "scale_points": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    40,
+    50
+  ],
+  "k": 5,
+  "results": [
+    {
+      "candidates": 10,
+      "requests": 38,
+      "hits_at_1": "44.74%",
+      "hits_at_5": "65.79%",
+      "status": "ok"
+    },
+    {
+      "candidates": 15,
+      "requests": 47,
+      "hits_at_1": "19.15%",
+      "hits_at_5": "36.17%",
+      "status": "ok"
+    },
+    {
+      "candidates": 20,
+      "requests": 50,
+      "hits_at_1": "22.00%",
+      "hits_at_5": "44.00%",
+      "status": "ok"
+    },
+    {
+      "candidates": 25,
+      "requests": 50,
+      "hits_at_1": "12.00%",
+      "hits_at_5": "26.00%",
+      "status": "ok"
+    },
+    {
+      "candidates": 30,
+      "requests": 0,
+      "hits_at_1": "--",
+      "hits_at_5": "--",
+      "status": "context_exceeded"
+    },
+    {
+      "candidates": 40,
+      "requests": "--",
+      "hits_at_1": "--",
+      "hits_at_5": "--",
+      "status": "skipped"
+    },
+    {
+      "candidates": 50,
+      "requests": "--",
+      "hits_at_1": "--",
+      "hits_at_5": "--",
+      "status": "skipped"
+    }
+  ]
+}
