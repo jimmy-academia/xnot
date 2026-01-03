@@ -2,138 +2,193 @@
 
 ANoT (Adaptive Network of Thought) is a three-phase evaluation method for ranking tasks over structured multi-source data.
 
-**Performance:** 70% Hits@1 vs CoT's 44.74% on philly_cafes (10 candidates)
-
 ## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    User Request                          │
-│     "I need a cafe with a drive-thru option"            │
+│     "cafe with drive-thru, kid-friendly, without TVs"   │
 └────────────────────────┬────────────────────────────────┘
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Phase 1: ReAct Exploration                 │
-│  • Discover data structure via tools (count, keys, etc) │
-│  • Find relevant attributes (e.g., DriveThru)           │
-│  • Generate global plan with N branches                 │
+│              Phase 1: Planning                           │
+│  • Extract conditions from request                       │
+│  • Prune items that fail attribute checks                │
+│  • Generate LWT skeleton + message for Phase 2           │
 └────────────────────────┬────────────────────────────────┘
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Phase 2: LWT Expansion (Parallel)          │
-│  • For each item, LLM generates evaluation step         │
-│  • Semantic scoring prompts with actual attribute values│
-│  • Output: (idx)=LLM("prompt. Output: <score>")         │
+│              Phase 2: ReAct Expansion                    │
+│  • Check NEEDS_EXPANSION in message                      │
+│  • If no → call done() immediately                       │
+│  • If yes → use tools to expand LWT, then done()         │
 └────────────────────────┬────────────────────────────────┘
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│              Phase 3: Parallel Execution                │
-│  • Execute all LWT steps in parallel                    │
-│  • Parse scores (0-10 scale)                            │
-│  • Rank items by score, return top-k                    │
+│              Phase 3: Execution                          │
+│  • Execute LWT steps with variable substitution          │
+│  • Parallel DAG execution within layers                  │
+│  • Final step outputs ranking indices                    │
 └────────────────────────┬────────────────────────────────┘
                          ▼
 ┌─────────────────────────────────────────────────────────┐
 │                   Final Ranking                          │
-│            [6, 2, 9, 1, 4] (top-5 indices)              │
+│                    6 (1-indexed)                         │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Phase 1: ReAct Exploration
+## Phase 1: Planning
 
-**Goal:** Discover data structure and generate a global plan.
+**Goal:** Extract conditions, prune items, and generate LWT skeleton.
 
-The LLM explores the data using lightweight tools (executed in Python, not by LLM):
+### Input
+- `context`: User's natural language request
+- `items`: Compact item representations with attributes
 
-| Tool | Description | Example |
-|------|-------------|---------|
-| `count(path)` | Length of array/dict | `count("items")` → `10` |
-| `keys(path)` | List of keys at path | `keys("items[0]")` → `["item_id", "attributes", ...]` |
-| `union_keys(path)` | Union of keys across items | `union_keys("items[*].attributes")` → `["DriveThru", "WiFi", ...]` |
-| `sample(path)` | Sample value (truncated) | `sample("items[0].item_name")` → `"Cafe Roma"` |
+### Process
+1. Extract conditions from request (e.g., DriveThru=True, GoodForKids=True)
+2. Find items that match ALL conditions
+3. Generate LWT skeleton with matching indices
+4. Output message explaining conditions and remaining items
 
-**ReAct Loop:**
+### Output
+Two strings:
+- `lwt_skeleton`: List of LWT step strings
+- `message`: Natural language explanation for Phase 2
+
+### Prompt
+
 ```
-THOUGHT: I need to find items with drive-thru...
-ACTION: union_keys("items[*].attributes")
-RESULT: ["DriveThru", "WiFi", "NoiseLevel", ...]
-THOUGHT: Found DriveThru attribute!
-PLAN:
-N = 10
-RELEVANT_ATTR = DriveThru
-(0) = evaluate item 0: check [attributes][DriveThru]
-...
-(10) = aggregate scores, return top-5
+Analyze the user request and rank items.
+
+[USER REQUEST]
+{context}
+
+[ITEMS]
+{items_compact}
+
+[TASK]
+1. Extract conditions (e.g., DriveThru=True, GoodForKids=True, HasTV=False)
+2. Find which items match ALL conditions
+3. Output the matching item indices
+
+[OUTPUT FORMAT]
+===LWT_SKELETON===
+(final)=LLM("User wants: {context}. Item(s) that match: [LIST INDICES]. Output the best index.")
+
+===MESSAGE===
+CONDITIONS: <list>
+REMAINING: <indices of matching items>
+NEEDS_EXPANSION: no
 ```
 
-**Output:** Structured plan with:
-- `n_items`: Number of items
-- `relevant_attr`: Key attribute to check
-- `branches`: List of (idx, instruction) tuples
+### Example Output
+
+```
+===LWT_SKELETON===
+(final)=LLM("User wants: cafe with drive-thru, kid-friendly, without TVs. Item(s) that match: [5]. Output the best index.")
+
+===MESSAGE===
+CONDITIONS: DriveThru=True, GoodForKids=True, HasTV=False
+REMAINING: 5
+NEEDS_EXPANSION: no
+```
 
 ---
 
-## Phase 2: LWT Expansion (Parallel)
+## Phase 2: ReAct Expansion
 
-**Goal:** Generate intelligent, semantic evaluation prompts for each item using LLM.
+**Goal:** Expand LWT skeleton if needed using tools, then finalize.
 
-For each item, the LLM generates an LWT step that:
-1. Understands the user's request context
-2. Evaluates actual attribute values semantically
-3. Produces a 0-10 score based on match quality
+### Input
+- `lwt_skeleton`: LWT steps from Phase 1
+- `message`: Natural language explanation from Phase 1
+- `query`: Full data dict for read() tool access
 
-**Example Expansion:**
+### Process
+1. Read message to check NEEDS_EXPANSION
+2. If "no" → call `done()` immediately (pass-through)
+3. If "yes" → use tools to expand LWT, then `done()`
 
-For user request "I need a cafe with a drive-thru option":
+### Tools
+
+| Tool | Description |
+|------|-------------|
+| `done()` | Finish and return final LWT |
+| `lwt_list()` | Show current LWT steps with indices |
+| `lwt_insert(idx, "step")` | Insert step at index |
+| `lwt_set(idx, "step")` | Replace step at index |
+| `read(path)` | Get data at path (e.g., `read("items[5].item_data")`) |
+
+### Prompt
 
 ```
-(0)=LLM("Evaluate Tria Cafe. DriveThru: not present. No drive-thru means poor fit. Score 0-10. Output: <score>")
-(1)=LLM("Evaluate Front Street Cafe. DriveThru: not present. TakeOut: True. Partial fit. Score 0-10. Output: <score>")
-...
-(5)=LLM("Evaluate Milkcrate Cafe. DriveThru: True. GoodForKids: True. Perfect match! Score 0-10. Output: <score>")
+Check if the LWT skeleton needs expansion, then call done().
+
+[MESSAGE FROM PHASE 1]
+{message}
+
+[CURRENT LWT]
+{lwt_skeleton}
+
+[TOOLS]
+- done() → finish (call this when skeleton is complete)
+- lwt_insert(idx, "step") → add step (only if needed)
+- read(path) → get data (only if needed)
+
+[DECISION]
+Look at NEEDS_EXPANSION in the message:
+- If "no" → just call done() now
+- If "yes" → use tools to add steps, then done()
+
+What is your action?
 ```
 
-**Prompt Template:** `EXPAND_BRANCH_PROMPT` includes:
-- User request context
-- Item name and index
-- Actual attribute values (JSON)
-- Sample reviews
-- LWT syntax instructions
+### Pass-Through Case
 
-**Parallelization:** All items expand concurrently via `asyncio.gather()`.
+For simple attribute-only conditions (most common case):
+1. Phase 1 sets `NEEDS_EXPANSION: no`
+2. Phase 2 sees this and calls `done()` immediately
+3. Returns original skeleton unchanged
 
 ---
 
-## Phase 3: Parallel Execution
+## Phase 3: Execution
 
-**Goal:** Execute all LWT steps and aggregate results.
+**Goal:** Execute LWT steps and produce final ranking.
 
-**Execution Model:**
-- Uses `asyncio` for parallel LLM calls
-- DAG-based layer execution (independent steps run concurrently)
-- Results cached by step index
-- Per-step token usage captured after parallel execution
+### Process
+1. Parse LWT script into steps
+2. Build DAG based on dependencies (`{(step_id)}` references)
+3. Execute steps in parallel within each layer
+4. Substitute variables in prompts
+5. Return final step's output
 
-**Scoring Scale:**
+### Variable Substitution
 
-| Score | Meaning |
-|-------|---------|
-| 0-2   | Poor match |
-| 3-4   | Weak match |
-| 5-6   | Moderate match |
-| 7-8   | Good match |
-| 9-10  | Excellent match |
+Two types of variables:
+- `{(input)}["key"][idx]` - Access query data
+- `{(step_id)}` - Access previous step output
 
-**Score Parsing:** `parse_score()` handles varied LLM output formats:
-- Direct number: `5`
-- XML tags: `<5>` or `<score>5</score>`
-- Fraction: `4/10`
-- Score prefix: `Score: 5` or `Output: 5`
-- With explanation: `5 — explanation here`
+Examples:
+```
+# Query data access
+{(input)}["items"][5]["attributes"]["DriveThru"]
 
-**Output:** Top-K indices ranked by score (descending), then by index (ascending for ties).
+# Step output access
+{(5.check)} → substituted with step 5.check's output
+```
+
+### Parallel Execution
+
+Steps are organized into layers based on dependencies:
+- Layer 0: Steps with no dependencies (run in parallel)
+- Layer 1: Steps depending on Layer 0 (run in parallel after Layer 0)
+- ...and so on
+
+Uses `asyncio.gather()` for concurrent LLM calls within each layer.
 
 ---
 
@@ -144,28 +199,48 @@ Control debug output via `ANOT_DEBUG` environment variable:
 | Level | Name | Output |
 |-------|------|--------|
 | 0 | OFF | Rich table display only |
-| 1 | SUMMARY | Phase transitions, final scores |
-| 2 | VERBOSE | Per-item progress, LWT steps |
+| 1 | SUMMARY | Phase transitions, final results |
+| 2 | VERBOSE | Per-phase progress, LWT steps |
 | 3 | FULL | Complete LLM prompts and responses |
 
 **Usage:**
 ```bash
-# Run with verbose debug
-ANOT_DEBUG=2 python main.py --method anot --data philly_cafes --candidates 10 --limit 10
-
-# Monitor in another terminal
-tail -f results/benchmarks/anot_philly_cafes/clean/run_1/anot_debug.log
+ANOT_DEBUG=2 python main.py --method anot --data philly_cafes --limit 1
 ```
 
 **Debug Output Format:**
 ```
-[HH:MM:SS.mmm] [P1:R00] Starting exploration: I need a cafe...
-[HH:MM:SS.mmm] [P1:R00] Plan: attr=DriveThru, branches=11
-[HH:MM:SS.mmm] [P2:R00] Expanding 10 items (parallel)...
-[HH:MM:SS.mmm] [P2:R00] Item 5 (Milkcrate Cafe): (5)=LLM("Evaluate...")
-[HH:MM:SS.mmm] [P3:R00] Executing 11 steps in 2 layers...
-[HH:MM:SS.mmm] [P3:R00] Final scores: [('Milkcrate Cafe', 9), ...]
-[HH:MM:SS.mmm] [P3:R00] Final ranking: 6,2,9,1,3
+[HH:MM:SS.mmm] [P1:R00] Planning for: cafe with drive-thru...
+[HH:MM:SS.mmm] [P1:R00] Skeleton: (final)=LLM("User wants...")
+[HH:MM:SS.mmm] [P2:R00] ReAct expansion: 1 initial steps...
+[HH:MM:SS.mmm] [P2:R00] ReAct done after 1 iterations
+[HH:MM:SS.mmm] [P3:R00] Executing 1 steps in 1 layers...
+[HH:MM:SS.mmm] [P3:R00] Final ranking: 6
+```
+
+---
+
+## Example Trace
+
+For request "cafe with drive-thru, kid-friendly, without TVs":
+
+```
+Phase 1 (15s):
+  → Extract conditions: DriveThru=True, GoodForKids=True, HasTV=False
+  → Check items 0-9 against conditions
+  → Item 5 (Milkcrate Cafe) passes all conditions
+  → Skeleton: (final)=LLM("...Item(s) that match: [5]...")
+  → Message: CONDITIONS: ..., REMAINING: 5, NEEDS_EXPANSION: no
+
+Phase 2 (3s):
+  → Read message, see NEEDS_EXPANSION: no
+  → Call done() immediately
+  → Return skeleton unchanged
+
+Phase 3 (4s):
+  → Execute: (final)=LLM("User wants: cafe with... Item(s): [5]...")
+  → LLM output: "5"
+  → Final ranking: 6 (1-indexed)
 ```
 
 ---
@@ -174,12 +249,13 @@ tail -f results/benchmarks/anot_philly_cafes/clean/run_1/anot_debug.log
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| `phase1_explore()` | `methods/anot.py:686` | ReAct-style data exploration |
-| `phase2_expand()` | `methods/anot.py:946` | Parallel LWT generation |
-| `phase3_execute()` | `methods/anot.py:1089` | Parallel LWT execution |
-| `parse_score()` | `methods/anot.py:124` | Robust 0-10 score extraction |
-| `execute_tool()` | `methods/anot.py:196` | Data exploration tools |
-| `_expand_branch_async()` | `methods/anot.py:884` | Async item expansion |
+| `phase1_plan()` | `methods/anot.py` | Extract conditions, prune, generate skeleton |
+| `phase2_expand()` | `methods/anot.py` | ReAct loop with LWT tools |
+| `phase3_execute()` | `methods/anot.py` | Parallel LWT execution |
+| `tool_lwt_list()` | `methods/anot.py` | Show LWT steps |
+| `tool_lwt_insert()` | `methods/anot.py` | Insert LWT step |
+| `tool_read()` | `methods/anot.py` | Read query data |
+| `substitute_variables()` | `utils/parsing.py` | Variable substitution |
 
 ---
 
@@ -188,56 +264,22 @@ tail -f results/benchmarks/anot_philly_cafes/clean/run_1/anot_debug.log
 LWT (Lightweight Template) is the execution script format:
 
 ```
-(0)=LLM("Evaluate Milkcrate Cafe for drive-thru. DriveThru=True. Score 0-10.")
-(1)=LLM("Evaluate Tria Cafe for drive-thru. DriveThru=False. Score 0-10.")
-...
-(9)=LLM("Evaluate Chapterhouse for drive-thru. DriveThru=False. Score 0-10.")
-(10)=LLM("Scores: {0}, {1}, {2}, ..., {9}. Return top-5 indices sorted by score.")
+(step_id)=LLM("prompt text with {(variable)} substitution")
 ```
 
-**Variable Substitution:** `{idx}` is replaced with cached result from step `idx`.
-
----
-
-## Example Trace
-
-For request "I need a cafe with a drive-thru option":
-
+Examples:
 ```
-Phase 1 (32s):
-  → count("items") = 10
-  → keys("items[0]") = ["item_id", "attributes", ...]
-  → union_keys("items[*].attributes") = ["DriveThru", "WiFi", ...]
-  → Plan: N=10, RELEVANT_ATTR=DriveThru, branches=11
-
-Phase 2 (45s):
-  → 10 async LLM calls for item expansion
-  → Generated semantic prompts with actual attribute values
-  → Example: (5)=LLM("Milkcrate Cafe. DriveThru=True, GoodForKids=True. Score: 9")
-
-Phase 3 (15s):
-  → 11 steps executed in 2 layers (parallel)
-  → Scores: [2, 1, 1, 2, 1, 9, 1, 2, 1, 2]
-  → Top-5: [6, 1, 4, 8, 10] (item 6 = Milkcrate Cafe with DriveThru=True)
+(final)=LLM("User wants: cafe with drive-thru. Items: [5]. Output best index.")
+(5.check)=LLM("Does item 5 have {(input)}[\"items\"][5][\"attributes\"][\"DriveThru\"]} = True?")
+(agg)=LLM("Results: {(5.check)}. Count matches.")
 ```
 
 ---
 
-## Key Files
+## Key Design Principles
 
-| File | Purpose |
-|------|---------|
-| `methods/anot.py` | Main ANoT implementation (~1300 lines) |
-| `methods/shared.py` | Shared utilities (parse_script, build_execution_layers) |
-| `prompts/task_descriptions.py` | Standard task descriptions |
-| `utils/llm.py` | LLM call wrappers (sync and async) |
-
----
-
-## Advantages
-
-1. **Adaptive:** Discovers relevant fields dynamically via ReAct exploration
-2. **Semantic:** LLM generates contextual evaluation prompts (not hardcoded rules)
-3. **Parallel:** Both Phase 2 expansion and Phase 3 execution run concurrently
-4. **Robust:** Score parsing handles diverse LLM output formats
-5. **Observable:** Multi-level debug mode for development and troubleshooting
+1. **LLM-to-LLM Communication** - Phases communicate via strings (skeleton + message), not parsed Python objects
+2. **Condition-Based Pruning** - Phase 1 prunes items based on attribute conditions
+3. **Pass-Through Case** - Phase 2 can complete instantly if no expansion needed
+4. **Parallel Execution** - Phase 3 executes independent steps concurrently
+5. **Pure Variable Passing** - LLM outputs passed as-is to subsequent steps

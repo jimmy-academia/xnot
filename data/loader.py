@@ -172,8 +172,6 @@ def load_dataset(data_name: str, review_limit: int = None) -> Dataset:
             "attributes": rest.get("attributes", {}),
             "categories": categories,
             "hours": rest.get("hours"),
-            "llm_score": rest.get("llm_score"),
-            "llm_reasoning": rest.get("llm_reasoning", ""),
             "reviews": [
                 {
                     "review_id": r.get("review_id", ""),

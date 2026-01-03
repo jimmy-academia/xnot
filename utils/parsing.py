@@ -11,8 +11,11 @@ logger = logging.getLogger(__name__)
 
 
 def substitute_variables(instruction: str, query, context: str, cache: dict) -> str:
-    """Substitute {(var)}[key][index] patterns with actual values."""
-    pattern = r'\{\((\w+)\)\}((?:\[[^\]]+\])*)'
+    """Substitute {(var)}[key][index] patterns with actual values.
+
+    Supports hierarchical step IDs like {(2.rev.0)} and {(final)}.
+    """
+    pattern = r'\{\(([a-zA-Z0-9_.]+)\)\}((?:\[[^\]]+\])*)'
 
     def _sub(match):
         var = match.group(1)
@@ -63,6 +66,8 @@ def parse_script(script: str) -> list:
     - (0)=LLM("instruction")
     - (0) = LLM("instruction")
     - (0)=LLM('instruction')
+    - (2.rev.0)=LLM("instruction")  # Hierarchical step IDs
+    - (final)=LLM("instruction")    # Named step IDs
     - Multi-line instructions
     """
     steps = []
@@ -71,8 +76,9 @@ def parse_script(script: str) -> list:
         if not re.search(r'=\s*LLM\s*\(', line):
             continue
 
-        # Match step index: (0), (1), etc. with optional spaces
-        idx_match = re.search(r'\((\d+)\)\s*=\s*LLM', line)
+        # Match step index: (0), (final), (2.rev.0), etc. with optional spaces
+        # Supports: numeric, alphanumeric, and dot-separated hierarchical IDs
+        idx_match = re.search(r'\(([a-zA-Z0-9_.]+)\)\s*=\s*LLM', line)
         if not idx_match:
             continue
 

@@ -8,10 +8,16 @@ This is a Python-based LLM evaluation framework comparing prompting methodologie
 
 ## Commands
 
+**IMPORTANT: Always use `.venv/bin/python` or activate the virtual environment first!**
+
 ### Run Evaluation
 ```bash
+# ALWAYS use the virtual environment
+source .venv/bin/activate
+# OR prefix commands with .venv/bin/python
+
 # Development mode (default): creates results/dev/{NNN}_{run-name}/
-python main.py --method cot --run-name baseline
+.venv/bin/python main.py --method cot --run-name baseline
 python main.py --method anot --run-name experiment1
 
 # Benchmark mode: set BENCHMARK_MODE=True in utils/arguments.py

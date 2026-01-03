@@ -50,8 +50,8 @@ Output: 1 (good match), 0 (unclear/mixed), -1 (poor match)"""
 # =============================================================================
 
 def extract_dependencies(instruction: str) -> set:
-    """Extract step indices referenced in instruction (e.g., {(0)}, {(1)})."""
-    matches = re.findall(r'\{\((\d+)\)\}', instruction)
+    """Extract step IDs referenced in instruction (e.g., {(0)}, {(5.agg)}, {(final)})."""
+    matches = re.findall(r'\{\(([a-zA-Z0-9_.]+)\)\}', instruction)
     return set(matches)
 
 
