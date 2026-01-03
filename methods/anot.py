@@ -23,16 +23,65 @@ from rich.console import Console
 from rich.text import Text
 
 from .base import BaseMethod
-from .shared import (
-    SYSTEM_PROMPT,
-    substitute_variables,
-    parse_script,
-    build_execution_layers,
-)
 from utils.llm import call_llm, call_llm_async
+from utils.parsing import parse_script, substitute_variables
 from utils.usage import get_usage_tracker
 from utils.parsing import parse_final_answer
 from prompts.task_descriptions import RANKING_TASK_COMPACT
+
+# =============================================================================
+# Constants and Utilities (moved from shared.py - anot-specific)
+# =============================================================================
+
+SYSTEM_PROMPT = "You follow instructions precisely. Output only what is requested."
+
+
+def extract_dependencies(instruction: str) -> set:
+    """Extract step IDs referenced in instruction (e.g., {(0)}, {(5.agg)}, {(final)})."""
+    matches = re.findall(r'\{\(([a-zA-Z0-9_.]+)\)\}', instruction)
+    return set(matches)
+
+
+def build_execution_layers(steps: list) -> list:
+    """Group steps into layers that can run in parallel.
+
+    Returns list of layers, where each layer is [(idx, instr), ...].
+    Steps in the same layer have no dependencies on each other.
+    """
+    if not steps:
+        return []
+
+    # Build dependency graph
+    step_deps = {}
+    for idx, instr in steps:
+        step_deps[idx] = extract_dependencies(instr)
+
+    # Assign steps to layers using topological sort
+    layers = []
+    assigned = set()
+
+    while len(assigned) < len(steps):
+        current_layer = []
+        for idx, instr in steps:
+            if idx in assigned:
+                continue
+            deps = step_deps[idx]
+            if deps <= assigned:
+                current_layer.append((idx, instr))
+
+        if not current_layer:
+            remaining = [(idx, instr) for idx, instr in steps if idx not in assigned]
+            if remaining:
+                unresolved = [idx for idx, _ in remaining]
+                raise ValueError(f"Cycle detected in LWT dependencies. Unresolved steps: {unresolved}")
+            break
+
+        layers.append(current_layer)
+        for idx, _ in current_layer:
+            assigned.add(idx)
+
+    return layers
+
 
 # Global debug log file handle (set by method instance)
 _DEBUG_LOG_FILE = None

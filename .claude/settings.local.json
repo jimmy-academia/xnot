@@ -63,7 +63,8 @@
       "Bash(do for method in cot cotsc react ps decomp l2m selfask prp listwise setwise parade rankgpt finegrained pal pot cot_table weaver)",
       "Bash(do echo \"Running $method on selection_$sel...\")",
       "Bash(chmod:*)",
-      "Bash(ANOT_DEBUG=3 timeout 300 python:*)"
+      "Bash(ANOT_DEBUG=3 timeout 300 python:*)",
+      "Bash(git -C /Users/jimmyyeh/Documents/Station/anot diff HEAD~1 methods/anot.py methods/shared.py)"
     ]
   }
 }
