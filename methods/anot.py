@@ -22,13 +22,13 @@ from rich.text import Text
 
 from .base import BaseMethod
 from .shared import (
-    DEBUG,
     SYSTEM_PROMPT,
     substitute_variables,
     parse_script,
     build_execution_layers,
 )
 from utils.llm import call_llm, call_llm_async
+from utils.usage import get_usage_tracker
 from utils.parsing import parse_final_answer
 from prompts.task_descriptions import RANKING_TASK_COMPACT
 
@@ -309,6 +309,26 @@ class AdaptiveNetworkOfThought(BaseMethod):
             with open(filepath, "a") as f:
                 f.write(json.dumps(self._trace) + "\n")
 
+    def _find_tokens_by_context(self, phase: int, step: str) -> dict:
+        """Find usage record matching phase and step context (thread-safe).
+
+        Args:
+            phase: Phase number (1 or 3)
+            step: Step identifier (e.g., "explore_0" for phase 1, "0" for phase 3)
+
+        Returns:
+            Dict with prompt_tokens and completion_tokens, or zeros if not found
+        """
+        records = get_usage_tracker().get_records()
+        for r in reversed(records):  # Most recent first
+            ctx = r.get("context", {})
+            if ctx.get("phase") == phase and str(ctx.get("step")) == str(step):
+                return {
+                    "prompt_tokens": r.get("prompt_tokens", 0),
+                    "completion_tokens": r.get("completion_tokens", 0),
+                }
+        return {"prompt_tokens": 0, "completion_tokens": 0}
+
     # =========================================================================
     # Rich Display Methods
     # =========================================================================
@@ -491,9 +511,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 context={"method": "anot", "phase": 1, "step": f"explore_{round_num}"}
             )
 
-            if DEBUG:
-                print(f"[DEBUG] Explore round {round_num + 1}:", flush=True)
-                print(f"---\n{response[:500]}...\n---" if len(response) > 500 else f"---\n{response}\n---", flush=True)
+            # Capture tokens for this exploration round
+            round_tokens = self._find_tokens_by_context(1, f"explore_{round_num}")
 
             round_start = time.time()
 
@@ -533,6 +552,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
                         "action": f'{tool}("{path}")',
                         "result": result[:200] if len(result) > 200 else result,
                         "latency_ms": action_latency,
+                        "prompt_tokens": round_tokens.get("prompt_tokens", 0),
+                        "completion_tokens": round_tokens.get("completion_tokens", 0),
                     })
 
                 # Add to conversation history
@@ -595,8 +616,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
         for i, item in enumerate(items):
             step = self._expand_branch(i, item, relevant_attr)
             expanded_steps.append(step)
-            if DEBUG:
-                print(f"[DEBUG] Branch {i}: {step}", flush=True)
 
         # Add aggregation step
         n = len(items)
@@ -687,6 +706,13 @@ class AdaptiveNetworkOfThought(BaseMethod):
             for idx, output in results:
                 self.cache[idx] = output
                 final = output
+
+        # After all parallel execution completes, add tokens to trace by context filtering
+        if self._trace:
+            for idx in self._trace["phase3"]["step_results"]:
+                tokens = self._find_tokens_by_context(3, str(idx))
+                self._trace["phase3"]["step_results"][idx]["prompt_tokens"] = tokens["prompt_tokens"]
+                self._trace["phase3"]["step_results"][idx]["completion_tokens"] = tokens["completion_tokens"]
 
         return final
 

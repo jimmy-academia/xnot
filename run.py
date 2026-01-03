@@ -146,9 +146,6 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     Raises:
         ContextLengthExceeded: If the context length limit is exceeded
     """
-    import os
-    debug = os.environ.get("KNOT_DEBUG", "0") == "1"
-
     req_id = req["id"]
     gt = groundtruth.get(req_id)
     if not gt:
@@ -170,25 +167,21 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     response = None
     shuffled_preds = []
     try:
-        response = method.evaluate_ranking(query, context, k=k, request_id=req_id)
+        # Only pass request_id if method accepts it (e.g., ANoT)
+        import inspect
+        sig = inspect.signature(method.evaluate_ranking)
+        if 'request_id' in sig.parameters:
+            response = method.evaluate_ranking(query, context, k=k, request_id=req_id)
+        else:
+            response = method.evaluate_ranking(query, context, k=k)
         shuffled_preds = parse_indices(response, item_count, k)
-
-        # Debug: log when parsing fails
-        if debug and not shuffled_preds and response:
-            print(f"[DEBUG] {req_id}: No indices parsed from response (len={len(response)})")
-            print(f"  Response preview: {response[:300]}...")
 
     except Exception as e:
         error_str = str(e)
         # Check for context length exceeded - stop early to save budget
         if "context_length_exceeded" in error_str or "too many tokens" in error_str.lower():
-            print(f"\n[STOP] Context length exceeded at {req_id}. Stopping all requests.")
             raise ContextLengthExceeded(error_str)
-
         shuffled_preds = []
-        # Log other exceptions in debug mode
-        if debug:
-            print(f"[DEBUG] {req_id}: Exception: {type(e).__name__}: {e}")
 
     # Compute usage for this request
     request_records = tracker.get_records()[start_idx:]
@@ -237,10 +230,6 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
     Returns:
         Dict with results and accuracy stats
     """
-    req_ids = [r["id"] for r in requests]
-
-    context_exceeded = False
-
     # Start rich Live display if method supports it (e.g., ANoT)
     has_rich_display = hasattr(method, 'start_display') and hasattr(method, 'stop_display')
     if has_rich_display:
@@ -404,10 +393,16 @@ def run_evaluation_loop(args, dataset, method, experiment):
         eval_out["stats"] = merged_stats
 
     # Save results - use results_{n}.jsonl when candidates specified for scaling compatibility
-    n_candidates = getattr(args, 'candidates', None)
-    results_filename = f"results_{n_candidates}.jsonl" if n_candidates else "results.jsonl"
+    n_candidates = getattr(args, 'candidates', None) or len(dataset.items)
+    results_filename = f"results_{n_candidates}.jsonl" if getattr(args, 'candidates', None) else "results.jsonl"
     result_path = experiment.save_results(results_to_save, results_filename)
     print(f"\nResults saved to {result_path}")
+
+    # Merge usage into usage.jsonl
+    existing_usage = load_usage(experiment.run_dir)
+    new_usage = extract_usage_from_results(results_to_save, n_candidates)
+    existing_usage.update(new_usage)  # Overwrite on re-run
+    save_usage(experiment.run_dir, existing_usage)
 
     return {"stats": eval_out["stats"]}
 
@@ -438,13 +433,6 @@ def save_final_config(args, all_results, experiment):
 
     config_path = experiment.save_config(config)
     print(f"Config saved to {config_path}")
-
-    # Save detailed usage log - use usage_{n}.jsonl when candidates specified
-    n_candidates = getattr(args, 'candidates', None)
-    usage_filename = f"usage_{n_candidates}.jsonl" if n_candidates else "usage.jsonl"
-    usage_path = experiment.run_dir / usage_filename
-    tracker.save_to_file(usage_path)
-    print(f"Usage log saved to {usage_path}")
 
 
 def run_single(args, experiment, log):
@@ -537,6 +525,69 @@ def load_existing_results(run_dir: Path, n_candidates: int) -> dict:
     return existing
 
 
+def load_usage(run_dir: Path) -> dict:
+    """Load existing usage records from usage.jsonl.
+
+    Returns:
+        Dict keyed by (request_id, n_candidates) -> usage record
+    """
+    usage_path = run_dir / "usage.jsonl"
+    if not usage_path.exists():
+        return {}
+
+    existing = {}
+    for line in usage_path.read_text().strip().split("\n"):
+        if line:
+            r = json.loads(line)
+            key = (r["request_id"], r["n_candidates"])
+            existing[key] = r
+    return existing
+
+
+def save_usage(run_dir: Path, usage_dict: dict):
+    """Save usage records to usage.jsonl.
+
+    Args:
+        run_dir: Run directory path
+        usage_dict: Dict keyed by (request_id, n_candidates) -> usage record
+    """
+    usage_path = run_dir / "usage.jsonl"
+    # Sort by n_candidates then request_id for consistent output
+    sorted_records = sorted(usage_dict.values(), key=lambda x: (x["n_candidates"], x["request_id"]))
+    with open(usage_path, "w") as f:
+        for r in sorted_records:
+            f.write(json.dumps(r) + "\n")
+
+
+def extract_usage_from_results(results: list, n_candidates: int) -> dict:
+    """Extract per-request usage records from results.
+
+    Args:
+        results: List of result dicts from evaluation
+        n_candidates: Number of candidates for this run
+
+    Returns:
+        Dict keyed by (request_id, n_candidates) -> usage record
+    """
+    from datetime import datetime
+    timestamp = datetime.now().isoformat()
+
+    usage_dict = {}
+    for r in results:
+        key = (r["request_id"], n_candidates)
+        usage_dict[key] = {
+            "request_id": r["request_id"],
+            "n_candidates": n_candidates,
+            "prompt_tokens": r.get("prompt_tokens", 0),
+            "completion_tokens": r.get("completion_tokens", 0),
+            "tokens": r.get("tokens", 0),
+            "cost_usd": r.get("cost_usd", 0),
+            "latency_ms": r.get("latency_ms", 0),
+            "timestamp": timestamp,
+        }
+    return usage_dict
+
+
 def save_scaling_summary(run_dir: Path, results_table: list, k: int):
     """Save scaling experiment summary to JSON.
 
@@ -585,9 +636,7 @@ def run_scaling_experiment(args, log):
           results_10.jsonl
           results_15.jsonl
           ...
-          usage_10.jsonl
-          usage_15.jsonl
-          ...
+          usage.jsonl          (merged per-request usage across all scale points)
           scaling_summary.json
           config.json
 
@@ -755,9 +804,11 @@ def run_scaling_experiment(args, log):
             for r in sorted(merged_results, key=lambda x: x.get("request_id", "")):
                 f.write(json.dumps(r) + "\n")
 
-        # Save usage for this scale point
-        usage_path = run_dir / f"usage_{n_candidates}.jsonl"
-        tracker.save_to_file(usage_path)
+        # Merge usage into unified usage.jsonl
+        existing_usage = load_usage(run_dir)
+        new_usage = extract_usage_from_results(merged_results, n_candidates)
+        existing_usage.update(new_usage)
+        save_usage(run_dir, existing_usage)
 
         # Recompute stats from merged results
         stats = compute_multi_k_stats(merged_results, k)

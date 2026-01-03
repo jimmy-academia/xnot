@@ -23,8 +23,7 @@ import logging
 
 from utils.usage import get_usage_tracker
 
-# Suppress verbose httpx INFO logs (e.g., "HTTP Request: POST ...")
-logging.getLogger("httpx").setLevel(logging.WARNING)
+# httpx/httpcore logging suppression moved to main.py (after basicConfig)
 
 DEBUG = os.environ.get("KNOT_DEBUG", "0") == "1"
 

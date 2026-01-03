@@ -23,6 +23,9 @@ def setup_logging(verbose: bool = False):
         level=level,
         format="%(levelname)s: %(message)s"
     )
+    # Suppress verbose HTTP client logs (must be after basicConfig)
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
     return logging.getLogger(__name__)
 
 

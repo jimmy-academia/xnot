@@ -44,6 +44,8 @@ RELEVANT_ATTR = DriveThru
 - `relevant_attr`: Key attribute to check
 - `branches`: List of (idx, instruction) tuples
 
+**Token Tracking:** Each exploration round records `prompt_tokens` and `completion_tokens` for cost analysis.
+
 ---
 
 ## Phase 2: Branch Expansion
@@ -84,6 +86,7 @@ This phase uses **no LLM calls** - pure Python string expansion based on local i
 - Uses `asyncio` for parallel LLM calls
 - DAG-based layer execution (independent steps run concurrently)
 - Results cached by step index
+- Per-step token usage captured after parallel execution (thread-safe)
 
 **Scoring Convention:**
 | Score | Meaning |
@@ -112,16 +115,18 @@ For request "I need a cafe with a drive-thru option":
 
 ```
 Phase 1 (46s):
-  → count("items") = 10
-  → keys("items[0]") = ["item_id", "attributes", ...]
+  → count("items") = 10         [1250 in / 320 out tokens]
+  → keys("items[0]") = [...]    [1420 in / 185 out tokens]
   → union_keys("items[*].attributes") = ["DriveThru", ...]
   → Plan: N=10, RELEVANT_ATTR=DriveThru
 
 Phase 2 (0.2ms):
   → Expanded 11 LWT steps (10 items + 1 aggregation)
+  → No LLM calls
 
 Phase 3 (5.3s):
   → Steps 0-9 executed in parallel
+  → Each step records output, latency, prompt_tokens, completion_tokens
   → Scores: [-1, -1, -1, -1, -1, 1, -1, -1, -1, -1]
   → Top-5: [6, 1, 2, 3, 4] (item 6 = Milkcrate Cafe has DriveThru)
 ```
@@ -133,4 +138,4 @@ Phase 3 (5.3s):
 1. **Adaptive:** Discovers relevant fields dynamically
 2. **Efficient:** Phase 2 uses no LLM calls
 3. **Parallel:** Phase 3 executes all branches concurrently
-4. **Traceable:** Structured logging of all phases
+4. **Traceable:** Structured logging with per-step token usage for cost analysis
