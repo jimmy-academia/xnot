@@ -8,6 +8,7 @@ import json
 
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 from rich.console import Console
+from rich.table import Table
 
 from data.loader import load_dataset, filter_by_candidates, format_query, format_ranking_query
 from utils.io import loadjl
@@ -707,6 +708,9 @@ def run_scaling_experiment(args, log):
                 "candidates": n_candidates,
                 "requests": "--",
                 "hits_at_1": "--",
+                "hits_at_2": "--",
+                "hits_at_3": "--",
+                "hits_at_4": "--",
                 "hits_at_5": "--",
                 "status": "skipped",
             })
@@ -718,17 +722,13 @@ def run_scaling_experiment(args, log):
                 "candidates": n_candidates,
                 "requests": "--",
                 "hits_at_1": "--",
+                "hits_at_2": "--",
+                "hits_at_3": "--",
+                "hits_at_4": "--",
                 "hits_at_5": "--",
                 "status": "skipped",
             })
             continue
-
-        print(f"\n{'='*60}")
-        print(f"Running with {n_candidates} candidates...")
-        print(f"{'='*60}")
-
-        # Reset usage tracker for this scale point
-        tracker.reset()
 
         # Load and filter dataset by candidates
         dataset = load_dataset(
@@ -746,11 +746,14 @@ def run_scaling_experiment(args, log):
             dataset.groundtruth = {rid: gt for rid, gt in dataset.groundtruth.items() if rid in filtered_ids}
 
         if len(dataset.requests) == 0:
-            log.info(f"Candidates: {n_candidates}, No valid requests (gold not in candidate set)")
+            log.info(f"Scale {n_candidates}: No valid requests (gold not in candidate set)")
             results_table.append({
                 "candidates": n_candidates,
                 "requests": 0,
                 "hits_at_1": "--",
+                "hits_at_2": "--",
+                "hits_at_3": "--",
+                "hits_at_4": "--",
                 "hits_at_5": "--",
                 "status": "no_requests",
             })
@@ -768,12 +771,18 @@ def run_scaling_experiment(args, log):
                 cached_results = list(existing.values())
                 stats = compute_multi_k_stats(cached_results, k)
                 hits_at = stats.get("hits_at", {})
-                h1 = hits_at.get(1, {}).get("accuracy", 0)
-                h5 = hits_at.get(5, {}).get("accuracy", 0)
+                h1 = hits_at.get(1, hits_at.get("1", {})).get("accuracy", 0)
+                h2 = hits_at.get(2, hits_at.get("2", {})).get("accuracy", 0)
+                h3 = hits_at.get(3, hits_at.get("3", {})).get("accuracy", 0)
+                h4 = hits_at.get(4, hits_at.get("4", {})).get("accuracy", 0)
+                h5 = hits_at.get(5, hits_at.get("5", {})).get("accuracy", 0)
                 results_table.append({
                     "candidates": n_candidates,
                     "requests": len(existing),
                     "hits_at_1": f"{h1:.2%}",
+                    "hits_at_2": f"{h2:.2%}",
+                    "hits_at_3": f"{h3:.2%}",
+                    "hits_at_4": f"{h4:.2%}",
                     "hits_at_5": f"{h5:.2%}",
                     "status": "ok",
                 })
@@ -786,8 +795,9 @@ def run_scaling_experiment(args, log):
                     "total_cost_usd": sum(r.get('cost_usd', 0) for r in cached_results),
                     "total_latency_ms": sum(r.get('latency_ms', 0) for r in cached_results),
                 }
-                show_details = getattr(args, 'full', False)
-                print_ranking_results(stats, cached_results, cached_usage, show_details=show_details)
+                # Only print per-scale results if --full
+                if getattr(args, 'full', False):
+                    print_ranking_results(stats, cached_results, cached_usage, show_details=True)
                 continue
 
             # Partial results exist - only run missing requests
@@ -795,6 +805,14 @@ def run_scaling_experiment(args, log):
             dataset.requests = [r for r in dataset.requests if r["id"] in missing_ids]
             dataset.groundtruth = {rid: gt for rid, gt in dataset.groundtruth.items() if rid in missing_ids}
             log.info(f"Scale {n_candidates}: Running {len(missing_ids)} missing requests")
+
+        # Print header only when there's work to do
+        print(f"\n{'='*60}")
+        print(f"Running with {n_candidates} candidates...")
+        print(f"{'='*60}")
+
+        # Reset usage tracker for this scale point
+        tracker.reset()
 
         log.info(f"Candidates: {n_candidates}, Items: {len(dataset.items)}, Requests: {len(dataset.requests)}")
 
@@ -854,6 +872,9 @@ def run_scaling_experiment(args, log):
                 "candidates": n_candidates,
                 "requests": len(merged_results),
                 "hits_at_1": "--",
+                "hits_at_2": "--",
+                "hits_at_3": "--",
+                "hits_at_4": "--",
                 "hits_at_5": "--",
                 "status": "context_exceeded",
             })
@@ -861,32 +882,58 @@ def run_scaling_experiment(args, log):
         else:
             hits_at = stats.get("hits_at", {})
             h1 = hits_at.get(1, hits_at.get("1", {})).get("accuracy", 0)
+            h2 = hits_at.get(2, hits_at.get("2", {})).get("accuracy", 0)
+            h3 = hits_at.get(3, hits_at.get("3", {})).get("accuracy", 0)
+            h4 = hits_at.get(4, hits_at.get("4", {})).get("accuracy", 0)
             h5 = hits_at.get(5, hits_at.get("5", {})).get("accuracy", 0)
 
             results_table.append({
                 "candidates": n_candidates,
                 "requests": len(merged_results),
                 "hits_at_1": f"{h1:.2%}",
+                "hits_at_2": f"{h2:.2%}",
+                "hits_at_3": f"{h3:.2%}",
+                "hits_at_4": f"{h4:.2%}",
                 "hits_at_5": f"{h5:.2%}",
                 "status": "ok",
             })
 
-            # Print per-run results with usage
-            usage_for_display = tracker.get_summary()
-            show_details = getattr(args, 'full', False)
-            print_ranking_results(stats, merged_results, usage_for_display, show_details=show_details)
+            # Only print per-scale results if --full
+            if getattr(args, 'full', False):
+                usage_for_display = tracker.get_summary()
+                print_ranking_results(stats, merged_results, usage_for_display, show_details=True)
 
     # Save scaling summary
     save_scaling_summary(run_dir, results_table, k)
 
-    # Print final summary table
+    # Print final summary table with Rich
+    console = Console()
     print(f"\n{'='*60}")
     print(f"SCALING EXPERIMENT SUMMARY: {args.method}")
-    print(f"{'='*60}")
-    print(f"\n{'Candidates':<12} {'Requests':<10} {'Hits@1':<10} {'Hits@5':<10} {'Status'}")
-    print("-" * 55)
+    print(f"{'='*60}\n")
+
+    table = Table(title="Scaling Results")
+    table.add_column("Candidates", style="cyan")
+    table.add_column("Requests", style="cyan")
+    table.add_column("Hits@1", style="yellow")
+    table.add_column("Hits@2", style="yellow")
+    table.add_column("Hits@3", style="yellow")
+    table.add_column("Hits@4", style="yellow")
+    table.add_column("Hits@5", style="yellow")
+    table.add_column("Status", style="green")
+
     for row in results_table:
-        print(f"{row['candidates']:<12} {row['requests']:<10} {row['hits_at_1']:<10} {row['hits_at_5']:<10} {row['status']}")
+        table.add_row(
+            str(row['candidates']),
+            str(row['requests']),
+            row.get('hits_at_1', '--'),
+            row.get('hits_at_2', '--'),
+            row.get('hits_at_3', '--'),
+            row.get('hits_at_4', '--'),
+            row.get('hits_at_5', '--'),
+            row['status']
+        )
+    console.print(table)
 
     if context_exceeded_at:
         print(f"\nContext limit exceeded at {context_exceeded_at} candidates.")

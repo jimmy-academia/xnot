@@ -14,6 +14,9 @@
       "candidates": 10,
       "requests": 38,
       "hits_at_1": "44.74%",
+      "hits_at_2": "55.26%",
+      "hits_at_3": "63.16%",
+      "hits_at_4": "63.16%",
       "hits_at_5": "65.79%",
       "status": "ok"
     },
@@ -21,6 +24,9 @@
       "candidates": 15,
       "requests": 47,
       "hits_at_1": "19.15%",
+      "hits_at_2": "27.66%",
+      "hits_at_3": "31.91%",
+      "hits_at_4": "34.04%",
       "hits_at_5": "36.17%",
       "status": "ok"
     },
@@ -28,6 +34,9 @@
       "candidates": 20,
       "requests": 50,
       "hits_at_1": "22.00%",
+      "hits_at_2": "34.00%",
+      "hits_at_3": "44.00%",
+      "hits_at_4": "44.00%",
       "hits_at_5": "44.00%",
       "status": "ok"
     },
@@ -35,6 +44,9 @@
       "candidates": 25,
       "requests": 50,
       "hits_at_1": "12.00%",
+      "hits_at_2": "14.00%",
+      "hits_at_3": "20.00%",
+      "hits_at_4": "26.00%",
       "hits_at_5": "26.00%",
       "status": "ok"
     },
@@ -42,6 +54,9 @@
       "candidates": 30,
       "requests": "--",
       "hits_at_1": "--",
+      "hits_at_2": "--",
+      "hits_at_3": "--",
+      "hits_at_4": "--",
       "hits_at_5": "--",
       "status": "skipped"
     },
@@ -49,6 +64,9 @@
       "candidates": 40,
       "requests": "--",
       "hits_at_1": "--",
+      "hits_at_2": "--",
+      "hits_at_3": "--",
+      "hits_at_4": "--",
       "hits_at_5": "--",
       "status": "skipped"
     },
@@ -56,6 +74,9 @@
       "candidates": 50,
       "requests": "--",
       "hits_at_1": "--",
+      "hits_at_2": "--",
+      "hits_at_3": "--",
+      "hits_at_4": "--",
       "hits_at_5": "--",
       "status": "skipped"
     }
