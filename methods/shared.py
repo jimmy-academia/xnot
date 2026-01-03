@@ -84,7 +84,9 @@ def build_execution_layers(steps: list) -> list:
 
         if not current_layer:
             remaining = [(idx, instr) for idx, instr in steps if idx not in assigned]
-            layers.append(remaining)
+            if remaining:
+                unresolved = [idx for idx, _ in remaining]
+                raise ValueError(f"Cycle detected in LWT dependencies. Unresolved steps: {unresolved}")
             break
 
         layers.append(current_layer)

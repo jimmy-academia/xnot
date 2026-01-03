@@ -14,6 +14,7 @@ import re
 import time
 import asyncio
 import threading
+import traceback
 from typing import Optional, Dict, List, Any, Tuple
 
 from rich.live import Live
@@ -339,6 +340,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._display_title = ""
         self._display_stats = {"complete": 0, "total": 0, "tokens": 0, "cost": 0.0}
         self._last_display_update = 0
+        self._errors = []  # Accumulated errors: (request_id, step_idx, error_msg)
         self._debug_log_file = None
         self._debug_log_path = None
 
@@ -396,6 +398,13 @@ class AdaptiveNetworkOfThought(BaseMethod):
             return None
         with self._traces_lock:
             return self._traces.get(rid)
+
+    def _update_trace_step(self, idx: str, data: dict):
+        """Thread-safe update of trace step result."""
+        with self._traces_lock:
+            req_id = getattr(self._thread_local, 'request_id', None)
+            if req_id and req_id in self._traces:
+                self._traces[req_id]["phase3"]["step_results"][idx] = data
 
     def _get_cache(self) -> dict:
         """Get thread-local step results cache."""
@@ -474,10 +483,17 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._live.start()
 
     def stop_display(self):
-        """Stop rich Live display."""
+        """Stop rich Live display and print error summary if any."""
         if self._live:
             self._live.stop()
             self._live = None
+
+        # Print accumulated errors
+        if self._errors:
+            print(f"\n⚠️  {len(self._errors)} error(s) during execution:")
+            for req_id, step_idx, msg in self._errors:
+                print(f"  [{req_id}] Step {step_idx}: {msg}")
+            self._errors.clear()  # Clear for next run
 
     def _update_display(self, request_id: str, phase: str, status: str, context: str = None):
         """Update display row for request."""
@@ -747,20 +763,25 @@ class AdaptiveNetworkOfThought(BaseMethod):
             completion_tokens = result["completion_tokens"]
         except Exception as e:
             output = "NO"
-            self._debug(1, "P3", f"ERROR in step {idx}: {e}")
+            error_msg = f"{type(e).__name__}: {str(e)}"
+            req_id = getattr(self._thread_local, 'request_id', 'R??')
+            self._errors.append((req_id, idx, error_msg))
+            self._debug(1, "P3", f"ERROR in step {idx}: {e}", content=traceback.format_exc())
 
         latency = (time.time() - start) * 1000
         self._log_llm_call("P3", f"step_{idx}", filled, output)
         self._debug(2, "P3", f"Step {idx}: {output[:50]}... ({latency:.0f}ms, {prompt_tokens}+{completion_tokens} tok)")
 
-        trace = self._get_trace()
-        if trace:
-            trace["phase3"]["step_results"][idx] = {
-                "output": output[:100] if len(output) > 100 else output,
-                "latency_ms": latency,
-                "prompt_tokens": prompt_tokens,
-                "completion_tokens": completion_tokens,
-            }
+        # Thread-safe trace update
+        step_data = {
+            "output": output[:100] if len(output) > 100 else output,
+            "latency_ms": latency,
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+        }
+        if output == "NO" and 'error_msg' in locals():
+            step_data["error"] = error_msg
+        self._update_trace_step(idx, step_data)
 
         return idx, output
 
