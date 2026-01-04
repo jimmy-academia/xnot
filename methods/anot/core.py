@@ -14,245 +14,25 @@ import time
 import asyncio
 import threading
 import traceback
-from typing import Optional, Dict, List, Any, Tuple
+from typing import Dict, List, Tuple
 
 from rich.live import Live
 from rich.table import Table
 from rich.console import Console
 from rich.text import Text
 
-from .base import BaseMethod
+from ..base import BaseMethod
 from utils.llm import call_llm, call_llm_async
 from utils.parsing import parse_script, substitute_variables
 from utils.usage import get_usage_tracker
 
-# =============================================================================
-# Constants and Utilities (moved from shared.py - anot-specific)
-# =============================================================================
+from .prompts import SYSTEM_PROMPT, PHASE1_PROMPT, PHASE2_PROMPT
+from .helpers import build_execution_layers, format_items_compact
+from .tools import (
+    tool_read, tool_lwt_list, tool_lwt_get,
+    tool_lwt_set, tool_lwt_delete, tool_lwt_insert
+)
 
-SYSTEM_PROMPT = "You follow instructions precisely. Output only what is requested."
-
-
-def extract_dependencies(instruction: str) -> set:
-    """Extract step IDs referenced in instruction (e.g., {(0)}, {(5.agg)}, {(final)})."""
-    matches = re.findall(r'\{\(([a-zA-Z0-9_.]+)\)\}', instruction)
-    return set(matches)
-
-
-def build_execution_layers(steps: list) -> list:
-    """Group steps into layers that can run in parallel.
-
-    Returns list of layers, where each layer is [(idx, instr), ...].
-    Steps in the same layer have no dependencies on each other.
-    """
-    if not steps:
-        return []
-
-    # Build dependency graph
-    step_deps = {}
-    for idx, instr in steps:
-        step_deps[idx] = extract_dependencies(instr)
-
-    # Assign steps to layers using topological sort
-    layers = []
-    assigned = set()
-
-    while len(assigned) < len(steps):
-        current_layer = []
-        for idx, instr in steps:
-            if idx in assigned:
-                continue
-            deps = step_deps[idx]
-            if deps <= assigned:
-                current_layer.append((idx, instr))
-
-        if not current_layer:
-            remaining = [(idx, instr) for idx, instr in steps if idx not in assigned]
-            if remaining:
-                unresolved = [idx for idx, _ in remaining]
-                raise ValueError(f"Cycle detected in LWT dependencies. Unresolved steps: {unresolved}")
-            break
-
-        layers.append(current_layer)
-        for idx, _ in current_layer:
-            assigned.add(idx)
-
-    return layers
-
-
-# =============================================================================
-# Formatting Utilities
-# =============================================================================
-
-def format_items_compact(items: list) -> str:
-    """Format items as one line each with key=value pairs.
-
-    Example output:
-    Item 0: "Tria Cafe" - HasTV=False, GoodForKids=False, DriveThru=None, WiFi=free
-    Item 1: "Front Street" - HasTV=False, GoodForKids=True, DriveThru=None, WiFi=free
-
-    Rules:
-    - One line per item
-    - Include item name
-    - Flatten attributes to key=value pairs
-    - Use None for missing attributes
-    - For complex nested values (dicts), just show key=<dict>
-    """
-    lines = []
-    for i, item in enumerate(items):
-        name = item.get("item_name", f"Item {i}")
-        attrs = item.get("attributes", {})
-        hours = item.get("hours", {})
-
-        # Flatten attributes
-        attr_parts = []
-        for k, v in sorted(attrs.items()):
-            # Simplify complex values
-            if isinstance(v, dict):
-                attr_parts.append(f"{k}=<dict>")
-            elif isinstance(v, str) and len(v) > 20:
-                attr_parts.append(f"{k}={v[:15]}...")
-            else:
-                attr_parts.append(f"{k}={v}")
-
-        # Add hours summary if present
-        if hours:
-            days = list(hours.keys())
-            if days:
-                attr_parts.append(f"hours={','.join(days[:3])}...")
-
-        attrs_str = ", ".join(attr_parts) if attr_parts else "(no attributes)"
-        lines.append(f'Item {i}: "{name}" - {attrs_str}')
-
-    return "\n".join(lines)
-
-
-# =============================================================================
-# Prompts
-# =============================================================================
-
-PHASE1_PROMPT = """Analyze the user request and rank items.
-
-[USER REQUEST]
-{context}
-
-[ITEMS]
-{items_compact}
-
-[TASK]
-1. Extract conditions (e.g., DriveThru=True, GoodForKids=True, HasTV=False)
-2. Find which items match ALL conditions
-3. Output the matching item indices
-
-[OUTPUT FORMAT]
-===LWT_SKELETON===
-(final)=LLM("User wants: {context}. Item(s) that match: [LIST INDICES]. Output the best index.")
-
-===MESSAGE===
-CONDITIONS: <list>
-REMAINING: <indices of matching items>
-NEEDS_EXPANSION: no
-"""
-
-PHASE2_PROMPT = """Check if the LWT skeleton needs expansion, then call done().
-
-[MESSAGE FROM PHASE 1]
-{message}
-
-[CURRENT LWT]
-{lwt_skeleton}
-
-[TOOLS]
-- done() → finish (call this when skeleton is complete)
-- lwt_insert(idx, "step") → add step (only if needed)
-- read(path) → get data (only if needed)
-
-[DECISION]
-Look at NEEDS_EXPANSION in the message:
-- If "no" → just call done() now
-- If "yes" → use tools to add steps, then done()
-
-What is your action?
-"""
-
-
-# =============================================================================
-# Phase 2 Tools
-# =============================================================================
-
-def tool_read(path: str, data: dict) -> str:
-    """Read full value at path."""
-    def resolve_path(p: str, d):
-        if not p:
-            return d
-        # Parse path like items[2].item_data[0].review
-        parts = re.split(r'\.|\[|\]', p)
-        parts = [x for x in parts if x]
-        val = d
-        for part in parts:
-            try:
-                if isinstance(val, list) and part.isdigit():
-                    val = val[int(part)]
-                elif isinstance(val, dict):
-                    val = val.get(part)
-                else:
-                    return None
-            except (IndexError, KeyError, TypeError):
-                return None
-        return val
-
-    result = resolve_path(path, data)
-    if result is None:
-        return f"Error: path '{path}' not found"
-    if isinstance(result, str):
-        return result
-    return json.dumps(result, ensure_ascii=False)
-
-
-def tool_lwt_list(lwt_steps: List[str]) -> str:
-    """Show current LWT steps with indices."""
-    if not lwt_steps:
-        return "(empty)"
-    lines = []
-    for i, step in enumerate(lwt_steps):
-        lines.append(f"{i}: {step}")
-    return "\n".join(lines)
-
-
-def tool_lwt_get(idx: int, lwt_steps: List[str]) -> str:
-    """Get step at index."""
-    if idx < 0 or idx >= len(lwt_steps):
-        return f"Error: index {idx} out of range (0-{len(lwt_steps)-1})"
-    return lwt_steps[idx]
-
-
-def tool_lwt_set(idx: int, step: str, lwt_steps: List[str]) -> str:
-    """Replace step at index. Returns status."""
-    if idx < 0 or idx >= len(lwt_steps):
-        return f"Error: index {idx} out of range (0-{len(lwt_steps)-1})"
-    lwt_steps[idx] = step
-    return f"Replaced step at index {idx}"
-
-
-def tool_lwt_delete(idx: int, lwt_steps: List[str]) -> str:
-    """Delete step at index. Returns status."""
-    if idx < 0 or idx >= len(lwt_steps):
-        return f"Error: index {idx} out of range (0-{len(lwt_steps)-1})"
-    deleted = lwt_steps.pop(idx)
-    return f"Deleted step at index {idx}"
-
-
-def tool_lwt_insert(idx: int, step: str, lwt_steps: List[str]) -> str:
-    """Insert step at index (shifts others down). Returns status."""
-    if idx < 0 or idx > len(lwt_steps):
-        return f"Error: index {idx} out of range (0-{len(lwt_steps)})"
-    lwt_steps.insert(idx, step)
-    return f"Inserted at index {idx}"
-
-
-# =============================================================================
-# ANoT Implementation
-# =============================================================================
 
 class AdaptiveNetworkOfThought(BaseMethod):
     """Enhanced Adaptive Network of Thought - three-phase architecture."""
@@ -279,11 +59,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
         if run_dir:
             self._debug_log_path = os.path.join(run_dir, "debug.log")
             try:
-                self._debug_log_file = open(self._debug_log_path, "w", buffering=1)  # overwrite, line buffered
+                self._debug_log_file = open(self._debug_log_path, "w", buffering=1)
                 from datetime import datetime
                 self._debug_log_file.write(f"=== ANoT Debug Log @ {datetime.now().isoformat()} ===\n")
                 self._debug_log_file.flush()
-            except Exception as e:
+            except Exception:
                 pass  # Silent fail - debug log is optional
 
     def __del__(self):
@@ -293,6 +73,10 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 self._debug_log_file.close()
             except Exception:
                 pass
+
+    # =========================================================================
+    # Debug/Trace Methods
+    # =========================================================================
 
     def _debug(self, level: int, phase: str, msg: str, content: str = None):
         """Write debug to file only (no terminal output)."""
@@ -304,7 +88,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
         timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
         log_line = f"[{timestamp}] {prefix} {msg}"
 
-        # Write to debug log file only (full detail)
         self._debug_log_file.write(log_line + "\n")
         if content:
             self._debug_log_file.write(f">>> {content}\n")
@@ -336,24 +119,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
             req_id = getattr(self._thread_local, 'request_id', None)
             if req_id and req_id in self._traces:
                 self._traces[req_id]["phase3"]["step_results"][idx] = data
-
-    def _get_cache(self) -> dict:
-        """Get thread-local step results cache."""
-        return getattr(self._thread_local, 'cache', {})
-
-    def _set_cache(self, value: dict):
-        """Set thread-local step results cache."""
-        self._thread_local.cache = value
-
-    def _cache_get(self, key: str, default=None):
-        """Get value from thread-local cache."""
-        return self._get_cache().get(key, default)
-
-    def _cache_set(self, key: str, value):
-        """Set value in thread-local cache."""
-        cache = self._get_cache()
-        cache[key] = value
-        self._thread_local.cache = cache
 
     def _save_trace_incremental(self, request_id: str = None):
         """Save current trace to JSONL file incrementally."""
@@ -388,6 +153,24 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._debug_log_file.flush()
 
     # =========================================================================
+    # Cache Methods
+    # =========================================================================
+
+    def _get_cache(self) -> dict:
+        """Get thread-local step results cache."""
+        return getattr(self._thread_local, 'cache', {})
+
+    def _set_cache(self, value: dict):
+        """Set thread-local step results cache."""
+        self._thread_local.cache = value
+
+    def _cache_set(self, key: str, value):
+        """Set value in thread-local cache."""
+        cache = self._get_cache()
+        cache[key] = value
+        self._thread_local.cache = cache
+
+    # =========================================================================
     # Display Methods
     # =========================================================================
 
@@ -419,12 +202,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
             self._live.stop()
             self._live = None
 
-        # Print accumulated errors
         if self._errors:
             print(f"\n⚠️  {len(self._errors)} error(s) during execution:")
             for req_id, step_idx, msg in self._errors:
                 print(f"  [{req_id}] Step {step_idx}: {msg}")
-            self._errors.clear()  # Clear for next run
+            self._errors.clear()
 
     def _update_display(self, request_id: str, phase: str, status: str, context: str = None):
         """Update display row for request."""
@@ -485,20 +267,9 @@ class AdaptiveNetworkOfThought(BaseMethod):
     # =========================================================================
 
     def phase1_plan(self, context: str, items: List[dict]) -> Tuple[List[str], str]:
-        """Phase 1: Generate LWT skeleton and message for Phase 2.
-
-        Args:
-            context: User's natural language request
-            items: List of item dicts with attributes
-
-        Returns:
-            (lwt_skeleton, message) tuple where:
-            - lwt_skeleton: List of LWT step strings
-            - message: Natural language explanation for Phase 2
-        """
+        """Phase 1: Generate LWT skeleton and message for Phase 2."""
         self._debug(1, "P1", f"Planning for: {context[:60]}...")
 
-        # Format items compactly - one line per item
         items_compact = format_items_compact(items)
         self._debug(2, "P1", f"Compact items:\n{items_compact[:500]}...")
 
@@ -521,26 +292,20 @@ class AdaptiveNetworkOfThought(BaseMethod):
         lwt_skeleton = []
         message = ""
 
-        # Extract LWT_SKELETON section
         if "===LWT_SKELETON===" in response:
             skel_start = response.index("===LWT_SKELETON===") + len("===LWT_SKELETON===")
             skel_end = response.find("===MESSAGE===", skel_start) if "===MESSAGE===" in response else len(response)
             skeleton_str = response[skel_start:skel_end].strip()
-            # Parse skeleton into list of steps
             for line in skeleton_str.split("\n"):
                 line = line.strip()
                 if line and line.startswith("("):
                     lwt_skeleton.append(line)
 
-        # Extract MESSAGE section
         if "===MESSAGE===" in response:
             msg_start = response.index("===MESSAGE===") + len("===MESSAGE===")
             message = response[msg_start:].strip()
 
         self._debug(1, "P1", f"LWT skeleton: {len(lwt_skeleton)} steps")
-        self._debug(2, "P1", f"Skeleton:\n" + "\n".join(lwt_skeleton[:5]) + ("..." if len(lwt_skeleton) > 5 else ""))
-        self._debug(2, "P1", f"Message:\n{message[:300]}...")
-
         return lwt_skeleton, message
 
     # =========================================================================
@@ -548,39 +313,20 @@ class AdaptiveNetworkOfThought(BaseMethod):
     # =========================================================================
 
     def phase2_expand(self, lwt_skeleton: List[str], message: str, query: dict) -> List[str]:
-        """Phase 2: Expand LWT skeleton using ReAct loop with LWT manipulation tools.
-
-        Args:
-            lwt_skeleton: List of LWT step strings from Phase 1
-            message: Natural language message from Phase 1
-            query: Full data dict for read() tool
-
-        Returns:
-            Expanded list of LWT step strings
-        """
+        """Phase 2: Expand LWT skeleton using ReAct loop with LWT manipulation tools."""
         self._debug(1, "P2", f"ReAct expansion: {len(lwt_skeleton)} initial steps...")
         req_id = getattr(self._thread_local, 'request_id', None)
         if req_id:
             self._update_display(req_id, "P2", "ReAct expand")
 
-        # External LWT list (modified by tools)
-        lwt_steps = list(lwt_skeleton)  # Copy to avoid mutation
-
-        # Build initial prompt with skeleton
+        lwt_steps = list(lwt_skeleton)
         skeleton_str = "\n".join(f"{i}: {step}" for i, step in enumerate(lwt_steps)) if lwt_steps else "(empty)"
-        prompt = PHASE2_PROMPT.format(
-            message=message,
-            lwt_skeleton=skeleton_str
-        )
-
-        # Conversation history for ReAct
+        prompt = PHASE2_PROMPT.format(message=message, lwt_skeleton=skeleton_str)
         conversation = [prompt]
 
         max_iterations = 50
         for iteration in range(max_iterations):
             self._debug(2, "P2", f"ReAct iteration {iteration + 1}")
-
-            # Build full prompt
             full_prompt = "\n".join(conversation)
 
             response = call_llm(
@@ -589,77 +335,41 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 role="planner",
                 context={"method": "anot", "phase": 2, "step": f"react_{iteration}"}
             )
-
             self._log_llm_call("P2", f"react_{iteration}", full_prompt, response)
 
             if not response.strip():
                 self._debug(1, "P2", "Empty response, breaking")
                 break
 
-            # Find FIRST action in response (true ReAct: one action per turn)
             action_result = None
-            action_type = None
 
-            # Check for done() first
             if "done()" in response.lower():
                 self._debug(1, "P2", f"ReAct done after {iteration + 1} iterations")
                 break
 
-            # Check for lwt_list()
             if "lwt_list()" in response:
-                action_type = "lwt_list"
                 action_result = tool_lwt_list(lwt_steps)
-                self._debug(2, "P2", f"lwt_list() → {len(lwt_steps)} steps")
-
-            # Check for lwt_get(idx)
             elif match := re.search(r'lwt_get\((\d+)\)', response):
-                action_type = "lwt_get"
-                idx = int(match.group(1))
-                action_result = tool_lwt_get(idx, lwt_steps)
-                self._debug(2, "P2", f"lwt_get({idx}) → {action_result[:50]}...")
-
-            # Check for lwt_set(idx, step)
+                action_result = tool_lwt_get(int(match.group(1)), lwt_steps)
             elif match := re.search(r'lwt_set\((\d+),\s*"(.+?)"\)', response, re.DOTALL):
-                action_type = "lwt_set"
-                idx = int(match.group(1))
                 step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
-                action_result = tool_lwt_set(idx, step, lwt_steps)
-                self._debug(2, "P2", f"lwt_set({idx}) → {action_result}")
-
-            # Check for lwt_delete(idx)
+                action_result = tool_lwt_set(int(match.group(1)), step, lwt_steps)
             elif match := re.search(r'lwt_delete\((\d+)\)', response):
-                action_type = "lwt_delete"
-                idx = int(match.group(1))
-                action_result = tool_lwt_delete(idx, lwt_steps)
-                self._debug(2, "P2", f"lwt_delete({idx}) → {action_result}")
-
-            # Check for lwt_insert(idx, step)
+                action_result = tool_lwt_delete(int(match.group(1)), lwt_steps)
             elif match := re.search(r'lwt_insert\((\d+),\s*"(.+?)"\)', response, re.DOTALL):
-                action_type = "lwt_insert"
-                idx = int(match.group(1))
                 step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
-                action_result = tool_lwt_insert(idx, step, lwt_steps)
-                self._debug(2, "P2", f"lwt_insert({idx}) → {action_result}")
-
-            # Check for read(path)
+                action_result = tool_lwt_insert(int(match.group(1)), step, lwt_steps)
             elif match := re.search(r'read\("([^"]+)"\)', response):
-                action_type = "read"
-                path = match.group(1)
-                action_result = tool_read(path, query)
-                # Truncate long results
+                action_result = tool_read(match.group(1), query)
                 if len(action_result) > 2000:
                     action_result = action_result[:2000] + "... (truncated)"
-                self._debug(2, "P2", f"read({path}) → {action_result[:100]}...")
 
-            # If action found, add response + result to conversation
             if action_result is not None:
                 conversation.append(f"\n{response}\n\nRESULT: {action_result}\n\nContinue:")
             else:
-                # No recognizable action - ask LLM to try again or done
                 self._debug(1, "P2", "No action found, prompting for action")
                 conversation.append(f"\n{response}\n\nNo valid action found. Use lwt_list(), lwt_get(idx), lwt_set(idx, step), lwt_delete(idx), lwt_insert(idx, step), read(path), or done():")
 
-        # Return expanded LWT
         self._debug(1, "P2", f"Expanded LWT: {len(lwt_steps)} steps after {iteration + 1} iterations")
 
         trace = self._get_trace()
@@ -701,9 +411,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         latency = (time.time() - start) * 1000
         self._log_llm_call("P3", f"step_{idx}", filled, output)
-        self._debug(2, "P3", f"Step {idx}: {output[:50]}... ({latency:.0f}ms, {prompt_tokens}+{completion_tokens} tok)")
+        self._debug(2, "P3", f"Step {idx}: {output[:50]}... ({latency:.0f}ms)")
 
-        # Thread-safe trace update
         step_data = {
             "output": output[:100] if len(output) > 100 else output,
             "latency_ms": latency,
@@ -776,16 +485,10 @@ class AdaptiveNetworkOfThought(BaseMethod):
         return 0
 
     def evaluate_ranking(self, query, context: str, k: int = 1, request_id: str = "R00") -> str:
-        """Ranking evaluation: Phase 1 → Phase 2 → Phase 3.
-
-        Phase 1: Generate LWT skeleton + message (planning)
-        Phase 2: Expand LWT using ReAct tools (expansion)
-        Phase 3: Execute LWT with DAG parallelism (execution)
-        """
+        """Ranking evaluation: Phase 1 → Phase 2 → Phase 3."""
         self._init_trace(request_id, context)
         self._thread_local.request_id = request_id
 
-        # Parse data
         if isinstance(query, str):
             data = json.loads(query)
         else:
@@ -797,7 +500,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._update_display(request_id, "---", "starting", context)
         trace = self._get_trace()
 
-        # Phase 1: Plan (LWT skeleton + message)
+        # Phase 1
         self._update_display(request_id, "P1", "planning")
         p1_start = time.time()
         lwt_skeleton, message = self.phase1_plan(context, items)
@@ -809,7 +512,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
             trace["phase1"]["latency_ms"] = p1_latency
             self._save_trace_incremental(request_id)
 
-        # Phase 2: Expand LWT using ReAct tools
+        # Phase 2
         self._update_display(request_id, "P2", "expanding")
         p2_start = time.time()
         expanded_lwt_steps = self.phase2_expand(lwt_skeleton, message, data)
@@ -820,26 +523,23 @@ class AdaptiveNetworkOfThought(BaseMethod):
             trace["phase2"]["latency_ms"] = p2_latency
             self._save_trace_incremental(request_id)
 
-        # Phase 3: Execute
+        # Phase 3
         self._update_display(request_id, "P3", "executing")
         p3_start = time.time()
         output = self.phase3_execute(expanded_lwt, data, context)
         p3_latency = (time.time() - p3_start) * 1000
 
-        # Parse final output to get ranking
+        # Parse final output
         indices = []
         for match in re.finditer(r'\b(\d+)\b', output):
             idx = int(match.group(1))
             if 0 <= idx < n_items and idx not in indices:
                 indices.append(idx)
 
-        # If no valid indices, fallback to first k items
         if not indices:
             indices = list(range(min(k, n_items)))
 
-        # Convert to 1-indexed for output
         top_k = [str(idx + 1) for idx in indices[:k]]
-
         self._debug(1, "P3", f"Final ranking: {','.join(top_k)}")
 
         if trace:
@@ -853,10 +553,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         return ", ".join(top_k)
 
-
-# =============================================================================
-# Factory
-# =============================================================================
 
 def create_method(run_dir: str = None, defense: bool = False, debug: bool = False):
     """Factory function to create ANoT instance."""

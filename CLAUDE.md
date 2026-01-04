@@ -76,17 +76,26 @@ python main.py --method anot --no-verbose
 
 ### Core Files
 
-- **main.py** - Entry point: parses args, sets up experiment, delegates to run.py.
+- **main.py** - Entry point: parses args, sets up experiment, delegates to run/.
 
-- **run.py** - Evaluation orchestration: `run_evaluation_loop()`, `evaluate()`, `evaluate_parallel()`.
+- **run/** - Evaluation orchestration package:
+  - `orchestrate.py` - `run_single()`, `run_evaluation_loop()`
+  - `evaluate.py` - `evaluate_ranking()`, `compute_multi_k_stats()`
+  - `scaling.py` - `run_scaling_experiment()`
+  - `shuffle.py` - Shuffle utilities for position bias mitigation
+  - `io.py` - Result loading/saving
+
+- **methods/anot/** - Adaptive Network of Thought package:
+  - `core.py` - Main `AdaptiveNetworkOfThought` class with 3 phases
+  - `helpers.py` - DAG building, formatting utilities
+  - `tools.py` - Phase 2 LWT manipulation tools
+  - `prompts.py` - LLM prompt constants
 
 - **utils/experiment.py** - `ExperimentManager` class for dev/benchmark mode directory handling.
 
 - **utils/llm.py** - Unified LLM API wrapper. Supports OpenAI, Anthropic, and local endpoints.
 
 - **methods/cot.py** - Chain-of-Thought using few-shot prompting.
-
-- **methods/anot.py** - Adaptive Network of Thought with 3-phase script generation.
 
 - **attack.py** - Attack functions (typo, injection, fake_review) and configs.
 
@@ -107,8 +116,21 @@ results/
 └── benchmarks/    # Benchmark runs (tracked in git)
     └── final_run/
 
+run/               # Evaluation orchestration package
+├── orchestrate.py # run_single, run_evaluation_loop
+├── evaluate.py    # evaluate_ranking, stats computation
+├── scaling.py     # Scaling experiment
+├── shuffle.py     # Shuffle utilities
+└── io.py          # Result I/O
+
+methods/           # Evaluation methods
+├── anot/          # ANoT package (core.py, helpers.py, tools.py, prompts.py)
+├── cot.py         # Chain-of-Thought
+├── listwise.py    # Listwise reranking
+├── weaver.py      # SQL+LLM hybrid
+└── ...
+
 utils/             # Utility modules
-methods/           # Evaluation methods (cot, anot, etc.)
 doc/               # Experiment documentation
 ```
 
@@ -120,7 +142,7 @@ def method(query, context: str) -> int
     # returns: -1 (not recommend), 0 (neutral), 1 (recommend)
 ```
 
-### Input Modes (anot.py)
+### Input Modes (methods/anot/)
 
 **String mode** (default): Input is formatted text, LLM extracts info
 ```
@@ -140,7 +162,7 @@ def method(query, context: str) -> int
 
 2. **Variable Substitution**: `{(var)}[key][index]` for nested access in scripts.
 
-3. **Dynamic Script Generation** (anot.py): LLM generates execution plan at runtime.
+3. **Dynamic Script Generation** (methods/anot/): LLM generates execution plan at runtime.
 
 ### User Request Personas (R0, R1, R2)
 

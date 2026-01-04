@@ -245,16 +245,34 @@ Phase 3 (4s):
 
 ---
 
+## Package Structure
+
+ANoT is organized as a Python package for maintainability:
+
+```
+methods/anot/
+├── __init__.py      Re-exports AdaptiveNetworkOfThought, create_method
+├── core.py          Main class with phases and display
+├── helpers.py       Utility functions (DAG building, formatting)
+├── prompts.py       LLM prompt constants
+└── tools.py         Phase 2 tool implementations
+```
+
 ## Key Components
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| `phase1_plan()` | `methods/anot.py` | Extract conditions, prune, generate skeleton |
-| `phase2_expand()` | `methods/anot.py` | ReAct loop with LWT tools |
-| `phase3_execute()` | `methods/anot.py` | Parallel LWT execution |
-| `tool_lwt_list()` | `methods/anot.py` | Show LWT steps |
-| `tool_lwt_insert()` | `methods/anot.py` | Insert LWT step |
-| `tool_read()` | `methods/anot.py` | Read query data |
+| `AdaptiveNetworkOfThought` | `methods/anot/core.py` | Main class orchestrating all phases |
+| `phase1_plan()` | `methods/anot/core.py` | Extract conditions, prune, generate skeleton |
+| `phase2_expand()` | `methods/anot/core.py` | ReAct loop with LWT tools |
+| `phase3_execute()` | `methods/anot/core.py` | Parallel LWT execution |
+| `build_execution_layers()` | `methods/anot/helpers.py` | Build DAG for parallel execution |
+| `format_items_compact()` | `methods/anot/helpers.py` | Format items for Phase 1 |
+| `tool_lwt_list()` | `methods/anot/tools.py` | Show LWT steps |
+| `tool_lwt_insert()` | `methods/anot/tools.py` | Insert LWT step |
+| `tool_read()` | `methods/anot/tools.py` | Read query data |
+| `PHASE1_PROMPT` | `methods/anot/prompts.py` | Phase 1 prompt template |
+| `PHASE2_PROMPT` | `methods/anot/prompts.py` | Phase 2 prompt template |
 | `substitute_variables()` | `utils/parsing.py` | Variable substitution |
 
 ---
