@@ -80,10 +80,6 @@ def build_execution_layers(steps: list) -> list:
     return layers
 
 
-# Global debug log file handle (set by method instance)
-_DEBUG_LOG_FILE = None
-
-
 # =============================================================================
 # Formatting Utilities
 # =============================================================================

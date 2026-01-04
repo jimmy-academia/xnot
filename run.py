@@ -96,6 +96,24 @@ def unmap_predictions(pred_indices: list[int], mapping: dict) -> list[int]:
 
 # --- Ranking Evaluation ---
 
+def extract_hits_at(stats: dict, k: int = 5) -> dict:
+    """Extract hits_at accuracies from stats dict.
+
+    Args:
+        stats: Stats dict with hits_at data
+        k: Maximum K value to extract
+
+    Returns:
+        Dict with hits_at_1, hits_at_2, ..., hits_at_k keys
+    """
+    hits_at = stats.get("hits_at", {})
+    result = {}
+    for i in range(1, k + 1):
+        acc = hits_at.get(i, hits_at.get(str(i), {})).get("accuracy", 0)
+        result[f"hits_at_{i}"] = acc
+    return result
+
+
 def compute_multi_k_stats(results: list[dict], k: int) -> dict:
     """Compute Hits@1 through Hits@k from results.
 
@@ -770,20 +788,15 @@ def run_scaling_experiment(args, log):
                 log.info(f"Scale {n_candidates}: Already complete ({len(existing)} requests)")
                 cached_results = list(existing.values())
                 stats = compute_multi_k_stats(cached_results, k)
-                hits_at = stats.get("hits_at", {})
-                h1 = hits_at.get(1, hits_at.get("1", {})).get("accuracy", 0)
-                h2 = hits_at.get(2, hits_at.get("2", {})).get("accuracy", 0)
-                h3 = hits_at.get(3, hits_at.get("3", {})).get("accuracy", 0)
-                h4 = hits_at.get(4, hits_at.get("4", {})).get("accuracy", 0)
-                h5 = hits_at.get(5, hits_at.get("5", {})).get("accuracy", 0)
+                hits = extract_hits_at(stats, k=5)
                 results_table.append({
                     "candidates": n_candidates,
                     "requests": len(existing),
-                    "hits_at_1": f"{h1:.2%}",
-                    "hits_at_2": f"{h2:.2%}",
-                    "hits_at_3": f"{h3:.2%}",
-                    "hits_at_4": f"{h4:.2%}",
-                    "hits_at_5": f"{h5:.2%}",
+                    "hits_at_1": f"{hits['hits_at_1']:.2%}",
+                    "hits_at_2": f"{hits['hits_at_2']:.2%}",
+                    "hits_at_3": f"{hits['hits_at_3']:.2%}",
+                    "hits_at_4": f"{hits['hits_at_4']:.2%}",
+                    "hits_at_5": f"{hits['hits_at_5']:.2%}",
                     "status": "ok",
                 })
                 # Compute usage from cached per-request data
@@ -880,21 +893,15 @@ def run_scaling_experiment(args, log):
             })
             print(f"\n[STOP] Context limit exceeded at {n_candidates} candidates.")
         else:
-            hits_at = stats.get("hits_at", {})
-            h1 = hits_at.get(1, hits_at.get("1", {})).get("accuracy", 0)
-            h2 = hits_at.get(2, hits_at.get("2", {})).get("accuracy", 0)
-            h3 = hits_at.get(3, hits_at.get("3", {})).get("accuracy", 0)
-            h4 = hits_at.get(4, hits_at.get("4", {})).get("accuracy", 0)
-            h5 = hits_at.get(5, hits_at.get("5", {})).get("accuracy", 0)
-
+            hits = extract_hits_at(stats, k=5)
             results_table.append({
                 "candidates": n_candidates,
                 "requests": len(merged_results),
-                "hits_at_1": f"{h1:.2%}",
-                "hits_at_2": f"{h2:.2%}",
-                "hits_at_3": f"{h3:.2%}",
-                "hits_at_4": f"{h4:.2%}",
-                "hits_at_5": f"{h5:.2%}",
+                "hits_at_1": f"{hits['hits_at_1']:.2%}",
+                "hits_at_2": f"{hits['hits_at_2']:.2%}",
+                "hits_at_3": f"{hits['hits_at_3']:.2%}",
+                "hits_at_4": f"{hits['hits_at_4']:.2%}",
+                "hits_at_5": f"{hits['hits_at_5']:.2%}",
                 "status": "ok",
             })
 

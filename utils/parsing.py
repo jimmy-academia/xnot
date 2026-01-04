@@ -35,7 +35,7 @@ def substitute_variables(instruction: str, query, context: str, cache: dict) -> 
                 parsed = ast.literal_eval(val)
                 if isinstance(parsed, (dict, list, tuple)):
                     val = parsed
-            except:
+            except Exception:
                 pass
 
         # Apply accessors [key] or [index]
@@ -48,7 +48,7 @@ def substitute_variables(instruction: str, query, context: str, cache: dict) -> 
                     val = val[idx] if 0 <= idx < len(val) else ''
                 else:
                     val = ''
-            except:
+            except Exception:
                 val = ''
 
         # Return as string
