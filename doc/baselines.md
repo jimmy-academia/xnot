@@ -39,12 +39,8 @@ This document tracks baseline methods for comparison with ANoT.
 
 ## To Be Implemented (Multi-Agent)
 
-| Method | Paper | Venue | Year | Notes |
-|--------|-------|-------|------|-------|
-| Chain of Agents | Chain of Agents: Large Language Models Collaborating on Long-Context Tasks | arXiv | 2024 | Multi-agent collaboration |
-| LONGAGENT | LongAgent: Scaling Language Models to 128k Context through Multi-Agent Collaboration | arXiv | 2024 | Long-context handling |
-| Tree of Agents | Tree of Agents: Towards Modular Multi-Agent Collaboration | | | Hierarchical agents |
-| MegaAgent | MegaAgent: A Practical Framework for Autonomous Cooperation in Large-Scale LLM Agent Systems | | | Large-scale coordination |
-| AutoGen | AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation | arXiv | 2023 | Microsoft framework |
-| MetaGPT | MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework | ICLR | 2024 | Role-based agents |
-| ReDel | ReDel: A Toolkit for LLM-Powered Recursive Multi-Agent Systems | arXiv | 2024 | Recursive delegation |
+| Method | Paper | Venue | Year |
+|--------|-------|-------|------|
+| Chain of Agents | Chain of Agents: Large Language Models Collaborating on Long-Context Tasks | NeurIPS (Poster) | 2024 |
+| AutoGen         | AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversations  | COLM             | 2024 |
+
