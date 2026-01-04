@@ -131,8 +131,10 @@ methods/           # Evaluation methods
 └── ...
 
 utils/             # Utility modules
-doc/               # Experiment documentation
+doc/               # Implementation documentation (not for main paper)
 ```
+
+**Note**: Documentation in `doc/` describes implementation details for code maintenance. These are not intended for the main research paper.
 
 ### Method Interface
 

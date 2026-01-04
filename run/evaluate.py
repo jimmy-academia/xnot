@@ -5,8 +5,6 @@ import inspect
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Callable
 
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
-
 from data.loader import format_ranking_query
 from utils.parsing import parse_indices
 from utils.usage import get_usage_tracker
@@ -144,18 +142,19 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
 def _run_with_progress(generator, has_rich_display: bool, description: str, total: int):
     """Run a generator with optional progress display."""
     if has_rich_display:
+        # anot handles its own Rich live display
         for _ in generator:
             pass
     else:
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TaskProgressColumn(),
-        ) as progress:
-            task = progress.add_task(description, total=total)
-            for _ in generator:
-                progress.update(task, advance=1)
+        # Show simple progress line with token/cost for non-anot methods
+        completed = 0
+        for _ in generator:
+            completed += 1
+            usage = get_usage_tracker().get_summary()
+            tokens = usage.get('total_tokens', 0)
+            cost = usage.get('total_cost_usd', 0)
+            print(f"\rProgress: {completed}/{total} | Tokens: {tokens:,} | ${cost:.4f}", end="", flush=True)
+        print()  # newline after completion
 
 
 def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],

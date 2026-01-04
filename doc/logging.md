@@ -162,9 +162,11 @@ This enables fine-grained cost analysis and optimization of individual steps.
 
 ---
 
-## ANoT Rich Terminal Display
+## Terminal Progress Display
 
-ANoT provides a live terminal display during evaluation:
+### ANoT Rich Display
+
+ANoT provides a live Rich terminal display during evaluation:
 
 ```
                     ANoT: 10 candidates, k=5
@@ -177,6 +179,19 @@ ANoT provides a live terminal display during evaluation:
 └─────┴─────────────────────────────────┴───────┴────────────┘
 Progress: 1/3 | Tokens: 45,678 | $0.1234
 ```
+
+### Baseline Methods Progress
+
+Baseline methods (cot, ps, listwise, weaver) show a simple one-line progress during evaluation:
+
+```
+Progress: 49/50 | Tokens: 608,357 | $0.1991
+```
+
+This updates in-place after each request completes, showing:
+- **Progress**: completed/total requests
+- **Tokens**: cumulative token count
+- **Cost**: cumulative cost in USD
 
 ---
 
@@ -193,6 +208,32 @@ run_dir/
   scaling_summary.json  # Summary with Hits@1, Hits@5 per scale
   config.json           # Run configuration
 ```
+
+### Scaling Summary Table
+
+The scaling experiment prints a compact summary table:
+
+```
+======================================================================
+SCALING EXPERIMENT SUMMARY: cot
+======================================================================
+
+                         Scaling Results
+┌────┬─────┬─────┬─────┬─────┬─────┬─────┬─────────────────────┬────────┐
+│ N  │ Req │ @1  │ @2  │ @3  │ @4  │ @5  │ Usage (tok, $, time)│ Status │
+├────┼─────┼─────┼─────┼─────┼─────┼─────┼─────────────────────┼────────┤
+│ 10 │ 50  │ 80% │ 86% │ 88% │ 90% │ 92% │ 608k, $0.20, 45s    │ ok     │
+│ 15 │ 50  │ 76% │ 82% │ 86% │ 88% │ 90% │ 912k, $0.30, 68s    │ ok     │
+│ 20 │ 50  │ 72% │ 80% │ 84% │ 86% │ 88% │ 1.2M, $0.40, 92s    │ ok     │
+└────┴─────┴─────┴─────┴─────┴─────┴─────┴─────────────────────┴────────┘
+```
+
+Column descriptions:
+- **N**: Number of candidates
+- **Req**: Number of requests
+- **@1-@5**: Hits@K accuracy (integer percent)
+- **Usage**: Tokens (k/M), cost ($), latency (seconds)
+- **Status**: ok, skipped, context_exceeded, no_requests
 
 ---
 

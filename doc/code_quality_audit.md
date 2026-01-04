@@ -142,6 +142,54 @@ run/
 
 ---
 
+## Recent Improvements
+
+### Shared Task Description Prompts
+
+All methods now import `RANKING_TASK_COMPACT` from `prompts/task_descriptions.py`:
+- `methods/anot/prompts.py` - used in PHASE1_PROMPT
+- `methods/cot.py` - used in ranking prompts
+- `methods/listwise.py` - used in LISTWISE_PROMPT
+- `methods/ps.py` - used in ranking prompts
+
+### Progress Display for Baseline Methods
+
+Added live progress display for non-anot methods (`run/evaluate.py`):
+```
+Progress: 49/50 | Tokens: 608,357 | $0.1991
+```
+
+### Compact Scaling Summary Table
+
+Updated scaling experiment summary (`run/scaling.py`) with:
+- Compact column headers: N, Req, @1-@5
+- Combined usage column: tokens (k/M), cost ($), latency (s)
+- Integer percent format
+
+```
+│ N  │ Req │ @1  │ @2  │ @3  │ @4  │ @5  │ Usage (tok, $, time)│ Status │
+│ 10 │ 50  │ 80% │ 86% │ 88% │ 90% │ 92% │ 608k, $0.20, 45s    │ ok     │
+```
+
+---
+
+## ANoT Hardcoded Logic Analysis
+
+The following Python logic in ANoT is hardcoded by design:
+
+| Location | Logic | Justification |
+|----------|-------|---------------|
+| `helpers.py:format_items_compact()` | Truncates strings >20 chars, shows dicts as `<dict>` | **By design**: ANoT looks at the "spine" (schema) of input JSON in Phase 1, not full data values |
+| `core.py:534-543` | Regex extraction of indices from LLM output | **Standard practice**: Typical LLM output parsing with fallback |
+| `core.py:365-366` | 2000 char truncation on `read()` tool results | **Safety**: Protection from context length exceptions in Phase 2 |
+
+These are deterministic operations that don't require LLM reasoning:
+- Schema extraction is a design choice for efficient planning
+- Output parsing is standard post-processing
+- Truncation is a safety guard against token limits
+
+---
+
 ## Architecture Benefits
 
 After refactoring:

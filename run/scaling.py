@@ -23,31 +23,51 @@ from .io import (
 SCALE_POINTS = [10, 15, 20, 25, 30, 40, 50]
 
 
+def _format_compact(tokens: int, cost: float, latency_ms: float) -> str:
+    """Format tokens, cost, latency into compact string like '608k, $0.20, 45s'."""
+    if not tokens and not cost:
+        return "--"
+    # Format tokens: 608357 -> "608k"
+    if tokens >= 1_000_000:
+        tok_str = f"{tokens / 1_000_000:.1f}M"
+    elif tokens >= 1_000:
+        tok_str = f"{tokens // 1_000}k"
+    else:
+        tok_str = str(tokens)
+    # Format latency: ms -> seconds
+    lat_str = f"{latency_ms / 1000:.0f}s" if latency_ms else "0s"
+    return f"{tok_str}, ${cost:.2f}, {lat_str}"
+
+
 def _make_row_skipped(n_candidates: int) -> dict:
     """Create a skipped result row."""
     return {
         "candidates": n_candidates,
         "requests": "--",
-        "hits_at_1": "--",
-        "hits_at_2": "--",
-        "hits_at_3": "--",
-        "hits_at_4": "--",
-        "hits_at_5": "--",
+        "at_1": "--",
+        "at_2": "--",
+        "at_3": "--",
+        "at_4": "--",
+        "at_5": "--",
+        "usage": "--",
         "status": "skipped",
     }
 
 
-def _make_row_from_stats(n_candidates: int, n_requests: int, stats: dict, status: str = "ok") -> dict:
+def _make_row_from_stats(n_candidates: int, n_requests: int, stats: dict,
+                          tokens: int = 0, cost: float = 0.0,
+                          latency_ms: float = 0.0, status: str = "ok") -> dict:
     """Create a result row from stats."""
     hits = extract_hits_at(stats, k=5)
     return {
         "candidates": n_candidates,
         "requests": n_requests,
-        "hits_at_1": f"{hits['hits_at_1']:.2%}",
-        "hits_at_2": f"{hits['hits_at_2']:.2%}",
-        "hits_at_3": f"{hits['hits_at_3']:.2%}",
-        "hits_at_4": f"{hits['hits_at_4']:.2%}",
-        "hits_at_5": f"{hits['hits_at_5']:.2%}",
+        "at_1": f"{hits['hits_at_1']:.0%}",
+        "at_2": f"{hits['hits_at_2']:.0%}",
+        "at_3": f"{hits['hits_at_3']:.0%}",
+        "at_4": f"{hits['hits_at_4']:.0%}",
+        "at_5": f"{hits['hits_at_5']:.0%}",
+        "usage": _format_compact(tokens, cost, latency_ms),
         "status": status,
     }
 
@@ -204,11 +224,8 @@ def run_scaling_experiment(args, log):
             results_table.append({
                 "candidates": n_candidates,
                 "requests": 0,
-                "hits_at_1": "--",
-                "hits_at_2": "--",
-                "hits_at_3": "--",
-                "hits_at_4": "--",
-                "hits_at_5": "--",
+                "at_1": "--", "at_2": "--", "at_3": "--", "at_4": "--", "at_5": "--",
+                "usage": "--",
                 "status": "no_requests",
             })
             continue
@@ -216,7 +233,13 @@ def run_scaling_experiment(args, log):
         # Handle cached results (eval_result is None)
         if eval_result is None:
             stats = compute_multi_k_stats(merged_results, k)
-            results_table.append(_make_row_from_stats(n_candidates, len(merged_results), stats))
+            cached_tokens = sum(r.get('tokens', 0) for r in merged_results)
+            cached_cost = sum(r.get('cost_usd', 0) for r in merged_results)
+            cached_latency = sum(r.get('latency_ms', 0) for r in merged_results)
+            results_table.append(_make_row_from_stats(
+                n_candidates, len(merged_results), stats,
+                tokens=cached_tokens, cost=cached_cost, latency_ms=cached_latency
+            ))
             # Print if --full
             if getattr(args, 'full', False):
                 cached_usage = {
@@ -236,11 +259,8 @@ def run_scaling_experiment(args, log):
             results_table.append({
                 "candidates": n_candidates,
                 "requests": len(merged_results),
-                "hits_at_1": "--",
-                "hits_at_2": "--",
-                "hits_at_3": "--",
-                "hits_at_4": "--",
-                "hits_at_5": "--",
+                "at_1": "--", "at_2": "--", "at_3": "--", "at_4": "--", "at_5": "--",
+                "usage": "--",
                 "status": "context_exceeded",
             })
             print(f"\n[STOP] Context limit exceeded at {n_candidates} candidates.")
@@ -248,7 +268,13 @@ def run_scaling_experiment(args, log):
 
         # Normal result
         stats = compute_multi_k_stats(merged_results, k)
-        results_table.append(_make_row_from_stats(n_candidates, len(merged_results), stats))
+        usage = tracker.get_summary()
+        results_table.append(_make_row_from_stats(
+            n_candidates, len(merged_results), stats,
+            tokens=usage.get('total_tokens', 0),
+            cost=usage.get('total_cost_usd', 0),
+            latency_ms=usage.get('total_latency_ms', 0)
+        ))
 
         # Print if --full
         if getattr(args, 'full', False):
@@ -265,29 +291,31 @@ def run_scaling_experiment(args, log):
 def _print_scaling_summary(method_name: str, results_table: list, context_exceeded_at: int | None):
     """Print final scaling summary table."""
     console = Console()
-    print(f"\n{'='*60}")
+    print(f"\n{'='*70}")
     print(f"SCALING EXPERIMENT SUMMARY: {method_name}")
-    print(f"{'='*60}\n")
+    print(f"{'='*70}\n")
 
     table = Table(title="Scaling Results")
-    table.add_column("Candidates", style="cyan")
-    table.add_column("Requests", style="cyan")
-    table.add_column("Hits@1", style="yellow")
-    table.add_column("Hits@2", style="yellow")
-    table.add_column("Hits@3", style="yellow")
-    table.add_column("Hits@4", style="yellow")
-    table.add_column("Hits@5", style="yellow")
-    table.add_column("Status", style="green")
+    table.add_column("N", style="cyan")
+    table.add_column("Req", style="cyan")
+    table.add_column("@1", style="yellow")
+    table.add_column("@2", style="yellow")
+    table.add_column("@3", style="yellow")
+    table.add_column("@4", style="yellow")
+    table.add_column("@5", style="yellow")
+    table.add_column("Usage (tok, $, time)", style="magenta")
+    table.add_column("Status", style="dim")
 
     for row in results_table:
         table.add_row(
             str(row['candidates']),
             str(row['requests']),
-            row.get('hits_at_1', '--'),
-            row.get('hits_at_2', '--'),
-            row.get('hits_at_3', '--'),
-            row.get('hits_at_4', '--'),
-            row.get('hits_at_5', '--'),
+            row.get('at_1', '--'),
+            row.get('at_2', '--'),
+            row.get('at_3', '--'),
+            row.get('at_4', '--'),
+            row.get('at_5', '--'),
+            row.get('usage', '--'),
             row['status']
         )
     console.print(table)
