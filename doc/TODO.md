@@ -1,27 +1,24 @@
 # TODOs
 
 ## Completed
+
 - [x] **Make Requests More Difficult** - Updated request generation to use multiple conditions
-
-## Priority Tasks
-
-### 2. Implement Agent Baseline: Plan-and-Act
-- Paper: "Plan-and-Act: Improving Planning of Agents for Long-Horizon Tasks"
-- Create baseline method for agent-based planning approaches
-- Will serve as comparison for ANoT
-
-#### Other papers considered (for reference):
-- Chain of Agents, LONGAGENT, Tree of Agents, MegaAgent
-- AutoGen, MetaGPT, ReDel
-
-### 3. Implement ANoT
-- Implement the ANoT (Agentic Network of Thought) method
-- Core contribution of the research
+- [x] **Implement Plan-and-Act Baseline** - `methods/plan_act.py`
+- [x] **Implement ANoT** - `methods/anot/` package
 
 ---
 
-## Future TODOs
+## Future Tasks
 
-### 4. Preprocessing: User-Defined Categories
-- In `curate.py`, allow user to **type in the categorization** they have in mind during preprocessing
-- Makes data curation more flexible
+### Multi-Agent Baselines
+
+See [baselines.md](baselines.md) for full list with paper references.
+
+Priority candidates:
+- Chain of Agents (2024) - Multi-agent collaboration
+- MetaGPT (ICLR 2024) - Role-based agents
+- ReDel (2024) - Recursive delegation
+
+### Preprocessing Improvements
+
+- User-Defined Categories: In `curate.py`, allow user to type in categorization during preprocessing

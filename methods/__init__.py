@@ -10,15 +10,46 @@ from .listwise import ListwiseRanker
 from .weaver import Weaver
 from .anot import AdaptiveNetworkOfThought, create_method as create_anot
 
+# Additional baseline methods
+from .l2m import LeastToMost
+from .selfask import SelfAsk
+from .rankgpt import RankGPT
+from .setwise import Setwise
+from .parade import PaRaDe
+from .react import ReAct
+from .decomp import DecomposedPrompting
+from .pal import ProgramAidedLanguage
+from .pot import ProgramOfThoughts
+from .cot_table import ChainOfTable
+from .finegrained import FineGrainedRanker
+from .prp import PairwiseRankingPrompting
+
 
 # Method registry: name -> (class, supports_defense)
 METHOD_REGISTRY = {
+    # Core methods
     "cot": (ChainOfThought, True),
     "ps": (PlanAndSolve, False),
     "plan_act": (PlanAndAct, True),
     "listwise": (ListwiseRanker, True),
     "weaver": (Weaver, True),
     "anot": (AdaptiveNetworkOfThought, True),
+    # CoT variants
+    "l2m": (LeastToMost, False),
+    "selfask": (SelfAsk, False),
+    # Program-aided methods
+    "pal": (ProgramAidedLanguage, False),
+    "pot": (ProgramOfThoughts, False),
+    "cot_table": (ChainOfTable, False),
+    # Ranking methods
+    "rankgpt": (RankGPT, False),
+    "setwise": (Setwise, False),
+    "parade": (PaRaDe, False),
+    "finegrained": (FineGrainedRanker, False),
+    "prp": (PairwiseRankingPrompting, False),
+    # Agentic methods
+    "react": (ReAct, False),
+    "decomp": (DecomposedPrompting, False),
 }
 
 
@@ -71,14 +102,33 @@ def list_methods() -> list:
 
 
 __all__ = [
+    # Base
     "BaseMethod",
+    "DummyMethod",
+    # Core methods
     "ChainOfThought",
     "PlanAndSolve",
     "PlanAndAct",
     "ListwiseRanker",
     "Weaver",
     "AdaptiveNetworkOfThought",
-    "DummyMethod",
+    # CoT variants
+    "LeastToMost",
+    "SelfAsk",
+    # Program-aided methods
+    "ProgramAidedLanguage",
+    "ProgramOfThoughts",
+    "ChainOfTable",
+    # Ranking methods
+    "RankGPT",
+    "Setwise",
+    "PaRaDe",
+    "FineGrainedRanker",
+    "PairwiseRankingPrompting",
+    # Agentic methods
+    "ReAct",
+    "DecomposedPrompting",
+    # Utilities
     "get_method",
     "list_methods",
     "METHOD_REGISTRY",
