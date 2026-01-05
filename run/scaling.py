@@ -87,6 +87,20 @@ def _run_scale_point(args, run_dir: Path, n_candidates: int, k: int, tracker, lo
     )
     dataset = filter_by_candidates(dataset, n_candidates)
 
+    # Build attack config for per-request attacks
+    attack = getattr(args, 'attack', 'none')
+    attack_config = None
+    if attack not in ("none", "clean", None, ""):
+        from attack import get_attack_config
+        attack_config = get_attack_config(
+            attack,
+            n_restaurants=getattr(args, 'attack_restaurants', None),
+            n_reviews=getattr(args, 'attack_reviews', 1),
+            seed=getattr(args, 'seed', None),
+            target_len=getattr(args, 'attack_target_len', None)
+        )
+        log.info(f"Attack configured: {attack} (per-request, protecting gold)")
+
     # Apply --limit if specified
     if args.limit:
         indices = parse_limit_spec(args.limit)
@@ -147,7 +161,8 @@ def _run_scale_point(args, run_dir: Path, n_candidates: int, k: int, tracker, lo
         k=k,
         shuffle=shuffle,
         parallel=args.parallel,
-        max_workers=getattr(args, 'max_concurrent', 200)
+        max_workers=getattr(args, 'max_concurrent', 200),
+        attack_config=attack_config
     )
 
     # Merge with existing

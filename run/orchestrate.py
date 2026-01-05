@@ -13,7 +13,7 @@ from .evaluate import evaluate_ranking, compute_multi_k_stats
 from .io import load_existing_results, load_usage, save_usage, extract_usage_from_results
 
 
-def run_evaluation_loop(args, dataset, method, experiment):
+def run_evaluation_loop(args, dataset, method, experiment, attack_config=None):
     """Run evaluation on the dataset.
 
     Args:
@@ -21,6 +21,7 @@ def run_evaluation_loop(args, dataset, method, experiment):
         dataset: Dataset object with items, requests, groundtruth
         method: Method instance
         experiment: ExperimentManager instance
+        attack_config: Optional attack configuration for per-request attacks
 
     Returns:
         Dict with stats
@@ -36,7 +37,8 @@ def run_evaluation_loop(args, dataset, method, experiment):
     # Ranking evaluation (default)
     mode_str = "parallel" if parallel else "sequential"
     shuffle_str = f", shuffle={shuffle}" if shuffle != "none" else ""
-    print(f"\nRunning ranking evaluation (k={k}, {mode_str}{shuffle_str})...", flush=True)
+    attack_str = f", attack={attack_config['attack']}" if attack_config else ""
+    print(f"\nRunning ranking evaluation (k={k}, {mode_str}{shuffle_str}{attack_str})...", flush=True)
     eval_out = evaluate_ranking(
         dataset.items,
         method,
@@ -46,7 +48,8 @@ def run_evaluation_loop(args, dataset, method, experiment):
         k=k,
         shuffle=shuffle,
         parallel=parallel,
-        max_workers=max_workers
+        max_workers=max_workers,
+        attack_config=attack_config
     )
     # Get current usage for display
     usage_for_display = get_usage_tracker().get_summary()
@@ -82,7 +85,7 @@ def run_evaluation_loop(args, dataset, method, experiment):
     return {"stats": eval_out["stats"]}
 
 
-def save_final_config(args, all_results, experiment):
+def save_final_config(args, all_results, experiment, attack_config=None):
     """Construct and save the run configuration."""
     tracker = get_usage_tracker()
     usage_summary = tracker.get_summary()
@@ -99,6 +102,7 @@ def save_final_config(args, all_results, experiment):
             "temperature": getattr(args, "temperature", 0.0),
             "max_tokens": getattr(args, "max_tokens", 1024),
         },
+        "attack_config": attack_config,
         "stats": all_results.get("stats", {}),
         "usage": usage_summary,
     }
@@ -140,6 +144,20 @@ def run_single(args, experiment, log):
     if n_candidates:
         dataset = filter_by_candidates(dataset, n_candidates)
         log.info(f"Filtered to top {n_candidates} candidates ({len(dataset.requests)} requests)")
+
+    # Build attack config for per-request attacks
+    attack = getattr(args, 'attack', 'none')
+    attack_config = None
+    if attack not in ("none", "clean", None, ""):
+        from attack import get_attack_config
+        attack_config = get_attack_config(
+            attack,
+            n_restaurants=getattr(args, 'attack_restaurants', None),
+            n_reviews=getattr(args, 'attack_reviews', 1),
+            seed=getattr(args, 'seed', None),
+            target_len=getattr(args, 'attack_target_len', None)
+        )
+        log.info(f"Attack configured: {attack} (per-request, protecting gold)")
 
     # Filter requests if --limit specified
     if args.limit:
@@ -186,9 +204,9 @@ def run_single(args, experiment, log):
     )
     print(f"\nMethod: {method}")
 
-    all_results = run_evaluation_loop(args, dataset, method, experiment)
+    all_results = run_evaluation_loop(args, dataset, method, experiment, attack_config)
 
-    save_final_config(args, all_results, experiment)
+    save_final_config(args, all_results, experiment, attack_config)
     experiment.consolidate_debug_logs()
 
     return all_results

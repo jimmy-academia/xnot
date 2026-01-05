@@ -60,7 +60,7 @@ def compute_multi_k_stats(results: list[dict], k: int) -> dict:
 
 def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
                             context: str, k: int, req: dict,
-                            groundtruth: dict) -> dict | None:
+                            groundtruth: dict, attack_config: dict = None) -> dict | None:
     """Evaluate a single request (thread-safe helper).
 
     Args:
@@ -72,6 +72,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         k: Number of top predictions
         req: Request dict with 'id'
         groundtruth: {request_id: {"gold_restaurant": str, "gold_idx": int}}
+        attack_config: Optional attack configuration for per-request attacks
 
     Returns:
         Result dict or None if no ground truth
@@ -85,6 +86,15 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         return None
 
     gold_idx = gt["gold_idx"]
+    gold_id = gt["gold_restaurant"]
+
+    # Apply per-request attack (protecting only this request's gold)
+    if attack_config and attack_config.get("attack", "none") not in ("none", "clean", None, ""):
+        from attack import apply_attack_for_request
+        # Use request-specific seed for reproducibility
+        base_seed = attack_config.get("seed")
+        request_seed = hash(req_id) % (2**31) if base_seed is None else base_seed + hash(req_id) % 1000
+        items = apply_attack_for_request(items, attack_config, gold_id, request_seed)
 
     # Apply shuffle based on gold position
     shuffled_items, mapping, shuffled_gold_pos = apply_shuffle(items, gold_idx, shuffle)
@@ -160,7 +170,7 @@ def _run_with_progress(generator, has_rich_display: bool, description: str, tota
 def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
                      groundtruth: dict, mode: str = "string", k: int = 5,
                      shuffle: str = "middle", parallel: bool = True,
-                     max_workers: int = 40) -> dict:
+                     max_workers: int = 40, attack_config: dict = None) -> dict:
     """Evaluate using ranking (Hits@K accuracy).
 
     Args:
@@ -173,6 +183,7 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
         shuffle: Shuffle strategy ("none", "middle", "random") - default "middle"
         parallel: Whether to use parallel execution (default True)
         max_workers: Maximum number of worker threads (default 40)
+        attack_config: Optional attack configuration for per-request attacks
 
     Returns:
         Dict with results and accuracy stats
@@ -185,14 +196,14 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
 
     try:
         return _evaluate_ranking_inner(
-            items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display
+            items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display, attack_config
         )
     finally:
         if has_rich_display:
             method.stop_display()
 
 
-def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display):
+def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display, attack_config=None):
     """Inner implementation of evaluate_ranking (wrapped by display context)."""
     req_ids = [r["id"] for r in requests]
     context_exceeded = False
@@ -207,7 +218,7 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                         evaluate_ranking_single,
                         method, items, mode, shuffle,
                         req.get("context") or req.get("text", ""),
-                        k, req, groundtruth
+                        k, req, groundtruth, attack_config
                     ): req
                     for req in requests
                 }
@@ -232,7 +243,7 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                 context = req.get("context") or req.get("text", "")
                 try:
                     result = evaluate_ranking_single(
-                        method, items, mode, shuffle, context, k, req, groundtruth
+                        method, items, mode, shuffle, context, k, req, groundtruth, attack_config
                     )
                     if result:
                         results.append(result)

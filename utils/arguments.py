@@ -14,10 +14,17 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 # Method choices - champions only
 METHOD_CHOICES = ["cot", "ps", "plan_act", "listwise", "weaver", "anot", "dummy"]
 
-# Attack choices
-ATTACK_CHOICES = ["none", "clean", "all", "typo", "verbose", "duplicate",
-                  "inject_override", "inject_system", "fake_positive",
-                  "fake_negative", "sarcastic"]
+# Attack choices - import from attack.py for consistency
+# Note: heterogeneity requires --attack-target-len
+ATTACK_CHOICES = [
+    "none", "clean",
+    "typo_10", "typo_20",
+    "inject_override", "inject_fake_sys", "inject_hidden", "inject_manipulation",
+    "fake_positive", "fake_negative",
+    "sarcastic_wifi", "sarcastic_noise", "sarcastic_outdoor", "sarcastic_all",
+    "heterogeneity",
+    "all",  # Run all attacks (excluding clean)
+]
 
 
 def parse_args():
@@ -44,11 +51,17 @@ def parse_args():
 
     # Attack arguments
     parser.add_argument("--attack", choices=ATTACK_CHOICES, default="none",
-                        help="Attack type to apply (none=clean, all=run all attacks)")
+                        help="Attack type to apply (none=clean)")
     parser.add_argument("--seed", type=int, default=None,
                         help="Random seed for reproducible attacks")
     parser.add_argument("--defense", action="store_true",
                         help="Enable defense prompts (attack-resistant mode)")
+    parser.add_argument("--attack-restaurants", type=int, default=None,
+                        help="Number of non-gold restaurants to attack (default: all)")
+    parser.add_argument("--attack-reviews", type=int, default=1,
+                        help="Number of reviews per restaurant to modify (default: 1)")
+    parser.add_argument("--attack-target-len", type=int, default=None,
+                        help="Target character length for heterogeneity attack")
 
     # LLM configuration
     parser.add_argument("--provider", choices=["openai", "anthropic", "local"], default="openai",
