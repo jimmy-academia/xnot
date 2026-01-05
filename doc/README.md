@@ -12,6 +12,7 @@ This directory contains all research documentation for the ANoT project.
 | [logging.md](logging.md) | Logging infrastructure: usage.jsonl and anot_trace.jsonl |
 | [code_quality_audit.md](code_quality_audit.md) | Code health audit and refactoring status |
 | [baselines.md](baselines.md) | Baseline methods with paper references |
+| [attack_plan.md](attack_plan.md) | Adversarial attack implementation plan (WIP) |
 | [TODO.md](TODO.md) | Current and future tasks |
 
 ## Quick Reference

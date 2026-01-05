@@ -171,3 +171,19 @@ def method(query, context: str) -> int
 - **R0**: Quiet dining, comfortable seating, budget-conscious
 - **R1**: Allergy-conscious, needs clear ingredient labeling
 - **R2**: Chicago tourist seeking authentic local experience
+
+## WIP: Attack Implementation
+
+**Status**: Planned, not yet integrated. See `doc/attack_plan.md` for details.
+
+**Goal**: Test robustness - attacks should cause CoT to fail while ANoT resists.
+
+**Key files**:
+- `oldsrc/attack.py` - Existing attack implementations (typo, injection, fake_review, sarcastic)
+- `utils/arguments.py` - Already has `--attack`, `--seed`, `--defense` flags (parsed but unused)
+
+**Next steps**:
+1. Copy `oldsrc/attack.py` → `attack.py`
+2. Wire into `run/scaling.py` and `run/orchestrate.py` (after `filter_by_candidates`)
+3. For injection attacks, target = OPPOSITE of ground truth (gold item gets -1, others get 1)
+4. Test: CoT fails with attacks, ANoT resists, defense on CoT doesn't help
