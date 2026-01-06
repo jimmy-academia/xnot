@@ -1,63 +1,74 @@
 # Documentation Index
 
-This directory contains all research and technical documentation for the ANoT project.
+Comprehensive documentation for the ANoT evaluation framework.
 
-## Benchmark Dataset Documentation
+## Documentation by Use Case
 
-The philly_cafes benchmark is the primary evaluation dataset. Documentation is split between methodology (here) and dataset-specific files (in `data/philly_cafes/`).
+### Writing a Research Paper
 
-### Methodology & Design
+- [Methodology](paper/methodology.md) - How the evaluation framework works
+- [Data Pipeline](paper/data_pipeline.md) - How data flows through the system
+- [ANoT Architecture](research/anot_architecture.md) - Three-phase design details
+- [Baselines](research/baselines.md) - Implemented methods with citations
 
-| File | Purpose |
-|------|---------|
-| [condition_design.md](condition_design.md) | **Bottom-up anchor-first design methodology** - Key insights, evidence types, debugging multi-match issues |
+### Recreating the philly_cafes Dataset
 
-### Dataset Reference (in `data/philly_cafes/`)
+- [Recreation Guide](guides/recreate_philly_cafes.md) - Step-by-step reproduction
+- [Evidence Types](reference/evidence_types.md) - Validation logic reference
+- [Request Structure](reference/request_structure.md) - Request JSON schema
+- [Prompt Templates](../preprocessing/prompts/) - Claude Code prompts used
 
-| File | Purpose |
-|------|---------|
-| [README.md](../data/philly_cafes/README.md) | Dataset overview, request group designs (G01-G08) |
-| [requests_reference.md](../data/philly_cafes/requests_reference.md) | Complete request-answer reference (all 80 requests) |
-| [statistics.md](../data/philly_cafes/statistics.md) | Evidence distribution, restaurant coverage, complexity analysis |
-| [condition_summary.md](../data/philly_cafes/condition_summary.md) | Unique/rare conditions, restaurant identifiers |
+### Creating a New Benchmark
 
-### Supporting Files (in `data/philly_cafes/`)
+- [Benchmark Creation Guide](guides/create_new_benchmark.md) - Template for new datasets
+- [Adding Evidence Types](guides/add_evidence_type.md) - Extending validation logic
+- [Condition Design](research/condition_design.md) - Bottom-up anchor-first methodology
 
-| File | Purpose |
-|------|---------|
-| `condition_matrix.json` | Machine-readable condition satisfaction matrix |
-| `groundtruth.jsonl` | Validation results for all 80 requests |
+### Running Experiments
+
+- [Experiments Guide](guides/run_experiments.md) - How to run evaluations
+- [Evaluation Spec](research/evaluation_spec.md) - Metrics and protocols
 
 ---
 
-## Research Documentation
+## Directory Structure
 
-| File | Purpose |
-|------|---------|
-| [research_plan.md](research_plan.md) | Master research plan with task formulation, baselines, and specifications |
-| [evaluation_spec.md](evaluation_spec.md) | Detailed evaluation protocol and method interface |
-| [baselines.md](baselines.md) | Baseline methods with paper references |
-
-## Architecture Documentation
-
-| File | Purpose |
-|------|---------|
-| [anot_architecture.md](anot_architecture.md) | Three-phase ANoT design: Plan → Expand → Execute |
-| [logging.md](logging.md) | Logging infrastructure: usage.jsonl and anot_trace.jsonl |
-
-## Development Documentation
-
-| File | Purpose |
-|------|---------|
-| [code_quality_audit.md](code_quality_audit.md) | Code health audit and refactoring status |
-| [attack_plan.md](attack_plan.md) | Adversarial attack implementation plan (WIP) |
-| [TODO.md](TODO.md) | Current and future tasks |
+```
+doc/
+├── paper/                # Research paper support
+│   ├── methodology.md    # Evaluation framework design
+│   └── data_pipeline.md  # Data flow documentation
+│
+├── research/             # Core research documentation
+│   ├── anot_architecture.md    # Three-phase ANoT design
+│   ├── baselines.md            # Method references
+│   ├── evaluation_spec.md      # Evaluation protocol
+│   ├── research_plan.md        # Master research plan
+│   └── condition_design.md     # Benchmark design methodology
+│
+├── guides/               # How-to guides
+│   ├── recreate_philly_cafes.md  # Dataset reproduction
+│   ├── create_new_benchmark.md   # New dataset creation
+│   ├── add_evidence_type.md      # Extending validation
+│   └── run_experiments.md        # Running evaluations
+│
+├── reference/            # Technical reference
+│   ├── evidence_types.md       # Evidence type specifications
+│   ├── request_structure.md    # Request JSON schema
+│   └── logging.md              # Output file formats
+│
+└── internal/             # Development documentation
+    ├── TODO.md                 # Current tasks
+    ├── attack_plan.md          # Attack implementation
+    └── code_quality_audit.md   # Code health audit
+```
 
 ---
 
 ## Quick Reference
 
 ### Task
+
 **Constraint-Satisfying Reranking** (Last-Mile RAG)
 
 Given a user request with logical structure and N candidate restaurants, identify the one that satisfies all conditions.
@@ -73,32 +84,61 @@ Given a user request with logical structure and N candidate restaurants, identif
 
 ### Request Groups
 
-| Group | Structure | Shorthand Pattern | Requests |
-|-------|-----------|-------------------|----------|
-| G01 | Simple AND | `AND(a, b, c)` | R01-R10 |
-| G02 | Simple OR | `AND(anchor, OR(a, b))` | R11-R20 |
-| G03 | AND-OR Combination | `AND(a, OR(b, c))` | R21-R30 |
-| G04 | Credibility-Count | `AND(a, review_meta_*)` | R31-R40 |
-| G05 | Triple OR + Anchor | `AND(a, OR(b, c, d, e))` | R41-R50 |
-| G06 | Nested OR+AND | `AND(a, OR(AND(b,c), AND(d,e)))` | R51-R60 |
-| G07 | Chained OR | `AND(a, OR(b,c), OR(d,e))` | R61-R70 |
-| G08 | Unbalanced | `AND(a, OR(b, AND(c,d)))` | R71-R80 |
-| G09 | Direct Friends (1-hop) | `1HOP([friends], pattern)` | R81-R90 |
-| G10 | Social Circle (2-hop) | `2HOP([friends], pattern)` | R91-R100 |
+| Group | Structure | Requests |
+|-------|-----------|----------|
+| G01 | Simple AND | R01-R10 |
+| G02 | Simple OR | R11-R20 |
+| G03 | AND-OR Combination | R21-R30 |
+| G04 | Credibility Weighting | R31-R40 |
+| G05 | Triple OR + Anchor | R41-R50 |
+| G06 | Nested OR+AND | R51-R60 |
+| G07 | Chained OR | R61-R70 |
+| G08 | Unbalanced Structure | R71-R80 |
+| G09 | Direct Friends (1-hop) | R81-R90 |
+| G10 | Social Circle (2-hop) | R91-R100 |
 
 ### Evidence Types
 
-| Type | Usage | Reliability |
-|------|-------|-------------|
-| `item_meta` | ~49% | High |
-| `review_text` | ~43% | Medium |
-| `review_meta` | ~5% | Medium |
-| `item_meta_hours` | ~3% | High |
+| Type | Description |
+|------|-------------|
+| `item_meta` | Attribute matching |
+| `item_meta_hours` | Operating hours |
+| `review_text` | Pattern matching |
+| `review_meta` | Reviewer metadata |
+| `social_filter` | Social graph filtering |
 
-### Baselines
+### Methods
 
-CoT, Plan-and-Solve, Plan-and-Act, Listwise, Weaver (see [baselines.md](baselines.md))
+| Method | Description |
+|--------|-------------|
+| `cot` | Chain-of-Thought |
+| `ps` | Plan-and-Solve |
+| `plan_act` | Plan-and-Act |
+| `listwise` | Listwise Reranking |
+| `weaver` | SQL+LLM Hybrid |
+| `anot` | **Ours**: Adaptive Network of Thought |
 
-### Our Method
+---
 
-**ANoT** (Adaptive Network of Thought) - Three-phase adaptive evaluation (see [anot_architecture.md](anot_architecture.md))
+## Dataset Documentation
+
+See `data/philly_cafes/`:
+
+| File | Purpose |
+|------|---------|
+| [README.md](../data/philly_cafes/README.md) | Dataset overview |
+| [statistics.md](../data/philly_cafes/statistics.md) | Detailed statistics |
+| [requests_reference.md](../data/philly_cafes/requests_reference.md) | Request-answer reference |
+| [condition_summary.md](../data/philly_cafes/condition_summary.md) | Condition analysis |
+
+---
+
+## Preprocessing Documentation
+
+See `preprocessing/`:
+
+| File | Purpose |
+|------|---------|
+| [README.md](../preprocessing/README.md) | Pipeline overview |
+| [prompts/](../preprocessing/prompts/) | Claude Code prompt templates |
+| [records/](../preprocessing/records/) | Selection documentation |
