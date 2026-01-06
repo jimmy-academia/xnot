@@ -90,16 +90,21 @@ class Weaver(BaseMethod):
         if not HAS_PANDAS:
             raise ImportError("Weaver requires pandas. Install with: pip install pandas")
 
-    def evaluate(self, query: Any, context: str) -> int:
-        """Evaluate using Weaver-style SQL+LLM hybrid reasoning."""
-        # Convert query to DataFrame
-        if isinstance(query, str):
+    def evaluate(self, query: str, context: Any) -> int:
+        """Evaluate using Weaver-style SQL+LLM hybrid reasoning.
+
+        Args:
+            query: User request text
+            context: Restaurant data (dict or string)
+        """
+        # Convert context (restaurant data) to DataFrame
+        if isinstance(context, str):
             try:
-                data = json.loads(query)
+                data = json.loads(context)
             except json.JSONDecodeError:
-                data = {"raw_text": query}
+                data = {"raw_text": context}
         else:
-            data = query
+            data = context
 
         df = self._create_dataframe(data)
 
@@ -108,16 +113,16 @@ class Weaver(BaseMethod):
             print(f"[Weaver] Columns: {list(df.columns)}")
 
         # Step 1: Generate execution plan
-        plan = self._generate_plan(df, context)
+        plan = self._generate_plan(df, query)
 
         if self.verbose:
             print(f"[Weaver] Plan:\n{plan}")
 
         # Step 2: Execute plan steps
-        df = self._execute_plan(df, plan, context, self.verbose)
+        df = self._execute_plan(df, plan, query, self.verbose)
 
         # Step 3: Extract answer
-        answer = self._extract_answer(df, context)
+        answer = self._extract_answer(df, query)
 
         return parse_final_answer(answer)
 
@@ -155,8 +160,12 @@ class Weaver(BaseMethod):
 
         return pd.DataFrame(rows)
 
-    def _generate_plan(self, df, context: str) -> str:
-        """Generate execution plan."""
+    def _generate_plan(self, df, query: str) -> str:
+        """Generate execution plan.
+
+        Args:
+            query: User request text
+        """
         columns = list(df.columns)
         sample = df.head(3).to_string(index=False)
 
@@ -164,13 +173,13 @@ class Weaver(BaseMethod):
 SAMPLE DATA:
 {sample}
 
-QUESTION: Does this restaurant match the user's request? User wants: {context}
+QUESTION: Does this restaurant match the user's request? User wants: {query}
 
 Create a step-by-step plan to analyze this table and answer the question."""
 
         return call_llm(prompt, system=PLANNER_PROMPT)
 
-    def _execute_plan(self, df, plan: str, context: str, debug: bool = False):
+    def _execute_plan(self, df, plan: str, query: str, debug: bool = False):
         """Execute the generated plan."""
         steps = self._parse_plan(plan)
 
@@ -287,8 +296,12 @@ Create a step-by-step plan to analyze this table and answer the question."""
 
         return df
 
-    def _extract_answer(self, df, context: str) -> str:
-        """Extract final answer from processed table."""
+    def _extract_answer(self, df, query: str) -> str:
+        """Extract final answer from processed table.
+
+        Args:
+            query: User request text
+        """
         if len(df) > 5:
             table_str = df.head(5).to_string(index=False) + f"\n... ({len(df)-5} more rows)"
         else:
@@ -296,20 +309,25 @@ Create a step-by-step plan to analyze this table and answer the question."""
 
         prompt = ANSWER_PROMPT.format(
             table=table_str,
-            question=f"Should this restaurant be recommended? User wants: {context}"
+            question=f"Should this restaurant be recommended? User wants: {query}"
         )
 
         return call_llm(prompt, system="Provide a recommendation: ANSWER: 1, 0, or -1")
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task."""
+        """Evaluate ranking task.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         prompt = f"""Analyze these restaurants and select the best match.
 
 [RESTAURANTS]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 Which restaurant (by index) best matches? Output: ANSWER: <index>"""
 

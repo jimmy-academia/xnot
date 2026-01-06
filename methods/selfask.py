@@ -48,12 +48,17 @@ class SelfAsk(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Self-Ask evaluation with follow-up questions."""
+        """Self-Ask evaluation with follow-up questions.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         prompt = f"""[RESTAURANT INFO]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 [EVALUATION]
 Question: Should this restaurant be recommended for the user's request?
@@ -65,12 +70,17 @@ Are follow-up questions needed here:"""
     # --- Ranking Methods ---
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Ranking with Self-Ask approach."""
+        """Ranking with Self-Ask approach.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         prompt = f"""[RESTAURANTS]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 [EVALUATION]
 Question: Which restaurant best matches the user's request?

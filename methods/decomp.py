@@ -57,7 +57,7 @@ HANDLER_PROMPTS = {
 Output a numbered list of specific criteria the restaurant must meet.
 
 User request:
-{context}
+{query}
 
 Requirements:""",
 
@@ -160,7 +160,12 @@ class DecomposedPrompting(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Evaluate restaurant recommendation using decomposed prompting."""
+        """Evaluate restaurant recommendation using decomposed prompting.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         # Step 1: Generate decomposition plan
         plan = self._generate_plan(query, context)
         steps = self._parse_plan(plan)
@@ -171,9 +176,9 @@ class DecomposedPrompting(BaseMethod):
 
         # Step 2: Execute plan sequentially
         results = {
-            "context": context,
-            "reviews": query,
-            "query": query,
+            "query": query,      # User request
+            "context": context,  # Restaurant data
+            "reviews": context,  # Alias for restaurant data (which contains reviews)
         }
 
         for step in steps[:MAX_STEPS]:
@@ -231,19 +236,19 @@ class DecomposedPrompting(BaseMethod):
             elif inp in results:
                 subs[inp.lower()] = results[inp]
 
-        # Add common substitutions
-        subs["context"] = context
-        subs["reviews"] = query
-        subs["query"] = query
+        # Add common substitutions (query=user request, context=restaurant data)
+        subs["query"] = query          # User request
+        subs["context"] = context      # Restaurant data
+        subs["reviews"] = context      # Reviews come from restaurant data
 
         # Map input names to template variables
         if handler_name == "analyze_reviews":
-            subs["criteria"] = results.get("requirements", context)
+            subs["criteria"] = results.get("requirements", query)
         elif handler_name == "count_evidence":
             subs["analysis"] = results.get("analysis", "")
         elif handler_name == "make_decision":
             subs["evidence"] = results.get("evidence", results.get("analysis", ""))
-            subs["requirements"] = results.get("requirements", context)
+            subs["requirements"] = results.get("requirements", query)
 
         # Substitute variables in prompt
         try:
@@ -257,14 +262,19 @@ class DecomposedPrompting(BaseMethod):
         return call_llm(prompt)
 
     def _fallback_evaluate(self, query: str, context: str) -> int:
-        """Fallback to simple CoT-style evaluation if plan parsing fails."""
+        """Fallback to simple CoT-style evaluation if plan parsing fails.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         prompt = f"""Evaluate if this restaurant matches the user's needs.
 
 Restaurant reviews:
-{query}
+{context}
 
 User requirements:
-{context}
+{query}
 
 Analyze the reviews and output ANSWER: 1 (recommend), 0 (neutral), or -1 (not recommend)."""
 
@@ -274,7 +284,12 @@ Analyze the reviews and output ANSWER: 1 (recommend), 0 (neutral), or -1 (not re
     # --- Ranking Methods ---
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task using decomposed prompting."""
+        """Evaluate ranking task using decomposed prompting.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         # Step 1: Generate plan for ranking
         plan = self._generate_ranking_plan()
         steps = self._parse_plan(plan)
@@ -284,9 +299,9 @@ Analyze the reviews and output ANSWER: 1 (recommend), 0 (neutral), or -1 (not re
 
         # Step 2: Execute plan
         results = {
-            "context": context,
-            "restaurants": query,
-            "query": query,
+            "query": query,          # User request
+            "context": context,      # Restaurant data
+            "restaurants": context,  # Alias for restaurant data
         }
 
         for step in steps[:MAX_STEPS]:
@@ -312,9 +327,10 @@ Analyze the reviews and output ANSWER: 1 (recommend), 0 (neutral), or -1 (not re
 
         # Build substitutions
         subs = {
-            "context": context,
-            "restaurants": query,
-            "requirements": results.get("requirements", context),
+            "query": query,            # User request
+            "context": context,        # Restaurant data
+            "restaurants": context,    # Alias
+            "requirements": results.get("requirements", query),
             "analysis": results.get("analysis", ""),
             "ranking": results.get("ranking", ""),
         }
@@ -329,7 +345,12 @@ Analyze the reviews and output ANSWER: 1 (recommend), 0 (neutral), or -1 (not re
         return call_llm(prompt)
 
     def _fallback_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Fallback ranking if plan parsing fails."""
+        """Fallback ranking if plan parsing fails.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "Select the restaurant that BEST matches the user's request.\nOutput only the restaurant number."
         else:
@@ -338,10 +359,10 @@ Analyze the reviews and output ANSWER: 1 (recommend), 0 (neutral), or -1 (not re
         prompt = f"""Select the best restaurant for this user.
 
 Restaurants:
-{query}
+{context}
 
 User requirements:
-{context}
+{query}
 
 {instruction}
 

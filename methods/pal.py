@@ -73,28 +73,37 @@ class ProgramAidedLanguage(BaseMethod):
     def __init__(self, run_dir: str = None, **kwargs):
         super().__init__(run_dir=run_dir, **kwargs)
 
-    def evaluate(self, query: Any, context: str) -> int:
-        """Evaluate restaurant recommendation using generated Python code."""
-        # Ensure query is dict for code generation
-        if isinstance(query, str):
+    def evaluate(self, query: str, context: Any) -> int:
+        """Evaluate restaurant recommendation using generated Python code.
+
+        Args:
+            query: User request text
+            context: Restaurant data (dict or string)
+        """
+        # Ensure context is dict for code generation
+        if isinstance(context, str):
             # Try to parse as JSON, otherwise wrap in dict
             try:
-                data = json.loads(query)
+                data = json.loads(context)
             except json.JSONDecodeError:
-                data = {"raw_text": query}
+                data = {"raw_text": context}
         else:
-            data = query
+            data = context
 
         # Step 1: Generate Python code
-        code = self._generate_code(data, context)
+        code = self._generate_code(data, query)
 
         # Step 2: Execute the code
-        result = self._execute_code(code, data, context)
+        result = self._execute_code(code, data, query)
 
         return result
 
-    def _generate_code(self, data: dict, context: str) -> str:
-        """Generate Python code to evaluate the restaurant."""
+    def _generate_code(self, data: dict, query: str) -> str:
+        """Generate Python code to evaluate the restaurant.
+
+        Args:
+            query: User request text
+        """
         # Truncate data for prompt (avoid token limits)
         data_preview = self._truncate_data(data)
 
@@ -104,7 +113,7 @@ class ProgramAidedLanguage(BaseMethod):
 data = {json.dumps(data_preview, indent=2)}
 
 [USER REQUEST]
-{context}
+{query}
 
 Generate a Python function `def evaluate(data: dict, request: str) -> int` that:
 1. Analyzes the restaurant data against the user's specific needs
@@ -150,8 +159,12 @@ Output ONLY the Python code:"""
         # Last resort: return entire response
         return response.strip()
 
-    def _execute_code(self, code: str, data: dict, context: str) -> int:
-        """Safely execute generated Python code."""
+    def _execute_code(self, code: str, data: dict, query: str) -> int:
+        """Safely execute generated Python code.
+
+        Args:
+            query: User request text
+        """
         # Create restricted namespace with allowed imports
         import math
         import statistics
@@ -210,7 +223,7 @@ Output ONLY the Python code:"""
                 return 0  # No function found
 
             # Execute the function
-            result = evaluate_fn(data, context)
+            result = evaluate_fn(data, query)
 
             # Normalize result
             if isinstance(result, (int, float)):
@@ -231,7 +244,12 @@ Output ONLY the Python code:"""
             return 0  # Default to neutral on error
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task - select best from multiple items."""
+        """Evaluate ranking task - select best from multiple items.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "Which restaurant (by number) BEST matches the user's request?\nOutput ONLY the restaurant number, nothing else."
         else:
@@ -245,10 +263,10 @@ Think step by step like you're writing code:
 3. Compare and select the best match
 
 [RESTAURANTS]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 {instruction}"""
 

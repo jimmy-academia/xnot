@@ -57,7 +57,15 @@ class ChainOfThought(BaseMethod):
         super().__init__(run_dir=run_dir, defense=defense, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Evaluate restaurant recommendation. Returns -1, 0, or 1."""
+        """Evaluate restaurant recommendation.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+
+        Returns:
+            -1, 0, or 1
+        """
         prompt = self._build_prompt(query, context)
         system = self._get_system_prompt()
         response = call_llm(prompt, system=system)
@@ -72,17 +80,28 @@ class ChainOfThought(BaseMethod):
         return system
 
     def _build_prompt(self, query: str, context: str) -> str:
-        """Build zero-shot prompt."""
+        """Build zero-shot prompt.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         parts = []
         parts.append("=== Your Task ===")
-        parts.append(f"\n[RESTAURANT INFO]\n{query}")
-        parts.append(f"\n[USER REQUEST]\n{context}")
+        parts.append(f"\n[RESTAURANT INFO]\n{context}")
+        parts.append(f"\n[USER REQUEST]\n{query}")
         parts.append("\n[ANALYSIS]")
         return "\n".join(parts)
 
     def _build_ranking_prompt(self, query: str, context: str, k: int = 1) -> str:
-        """Build prompt for ranking task."""
-        task_desc = RANKING_TASK_COMPACT.format(context=context, k=k)
+        """Build prompt for ranking task.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+            k: Number of top predictions
+        """
+        task_desc = RANKING_TASK_COMPACT.format(query=query, k=k)
 
         if k == 1:
             instruction = "Select the restaurant that BEST matches the user's request.\nOutput only the restaurant number."
@@ -94,14 +113,22 @@ class ChainOfThought(BaseMethod):
 {task_desc}
 
 [RESTAURANTS]
-{query}
+{context}
 
 {instruction}
 
 [ANALYSIS]"""
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task. Returns response string."""
+        """Evaluate ranking task.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+
+        Returns:
+            Response string with indices
+        """
         prompt = self._build_ranking_prompt(query, context, k)
         use_defense = self.defense or _use_defense_prompt
         system = SYSTEM_PROMPT_RANKING_DEFENSE if use_defense else SYSTEM_PROMPT_RANKING

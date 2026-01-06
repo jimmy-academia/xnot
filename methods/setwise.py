@@ -50,12 +50,17 @@ class Setwise(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Single-item evaluation (falls back to pointwise)."""
+        """Single-item evaluation (falls back to pointwise).
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         prompt = f"""[USER REQUEST]
-{context}
+{query}
 
 [RESTAURANT]
-{query}
+{context}
 
 Analyze whether this restaurant matches the user's request."""
 
@@ -65,17 +70,22 @@ Analyze whether this restaurant matches the user's request."""
     # --- Ranking Methods ---
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Setwise selection: pick the best restaurant(s) from the set."""
+        """Setwise selection: pick the best restaurant(s) from the set.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "select the ONE restaurant that BEST matches the user's request"
         else:
             instruction = f"select the TOP {k} restaurants in order from best to worst match"
 
         prompt = f"""[USER REQUEST]
-{context}
+{query}
 
 [RESTAURANTS]
-{query}
+{context}
 
 From the restaurants above, {instruction}.
 Output your selection as numbers: [best], [second], [third], etc.

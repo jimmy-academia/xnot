@@ -65,7 +65,15 @@ class ReAct(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Evaluate restaurant recommendation using ReACT loop. Returns -1, 0, or 1."""
+        """Evaluate restaurant recommendation using ReACT loop.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+
+        Returns:
+            -1, 0, or 1
+        """
         history = []
 
         for step in range(MAX_STEPS):
@@ -89,14 +97,19 @@ class ReAct(BaseMethod):
         return self._force_decision(history, query, context)
 
     def _build_react_prompt(self, query: str, context: str, history: List[dict]) -> str:
-        """Build prompt with ReACT history."""
+        """Build prompt with ReACT history.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         parts = []
 
         parts.append("[RESTAURANT INFO]")
-        parts.append(query)
+        parts.append(context)
         parts.append("")
         parts.append("[USER REQUEST]")
-        parts.append(context)
+        parts.append(query)
         parts.append("")
 
         if history:
@@ -143,17 +156,22 @@ class ReAct(BaseMethod):
         return thought, action, action_input
 
     def _execute_action(self, action: str, action_input: str, query: str, context: str) -> str:
-        """Execute an action and return observation."""
+        """Execute an action and return observation.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         if action == "analyze_requirements":
-            return f"User requirements: {context}"
+            return f"User requirements: {query}"
 
         elif action == "examine_reviews":
-            # Return the full query which contains reviews
-            return f"Restaurant information and reviews:\n{query[:2000]}"  # Truncate if too long
+            # Return the context which contains restaurant data and reviews
+            return f"Restaurant information and reviews:\n{context[:2000]}"  # Truncate if too long
 
         elif action == "check_ratings":
             # Extract any numeric patterns that might be ratings
-            ratings = re.findall(r"(\d+(?:\.\d+)?)\s*(?:stars?|rating|/\s*\d+)", query, re.IGNORECASE)
+            ratings = re.findall(r"(\d+(?:\.\d+)?)\s*(?:stars?|rating|/\s*\d+)", context, re.IGNORECASE)
             if ratings:
                 return f"Found ratings: {', '.join(ratings)}"
             return "No explicit ratings found in the data."
@@ -180,7 +198,12 @@ class ReAct(BaseMethod):
     # --- Ranking Methods ---
 
     def _build_ranking_prompt(self, query: str, context: str, history: List[dict], k: int = 1) -> str:
-        """Build prompt for ranking task with ReACT format."""
+        """Build prompt for ranking task with ReACT format.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "Select the restaurant that BEST matches the user's request."
         else:
@@ -188,10 +211,10 @@ class ReAct(BaseMethod):
 
         parts = []
         parts.append("[RESTAURANTS]")
-        parts.append(query)
+        parts.append(context)
         parts.append("")
         parts.append("[USER REQUEST]")
-        parts.append(context)
+        parts.append(query)
         parts.append("")
         parts.append(f"[INSTRUCTION]")
         parts.append(instruction)

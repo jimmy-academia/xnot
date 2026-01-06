@@ -3,6 +3,11 @@ Standard task descriptions for all methods.
 
 These descriptions are generic (items with attributes and reviews) so they
 can be used across different datasets and evaluation scenarios.
+
+Parameter convention:
+  - {query}: User request text (what user is searching for)
+  - {context}: Restaurant/item data (background information)
+  - {k}: Number of top predictions to return
 """
 
 # Full task description for methods that need detailed context
@@ -10,7 +15,7 @@ RANKING_TASK = """[TASK TYPE]
 RANKING - Given N candidate items, find the top-{k} that best match the user's criteria.
 
 [USER REQUEST]
-{context}
+{query}
 
 [AVAILABLE DATA]
 Each item has:
@@ -30,7 +35,7 @@ Scoring convention:
 # Compact version for prompts that already have detailed instructions
 RANKING_TASK_COMPACT = """RANKING task: Find top-{k} items matching the user request.
 
-User request: {context}
+User request: {query}
 
 Each item has: attributes (key-value), categories, hours, and user reviews.
 Score: 1 (matches), 0 (unknown), -1 (doesn't match).

@@ -83,8 +83,13 @@ class ProgramOfThoughts(BaseMethod):
     def __init__(self, run_dir: str = None, **kwargs):
         super().__init__(run_dir=run_dir, **kwargs)
 
-    def evaluate(self, query: Any, context: str) -> int:
-        """Evaluate restaurant recommendation using code generation."""
+    def evaluate(self, query: str, context: Any) -> int:
+        """Evaluate restaurant recommendation using code generation.
+
+        Args:
+            query: User request text
+            context: Restaurant data (dict or string)
+        """
         # Build prompt for code generation
         prompt = self._build_prompt(query, context)
 
@@ -99,23 +104,28 @@ class ProgramOfThoughts(BaseMethod):
 
         return result
 
-    def _build_prompt(self, query: Any, context: str) -> str:
-        """Build prompt for code generation."""
-        # Convert query to string representation if dict
-        if isinstance(query, dict):
-            query_str = json.dumps(query, indent=2, default=str)
+    def _build_prompt(self, query: str, context: Any) -> str:
+        """Build prompt for code generation.
+
+        Args:
+            query: User request text
+            context: Restaurant data (dict or string)
+        """
+        # Convert context (restaurant data) to string representation if dict
+        if isinstance(context, dict):
+            context_str = json.dumps(context, indent=2, default=str)
         else:
-            query_str = str(query)
+            context_str = str(context)
 
         return f"""Generate Python code to analyze this restaurant for the user's request.
 
 [RESTAURANT DATA]
 ```python
-restaurant = {query_str}
+restaurant = {context_str}
 ```
 
 [USER REQUEST]
-user_request = "{context}"
+user_request = "{query}"
 
 Generate code following the 4-step pattern:
 # Step 1: Extract relevant attributes (semantic binding)
@@ -142,13 +152,18 @@ The code must set `recommendation` to 1, 0, or -1."""
         # Assume entire response is code
         return response.strip()
 
-    def _execute_code(self, code: str, query: Any, context: str) -> int:
-        """Execute generated code safely and extract result."""
+    def _execute_code(self, code: str, query: str, context: Any) -> int:
+        """Execute generated code safely and extract result.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         try:
             # Set up execution environment
             local_vars = {
-                'restaurant': query,
-                'user_request': context,
+                'restaurant': context,
+                'user_request': query,
             }
             global_vars = {'__builtins__': SAFE_BUILTINS}
 
@@ -179,7 +194,12 @@ The code must set `recommendation` to 1, 0, or -1."""
     # --- Ranking Methods ---
 
     def _build_ranking_prompt(self, query: str, context: str, k: int = 1) -> str:
-        """Build prompt for ranking multiple restaurants."""
+        """Build prompt for ranking multiple restaurants.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "Which restaurant (by number) BEST matches the user's request?\nOutput ONLY the restaurant number, nothing else."
         else:
@@ -193,14 +213,19 @@ Think step by step:
 3. Score each restaurant on how well it matches
 
 [RESTAURANTS]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 {instruction}"""
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task."""
+        """Evaluate ranking task.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         prompt = self._build_ranking_prompt(query, context, k)
         return call_llm(prompt, system=SYSTEM_PROMPT_RANKING)

@@ -63,7 +63,7 @@ Keep reasoning focused and use 2-5 operations before answering."""
 STEP_PROMPT = """Current table state:
 {table}
 
-User request: {context}
+User request: {query}
 
 Previous operations: {history}
 
@@ -82,19 +82,24 @@ class ChainOfTable(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
         self.max_steps = max_steps
 
-    def evaluate(self, query: Any, context: str) -> int:
-        """Evaluate using iterative table operations."""
+    def evaluate(self, query: str, context: Any) -> int:
+        """Evaluate using iterative table operations.
+
+        Args:
+            query: User request text
+            context: Restaurant data (dict or string)
+        """
         import os
         debug = os.environ.get("KNOT_DEBUG", "0") == "1"
 
-        # Convert query to table format
-        if isinstance(query, str):
+        # Convert context (restaurant data) to table format
+        if isinstance(context, str):
             try:
-                data = json.loads(query)
+                data = json.loads(context)
             except json.JSONDecodeError:
-                data = {"raw_text": query}
+                data = {"raw_text": context}
         else:
-            data = query
+            data = context
 
         # Initialize table from restaurant data
         table = self._create_table(data)
@@ -108,7 +113,7 @@ class ChainOfTable(BaseMethod):
 
             prompt = STEP_PROMPT.format(
                 table=table_str,
-                context=context,
+                query=query,
                 history=history_str
             )
 
@@ -137,7 +142,7 @@ class ChainOfTable(BaseMethod):
 
 Operations performed: {' -> '.join(history)}
 
-User request: {context}
+User request: {query}
 
 Provide final recommendation: ANSWER: 1 (recommend), 0 (neutral), or -1 (not recommend)"""
 
@@ -323,7 +328,12 @@ Provide final recommendation: ANSWER: 1 (recommend), 0 (neutral), or -1 (not rec
             return table
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task."""
+        """Evaluate ranking task.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "Which restaurant (by number) BEST matches the user's request?\nOutput ONLY the restaurant number, nothing else."
         else:
@@ -339,10 +349,10 @@ Think of each restaurant as a row in a table with columns:
 Compare each restaurant's table data against the user's criteria.
 
 [RESTAURANTS]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 {instruction}"""
 

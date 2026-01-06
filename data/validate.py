@@ -56,69 +56,82 @@ def hours_contains(item_hours: str, required: str) -> bool:
     return item_start <= req_start and item_end >= req_end
 
 
-# --- Review Metadata Weighting ---
+# --- Review Metadata Credibility Evaluation ---
 
-def compute_review_weights(reviews: list, weight_by: dict) -> list[float]:
-    """Compute weights for each review based on metadata.
+def get_review_metadata_value(review: dict, field_path: list) -> float:
+    """Extract metadata value from a review for credibility scoring.
 
-    weight_by spec:
-        field: path to value (e.g., ["user", "review_count"], ["useful"])
-        normalize: "max" (default) - normalize to [0.5, 1.0] range
+    Args:
+        review: Review dict containing user metadata
+        field_path: Path to value (e.g., ["user", "review_count"])
 
-    Returns list of weights, one per review.
+    Returns:
+        Float value (0.0 if missing or invalid)
     """
-    field_path = weight_by.get("field", [])
-    normalize = weight_by.get("normalize", "max")
+    v = review
+    for key in field_path:
+        if isinstance(v, dict):
+            v = v.get(key)
+        else:
+            return 0.0
 
-    values = []
-    for r in reviews:
-        # Navigate to the value
-        v = r
-        for key in field_path:
-            if isinstance(v, dict):
-                v = v.get(key)
-            else:
-                v = None
-                break
+    # Special handling for elite (list of years)
+    if field_path == ["user", "elite"] and isinstance(v, list):
+        return float(len([e for e in v if e and e != 'None']))
 
-        # Special handling for elite (list of years)
-        if field_path == ["user", "elite"] and isinstance(v, list):
-            v = len([e for e in v if e and e != 'None'])
-
-        values.append(float(v) if v is not None else 0.0)
-
-    # Normalize to [0.5, 1.0] range (so low values still count somewhat)
-    max_val = max(values) if values else 1.0
-    if normalize == "max" and max_val > 0:
-        weights = [0.5 + 0.5 * (v / max_val) for v in values]
-    else:
-        weights = [1.0] * len(values)  # Equal weights if can't normalize
-
-    return weights
+    return float(v) if v is not None else 0.0
 
 
-def evaluate_weighted_review_text(reviews: list, pattern: str, weights: list, threshold: float = 0.2) -> int:
-    """Evaluate review text pattern with weighted aggregation.
+def evaluate_credibility_count(reviews: list, pattern: str, field_path: list,
+                               credibility_percentile: int = 50,
+                               min_credible_matches: int = 2) -> int:
+    """Evaluate review pattern using credibility threshold + count floor.
 
-    Returns 1 if weighted matches exceed threshold, -1 otherwise.
-    threshold: fraction of total weight that must match (default 0.2 = 20%)
+    Semantics: "At least N credible reviewers (above percentile) mention pattern"
+
+    Args:
+        reviews: List of review dicts
+        pattern: Regex pattern to match
+        field_path: Path to credibility field (e.g., ["user", "review_count"])
+        credibility_percentile: Percentile threshold for "credible" (default: 50 = median)
+        min_credible_matches: Minimum credible reviewers mentioning pattern (default: 2)
+
+    Returns:
+        1 if condition satisfied, -1 otherwise
     """
-    if not pattern or not reviews:
-        return 0
+    if not reviews or not pattern:
+        return -1
 
-    regex = re.compile(pattern, re.IGNORECASE)
-    weighted_matches = 0.0
-    total_weight = sum(weights)
+    # 1. Extract field values
+    values = [get_review_metadata_value(r, field_path) for r in reviews]
 
-    for r, w in zip(reviews, weights):
-        text = r.get("text", "")
-        if regex.search(text):
-            weighted_matches += w
+    # 2. Compute credibility threshold (percentile of non-zero values)
+    nonzero = sorted([v for v in values if v > 0])
+    if len(nonzero) < min_credible_matches:
+        return -1  # Not enough credible reviewers exist
 
-    # Threshold: if weighted matches > threshold of total weight
-    if total_weight > 0 and weighted_matches / total_weight > threshold:
-        return 1
-    return -1
+    threshold_idx = int(len(nonzero) * credibility_percentile / 100)
+    cred_threshold = nonzero[min(threshold_idx, len(nonzero) - 1)]
+
+    # 3. Count credible reviewers who mention pattern
+    try:
+        regex = re.compile(pattern, re.IGNORECASE)
+    except re.error:
+        # Fall back to literal matching
+        pattern_lower = pattern.lower()
+        credible_matches = sum(
+            1 for r, v in zip(reviews, values)
+            if v >= cred_threshold and pattern_lower in r.get('text', '').lower()
+        )
+        return 1 if credible_matches >= min_credible_matches else -1
+
+    credible_matches = sum(
+        1 for r, v in zip(reviews, values)
+        if v >= cred_threshold and regex.search(r.get('text', ''))
+    )
+
+    # 4. Return result
+    return 1 if credible_matches >= min_credible_matches else -1
 
 
 def evaluate_review_meta(reviews: list, evidence_spec: dict) -> int:
@@ -391,16 +404,26 @@ def evaluate_item_meta_rule(value, evidence_spec) -> int:
 
 
 def evaluate_review_text_pattern(reviews: list, pattern: str) -> int:
-    """Check if any review contains the pattern.
+    """Check if any review contains the pattern (regex supported).
 
     Returns: 1 if found, -1 if not found
     """
     if not pattern:
         return 0
-    pattern_lower = pattern.lower()
+    try:
+        regex = re.compile(pattern, re.IGNORECASE)
+    except re.error:
+        # Fall back to literal search if regex is invalid
+        pattern_lower = pattern.lower()
+        for r in reviews:
+            text = r.get("text", "")
+            if pattern_lower in text.lower():
+                return 1
+        return -1
+
     for r in reviews:
         text = r.get("text", "")
-        if pattern_lower in text.lower():
+        if regex.search(text):
             return 1
     return -1
 
@@ -425,11 +448,15 @@ def evaluate_condition(item: dict, condition: dict, reviews: list = None) -> int
         if not reviews:
             return 0
 
-        # If weight_by specified, use weighted aggregation
+        # If weight_by specified, use credibility-count evaluation
         if weight_by:
-            weights = compute_review_weights(reviews, weight_by)
-            threshold = evidence_spec.get("threshold", 0.2)
-            return evaluate_weighted_review_text(reviews, pattern, weights, threshold)
+            field_path = weight_by.get("field", [])
+            credibility_percentile = evidence_spec.get("credibility_percentile", 50)
+            min_credible_matches = evidence_spec.get("min_credible_matches", 2)
+            return evaluate_credibility_count(
+                reviews, pattern, field_path,
+                credibility_percentile, min_credible_matches
+            )
         else:
             return evaluate_review_text_pattern(reviews, pattern)
 

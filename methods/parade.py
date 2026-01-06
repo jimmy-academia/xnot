@@ -101,14 +101,19 @@ class PaRaDe(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Few-shot evaluation with demonstrations."""
+        """Few-shot evaluation with demonstrations.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         prompt = f"""{DEMONSTRATIONS}
 === Your Task ===
 [USER REQUEST]
-{context}
+{query}
 
 [RESTAURANT]
-{query}
+{context}
 
 [REASONING]"""
 
@@ -118,7 +123,12 @@ class PaRaDe(BaseMethod):
     # --- Ranking Methods ---
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Ranking with demonstration-based evaluation."""
+        """Ranking with demonstration-based evaluation.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         if k == 1:
             instruction = "select the BEST matching restaurant"
         else:
@@ -127,10 +137,10 @@ class PaRaDe(BaseMethod):
         prompt = f"""{DEMONSTRATIONS}
 === Your Task ===
 [USER REQUEST]
-{context}
+{query}
 
 [RESTAURANTS]
-{query}
+{context}
 
 Evaluate each restaurant using the demonstrated pattern, then {instruction}.
 Output your ranking as numbers: [best], [second], [third], etc.

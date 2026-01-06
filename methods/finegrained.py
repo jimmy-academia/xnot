@@ -31,7 +31,7 @@ RELEVANCE_LABELS = {
 SCORING_PROMPT = """Given this user request and restaurant information, rate the relevance.
 
 User Request:
-{context}
+{query}
 
 Restaurant:
 {item}
@@ -48,10 +48,10 @@ Your rating (output ONLY the label):"""
 EVALUATE_PROMPT = """Given this user request and restaurant information, rate the relevance.
 
 User Request:
-{context}
+{query}
 
 Restaurant:
-{query}
+{context}
 
 Rate the relevance using EXACTLY one of these labels:
 - Highly Relevant: Restaurant clearly matches all key requirements
@@ -74,8 +74,16 @@ class FineGrainedRanker(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Evaluate single item. Returns -1, 0, or 1."""
-        prompt = EVALUATE_PROMPT.format(context=context, query=query)
+        """Evaluate single item.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+
+        Returns:
+            -1, 0, or 1
+        """
+        prompt = EVALUATE_PROMPT.format(query=query, context=context)
         response = call_llm(prompt)
 
         score = self._parse_relevance(response)
@@ -92,9 +100,14 @@ class FineGrainedRanker(BaseMethod):
             return 1
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task using pointwise scoring."""
-        # Parse individual items from query
-        items = self._parse_items(query)
+        """Evaluate ranking task using pointwise scoring.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
+        # Parse individual items from context (restaurant data)
+        items = self._parse_items(context)
 
         if not items:
             return "1"  # Fallback
@@ -102,7 +115,7 @@ class FineGrainedRanker(BaseMethod):
         # Score all items in parallel using async
         async def score_all():
             tasks = [
-                self._score_item_async(idx, item_text, context)
+                self._score_item_async(idx, item_text, query)
                 for idx, item_text in items
             ]
             return await asyncio.gather(*tasks)
@@ -131,16 +144,24 @@ class FineGrainedRanker(BaseMethod):
 
         return items
 
-    def _score_item(self, item_text: str, context: str) -> int:
-        """Score a single item on the 4-point relevance scale."""
-        prompt = SCORING_PROMPT.format(context=context, item=item_text)
+    def _score_item(self, item_text: str, query: str) -> int:
+        """Score a single item on the 4-point relevance scale.
+
+        Args:
+            query: User request text
+        """
+        prompt = SCORING_PROMPT.format(query=query, item=item_text)
         response = call_llm(prompt)
 
         return self._parse_relevance(response)
 
-    async def _score_item_async(self, idx: int, item_text: str, context: str) -> Tuple[int, int]:
-        """Async version: score a single item, return (idx, score)."""
-        prompt = SCORING_PROMPT.format(context=context, item=item_text)
+    async def _score_item_async(self, idx: int, item_text: str, query: str) -> Tuple[int, int]:
+        """Async version: score a single item, return (idx, score).
+
+        Args:
+            query: User request text
+        """
+        prompt = SCORING_PROMPT.format(query=query, item=item_text)
         response = await call_llm_async(prompt)
 
         return (idx, self._parse_relevance(response))

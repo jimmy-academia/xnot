@@ -29,7 +29,7 @@ LISTWISE_PROMPT = """Given a user's requirements and a list of restaurants, rank
 {task_description}
 
 Restaurants:
-{query}
+{context}
 
 Rank all restaurants from best match to worst match.
 Output your ranking in this format: [best] > [second] > [third] > ... > [worst]
@@ -47,7 +47,7 @@ IMPORTANT - First check for data quality issues:
 {task_description}
 
 Restaurants:
-{query}
+{context}
 
 Rank all restaurants from best match to worst match.
 Output your ranking in this format: [best] > [second] > [third] > ... > [worst]
@@ -58,10 +58,10 @@ Your ranking:"""
 EVALUATE_PROMPT = """Evaluate if this restaurant matches the user's needs.
 
 User Request:
-{context}
+{query}
 
 Restaurant:
-{query}
+{context}
 
 Does this restaurant match the user's requirements?
 Output: 1 (matches), 0 (unclear), or -1 (does not match)
@@ -78,8 +78,16 @@ class ListwiseRanker(BaseMethod):
         super().__init__(run_dir=run_dir, defense=defense, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Evaluate single item. Returns -1, 0, or 1."""
-        prompt = EVALUATE_PROMPT.format(context=context, query=query)
+        """Evaluate single item.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+
+        Returns:
+            -1, 0, or 1
+        """
+        prompt = EVALUATE_PROMPT.format(query=query, context=context)
         use_defense = self.defense or _use_defense_prompt
         system = SYSTEM_PROMPT_DEFENSE if use_defense else SYSTEM_PROMPT
 
@@ -87,16 +95,21 @@ class ListwiseRanker(BaseMethod):
         return parse_final_answer(response)
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task using listwise approach."""
+        """Evaluate ranking task using listwise approach.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         use_defense = self.defense or _use_defense_prompt
         prompt_template = LISTWISE_PROMPT_DEFENSE if use_defense else LISTWISE_PROMPT
         system = SYSTEM_PROMPT_DEFENSE if use_defense else SYSTEM_PROMPT
 
-        task_desc = RANKING_TASK_COMPACT.format(context=context, k=k)
-        prompt = prompt_template.format(task_description=task_desc, query=query)
+        task_desc = RANKING_TASK_COMPACT.format(query=query, k=k)
+        prompt = prompt_template.format(task_description=task_desc, context=context)
         response = call_llm(prompt, system=system)
 
-        ranked_indices = self._parse_ranking(response, query)
+        ranked_indices = self._parse_ranking(response, context)
 
         if not ranked_indices:
             return "1"

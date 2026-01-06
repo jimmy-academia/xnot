@@ -104,14 +104,13 @@ def parse_args():
 
     args = parser.parse_args()
 
-    # Validate --limit: if it's a single integer <= 0, error
-    if args.limit is not None:
+    # Validate --limit: single integer must be positive; ranges/lists validated later
+    if args.limit:
         try:
-            limit_int = int(args.limit)
-            if limit_int <= 0:
-                parser.error(f"--limit must be positive (got {limit_int})")
+            if int(args.limit) <= 0:
+                parser.error(f"--limit must be positive (got {args.limit})")
         except ValueError:
-            pass  # Not a single integer (e.g., "0-9" or "0,1,2"), validation happens later
+            pass
 
     # Derived arguments
     args.parallel = PARALLEL_MODE and not args.sequential

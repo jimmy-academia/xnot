@@ -45,12 +45,17 @@ class RankGPT(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Permutation-based evaluation (single item maps to recommend/not)."""
+        """Permutation-based evaluation (single item maps to recommend/not).
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         prompt = f"""[USER REQUEST]
-{context}
+{query}
 
 [RESTAURANT]
-{query}
+{context}
 
 Should this restaurant be recommended? Output ANSWER: 1 (yes), 0 (neutral), or -1 (no)."""
 
@@ -60,12 +65,17 @@ Should this restaurant be recommended? Output ANSWER: 1 (yes), 0 (neutral), or -
     # --- Ranking Methods ---
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Listwise permutation ranking of all restaurants."""
+        """Listwise permutation ranking of all restaurants.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         prompt = f"""[USER REQUEST]
-{context}
+{query}
 
 [RESTAURANTS]
-{query}
+{context}
 
 Rank ALL restaurants from MOST to LEAST relevant to the user's request.
 

@@ -43,9 +43,14 @@ class LeastToMost(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """L2M evaluation: decompose request, solve sub-questions, aggregate."""
+        """L2M evaluation: decompose request, solve sub-questions, aggregate.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         # Step 1: Decompose user request into sub-questions
-        decompose_prompt = f"""User request: {context}
+        decompose_prompt = f"""User request: {query}
 
 Break this into 2-3 simpler questions to evaluate a restaurant."""
 
@@ -53,7 +58,7 @@ Break this into 2-3 simpler questions to evaluate a restaurant."""
         subquestions = self._parse_subquestions(subquestions_response)
 
         # Step 2: Solve each sub-question (least to most complex)
-        accumulated_context = f"[RESTAURANT INFO]\n{query}\n\n[USER REQUEST]\n{context}\n"
+        accumulated_context = f"[RESTAURANT INFO]\n{context}\n\n[USER REQUEST]\n{query}\n"
 
         for i, subq in enumerate(subquestions):
             solve_prompt = f"""{accumulated_context}
@@ -93,9 +98,14 @@ Based on all the above analysis, should this restaurant be recommended for the u
     # --- Ranking Methods ---
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Ranking evaluation with L2M approach."""
+        """Ranking evaluation with L2M approach.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
         # For ranking, use simplified single-pass L2M
-        decompose_prompt = f"""User request: {context}
+        decompose_prompt = f"""User request: {query}
 
 What are the 2-3 key criteria to evaluate restaurants for this request?"""
 
@@ -111,10 +121,10 @@ What are the 2-3 key criteria to evaluate restaurants for this request?"""
 {criteria_response}
 
 [RESTAURANTS]
-{query}
+{context}
 
 [USER REQUEST]
-{context}
+{query}
 
 Evaluate each restaurant against the criteria above.
 {instruction}

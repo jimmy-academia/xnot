@@ -107,8 +107,16 @@ anot/
 
 ## Documentation
 
-See [`doc/`](doc/README.md) for full documentation index:
-- [baselines.md](doc/baselines.md) - Implemented baseline methods with paper references
-- [anot_architecture.md](doc/anot_architecture.md) - ANoT three-phase design
-- [research_plan.md](doc/research_plan.md) - Research plan and specifications
-- [logging.md](doc/logging.md) - Logging infrastructure
+See [`doc/README.md`](doc/README.md) for full documentation index.
+
+### Benchmark Dataset
+- [data/philly_cafes/README.md](data/philly_cafes/README.md) - Dataset overview and request group designs (G01-G08)
+- [data/philly_cafes/requests_reference.md](data/philly_cafes/requests_reference.md) - Complete request-answer reference
+- [data/philly_cafes/statistics.md](data/philly_cafes/statistics.md) - Evidence distribution and coverage analysis
+- [doc/condition_design.md](doc/condition_design.md) - Bottom-up anchor-first design methodology
+
+### Research & Architecture
+- [doc/baselines.md](doc/baselines.md) - Implemented baseline methods with paper references
+- [doc/anot_architecture.md](doc/anot_architecture.md) - ANoT three-phase design
+- [doc/research_plan.md](doc/research_plan.md) - Research plan and specifications
+- [doc/logging.md](doc/logging.md) - Logging infrastructure

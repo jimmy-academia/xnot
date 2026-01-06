@@ -1,0 +1,91 @@
+{
+  "scale_points": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    40,
+    50
+  ],
+  "k": 5,
+  "results": [
+    {
+      "candidates": 10,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    },
+    {
+      "candidates": 15,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    },
+    {
+      "candidates": 20,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    },
+    {
+      "candidates": 25,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    },
+    {
+      "candidates": 30,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    },
+    {
+      "candidates": 40,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    },
+    {
+      "candidates": 50,
+      "requests": 3,
+      "at_1": "0%",
+      "at_2": "0%",
+      "at_3": "0%",
+      "at_4": "0%",
+      "at_5": "0%",
+      "usage": "--",
+      "status": "ok"
+    }
+  ]
+}

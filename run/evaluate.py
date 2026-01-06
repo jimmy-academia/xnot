@@ -59,7 +59,7 @@ def compute_multi_k_stats(results: list[dict], k: int) -> dict:
 
 
 def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
-                            context: str, k: int, req: dict,
+                            query: str, k: int, req: dict,
                             groundtruth: dict, attack_config: dict = None) -> dict | None:
     """Evaluate a single request (thread-safe helper).
 
@@ -68,7 +68,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         items: All items (will be shuffled per request)
         mode: "string" or "dict" for formatting
         shuffle: Shuffle strategy ("none", "middle", "random")
-        context: Request context/text
+        query: User request text (what user is searching for)
         k: Number of top predictions
         req: Request dict with 'id'
         groundtruth: {request_id: {"gold_restaurant": str, "gold_idx": int}}
@@ -99,8 +99,8 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     # Apply shuffle based on gold position
     shuffled_items, mapping, shuffled_gold_pos = apply_shuffle(items, gold_idx, shuffle)
 
-    # Format query with shuffled items
-    query, item_count = format_ranking_query(shuffled_items, mode)
+    # Format items as context (restaurant data)
+    context, item_count = format_ranking_query(shuffled_items, mode)
 
     # Track per-request token usage
     tracker = get_usage_tracker()
@@ -109,6 +109,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     response = None
     shuffled_preds = []
     try:
+        # query = user request, context = restaurant data
         # Only pass request_id if method accepts it (e.g., ANoT)
         sig = inspect.signature(method.evaluate_ranking)
         if 'request_id' in sig.parameters:
@@ -217,7 +218,7 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                     executor.submit(
                         evaluate_ranking_single,
                         method, items, mode, shuffle,
-                        req.get("context") or req.get("text", ""),
+                        req.get("context") or req.get("text", ""),  # query = user request
                         k, req, groundtruth, attack_config
                     ): req
                     for req in requests
@@ -240,10 +241,10 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
         def run_eval():
             nonlocal context_exceeded
             for req in requests:
-                context = req.get("context") or req.get("text", "")
+                query = req.get("context") or req.get("text", "")  # query = user request
                 try:
                     result = evaluate_ranking_single(
-                        method, items, mode, shuffle, context, k, req, groundtruth, attack_config
+                        method, items, mode, shuffle, query, k, req, groundtruth, attack_config
                     )
                     if result:
                         results.append(result)

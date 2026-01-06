@@ -24,7 +24,7 @@ from utils.parsing import parse_final_answer
 COMPARISON_PROMPT = """Given this user request, which restaurant is MORE relevant?
 
 User Request:
-{context}
+{query}
 
 Restaurant A:
 {item_a}
@@ -40,10 +40,10 @@ Output ONLY one of: A, B, or TIE"""
 EVALUATE_PROMPT = """Evaluate if this restaurant matches the user's needs.
 
 User Request:
-{context}
+{query}
 
 Restaurant:
-{query}
+{context}
 
 Does this restaurant match the user's requirements?
 Output: 1 (matches), 0 (unclear), or -1 (does not match)
@@ -63,15 +63,28 @@ class PairwiseRankingPrompting(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """Evaluate single item. Returns -1, 0, or 1."""
-        prompt = EVALUATE_PROMPT.format(context=context, query=query)
+        """Evaluate single item.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+
+        Returns:
+            -1, 0, or 1
+        """
+        prompt = EVALUATE_PROMPT.format(query=query, context=context)
         response = call_llm(prompt)
 
         return parse_final_answer(response)
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Evaluate ranking task using pairwise comparisons."""
-        items = self._parse_items(query)
+        """Evaluate ranking task using pairwise comparisons.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
+        items = self._parse_items(context)
 
         if not items:
             return "1"  # Fallback
@@ -91,7 +104,7 @@ class PairwiseRankingPrompting(BaseMethod):
         # Compare all pairs in parallel using async
         async def compare_all():
             tasks = [
-                self._compare_pair_async(item_a, item_b, idx_a, idx_b, context)
+                self._compare_pair_async(item_a, item_b, idx_a, idx_b, query)
                 for item_a, item_b, idx_a, idx_b in pairs
             ]
             return await asyncio.gather(*tasks)
@@ -129,10 +142,14 @@ class PairwiseRankingPrompting(BaseMethod):
         return items
 
     def _compare_pair(self, item_a: str, item_b: str,
-                      idx_a: int, idx_b: int, context: str) -> str:
-        """Compare two items and return winner: 'A', 'B', or 'TIE'."""
+                      idx_a: int, idx_b: int, query: str) -> str:
+        """Compare two items and return winner: 'A', 'B', or 'TIE'.
+
+        Args:
+            query: User request text
+        """
         prompt = COMPARISON_PROMPT.format(
-            context=context,
+            query=query,
             item_a=item_a,
             item_b=item_b
         )
@@ -141,10 +158,14 @@ class PairwiseRankingPrompting(BaseMethod):
         return self._parse_winner(response)
 
     async def _compare_pair_async(self, item_a: str, item_b: str,
-                                   idx_a: int, idx_b: int, context: str) -> Tuple[int, int, str]:
-        """Async version: compare two items, return (idx_a, idx_b, winner)."""
+                                   idx_a: int, idx_b: int, query: str) -> Tuple[int, int, str]:
+        """Async version: compare two items, return (idx_a, idx_b, winner).
+
+        Args:
+            query: User request text
+        """
         prompt = COMPARISON_PROMPT.format(
-            context=context,
+            query=query,
             item_a=item_a,
             item_b=item_b
         )

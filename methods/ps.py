@@ -39,9 +39,14 @@ class PlanAndSolve(BaseMethod):
         super().__init__(run_dir=run_dir, **kwargs)
 
     def evaluate(self, query: str, context: str) -> int:
-        """PS evaluation: plan then solve step by step."""
+        """PS evaluation: plan then solve step by step.
+
+        Args:
+            query: User request text
+            context: Restaurant data
+        """
         # Step 1: Devise a plan
-        plan_prompt = f"""User request: {context}
+        plan_prompt = f"""User request: {query}
 
 Restaurant information is available. Devise a 3-step plan to evaluate if this restaurant matches the user's needs."""
 
@@ -49,7 +54,7 @@ Restaurant information is available. Devise a 3-step plan to evaluate if this re
         steps = self._parse_steps(plan_response)
 
         # Step 2: Execute each step
-        accumulated = f"[RESTAURANT INFO]\n{query}\n\n[USER REQUEST]\n{context}\n\n[PLAN]\n{plan_response}\n"
+        accumulated = f"[RESTAURANT INFO]\n{context}\n\n[USER REQUEST]\n{query}\n\n[PLAN]\n{plan_response}\n"
 
         for i, step in enumerate(steps):
             solve_prompt = f"""{accumulated}
@@ -74,8 +79,13 @@ Based on all steps above, should this restaurant be recommended?"""
         return parse_numbered_steps(response, max_steps=3)
 
     def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
-        """Ranking with Plan-and-Solve approach."""
-        task_desc = RANKING_TASK_COMPACT.format(context=context, k=k)
+        """Ranking with Plan-and-Solve approach.
+
+        Args:
+            query: User request text
+            context: All restaurants formatted
+        """
+        task_desc = RANKING_TASK_COMPACT.format(query=query, k=k)
 
         plan_prompt = f"""{task_desc}
 
@@ -94,7 +104,7 @@ Devise a 3-step plan to compare multiple restaurants and select the best match."
 {task_desc}
 
 [RESTAURANTS]
-{query}
+{context}
 
 Execute the plan above to evaluate each restaurant.
 {instruction}

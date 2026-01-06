@@ -20,8 +20,8 @@ class BaseMethod(ABC):
         """Evaluate item against request.
 
         Args:
-            query: Restaurant data (str or dict)
-            context: User request text
+            query: User request text (what user is searching for)
+            context: Restaurant data (str or dict)
 
         Returns:
             1 (recommend), 0 (neutral), -1 (not recommend)
@@ -32,8 +32,8 @@ class BaseMethod(ABC):
         """Evaluate ranking task. Optional method for methods that support ranking.
 
         Args:
-            query: All restaurants formatted with indices
-            context: User request text
+            query: User request text (what user is searching for)
+            context: All restaurants formatted with indices
             k: Number of top predictions to return
 
         Returns:
