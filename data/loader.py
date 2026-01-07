@@ -12,9 +12,17 @@ from utils.io import loadjl
 DATA_DIR = Path(__file__).parent
 
 # Fields to strip from reviews/users (reduce token bloat)
-# Note: 'elite' is kept because G04 requests need it for weight_by checks
-STRIP_USER_FIELDS = {'friends', 'user_id'}
-STRIP_REVIEW_FIELDS = {'review_id', 'business_id', 'user_id'}
+# Keep: elite, fans, review_count, name (used by weight_by in requests)
+# Keep: useful (used by weight_by for helpful reviews)
+STRIP_USER_FIELDS = {'friends', 'user_id', 'yelping_since', 'average_stars'}
+STRIP_REVIEW_FIELDS = {'review_id', 'business_id', 'user_id', 'cool', 'funny', 'date'}
+
+# Unused attributes (not referenced by any request) - strip to save tokens
+STRIP_ATTRIBUTES = {
+    'BYOBCorkage', 'BestNights', 'BusinessAcceptsBitcoin', 'BusinessParking',
+    'ByAppointmentOnly', 'Caters', 'Corkage', 'GoodForDancing', 'Music',
+    'RestaurantsTableService', 'Smoking'
+}
 
 
 def _load_user_mapping(data_name: str) -> dict | None:
@@ -304,8 +312,12 @@ def _load_reviews_with_synthesis(
     return reviews_by_biz
 
 
-# Fields to remove from restaurants (ground-truth / evaluation-only)
-RESTAURANT_BLOCKLIST = {"llm_score", "llm_reasoning"}
+# Fields to remove from restaurants (ground-truth, internal IDs, unused metadata)
+RESTAURANT_BLOCKLIST = {
+    "llm_score", "llm_reasoning",  # Evaluation-only
+    "business_id", "latitude", "longitude",  # Internal/unused
+    "is_open", "postal_code", "state", "review_count", "stars"  # Redundant/unused
+}
 
 
 def _assemble_items(
@@ -339,6 +351,9 @@ def _assemble_items(
         # Parse string-encoded attributes (Yelp data has dicts as strings)
         if "attributes" in item:
             item["attributes"] = _parse_attributes(item["attributes"])
+            # Strip unused attributes to save tokens
+            item["attributes"] = {k: v for k, v in item["attributes"].items()
+                                  if k not in STRIP_ATTRIBUTES}
 
         # Parse categories string → list
         if isinstance(item.get("categories"), str):

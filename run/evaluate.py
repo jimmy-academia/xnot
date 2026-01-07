@@ -239,10 +239,16 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         response = _invoke_method(method, query, context, k, req_id)
         shuffled_preds = parse_indices(response, item_count, k)
     except Exception as e:
-        error_str = str(e)
-        if "context_length_exceeded" in error_str or "too many tokens" in error_str.lower():
-            raise ContextLengthExceeded(error_str)
-        print(f"[ERROR] {req_id}: {type(e).__name__}: {error_str[:200]}", flush=True)
+        error_str = str(e).lower()
+        # Detect context length errors (various API phrasings)
+        context_errors = [
+            "context_length_exceeded", "too many tokens", "maximum context length",
+            "context window", "token limit", "max_tokens", "input too long"
+        ]
+        if any(err in error_str for err in context_errors):
+            print(f"[CONTEXT EXCEEDED] {req_id}: {str(e)[:300]}", flush=True)
+            raise ContextLengthExceeded(str(e))
+        print(f"[ERROR] {req_id}: {type(e).__name__}: {str(e)[:300]}", flush=True)
 
     # Map predictions back to original indices
     pred_indices = unmap_predictions(shuffled_preds, mapping)

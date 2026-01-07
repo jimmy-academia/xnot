@@ -1,106 +1,169 @@
 #!/usr/bin/env python3
-"""Prompt constants for ANoT phases - Strategy-Centric Design."""
+"""Prompt constants for ANoT phases - Multi-Step Design."""
 
 from prompts.task_descriptions import RANKING_TASK_COMPACT
 
 # Re-export for use in core.py
-__all__ = ['SYSTEM_PROMPT', 'PHASE1_PROMPT', 'PHASE2_PROMPT', 'RANKING_TASK_COMPACT']
+__all__ = [
+    'SYSTEM_PROMPT', 'STEP1_EXTRACT_PROMPT', 'STEP2_PATH_PROMPT',
+    'STEP3_RULEOUT_PROMPT', 'STEP4_SKELETON_PROMPT', 'PHASE2_PROMPT',
+    'RANKING_TASK_COMPACT'
+]
 
 SYSTEM_PROMPT = "You follow instructions precisely. Output only what is requested."
 
 # =============================================================================
-# PHASE 1: Strategy Extraction (Schema-Aware, No Item Scanning)
+# STEP 1: Condition Extraction
 # =============================================================================
-# Phase 1 sees the SCHEMA (1-2 example items) to understand available fields,
-# but does NOT try to find matching items. It outputs an execution STRATEGY.
 
-PHASE1_PROMPT = """Analyze the user request and design an evaluation STRATEGY.
+STEP1_EXTRACT_PROMPT = """Extract conditions from the user request.
 
-{task_description}
-
-[SCHEMA - showing 1-2 example items so you know available fields]
-{schema_compact}
-
-[AVAILABLE FIELDS]
-- attributes: Direct key-value pairs (GoodForKids, WiFi, DriveThru, CoatCheck, etc.)
-- attributes.Ambience: Nested dict {{hipster:True, casual:True, upscale:False, ...}}
-- attributes.GoodForMeal: Nested dict {{breakfast:True, lunch:False, brunch:True, ...}}
-- hours: day=start-end format (e.g., Friday=12:0-22:0 means 12pm-10pm)
-- reviews: Array of review objects with 'text' field containing reviewer comments
-
-[TASK]
-1. READ the user request. Extract ALL conditions mentioned.
-2. CLASSIFY each condition by type:
-   - [ATTR] Direct attribute lookup (e.g., GoodForKids=True, WiFi=free, DriveThru=True)
-   - [AMBIENCE] Nested in Ambience dict (e.g., hipster vibe → Ambience.hipster=True)
-   - [MEAL] Nested in GoodForMeal dict (e.g., good for brunch → GoodForMeal.brunch=True)
-   - [HOURS] Operating hours check (e.g., open Friday after 9pm)
-   - [REVIEW_TEXT] Keyword search in review text (e.g., "mentions 'work'" or "has reviews about coffee")
-   - [REVIEW_META] Reviewer properties (e.g., elite reviewer, experienced reviewer)
-3. Identify LOGIC: AND (all conditions must match) or OR (any condition matches)
-4. DO NOT attempt to find matching items - Phase 2 will design evaluation steps.
+[USER REQUEST]
+{query}
 
 [OUTPUT FORMAT]
-===STRATEGY===
-CONDITIONS:
-  1. [TYPE] description - attribute.path = expected_value
-  2. [TYPE] description - attribute.path = expected_value
-  ...
+List each condition on a new line:
+[ATTR] description of attribute condition
+[REVIEW] description of review text search
+[HOURS] description of hours condition
 
-LOGIC: AND(1, 2, ...) or OR(1, 2, ...) or complex (e.g., AND(1, OR(2, 3)))
-TOTAL_ITEMS: {n_items}
-
-===MESSAGE===
-Brief notes for Phase 2 (optional)
+Example output:
+[ATTR] has drive-thru
+[ATTR] kid-friendly
+[REVIEW] mentions wifi
 """
 
 # =============================================================================
-# PHASE 2: LWT Generation (Item-Aware Execution Plan)
+# STEP 2: Path Resolution (called per condition)
 # =============================================================================
-# Phase 2 receives the strategy and generates concrete LWT steps.
-# CRITICAL: Each step must be SELF-CONTAINED with the actual condition embedded.
 
-PHASE2_PROMPT = """Generate LWT steps to evaluate {n_items} items against conditions.
+STEP2_PATH_PROMPT = """Determine where to find the value for this condition.
 
-[STRATEGY FROM PHASE 1]
-{strategy}
+[CONDITION]
+{condition_description}
+
+[SCHEMA - example items showing available fields]
+{schema_compact}
+
+[COMMON FIELDS]
+- attributes.GoodForKids: True/False
+- attributes.WiFi: "free", "paid", "no", or None
+- attributes.DriveThru: True/False
+- attributes.NoiseLevel: "quiet", "average", "loud", "very_loud"
+- attributes.OutdoorSeating: True/False
+- attributes.HasTV: True/False
+- attributes.Ambience: dict with keys like hipster, casual, upscale, romantic, etc.
+- attributes.GoodForMeal: dict with keys like breakfast, lunch, dinner, brunch, etc.
+- hours: dict with day names as keys, values like "8:0-22:0"
+- reviews: list of review objects with 'text' field
+
+[TASK]
+1. Identify which field to check for this condition
+2. If field doesn't exist in schema, use best guess from common fields
+3. Determine expected value
+
+[OUTPUT FORMAT]
+PATH: attributes.FieldName
+EXPECTED: True/False/"value"
+TYPE: HARD
+
+Or if it's a review text search:
+PATH: reviews
+EXPECTED: keyword
+TYPE: SOFT
+"""
+
+# =============================================================================
+# STEP 3: Quick Rule-Out (check hard conditions, prune items)
+# =============================================================================
+
+STEP3_RULEOUT_PROMPT = """Check items against hard conditions and identify which pass.
+
+[HARD CONDITIONS]
+{hard_conditions}
+
+[ITEMS - relevant attributes only]
+{items_compact}
+
+[TASK]
+For each item, check if ALL hard conditions are satisfied.
+- Item passes if all conditions match
+- Item fails if any condition doesn't match
+- Missing/None values count as not matching
+
+[OUTPUT FORMAT]
+===CANDIDATES===
+[list of item numbers that pass all conditions, e.g., 2, 4, 6, 7]
+
+===PRUNED===
+item_number: reason
+item_number: reason
+...
+"""
+
+# =============================================================================
+# STEP 4: LWT Skeleton Generation (separate steps per item)
+# =============================================================================
+
+STEP4_SKELETON_PROMPT = """Generate LWT skeleton for soft conditions on candidate items.
+
+[CANDIDATES]
+{candidates}
+
+[SOFT CONDITIONS]
+{soft_conditions}
+
+[RULES]
+- Generate ONE step per item per soft condition
+- Each step checks ONE item independently using {{{{(context)}}}}[item_num][reviews]
+- Final step aggregates all results and outputs ranking
+- Use variable names like (r2), (r4) for item-specific results
+
+[PATH SYNTAX]
+{{{{(context)}}}}[2][reviews] - Item 2's reviews array
+
+[OUTPUT FORMAT]
+===LWT_SKELETON===
+(r2)=LLM('Item 2 reviews: {{{{(context)}}}}[2][reviews]. {soft_question} Answer: yes/no')
+(r4)=LLM('Item 4 reviews: {{{{(context)}}}}[4][reviews]. {soft_question} Answer: yes/no')
+...
+(final)=LLM('Results: r2={{{{(r2)}}}}, r4={{{{(r4)}}}}, ... Rank items with yes first. Output top-{k}: [best,2nd,...]')
+
+[EXAMPLE for candidates [2,4,6] checking "mentions wifi"]
+===LWT_SKELETON===
+(r2)=LLM('Item 2 reviews: {{{{(context)}}}}[2][reviews]. Mentions wifi? Answer: yes/no')
+(r4)=LLM('Item 4 reviews: {{{{(context)}}}}[4][reviews]. Mentions wifi? Answer: yes/no')
+(r6)=LLM('Item 6 reviews: {{{{(context)}}}}[6][reviews]. Mentions wifi? Answer: yes/no')
+(final)=LLM('wifi: r2={{{{(r2)}}}}, r4={{{{(r4)}}}}, r6={{{{(r6)}}}}. Rank items with yes first. Output: [best,2nd,3rd,4th,5th]')
+
+[IF NO SOFT CONDITIONS]
+===LWT_SKELETON===
+(final)=LLM('Candidates: {candidates}. All passed hard conditions. Output top-{k}: [first {k} from list]')
+"""
+
+# =============================================================================
+# PHASE 2: ReAct Expansion (refine skeleton with read() calls)
+# =============================================================================
+
+PHASE2_PROMPT = """Refine the LWT skeleton by checking review content.
+
+[LWT SKELETON]
+{lwt_skeleton}
 
 [AVAILABLE TOOLS]
-- read("items[0].attributes") - Probe data structure, see available fields
-- read("items[0].attributes.GoodForKids") - Get specific value from item 0
-- lwt_insert(idx, step) - Add LWT step
-- done() - Finish
+- read("items[2].reviews") - Read item 2's reviews to check if they match
+- lwt_set(idx, step) - Modify step at index
+- lwt_delete(idx) - Remove step at index (if item clearly doesn't match)
+- done() - Finish refinement
 
-[PATH SYNTAX for LWT steps]
-Use {{(context)}}[path] to access restaurant data in Phase 3:
-- {{(context)}}[1] - Item 1 (1-indexed)
-- {{(context)}}[1][attributes] - Item 1's attributes dict
-- {{(context)}}[1][attributes][GoodForKids] - Single value (True/False)
-- {{(context)}}[1][attributes][Ambience][hipster] - Nested value
-- {{(context)}}[1][hours] - Item 1's hours dict
-
-[STEP TEMPLATES]
-CRITICAL: You MUST list ALL items explicitly. Do NOT use "..." - it won't be expanded!
-
-For [ATTR] conditions - list EVERY item's value:
-  (c1)=LLM('1={{(context)}}[1][attributes][GoodForKids], 2={{(context)}}[2][attributes][GoodForKids], 3={{(context)}}[3][attributes][GoodForKids], 4={{(context)}}[4][attributes][GoodForKids], 5={{(context)}}[5][attributes][GoodForKids]. Which are True? Output: [indices]')
-
-For nested attributes (Ambience, GoodForMeal) - list ALL:
-  (c2)=LLM('1={{(context)}}[1][attributes][Ambience][hipster], 2={{(context)}}[2][attributes][Ambience][hipster], 3={{(context)}}[3][attributes][Ambience][hipster], 4={{(context)}}[4][attributes][Ambience][hipster], 5={{(context)}}[5][attributes][Ambience][hipster]. Which are True? Output: [indices]')
-
-Final aggregation:
-  (final)=LLM('c1={{(c1)}}, c2={{(c2)}}. Score items: +1 per condition matched. Rank by score DESC. Output top-5: [best,2nd,3rd,4th,5th]')
+[TASK]
+1. Optionally read() reviews for items to verify they match soft conditions
+2. If an item clearly doesn't match, use lwt_delete() to remove its step
+3. Call done() when finished
 
 [PROCESS]
-1. Optionally use read() to verify field paths exist
-2. Generate LWT steps for each condition
-3. Generate final aggregation step
-4. Call done()
-
-[EXAMPLE for 10 items]
-read("items[0].attributes")  # See available fields
-lwt_insert(1, "(c1)=LLM('GoodForKids: 1={{(context)}}[1][attributes][GoodForKids], 2={{(context)}}[2][attributes][GoodForKids], 3={{(context)}}[3][attributes][GoodForKids], 4={{(context)}}[4][attributes][GoodForKids], 5={{(context)}}[5][attributes][GoodForKids], 6={{(context)}}[6][attributes][GoodForKids], 7={{(context)}}[7][attributes][GoodForKids], 8={{(context)}}[8][attributes][GoodForKids], 9={{(context)}}[9][attributes][GoodForKids], 10={{(context)}}[10][attributes][GoodForKids]. Which are True? Output: [indices]')")
-lwt_insert(2, "(c2)=LLM('WiFi: 1={{(context)}}[1][attributes][WiFi], 2={{(context)}}[2][attributes][WiFi], 3={{(context)}}[3][attributes][WiFi], 4={{(context)}}[4][attributes][WiFi], 5={{(context)}}[5][attributes][WiFi], 6={{(context)}}[6][attributes][WiFi], 7={{(context)}}[7][attributes][WiFi], 8={{(context)}}[8][attributes][WiFi], 9={{(context)}}[9][attributes][WiFi], 10={{(context)}}[10][attributes][WiFi]. Which are free? Output: [indices]')")
-lwt_insert(3, "(final)=LLM('c1={{(c1)}}, c2={{(c2)}}. Score: +1 per match. Output top-5: [best,2nd,3rd,4th,5th]')")
-done()
+- You can read a few items to verify matching
+- Delete steps for items that clearly don't match
+- Keep steps for items that might match (let Phase 3 evaluate)
+- Call done() to finish
 """

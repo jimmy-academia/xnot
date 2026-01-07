@@ -300,3 +300,211 @@ def format_schema_compact(items: list, num_examples: int = 2, truncate: int = 50
         lines.append("")  # blank line between items
 
     return "\n".join(lines)
+
+
+# =============================================================================
+# Multi-step Phase 1 Parsing Functions
+# =============================================================================
+
+def parse_conditions(response: str) -> list:
+    """Parse Step 1 output: extract conditions from LLM response.
+
+    Args:
+        response: LLM response with lines like "[ATTR] has drive-thru"
+
+    Returns:
+        List of dicts: [{"type": "ATTR", "description": "has drive-thru"}, ...]
+    """
+    conditions = []
+    for line in response.strip().split('\n'):
+        line = line.strip()
+        # Match [TYPE] description pattern
+        match = re.match(r'\[(\w+)\]\s*(.+)', line)
+        if match:
+            cond_type = match.group(1).upper()
+            description = match.group(2).strip()
+            conditions.append({"type": cond_type, "description": description})
+    return conditions
+
+
+def parse_resolved_path(response: str) -> dict:
+    """Parse Step 2 output: extract path resolution from LLM response.
+
+    Args:
+        response: LLM response with PATH, EXPECTED, TYPE lines
+
+    Returns:
+        Dict: {"path": "attributes.X", "expected": True, "type": "HARD"}
+        or {"path": "reviews", "expected": "keyword", "type": "SOFT"}
+    """
+    result = {"path": None, "expected": None, "type": "HARD"}
+
+    for line in response.strip().split('\n'):
+        line = line.strip()
+        if line.upper().startswith('PATH:'):
+            result["path"] = line.split(':', 1)[1].strip()
+        elif line.upper().startswith('EXPECTED:'):
+            val = line.split(':', 1)[1].strip()
+            # Parse boolean/string values
+            if val.lower() == 'true':
+                result["expected"] = True
+            elif val.lower() == 'false':
+                result["expected"] = False
+            else:
+                # Remove quotes if present
+                result["expected"] = val.strip('"\'')
+        elif line.upper().startswith('TYPE:'):
+            result["type"] = line.split(':', 1)[1].strip().upper()
+
+    # Normalize SOFT type variations
+    if result["type"] in ("SOFT", "REVIEW_SEARCH", "REVIEW"):
+        result["type"] = "SOFT"
+    else:
+        result["type"] = "HARD"
+
+    return result
+
+
+def parse_candidates(response: str) -> list:
+    """Parse Step 3 output: extract candidate item numbers.
+
+    Args:
+        response: LLM response with ===CANDIDATES=== section
+
+    Returns:
+        List of int: [2, 4, 6, 7, 8, 9, 10]
+    """
+    candidates = []
+
+    # Look for ===CANDIDATES=== section
+    if '===CANDIDATES===' in response:
+        parts = response.split('===CANDIDATES===')
+        if len(parts) > 1:
+            candidates_section = parts[1].split('===')[0]  # Get until next section
+            # Extract numbers
+            numbers = re.findall(r'\d+', candidates_section)
+            candidates = [int(n) for n in numbers]
+    else:
+        # Fallback: look for list of numbers anywhere
+        # Try to find a bracketed list [1, 2, 3]
+        match = re.search(r'\[[\d,\s]+\]', response)
+        if match:
+            numbers = re.findall(r'\d+', match.group())
+            candidates = [int(n) for n in numbers]
+
+    return candidates
+
+
+def parse_lwt_skeleton(response: str) -> list:
+    """Parse Step 4 output: extract LWT skeleton steps.
+
+    Args:
+        response: LLM response with ===LWT_SKELETON=== section
+
+    Returns:
+        List of tuples: [("r2", "LLM(...)"), ("r4", "LLM(...)"), ("final", "LLM(...)")]
+    """
+    steps = []
+
+    # Look for ===LWT_SKELETON=== section
+    content = response
+    if '===LWT_SKELETON===' in response:
+        content = response.split('===LWT_SKELETON===')[1]
+        # Stop at next section marker if present
+        if '===' in content:
+            content = content.split('===')[0]
+
+    # Match (var_name)=LLM('...') patterns
+    # Pattern handles nested parens and quotes
+    pattern = r"\((\w+)\)\s*=\s*LLM\s*\(\s*['\"](.+?)['\"]\s*\)"
+    for match in re.finditer(pattern, content, re.DOTALL):
+        var_name = match.group(1)
+        prompt = match.group(2)
+        steps.append((var_name, f"LLM('{prompt}')"))
+
+    return steps
+
+
+def format_items_for_ruleout(items: list, hard_conditions: list) -> str:
+    """Format items with only relevant attributes for quick rule-out.
+
+    Args:
+        items: List of item dicts
+        hard_conditions: List of resolved condition dicts with 'path' field
+
+    Returns:
+        Compact string showing only relevant attributes per item
+    """
+    # Extract field names from paths
+    fields_needed = set()
+    for cond in hard_conditions:
+        path = cond.get("path", "")
+        # Extract top-level field from path like "attributes.GoodForKids"
+        if path.startswith("attributes."):
+            # Get the specific attribute
+            attr_path = path[len("attributes."):]
+            # Handle nested like "Ambience.hipster"
+            attr_name = attr_path.split('.')[0]
+            fields_needed.add(attr_name)
+        elif path == "hours" or path.startswith("hours."):
+            fields_needed.add("hours")
+
+    lines = []
+    for i, item in enumerate(items):
+        attrs = item.get("attributes", {})
+        hours = item.get("hours", {})
+
+        # Build compact representation
+        parts = []
+        for field in sorted(fields_needed):
+            if field == "hours":
+                val = hours if hours else None
+            elif field in attrs:
+                val = attrs[field]
+            else:
+                val = None
+
+            # Format value compactly
+            if val is None:
+                parts.append(f"{field}=None")
+            elif isinstance(val, dict):
+                # For nested dicts like Ambience, show relevant subfields
+                sub_parts = []
+                for cond in hard_conditions:
+                    path = cond.get("path", "")
+                    if f"attributes.{field}." in path:
+                        subfield = path.split('.')[-1]
+                        sub_val = val.get(subfield)
+                        sub_parts.append(f"{subfield}={sub_val}")
+                if sub_parts:
+                    parts.append(f"{field}={{{','.join(sub_parts)}}}")
+                else:
+                    parts.append(f"{field}={val}")
+            elif isinstance(val, bool):
+                parts.append(f"{field}={val}")
+            else:
+                parts.append(f"{field}={repr(val)}")
+
+        lines.append(f"Item {i+1}: {', '.join(parts)}")
+
+    return "\n".join(lines)
+
+
+def get_attr_value(item: dict, path: str):
+    """Get value from item using dot-notation path.
+
+    Args:
+        item: Item dict
+        path: Path like "attributes.GoodForKids" or "attributes.Ambience.hipster"
+
+    Returns:
+        Value at path or None if not found
+    """
+    parts = path.split('.')
+    current = item
+    for part in parts:
+        if isinstance(current, dict) and part in current:
+            current = current[part]
+        else:
+            return None
+    return current

@@ -153,13 +153,10 @@ def _run_scale_point(args, run_dir: Path, n_candidates: int, k: int, tracker, lo
     eval_mode = "dict" if args.method in DICT_MODE_METHODS else "string"
     shuffle = getattr(args, 'shuffle', 'random')
 
-    # Build token budget for string-mode methods (pack-to-budget truncation)
+    # Disable pack-to-budget truncation - use stripped data directly
+    # String-mode methods will hit natural context limits at high candidate counts
     token_budget = None
     model = None
-    if args.method not in DICT_MODE_METHODS:
-        model = get_configured_model()
-        token_budget = get_token_budget(model)
-        log.info(f"Token budget: {token_budget:,} (model: {model})")
 
     eval_result = evaluate_ranking(
         dataset.items,

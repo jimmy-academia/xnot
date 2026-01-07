@@ -45,12 +45,10 @@ def run_evaluation_loop(
     parallel = getattr(args, 'parallel', True)
     max_workers = getattr(args, 'max_concurrent', 40)
 
-    # Build token budget for string-mode methods (pack-to-budget truncation)
+    # Disable pack-to-budget truncation - use stripped data directly
+    # String-mode methods will hit natural context limits at high candidate counts
     token_budget = None
     model = None
-    if args.method not in DICT_MODE_METHODS:
-        model = get_configured_model()
-        token_budget = get_token_budget(model)
 
     # Ranking evaluation (default)
     mode_str = "parallel" if parallel else "sequential"
@@ -72,6 +70,12 @@ def run_evaluation_loop(
         token_budget=token_budget,
         model=model
     )
+
+    # Check if context length was exceeded
+    if eval_out.get("context_exceeded"):
+        print(f"\n[STOP] Context length exceeded. Cannot evaluate with this many candidates.")
+        return {"stats": None, "context_exceeded": True}
+
     # Get current usage for display
     usage_for_display = get_usage_tracker().get_summary()
     # Show results: always in dev mode, or in benchmark mode if --full

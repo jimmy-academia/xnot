@@ -26,8 +26,16 @@ from utils.llm import call_llm, call_llm_async
 from utils.parsing import parse_script, substitute_variables
 from utils.usage import get_usage_tracker
 
-from .prompts import SYSTEM_PROMPT, PHASE1_PROMPT, PHASE2_PROMPT, RANKING_TASK_COMPACT
-from .helpers import build_execution_layers, format_items_compact, format_schema_compact, filter_items_for_ranking
+from .prompts import (
+    SYSTEM_PROMPT, STEP1_EXTRACT_PROMPT, STEP2_PATH_PROMPT,
+    STEP3_RULEOUT_PROMPT, STEP4_SKELETON_PROMPT, PHASE2_PROMPT,
+    RANKING_TASK_COMPACT
+)
+from .helpers import (
+    build_execution_layers, format_items_compact, format_schema_compact,
+    filter_items_for_ranking, parse_conditions, parse_resolved_path,
+    parse_candidates, parse_lwt_skeleton, format_items_for_ruleout, get_attr_value
+)
 from .tools import (
     tool_read, tool_lwt_list, tool_lwt_get,
     tool_lwt_set, tool_lwt_delete, tool_lwt_insert
@@ -295,99 +303,229 @@ class AdaptiveNetworkOfThought(BaseMethod):
         return table
 
     # =========================================================================
-    # Phase 1: Planning (LWT Skeleton + Message)
+    # Phase 1: Multi-Step Planning (4 steps)
     # =========================================================================
 
-    def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[str, str]:
-        """Phase 1: Generate evaluation STRATEGY (not execution).
-
-        Strategy-centric design: Phase 1 sees schema but does NOT scan items.
-        It outputs a strategy describing what conditions to check.
-
-        Args:
-            query: User request text (e.g., "Looking for a cafe...")
-            items: List of item dicts (used for schema only)
-            k: Number of top predictions
-
-        Returns:
-            Tuple of (strategy, message) for Phase 2
-        """
-        self._debug(1, "P1", f"Planning for: {query[:60]}...")
-
-        n_items = len(items)
-
-        # Show schema (1-2 example items) so LLM knows available fields
-        # But don't ask LLM to scan all items
-        filtered_items = filter_items_for_ranking(items)
-        schema_compact = format_schema_compact(filtered_items[:2], num_examples=2, truncate=50)
-        self._debug(2, "P1", f"Schema:\n{schema_compact[:500]}...")
-
-        task_desc = RANKING_TASK_COMPACT.format(query=query, k=k)
-        prompt = PHASE1_PROMPT.format(
-            task_description=task_desc,
-            schema_compact=schema_compact,
-            n_items=n_items
-        )
-
+    def _step1_extract_conditions(self, query: str) -> str:
+        """Step 1: Extract conditions from user query."""
+        prompt = STEP1_EXTRACT_PROMPT.format(query=query)
         response = call_llm(
             prompt,
             system=SYSTEM_PROMPT,
             role="planner",
-            context={"method": "anot", "phase": 1, "step": "plan"}
+            context={"method": "anot", "phase": 1, "step": "step1_extract"}
         )
+        self._log_llm_call("P1", "step1_extract", prompt, response)
+        return response
 
-        self._log_llm_call("P1", "plan", prompt, response)
-        self._debug(3, "P1", "Plan response:", response)
+    def _step2_resolve_path(self, condition: dict, schema_compact: str) -> dict:
+        """Step 2: Resolve path for a single condition."""
+        prompt = STEP2_PATH_PROMPT.format(
+            condition_description=f"[{condition['type']}] {condition['description']}",
+            schema_compact=schema_compact
+        )
+        response = call_llm(
+            prompt,
+            system=SYSTEM_PROMPT,
+            role="planner",
+            context={"method": "anot", "phase": 1, "step": "step2_resolve"}
+        )
+        self._log_llm_call("P1", f"step2_resolve_{condition['description'][:20]}", prompt, response)
+        resolved = parse_resolved_path(response)
+        resolved["description"] = condition["description"]
+        resolved["original_type"] = condition["type"]
+        return resolved
 
-        # Parse response - now looking for ===STRATEGY=== instead of ===LWT_SKELETON===
-        strategy = ""
-        message = ""
+    def _step3_quick_ruleout(self, hard_conditions: list, items_compact: str, n_items: int) -> list:
+        """Step 3: Quick rule-out by checking hard conditions."""
+        if not hard_conditions:
+            # No hard conditions - all items are candidates
+            return list(range(1, n_items + 1))
 
-        if "===STRATEGY===" in response:
-            strat_start = response.index("===STRATEGY===") + len("===STRATEGY===")
-            strat_end = response.find("===MESSAGE===", strat_start) if "===MESSAGE===" in response else len(response)
-            strategy = response[strat_start:strat_end].strip()
+        # Format hard conditions for prompt
+        hard_cond_str = "\n".join([
+            f"{i+1}. {c['path']} = {c['expected']}"
+            for i, c in enumerate(hard_conditions)
+        ])
 
-        if "===MESSAGE===" in response:
-            msg_start = response.index("===MESSAGE===") + len("===MESSAGE===")
-            message = response[msg_start:].strip()
+        prompt = STEP3_RULEOUT_PROMPT.format(
+            hard_conditions=hard_cond_str,
+            items_compact=items_compact
+        )
+        response = call_llm(
+            prompt,
+            system=SYSTEM_PROMPT,
+            role="planner",
+            context={"method": "anot", "phase": 1, "step": "step3_ruleout"}
+        )
+        self._log_llm_call("P1", "step3_ruleout", prompt, response)
+        candidates = parse_candidates(response)
 
-        self._debug(1, "P1", f"Strategy extracted: {len(strategy)} chars")
-        return strategy, message
+        # Fallback: if no candidates parsed, use all items
+        if not candidates:
+            self._debug(1, "P1", "No candidates parsed from ruleout, using all items")
+            candidates = list(range(1, n_items + 1))
+
+        return candidates
+
+    def _step4_generate_skeleton(self, candidates: list, soft_conditions: list, k: int) -> list:
+        """Step 4: Generate LWT skeleton for soft conditions on candidates."""
+        if not candidates:
+            # No candidates - return empty LWT with default ranking
+            return [(f"(final)=LLM('No candidates passed hard conditions. Output: []')")]
+
+        candidates_str = ", ".join(str(c) for c in candidates)
+
+        if not soft_conditions:
+            # No soft conditions - just output candidates ranked
+            top_k = candidates[:k]
+            return [f"(final)=LLM('Candidates: [{candidates_str}]. All passed hard conditions. Output: {top_k}')"]
+
+        # Format soft conditions
+        soft_cond_str = "\n".join([
+            f"{i+1}. [{c.get('original_type', 'REVIEW')}] {c['description']} (search for: {c['expected']})"
+            for i, c in enumerate(soft_conditions)
+        ])
+
+        # Build soft question for prompt template
+        soft_question = soft_conditions[0]['description'] if soft_conditions else "matches criteria"
+
+        prompt = STEP4_SKELETON_PROMPT.format(
+            candidates=candidates_str,
+            soft_conditions=soft_cond_str,
+            soft_question=soft_question,
+            k=k
+        )
+        response = call_llm(
+            prompt,
+            system=SYSTEM_PROMPT,
+            role="planner",
+            context={"method": "anot", "phase": 1, "step": "step4_skeleton"}
+        )
+        self._log_llm_call("P1", "step4_skeleton", prompt, response)
+
+        # Parse LWT skeleton
+        skeleton_steps = parse_lwt_skeleton(response)
+
+        if not skeleton_steps:
+            # Fallback: generate simple ranking step
+            self._debug(1, "P1", "No skeleton parsed, generating fallback")
+            top_k = candidates[:k]
+            skeleton_steps = [("final", f"LLM('Rank candidates {candidates_str} by reviews. Output top-{k}: {top_k}')")]
+
+        return skeleton_steps
+
+    def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[list, list]:
+        """Phase 1: Multi-step planning with condition extraction, path resolution,
+        quick rule-out, and LWT skeleton generation.
+
+        Args:
+            query: User request text (e.g., "Looking for a cafe...")
+            items: List of item dicts
+            k: Number of top predictions
+
+        Returns:
+            Tuple of (candidates, lwt_skeleton) for Phase 2/3
+        """
+        self._debug(1, "P1", f"Multi-step planning for: {query[:60]}...")
+        n_items = len(items)
+
+        # Prepare schema for path resolution
+        filtered_items = filter_items_for_ranking(items)
+        schema_compact = format_schema_compact(filtered_items[:2], num_examples=2, truncate=50)
+
+        # Step 1: Extract conditions
+        self._debug(1, "P1", "Step 1: Extracting conditions...")
+        conditions_raw = self._step1_extract_conditions(query)
+        conditions = parse_conditions(conditions_raw)
+        self._debug(1, "P1", f"Extracted {len(conditions)} conditions: {conditions}")
+
+        if not conditions:
+            # Fallback: no conditions found, rank all items
+            self._debug(1, "P1", "No conditions found, using default ranking")
+            all_items = list(range(1, n_items + 1))
+            return all_items, [("final", f"LLM('Rank items 1-{n_items} for query: {query[:100]}. Output top-{k}: [best,2nd,...]')")]
+
+        # Step 2: Resolve paths for each condition
+        self._debug(1, "P1", "Step 2: Resolving paths...")
+        resolved = []
+        for cond in conditions:
+            path_info = self._step2_resolve_path(cond, schema_compact)
+            resolved.append(path_info)
+            self._debug(2, "P1", f"  {cond['description']}: {path_info}")
+
+        hard = [r for r in resolved if r['type'] == 'HARD']
+        soft = [r for r in resolved if r['type'] == 'SOFT']
+        self._debug(1, "P1", f"Conditions: {len(hard)} HARD, {len(soft)} SOFT")
+
+        # Step 3: Quick rule-out (check hard conditions, prune items)
+        self._debug(1, "P1", "Step 3: Quick rule-out...")
+        if hard:
+            items_compact = format_items_for_ruleout(filtered_items, hard)
+            candidates = self._step3_quick_ruleout(hard, items_compact, n_items)
+        else:
+            candidates = list(range(1, n_items + 1))
+        self._debug(1, "P1", f"Candidates after rule-out: {candidates} ({len(candidates)}/{n_items})")
+
+        # Step 4: Generate LWT skeleton (soft conditions on candidates only)
+        self._debug(1, "P1", "Step 4: Generating LWT skeleton...")
+        skeleton_steps = self._step4_generate_skeleton(candidates, soft, k)
+        self._debug(1, "P1", f"Generated {len(skeleton_steps)} LWT steps")
+
+        return candidates, skeleton_steps
 
     # =========================================================================
     # Phase 2: ReAct LWT Expansion
     # =========================================================================
 
-    def phase2_expand(self, strategy: str, message: str, n_items: int, query: dict) -> List[str]:
-        """Phase 2: Generate batched LWT from strategy using ReAct loop.
+    def phase2_expand(self, skeleton_steps: list, candidates: list, query: dict) -> List[str]:
+        """Phase 2: Optionally refine LWT skeleton using ReAct loop.
+
+        Phase 2 can use read() to check review content and delete steps for
+        items that clearly don't match soft conditions.
 
         Args:
-            strategy: Evaluation strategy from Phase 1 (conditions + logic)
-            message: Additional notes from Phase 1
-            n_items: Total number of items to evaluate
+            skeleton_steps: LWT skeleton from Phase 1 [(var_name, step), ...]
+            candidates: List of candidate item numbers
             query: Full query dict (for read() tool if needed)
 
         Returns:
-            List of LWT steps
+            List of LWT steps (formatted strings)
         """
-        self._debug(1, "P2", f"ReAct expansion from strategy ({len(strategy)} chars)...")
+        self._debug(1, "P2", f"Refining skeleton with {len(skeleton_steps)} steps...")
         req_id = getattr(self._thread_local, 'request_id', None)
         if req_id:
-            self._update_display(req_id, "P2", "ReAct expand")
+            self._update_display(req_id, "P2", "refining")
 
-        # Start with EMPTY LWT - Phase 2 generates it from strategy
+        # Convert skeleton to LWT format
+        # skeleton_steps is list of (var_name, step_content) tuples
         lwt_steps = []
+        for var_name, step_content in skeleton_steps:
+            # Format as LWT step: (var_name)=step_content
+            if step_content.startswith("LLM("):
+                lwt_steps.append(f"({var_name})={step_content}")
+            else:
+                lwt_steps.append(f"({var_name})={step_content}")
 
-        # Combine strategy and message for prompt
-        full_strategy = strategy
-        if message:
-            full_strategy += f"\n\nNotes: {message}"
+        # Format skeleton for display
+        lwt_skeleton_str = "\n".join(lwt_steps)
+        self._debug(2, "P2", f"Initial LWT:\n{lwt_skeleton_str}")
 
-        prompt = PHASE2_PROMPT.format(strategy=full_strategy, n_items=n_items)
+        # For now, skip ReAct refinement if skeleton looks reasonable
+        # This simplifies the flow and avoids the broken ReAct loop
+        if len(lwt_steps) >= 1:
+            self._debug(1, "P2", f"Using skeleton directly: {len(lwt_steps)} steps")
+            trace = self._get_trace()
+            if trace:
+                trace["phase2"]["expanded_lwt"] = lwt_steps
+                trace["phase2"]["react_iterations"] = 0
+            return lwt_steps
+
+        # Optional: ReAct loop for refinement (can be enabled later)
+        prompt = PHASE2_PROMPT.format(lwt_skeleton=lwt_skeleton_str)
         conversation = [prompt]
 
-        max_iterations = 50
+        max_iterations = 10
         iteration = 0
         for iteration in range(max_iterations):
             self._debug(2, "P2", f"ReAct iteration {iteration + 1}")
@@ -405,56 +543,44 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 self._debug(1, "P2", "Empty response, breaking")
                 break
 
-            # Process ALL tool calls in this response before checking done()
+            # Process tool calls
             action_results = []
 
             # Check for lwt_list()
             if "lwt_list()" in response:
                 action_results.append(("lwt_list()", tool_lwt_list(lwt_steps)))
 
-            # Process ALL lwt_insert() calls (common when LLM outputs multiple steps at once)
-            for match in re.finditer(r'lwt_insert\((\d+),\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
-                step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
-                result = tool_lwt_insert(int(match.group(1)), step, lwt_steps)
-                action_results.append((f"lwt_insert({match.group(1)})", result))
-
-            # Process ALL lwt_set() calls
+            # Process lwt_set() calls
             for match in re.finditer(r'lwt_set\((\d+),\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
                 step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
                 result = tool_lwt_set(int(match.group(1)), step, lwt_steps)
                 action_results.append((f"lwt_set({match.group(1)})", result))
 
-            # Process ALL lwt_delete() calls
+            # Process lwt_delete() calls
             for match in re.finditer(r'lwt_delete\((\d+)\)', response):
                 result = tool_lwt_delete(int(match.group(1)), lwt_steps)
                 action_results.append((f"lwt_delete({match.group(1)})", result))
 
-            # Process ALL lwt_get() calls
-            for match in re.finditer(r'lwt_get\((\d+)\)', response):
-                result = tool_lwt_get(int(match.group(1)), lwt_steps)
-                action_results.append((f"lwt_get({match.group(1)})", result))
-
-            # Process ALL read() calls
+            # Process read() calls
             for match in re.finditer(r'read\("([^"]+)"\)', response):
                 result = tool_read(match.group(1), query)
                 if len(result) > 2000:
                     result = result[:2000] + "... (truncated)"
                 action_results.append((f"read(\"{match.group(1)}\")", result))
 
-            # Now check for done() - AFTER processing all other actions
+            # Check for done()
             if "done()" in response.lower():
-                self._debug(1, "P2", f"ReAct done after {iteration + 1} iterations, processed {len(action_results)} actions")
+                self._debug(1, "P2", f"ReAct done after {iteration + 1} iterations")
                 break
 
             if action_results:
-                # Combine all results into conversation
                 results_text = "\n".join([f"{name}: {result}" for name, result in action_results])
                 conversation.append(f"\n{response}\n\nRESULTS:\n{results_text}\n\nContinue:")
             else:
                 self._debug(1, "P2", "No action found, prompting for action")
-                conversation.append(f"\n{response}\n\nNo valid action found. Use lwt_list(), lwt_get(idx), lwt_set(idx, step), lwt_delete(idx), lwt_insert(idx, step), read(path), or done():")
+                conversation.append(f"\n{response}\n\nUse read(path), lwt_set(idx, step), lwt_delete(idx), or done():")
 
-        self._debug(1, "P2", f"Expanded LWT: {len(lwt_steps)} steps after {iteration + 1} iterations")
+        self._debug(1, "P2", f"Refined LWT: {len(lwt_steps)} steps")
 
         trace = self._get_trace()
         if trace:
@@ -662,22 +788,22 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._update_display(request_id, "---", "starting", query)
         trace = self._get_trace()
 
-        # Phase 1: Strategy extraction (schema-aware, no item scanning)
+        # Phase 1: Multi-step planning (condition extraction → path resolution → rule-out → skeleton)
         self._update_display(request_id, "P1", "planning")
         p1_start = time.time()
-        strategy, message = self.phase1_plan(query, items, k)
+        candidates, skeleton_steps = self.phase1_plan(query, items, k)
         p1_latency = (time.time() - p1_start) * 1000
 
         if trace:
-            trace["phase1"]["strategy"] = strategy[:500] if strategy else ""
-            trace["phase1"]["message"] = message[:500] if message else ""
+            trace["phase1"]["candidates"] = candidates
+            trace["phase1"]["skeleton_steps"] = len(skeleton_steps)
             trace["phase1"]["latency_ms"] = p1_latency
             self._save_trace_incremental(request_id)
 
-        # Phase 2: Generate batched LWT from strategy
-        self._update_display(request_id, "P2", "expanding")
+        # Phase 2: Refine skeleton (optional)
+        self._update_display(request_id, "P2", "refining")
         p2_start = time.time()
-        expanded_lwt_steps = self.phase2_expand(strategy, message, n_items, data)
+        expanded_lwt_steps = self.phase2_expand(skeleton_steps, candidates, data)
         p2_latency = (time.time() - p2_start) * 1000
         expanded_lwt = "\n".join(expanded_lwt_steps)
 
