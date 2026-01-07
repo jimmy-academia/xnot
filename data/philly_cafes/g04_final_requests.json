@@ -1,0 +1,193 @@
+{
+  "review_meta_conditions": {
+    "post_2020_avg_gte_4.0": {
+      "restaurants": [
+        8,
+        4
+      ],
+      "phrase": "recent reviews are very positive (avg >= 4.0)"
+    },
+    "harsh_avg_gte_2.7": {
+      "restaurants": [
+        14,
+        15
+      ],
+      "phrase": "even critics rate it well (harsh avg >= 2.7)"
+    },
+    "post_2020_count_gte_4": {
+      "restaurants": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "phrase": "has strong recent activity (4+ post-2020 reviews)"
+    },
+    "generous_high_but_harsh_low": {
+      "restaurants": [
+        3,
+        1,
+        19
+      ],
+      "phrase": "NOT just praised by easy raters (avoid if generous>=4 but harsh<2)"
+    }
+  },
+  "selected_requests": [
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_phrase": "recent reviews are very positive (avg >= 4.0)",
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "happy_hour"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_phrase": "recent reviews are very positive (avg >= 4.0)",
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_phrase": "even critics rate it well (harsh avg >= 2.7)",
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_phrase": "even critics rate it well (harsh avg >= 2.7)",
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "post_2020_count_gte_4",
+      "review_meta_phrase": "has strong recent activity (4+ post-2020 reviews)",
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_count_gte_4",
+      "review_meta_phrase": "has strong recent activity (4+ post-2020 reviews)",
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "generous_high_but_harsh_low",
+      "review_meta_phrase": "NOT just praised by easy raters (avoid if generous>=4 but harsh<2)",
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "generous_high_but_harsh_low",
+      "review_meta_phrase": "NOT just praised by easy raters (avoid if generous>=4 but harsh<2)",
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "post_2020_count_gte_4",
+      "review_meta_phrase": "has strong recent activity (4+ post-2020 reviews)",
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        17,
+        19
+      ],
+      "review_meta": "generous_high_but_harsh_low",
+      "review_meta_phrase": "NOT just praised by easy raters (avoid if generous>=4 but harsh<2)",
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    }
+  ]
+}

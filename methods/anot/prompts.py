@@ -94,15 +94,21 @@ STEP2_PATH_PROMPT = """Determine where to find the value for this condition.
    - "not kid-friendly" → user wants GoodForKids=False
    - "quiet" → user wants NoiseLevel="quiet"
    - "free WiFi" → user wants WiFi="free"
+3. For HOURS conditions: ALWAYS use TYPE: SOFT (requires range checking, not exact match)
 
 [OUTPUT FORMAT]
 PATH: attributes.FieldName
 EXPECTED: True/False/"value"
 TYPE: HARD
 
-Or if it's a review text search:
+For review text search:
 PATH: reviews
 EXPECTED: keyword
+TYPE: SOFT
+
+For hours conditions (ALWAYS use SOFT):
+PATH: hours.DayName
+EXPECTED: start:min-end:min
 TYPE: SOFT
 """
 
@@ -146,108 +152,78 @@ STEP4_SKELETON_PROMPT = """Generate LWT skeleton for soft conditions on candidat
 [SOFT CONDITIONS]
 {soft_conditions}
 
-[RULES]
-- Generate ONE step per item per soft condition
-- Each step checks ONE item independently
-- For [REVIEW:POSITIVE], ask if reviews PRAISE/RECOMMEND the topic (sentiment check)
-- For [REVIEW:NEGATIVE], ask if reviews COMPLAIN/CRITICIZE the topic (sentiment check)
-- For [REVIEW:MENTION], ask if reviews MENTION the keyword (presence check, no sentiment)
-- Final step aggregates all results and outputs ranking as comma-separated numbers
-- IMPORTANT: In final step, map item numbers clearly (item 2=yes means output 2)
+[CRITICAL RULES]
+1. ONLY generate steps for items in CANDIDATES list above - no other items!
+2. Generate ONE step per candidate per soft condition
+3. MUST end with a (final) step that aggregates results and outputs ranking
+
+[CONDITION TYPES - USE CORRECT FORMAT]
+For REVIEW conditions (POSITIVE/NEGATIVE/MENTION):
+  (rN)=LLM('Item N reviews: {{(context)}}[N][reviews]. [question]? yes/no')
+
+For HOURS conditions (check if open during requested time):
+  (hN)=LLM('Item N hours Day: {{(context)}}[N][hours][Day]. User needs START-END. Is item open? (start<=START AND end>=END) yes/no')
 
 [VARIABLE SYNTAX]
-Use these exact patterns (with curly braces):
-- {{(context)}}[2][reviews] - Item 2's reviews array
-- {{(r2)}} - Result from step r2
+- {{(context)}}[N][reviews] - Item N's reviews
+- {{(context)}}[N][hours][Day] - Item N's hours for Day (e.g., Monday)
+- {{(rN)}} or {{(hN)}} - Result from step rN or hN
 
 [OUTPUT FORMAT]
 ===LWT_SKELETON===
-(r2)=LLM('Item 2 reviews: {{(context)}}[2][reviews]. [semantic_question] Answer: yes/no')
-(r4)=LLM('Item 4 reviews: {{(context)}}[4][reviews]. [semantic_question] Answer: yes/no')
+(step_id)=LLM('...')
 ...
-(final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}... Output the item NUMBERS with yes first, then others. Format: 2, 4, 6, ...')
+(final)=LLM('Item N={{(rN)}}, ... Output item NUMBERS with yes first: ')
 
-[EXAMPLE for candidates [2,4,6] checking "POSITIVE coffee" (praised for coffee)]
+[EXAMPLE: candidates [2,4] with REVIEW condition]
 ===LWT_SKELETON===
-(r2)=LLM('Item 2 reviews: {{(context)}}[2][reviews]. Do reviewers PRAISE the coffee (positive sentiment)? Answer: yes/no')
-(r4)=LLM('Item 4 reviews: {{(context)}}[4][reviews]. Do reviewers PRAISE the coffee (positive sentiment)? Answer: yes/no')
-(r6)=LLM('Item 6 reviews: {{(context)}}[6][reviews]. Do reviewers PRAISE the coffee (positive sentiment)? Answer: yes/no')
-(final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}, Item 6={{(r6)}}. Output item NUMBERS with yes first, comma-separated: ')
+(r2)=LLM('Item 2 reviews: {{(context)}}[2][reviews]. Do reviews MENTION coffee? yes/no')
+(r4)=LLM('Item 4 reviews: {{(context)}}[4][reviews]. Do reviews MENTION coffee? yes/no')
+(final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}. Output item NUMBERS with yes first: ')
 
-[EXAMPLE for candidates [1,3,5] checking "NEGATIVE service" (complaints about service)]
+[EXAMPLE: candidates [5,6] with HOURS condition (Monday 7:0-8:0)]
 ===LWT_SKELETON===
-(r1)=LLM('Item 1 reviews: {{(context)}}[1][reviews]. Do reviewers COMPLAIN about service (negative sentiment)? Answer: yes/no')
-(r3)=LLM('Item 3 reviews: {{(context)}}[3][reviews]. Do reviewers COMPLAIN about service (negative sentiment)? Answer: yes/no')
-(r5)=LLM('Item 5 reviews: {{(context)}}[5][reviews]. Do reviewers COMPLAIN about service (negative sentiment)? Answer: yes/no')
-(final)=LLM('Item 1={{(r1)}}, Item 3={{(r3)}}, Item 5={{(r5)}}. Output item NUMBERS with yes first, comma-separated: ')
-
-[EXAMPLE for candidates [2,4,6] checking "MENTION cozy" (reviews mention cozy)]
-===LWT_SKELETON===
-(r2)=LLM('Item 2 reviews: {{(context)}}[2][reviews]. Do reviews MENTION the word cozy? Answer: yes/no')
-(r4)=LLM('Item 4 reviews: {{(context)}}[4][reviews]. Do reviews MENTION the word cozy? Answer: yes/no')
-(r6)=LLM('Item 6 reviews: {{(context)}}[6][reviews]. Do reviews MENTION the word cozy? Answer: yes/no')
-(final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}, Item 6={{(r6)}}. Output item NUMBERS with yes first, comma-separated: ')
+(h5)=LLM('Item 5 hours Monday: {{(context)}}[5][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
+(h6)=LLM('Item 6 hours Monday: {{(context)}}[6][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
+(final)=LLM('Item 5={{(h5)}}, Item 6={{(h6)}}. Output item NUMBERS with yes first: ')
 
 [IF NO SOFT CONDITIONS]
 ===LWT_SKELETON===
-(final)=LLM('Candidates: {candidates}. All passed hard conditions. Output top-{k}: [first {k} from list]')
-"""
+(final)=LLM('Candidates: {candidates}. Output as comma-separated: ')"""
 
 # =============================================================================
 # PHASE 2: ReAct Expansion (refine skeleton with slice syntax for long reviews)
 # =============================================================================
 
-PHASE2_PROMPT = """Refine the LWT skeleton by handling long reviews using slice syntax.
+PHASE2_PROMPT = """Refine LWT skeleton: handle long reviews.
 
-[LWT SKELETON]
+[CONDITIONS]
+{conditions}
+
+[SKELETON]
 {lwt_skeleton}
 
+[TOOLS]
+get_review_lengths(N) → char counts per review
+keyword_search(N, "word") → positions where keyword appears
+update_step("rN", "prompt text") → update step (just the prompt, NOT "LLM(...)")
+done() → finish
+
+[SLICE SYNTAX FOR LONG REVIEWS]
+{{(context)}}[N][reviews][R][text][start:end]
+
 [TASK]
-Analyze the LWT skeleton above. For each step that references reviews:
-1. Identify the item number and what keyword/topic is being searched
-2. Check if reviews are long and need slicing
-3. Modify steps to use slice syntax for long reviews
+For each review step (rN), check if reviews are long (>3000 chars).
+If long, use keyword_search to find relevant positions, then update_step with slice syntax.
 
-[AVAILABLE TOOLS]
-- get_review_lengths(item_num) - Get per-review char counts, returns JSON array [1200, 5400, 800]
-- keyword_search(item_num, "keyword") - Find keyword positions in reviews, returns JSON with matches
-- get_review_snippet(item_num, review_idx, start, length) - Preview text snippet
-- lwt_set(idx, "step") - Replace step at index with new step
-- lwt_insert(idx, "step") - Insert new step at index
-- lwt_delete(idx) - Remove step at index
-- done() - Finish refinement
+[CRITICAL]
+- Output ONE action, then STOP. Wait for system response.
+- NEVER write "Observation:" yourself - system provides it.
+- Use step IDs like "r2", "r7" - NOT indices.
+- Hours steps (hN) should already be correct from skeleton - just call done() if only hours steps exist.
 
-[SLICE SYNTAX]
-Use Python-style slices in variable references to truncate:
-- {{{{(context)}}}}[N][reviews][R][text][start:end] - Slice review R's text from start to end
-- {{{{(context)}}}}[N][reviews][0:K] - Only first K reviews
-- {{{{(context)}}}}[N][reviews][R][text][:3000] - First 3000 chars of review R
+[PROCESS]
+1. If skeleton only has hours steps (hN) and (final): call done()
+2. For each review step (rN): check lengths → if >3000, add slice → done()
 
-[STRATEGY]
-For each item step that references reviews:
-1. get_review_lengths(item_num) to find long reviews (> 3000 chars)
-2. If any review > 3000 chars:
-   a. Infer the keyword from the LWT step (e.g., "coffee" from "Praises coffee?")
-   b. keyword_search(item_num, "keyword") to find where keyword appears
-   c. If keyword found at position P in review R:
-      - Calculate slice: start = max(0, P - 1500), end = P + 1500
-      - lwt_set to use slice syntax: {{{{(context)}}}}[N][reviews][R][text][start:end]
-   d. If no keyword match in a long review: can skip that review or use [:3000]
-3. If all reviews are short (< 3000): no change needed
-4. done() when all items processed
-
-[EXAMPLE]
-Initial LWT step 0:
-(r2)=LLM('Reviews: {{{{(context)}}}}[2][reviews]. Praises coffee? yes/no')
-
-get_review_lengths(2) → [1200, 5400, 800]
-# Review 1 is 5400 chars (> 3000), reviews 0 and 2 are short
-
-keyword_search(2, "coffee") → {{"matches": [{{"review": 1, "positions": [2100], "length": 5400}}], "no_match_reviews": [0, 2], "total_matches": 1}}
-# Found "coffee" at position 2100 in review 1
-
-lwt_set(0, "(r2)=LLM('Reviews: {{{{(context)}}}}[2][reviews][0], {{{{(context)}}}}[2][reviews][1][text][600:3600], {{{{(context)}}}}[2][reviews][2]. Praises coffee? yes/no')")
-# Keep reviews 0 and 2 full (short), slice review 1 around the keyword match (600 to 3600)
-
-done()
-"""
+Begin. Output Thought and Action:"""

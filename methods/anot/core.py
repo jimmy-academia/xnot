@@ -38,7 +38,8 @@ from .helpers import (
 )
 from .tools import (
     tool_read, tool_lwt_list, tool_lwt_get,
-    tool_lwt_set, tool_lwt_delete, tool_lwt_insert, tool_review_length,
+    tool_lwt_set, tool_lwt_set_prompt, tool_lwt_delete, tool_lwt_insert,
+    tool_lwt_insert_prompt, tool_review_length, tool_update_step, tool_insert_step,
     tool_get_review_lengths, tool_keyword_search, tool_get_review_snippet
 )
 
@@ -451,7 +452,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         return normalized if normalized else skeleton_steps
 
-    def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[list, list]:
+    def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[list, list, list]:
         """Phase 1: Multi-step planning with condition extraction, path resolution,
         quick rule-out, and LWT skeleton generation.
 
@@ -461,7 +462,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
             k: Number of top predictions
 
         Returns:
-            Tuple of (candidates, lwt_skeleton) for Phase 2/3
+            Tuple of (candidates, lwt_skeleton, resolved_conditions) for Phase 2/3
         """
         self._debug(1, "P1", f"Multi-step planning for: {query[:60]}...")
         n_items = len(items)
@@ -481,7 +482,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
             self._debug(1, "P1", "No conditions found, using default ranking")
             all_items = list(range(1, n_items + 1))
             top_k = all_items[:k]
-            return all_items, [("final", f"LLM('Rank items 1-{n_items} for query: {query[:100]}. Output top-{k}: {top_k}')")]
+            return all_items, [("final", f"LLM('Rank items 1-{n_items} for query: {query[:100]}. Output top-{k}: {top_k}')")], []
 
         # Step 2: Resolve paths for each condition
         self._debug(1, "P1", "Step 2: Resolving paths...")
@@ -509,23 +510,24 @@ class AdaptiveNetworkOfThought(BaseMethod):
         skeleton_steps = self._step4_generate_skeleton(candidates, soft, k)
         self._debug(1, "P1", f"Generated {len(skeleton_steps)} LWT steps")
 
-        return candidates, skeleton_steps
+        return candidates, skeleton_steps, resolved
 
     # =========================================================================
     # Phase 2: ReAct LWT Expansion
     # =========================================================================
 
-    def phase2_expand(self, skeleton_steps: list, candidates: list, query: dict) -> List[str]:
+    def phase2_expand(self, skeleton_steps: list, candidates: list, query: dict, conditions: list = None) -> List[str]:
         """Phase 2: Refine LWT skeleton using ReAct loop with slice syntax for long reviews.
 
         Phase 2 uses tools to check review lengths, search for keywords, and
         modify LWT steps to use slice notation for truncating long reviews.
-        The LLM infers what keywords to search for from the LWT skeleton itself.
+        Also handles complex conditions (like hours range checks) by inserting steps.
 
         Args:
             skeleton_steps: LWT skeleton from Phase 1 [(var_name, step), ...]
             candidates: List of candidate item numbers
             query: Full query dict (for tools)
+            conditions: List of resolved conditions from Phase 1
 
         Returns:
             List of LWT steps (formatted strings)
@@ -549,8 +551,18 @@ class AdaptiveNetworkOfThought(BaseMethod):
         lwt_skeleton_str = "\n".join(lwt_steps)
         self._debug(2, "P2", f"Initial LWT:\n{lwt_skeleton_str}")
 
-        # ReAct loop for refinement - check review lengths, use slice syntax for long reviews
-        prompt = PHASE2_PROMPT.format(lwt_skeleton=lwt_skeleton_str)
+        # Format conditions for display
+        if conditions:
+            conditions_str = "\n".join([
+                f"- [{c.get('original_type', 'UNKNOWN')}] {c.get('description', '')} → {c.get('path', '')}"
+                for c in conditions
+            ])
+        else:
+            conditions_str = "None"
+        self._debug(2, "P2", f"Conditions:\n{conditions_str}")
+
+        # ReAct loop for refinement - check review lengths, handle complex conditions
+        prompt = PHASE2_PROMPT.format(conditions=conditions_str, lwt_skeleton=lwt_skeleton_str)
         conversation = [prompt]
 
         max_iterations = 10
@@ -578,22 +590,46 @@ class AdaptiveNetworkOfThought(BaseMethod):
             if "lwt_list()" in response:
                 action_results.append(("lwt_list()", tool_lwt_list(lwt_steps)))
 
-            # Process lwt_set() calls
+            # Process lwt_set() calls (raw step string)
             for match in re.finditer(r'lwt_set\((\d+),\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
                 step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
                 result = tool_lwt_set(int(match.group(1)), step, lwt_steps)
                 action_results.append((f"lwt_set({match.group(1)})", result))
+
+            # Process lwt_set_prompt() calls (auto-formatted LLM call)
+            for match in re.finditer(r'lwt_set_prompt\((\d+),\s*"([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                idx, step_id, prompt = int(match.group(1)), match.group(2), match.group(3).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_lwt_set_prompt(idx, step_id, prompt, lwt_steps)
+                action_results.append((f"lwt_set_prompt({idx}, \"{step_id}\")", result))
+
+            # Process update_step() calls (ID-based, no index - safer)
+            for match in re.finditer(r'update_step\("([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                step_id, prompt = match.group(1), match.group(2).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_update_step(step_id, prompt, lwt_steps)
+                action_results.append((f"update_step(\"{step_id}\")", result))
+
+            # Process insert_step() calls (ID-based, insert before final)
+            for match in re.finditer(r'insert_step\("([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                step_id, prompt = match.group(1), match.group(2).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_insert_step(step_id, prompt, lwt_steps)
+                action_results.append((f"insert_step(\"{step_id}\")", result))
 
             # Process lwt_delete() calls
             for match in re.finditer(r'lwt_delete\((\d+)\)', response):
                 result = tool_lwt_delete(int(match.group(1)), lwt_steps)
                 action_results.append((f"lwt_delete({match.group(1)})", result))
 
-            # Process lwt_insert() calls
+            # Process lwt_insert() calls (raw step string)
             for match in re.finditer(r'lwt_insert\((\d+),\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
                 step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
                 result = tool_lwt_insert(int(match.group(1)), step, lwt_steps)
                 action_results.append((f"lwt_insert({match.group(1)})", result))
+
+            # Process lwt_insert_prompt() calls (auto-formatted LLM call)
+            for match in re.finditer(r'lwt_insert_prompt\((\d+),\s*"([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                idx, step_id, prompt = int(match.group(1)), match.group(2), match.group(3).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_lwt_insert_prompt(idx, step_id, prompt, lwt_steps)
+                action_results.append((f"lwt_insert_prompt({idx}, \"{step_id}\")", result))
 
             # Process review_length() calls (legacy)
             for match in re.finditer(r'review_length\((\d+)\)', response):
@@ -631,11 +667,12 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 break
 
             if action_results:
-                results_text = "\n".join([f"{name}: {result}" for name, result in action_results])
-                conversation.append(f"\n{response}\n\nRESULTS:\n{results_text}\n\nContinue:")
+                # ReAct format: append response and observation
+                obs_text = action_results[0][1] if len(action_results) == 1 else "\n".join([f"{name}: {result}" for name, result in action_results])
+                conversation.append(f"\n{response}\nObservation: {obs_text}\n")
             else:
                 self._debug(1, "P2", "No action found, prompting for action")
-                conversation.append(f"\n{response}\n\nUse review_length(item_num), lwt_insert(idx, step), lwt_set(idx, step), lwt_delete(idx), read(path), or done():")
+                conversation.append(f"\n{response}\n\nPlease output Action: with a tool call (get_review_lengths, keyword_search, lwt_set, lwt_delete, or done):")
 
         self._debug(1, "P2", f"Refined LWT: {len(lwt_steps)} steps")
 
@@ -842,20 +879,21 @@ class AdaptiveNetworkOfThought(BaseMethod):
         # Phase 1: Multi-step planning (condition extraction → path resolution → rule-out → skeleton)
         self._update_display(request_id, "P1", "planning")
         p1_start = time.time()
-        candidates, skeleton_steps = self.phase1_plan(query, items, k)
+        candidates, skeleton_steps, resolved_conditions = self.phase1_plan(query, items, k)
         p1_latency = (time.time() - p1_start) * 1000
 
         if trace:
             trace["phase1"]["candidates"] = candidates
             trace["phase1"]["skeleton_steps"] = len(skeleton_steps)
+            trace["phase1"]["conditions"] = len(resolved_conditions)
             trace["phase1"]["latency_ms"] = p1_latency
             self._save_trace_incremental(request_id)
 
-        # Phase 2: Refine skeleton with review length handling
-        # The LLM infers what keywords to search for from the LWT skeleton itself
+        # Phase 2: Refine skeleton with review length handling and complex condition handling
+        # Pass conditions so LLM can add computation steps (e.g., hours range checks)
         self._update_display(request_id, "P2", "refining")
         p2_start = time.time()
-        expanded_lwt_steps = self.phase2_expand(skeleton_steps, candidates, data)
+        expanded_lwt_steps = self.phase2_expand(skeleton_steps, candidates, data, resolved_conditions)
         p2_latency = (time.time() - p2_start) * 1000
         expanded_lwt = "\n".join(expanded_lwt_steps)
 

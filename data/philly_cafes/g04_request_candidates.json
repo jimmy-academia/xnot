@@ -1,0 +1,7794 @@
+{
+  "all_matches": [
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 7,
+      "selected_name": "Swiss Haus Cafe & Pastry Bar",
+      "selected_biz_id": "vCHNWdW-ys-nWUx3Cpvk8Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_classy"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_classy"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "has_tv"
+      ],
+      "item_meta_rests": [
+        9,
+        3
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "has_tv"
+      ],
+      "item_meta_rests": [
+        9,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "dogs_no"
+      ],
+      "item_meta_rests": [
+        8,
+        16,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "dogs_no"
+      ],
+      "item_meta_rests": [
+        8,
+        16,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 18,
+      "selected_name": "Chapterhouse Caf\u00e9 & Gallery",
+      "selected_biz_id": "7hpUoYdAVToZXwuPRgoqdA"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19,
+        4
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        17,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "meal_dessert"
+      ],
+      "item_meta_rests": [
+        9,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "meal_dessert"
+      ],
+      "item_meta_rests": [
+        9,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        15,
+        13,
+        7
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        15,
+        13,
+        7
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        12
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "ambience_casual",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        1,
+        17
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "coat_check"
+      ],
+      "item_meta_rests": [
+        1,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "happy_hour"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "happy_hour"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "happy_hour"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "happy_hour"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "happy_hour"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "has_tv"
+      ],
+      "item_meta_rests": [
+        16,
+        9
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "has_tv"
+      ],
+      "item_meta_rests": [
+        16,
+        9
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        1
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        1
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        1
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        2,
+        9
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "ambience_classy",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        2,
+        9
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        0,
+        2,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "ambience_hipster",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        1
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        1
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        1
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        5,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        5
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "ambience_trendy",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        11,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "byob_corkage_no",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        6
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 6,
+      "selected_name": "The Bubble House",
+      "selected_biz_id": "8Wq0LZSuHdPTlleQD5sU_w"
+    },
+    {
+      "item_meta": [
+        "byob_corkage_no",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        6
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 6,
+      "selected_name": "The Bubble House",
+      "selected_biz_id": "8Wq0LZSuHdPTlleQD5sU_w"
+    },
+    {
+      "item_meta": [
+        "byob_corkage_no",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        6
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "byob_corkage_no",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        6
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "coat_check",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "coat_check",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "coat_check",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3,
+        14
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        4,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        4,
+        14
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        4,
+        14
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        4,
+        14
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        4,
+        14
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        4,
+        14
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        4,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        4,
+        14
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        4,
+        14
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        4,
+        14
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        4,
+        14
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        4,
+        14
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        10
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "wifi_none"
+      ],
+      "item_meta_rests": [
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "wifi_none"
+      ],
+      "item_meta_rests": [
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "wifi_none"
+      ],
+      "item_meta_rests": [
+        3,
+        14
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        17,
+        11
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        17,
+        11
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        17,
+        11
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        17,
+        11
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        13,
+        18,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        13,
+        18,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        13,
+        18,
+        5
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 18,
+      "selected_name": "Chapterhouse Caf\u00e9 & Gallery",
+      "selected_biz_id": "7hpUoYdAVToZXwuPRgoqdA"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        13,
+        18,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        19,
+        17,
+        11
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "dogs_yes",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "has_tv"
+      ],
+      "item_meta_rests": [
+        9,
+        3
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "has_tv"
+      ],
+      "item_meta_rests": [
+        9,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_brunch"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        8,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        8,
+        9,
+        2
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        8,
+        3
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        8,
+        3
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        8,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        8,
+        3
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 8,
+      "selected_name": "Le Pain Quotidien",
+      "selected_biz_id": "kj3Lyh9KooU8GcRBbMDQWQ"
+    },
+    {
+      "item_meta": [
+        "happy_hour",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        10
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_breakfast"
+      ],
+      "item_meta_rests": [
+        13,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        9,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        9,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        9,
+        15
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "meal_lunch"
+      ],
+      "item_meta_rests": [
+        9,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_loud"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        9,
+        3
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "price_mid"
+      ],
+      "item_meta_rests": [
+        9,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "has_tv",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        3,
+        4
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        14
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        1,
+        14
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "wifi_none"
+      ],
+      "item_meta_rests": [
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "wifi_none"
+      ],
+      "item_meta_rests": [
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "kids_no",
+        "wifi_none"
+      ],
+      "item_meta_rests": [
+        3,
+        14
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "noise_quiet"
+      ],
+      "item_meta_rests": [
+        13,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        2,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        2,
+        19
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "meal_breakfast",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        2,
+        19
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        15
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        2,
+        12
+      ],
+      "review_meta": "useful_high_avg_gte_4.0",
+      "review_meta_rests": [
+        1,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        2,
+        19
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "meal_brunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        2,
+        19
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "meal_dessert",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        9,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "meal_dessert",
+        "noise_average"
+      ],
+      "item_meta_rests": [
+        9,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        17
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        17
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        17
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        17
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "meal_lunch",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        17
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "no_tv",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "no_tv",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "no_tv",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "no_tv",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "no_tv",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "no_tv",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        2,
+        12
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    },
+    {
+      "item_meta": [
+        "noise_average",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "noise_average",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "noise_average",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        14
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 18,
+      "selected_name": "Chapterhouse Caf\u00e9 & Gallery",
+      "selected_biz_id": "7hpUoYdAVToZXwuPRgoqdA"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_loud",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        3,
+        4
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "noise_quiet",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "noise_quiet",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        16,
+        13,
+        15
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 15,
+      "selected_name": "Last Drop",
+      "selected_biz_id": "lh3ApskP-4XVdsQ-82792g"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 18,
+      "selected_name": "Chapterhouse Caf\u00e9 & Gallery",
+      "selected_biz_id": "7hpUoYdAVToZXwuPRgoqdA"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "price_budget"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        14
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        7
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        7
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        7
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        7
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        7
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "reservations_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4,
+        7
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "post_2020_avg_gte_3.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "post_2020_avg_gte_4.0",
+      "review_meta_rests": [
+        8,
+        4
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 7,
+      "selected_name": "Swiss Haus Cafe & Pastry Bar",
+      "selected_biz_id": "vCHNWdW-ys-nWUx3Cpvk8Q"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "outdoor_no",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        4,
+        7
+      ],
+      "review_meta": "post_minus_pre_gte_0.5",
+      "review_meta_rests": [
+        8,
+        17,
+        4,
+        5
+      ],
+      "selected": 4,
+      "selected_name": "Kung Fu Tea",
+      "selected_biz_id": "3yW8-dUi1wwCEf0URxUA7A"
+    },
+    {
+      "item_meta": [
+        "reservations_yes",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        10
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    }
+  ],
+  "selected_10": [
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 7,
+      "selected_name": "Swiss Haus Cafe & Pastry Bar",
+      "selected_biz_id": "vCHNWdW-ys-nWUx3Cpvk8Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 1,
+      "selected_name": "Tria Cafe Rittenhouse",
+      "selected_biz_id": "eJaeTZlIdM3HWCq__Ve4Wg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 2,
+      "selected_name": "Front Street Cafe",
+      "selected_biz_id": "JrG4NINLspXPNhSXg7Q07Q"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 5,
+      "selected_name": "Function Coffee Labs",
+      "selected_biz_id": "BaSwNEingTmrBw4shffK5w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 17,
+      "selected_name": "United By Blue",
+      "selected_biz_id": "ZpgVL2z1kgRi954c9m9INw"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "byob"
+      ],
+      "item_meta_rests": [
+        11,
+        12,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.6",
+      "review_meta_rests": [
+        17,
+        19,
+        4,
+        12
+      ],
+      "selected": 12,
+      "selected_name": "Hinge Cafe",
+      "selected_biz_id": "zjTBfbvbN2Ps6_Ar0w-fuQ"
+    }
+  ],
+  "selected_diverse": [
+    {
+      "item_meta": [
+        "alcohol_beer_wine",
+        "no_tv"
+      ],
+      "item_meta_rests": [
+        1,
+        7
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 7,
+      "selected_name": "Swiss Haus Cafe & Pastry Bar",
+      "selected_biz_id": "vCHNWdW-ys-nWUx3Cpvk8Q"
+    },
+    {
+      "item_meta": [
+        "byob_corkage_no",
+        "reservations_yes"
+      ],
+      "item_meta_rests": [
+        1,
+        6
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 6,
+      "selected_name": "The Bubble House",
+      "selected_biz_id": "8Wq0LZSuHdPTlleQD5sU_w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "outdoor_no"
+      ],
+      "item_meta_rests": [
+        18,
+        4
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 18,
+      "selected_name": "Chapterhouse Caf\u00e9 & Gallery",
+      "selected_biz_id": "7hpUoYdAVToZXwuPRgoqdA"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_hipster"
+      ],
+      "item_meta_rests": [
+        0,
+        5
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 0,
+      "selected_name": "Milkcrate Cafe",
+      "selected_biz_id": "e-ZyZc24wgkKafM3pguR2w"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "wheelchair"
+      ],
+      "item_meta_rests": [
+        17,
+        19,
+        4
+      ],
+      "review_meta": "useful_high_avg_gte_3.5",
+      "review_meta_rests": [
+        0,
+        1,
+        2,
+        12,
+        19
+      ],
+      "selected": 19,
+      "selected_name": "Sabrina's Caf\u00e9",
+      "selected_biz_id": "iUZEGx29miZObLd6_lt7Vg"
+    },
+    {
+      "item_meta": [
+        "byob",
+        "dogs_yes"
+      ],
+      "item_meta_rests": [
+        11,
+        5
+      ],
+      "review_meta": "exp_minus_casual_gte_1.5",
+      "review_meta_rests": [
+        4,
+        11,
+        12,
+        17,
+        19
+      ],
+      "selected": 11,
+      "selected_name": "Cafe La Maude",
+      "selected_biz_id": "K7KHmHzxNwzqiijSJeKe_A"
+    },
+    {
+      "item_meta": [
+        "alcohol_none",
+        "ambience_trendy"
+      ],
+      "item_meta_rests": [
+        16,
+        17,
+        5
+      ],
+      "review_meta": "harsh_avg_gte_2.5",
+      "review_meta_rests": [
+        4,
+        6,
+        14,
+        15,
+        16
+      ],
+      "selected": 16,
+      "selected_name": "Elixr Coffee Roasters",
+      "selected_biz_id": "oqbhVgliVJH-iRa3AnD-3A"
+    },
+    {
+      "item_meta": [
+        "dogs_no",
+        "kids_no"
+      ],
+      "item_meta_rests": [
+        16,
+        3,
+        14
+      ],
+      "review_meta": "harsh_avg_gte_2.7",
+      "review_meta_rests": [
+        14,
+        15
+      ],
+      "selected": 14,
+      "selected_name": "La Colombe Coffee",
+      "selected_biz_id": "htO_nlxkEsYHzDrtbiUxew"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_casual"
+      ],
+      "item_meta_rests": [
+        9,
+        2,
+        3
+      ],
+      "review_meta": "no_post_2020",
+      "review_meta_rests": [
+        3,
+        6,
+        7,
+        15,
+        18
+      ],
+      "selected": 3,
+      "selected_name": "MilkBoy",
+      "selected_biz_id": "V_jy9Aemc3kjznqhbsu_Dg"
+    },
+    {
+      "item_meta": [
+        "alcohol_full_bar",
+        "ambience_classy"
+      ],
+      "item_meta_rests": [
+        9,
+        2
+      ],
+      "review_meta": "post_2020_cnt_gte_4",
+      "review_meta_rests": [
+        9,
+        10,
+        11,
+        5
+      ],
+      "selected": 9,
+      "selected_name": "Gran Caffe L'Aquila",
+      "selected_biz_id": "-cEFKAznWmI0cledNOIQ7w"
+    }
+  ]
+}

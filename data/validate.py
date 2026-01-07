@@ -324,6 +324,185 @@ def evaluate_review_meta(reviews: list, evidence_spec: dict) -> int:
     return 0
 
 
+# --- Review Group Rating Evaluation (G04 conditions) ---
+
+def filter_reviews_by_group(reviews: list, group_filter: dict) -> list:
+    """Filter reviews by group criteria.
+
+    group_filter:
+        field: "date" or ["user", "average_stars"] etc.
+        operator: "gte", "lt", "lte", "gt"
+        value: threshold value
+    """
+    if not reviews or not group_filter:
+        return reviews
+
+    field = group_filter.get("field")
+    op = group_filter.get("operator", "gte")
+    value = group_filter.get("value")
+
+    if field is None or value is None:
+        return reviews
+
+    filtered = []
+    for r in reviews:
+        # Navigate to field value
+        if isinstance(field, list):
+            v = r
+            for key in field:
+                if isinstance(v, dict):
+                    v = v.get(key)
+                else:
+                    v = None
+                    break
+        else:
+            v = r.get(field)
+
+        if v is None:
+            continue
+
+        # Compare based on operator
+        try:
+            # Handle date strings
+            if isinstance(v, str) and isinstance(value, str) and "-" in v:
+                passes = (
+                    (op == "gte" and v >= value) or
+                    (op == "gt" and v > value) or
+                    (op == "lt" and v < value) or
+                    (op == "lte" and v <= value)
+                )
+            else:
+                v_num = float(v)
+                val_num = float(value)
+                passes = (
+                    (op == "gte" and v_num >= val_num) or
+                    (op == "gt" and v_num > val_num) or
+                    (op == "lt" and v_num < val_num) or
+                    (op == "lte" and v_num <= val_num)
+                )
+
+            if passes:
+                filtered.append(r)
+        except (ValueError, TypeError):
+            continue
+
+    return filtered
+
+
+def evaluate_review_group_rating(reviews: list, evidence_spec: dict) -> int:
+    """Evaluate review_group_rating condition.
+
+    Filters reviews by group criteria, then computes metric and compares to threshold.
+
+    evidence_spec:
+        group: name of group (e.g., "post_2020", "harsh_reviewers")
+        group_filter: {"field": ..., "operator": ..., "value": ...}
+        metric: "avg_stars" or "count"
+        threshold: numeric threshold
+        operator: "gte", "lt", etc.
+
+    Returns: 1 if condition met, -1 otherwise
+    """
+    if not reviews:
+        return -1
+
+    group_filter = evidence_spec.get("group_filter", {})
+    metric = evidence_spec.get("metric", "avg_stars")
+    threshold = evidence_spec.get("threshold", 0)
+    op = evidence_spec.get("operator", "gte")
+
+    # Filter reviews by group
+    filtered = filter_reviews_by_group(reviews, group_filter)
+
+    # Compute metric
+    if metric == "count":
+        computed = len(filtered)
+    elif metric == "avg_stars":
+        if not filtered:
+            return -1  # No reviews in group = condition not met
+        stars = [r.get("stars", 0) for r in filtered]
+        computed = sum(stars) / len(stars) if stars else 0
+    else:
+        return -1
+
+    # Compare to threshold
+    if op == "gte":
+        return 1 if computed >= threshold else -1
+    elif op == "gt":
+        return 1 if computed > threshold else -1
+    elif op == "lt":
+        return 1 if computed < threshold else -1
+    elif op == "lte":
+        return 1 if computed <= threshold else -1
+
+    return -1
+
+
+def evaluate_review_group_rating_negative(reviews: list, evidence_spec: dict) -> int:
+    """Evaluate review_group_rating_negative condition.
+
+    Checks that a restaurant is NOT only praised by easy raters.
+    Returns 1 if the restaurant passes (is NOT the bad pattern), -1 if it fails.
+
+    evidence_spec:
+        condition: {
+            "generous_avg_gte": 4.0,  # generous reviewers avg >= 4.0
+            "harsh_avg_lt": 2.0       # AND harsh reviewers avg < 2.0
+        }
+
+    The condition describes the BAD pattern to avoid.
+    If generous_avg >= 4.0 AND harsh_avg < 2.0, return -1 (fails - only easy raters like it)
+    Otherwise return 1 (passes - not just praised by easy raters)
+    """
+    if not reviews:
+        return 1  # No reviews = not the bad pattern
+
+    condition = evidence_spec.get("condition", {})
+    generous_threshold = condition.get("generous_avg_gte", 4.0)
+    harsh_threshold = condition.get("harsh_avg_lt", 2.0)
+
+    # Filter for generous reviewers (user.average_stars >= 4.0)
+    generous_reviews = []
+    harsh_reviews = []
+
+    for r in reviews:
+        user = r.get("user", {})
+        avg_stars = user.get("average_stars")
+        if avg_stars is None:
+            continue
+
+        try:
+            avg = float(avg_stars)
+            if avg >= 4.0:
+                generous_reviews.append(r)
+            elif avg < 3.5:
+                harsh_reviews.append(r)
+        except (ValueError, TypeError):
+            continue
+
+    # Compute averages
+    generous_avg = None
+    harsh_avg = None
+
+    if generous_reviews:
+        stars = [r.get("stars", 0) for r in generous_reviews]
+        generous_avg = sum(stars) / len(stars) if stars else None
+
+    if harsh_reviews:
+        stars = [r.get("stars", 0) for r in harsh_reviews]
+        harsh_avg = sum(stars) / len(stars) if stars else None
+
+    # Check if it matches the BAD pattern
+    # Bad pattern: generous love it (>= threshold) AND harsh hate it (< threshold)
+    is_bad_pattern = (
+        generous_avg is not None and generous_avg >= generous_threshold and
+        harsh_avg is not None and harsh_avg < harsh_threshold
+    )
+
+    # Return 1 if NOT the bad pattern, -1 if it IS the bad pattern
+    return -1 if is_bad_pattern else 1
+
+
 # --- Three-Value Logic (from oldsrc) ---
 
 class TV(Enum):
@@ -472,6 +651,13 @@ def evaluate_item_meta_rule(value, evidence_spec) -> int:
     contains_cond = evidence_spec.get("contains")
     missing_val = evidence_spec.get("missing", 0)
 
+    # "contains" check - look for substring in string repr
+    # Handle BEFORE missing check: str(None).lower() = "none", so "contains": "none" should match
+    if contains_cond is not None:
+        value_str = str(value).lower()
+        contains_str = str(contains_cond).lower()
+        return 1 if contains_str in value_str else -1
+
     # "not_true" / "true_not" - negative check (value should NOT match)
     # Handle BEFORE missing check: None is "not True" so it passes
     if not_true_cond is not None:
@@ -482,12 +668,6 @@ def evaluate_item_meta_rule(value, evidence_spec) -> int:
     # Missing value → use "missing" field (default 0=neutral)
     if value is None:
         return missing_val
-
-    # "contains" check - look for substring in string repr
-    if contains_cond is not None:
-        value_str = str(value).lower()
-        contains_str = str(contains_cond).lower()
-        return 1 if contains_str in value_str else -1
 
     # Dict of booleans → OR across children (e.g., BusinessParking)
     if isinstance(value, dict) and value and all(isinstance(v, bool) for v in value.values()):
@@ -663,6 +843,18 @@ def evaluate_condition(item: dict, condition: dict, reviews: list = None) -> int
         if not day_hours:
             return evidence_spec.get("missing", 0)
         return 1 if hours_contains(day_hours, required) else -1
+
+    elif kind == "review_group_rating":
+        # G04: Filter reviews by group, compute metric, compare to threshold
+        if not reviews:
+            return -1
+        return evaluate_review_group_rating(reviews, evidence_spec)
+
+    elif kind == "review_group_rating_negative":
+        # G04: Negative filter (NOT only praised by easy raters)
+        if not reviews:
+            return 1  # No reviews = not the bad pattern
+        return evaluate_review_group_rating_negative(reviews, evidence_spec)
 
     return 0
 

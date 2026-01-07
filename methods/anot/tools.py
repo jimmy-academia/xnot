@@ -53,11 +53,77 @@ def tool_lwt_get(idx: int, lwt_steps: List[str]) -> str:
 
 
 def tool_lwt_set(idx: int, step: str, lwt_steps: List[str]) -> str:
-    """Replace step at index. Returns status."""
+    """Replace step at index with raw step string. Returns status."""
     if idx < 0 or idx >= len(lwt_steps):
         return f"Error: index {idx} out of range (0-{len(lwt_steps)-1})"
     lwt_steps[idx] = step
     return f"Replaced step at index {idx}"
+
+
+def tool_lwt_set_prompt(idx: int, step_id: str, prompt: str, lwt_steps: List[str]) -> str:
+    """Replace step at index with auto-formatted LLM call."""
+    if idx < 0 or idx >= len(lwt_steps):
+        return f"Error: index {idx} out of range (0-{len(lwt_steps)-1})"
+    escaped_prompt = prompt.replace("'", "\\'")
+    formatted_step = f"({step_id})=LLM('{escaped_prompt}')"
+    lwt_steps[idx] = formatted_step
+    return f"OK"
+
+
+def tool_update_step(step_id: str, prompt: str, lwt_steps: List[str]) -> str:
+    """Update step by ID (not index). Finds step with matching ID and updates it.
+
+    This is safer than lwt_set_prompt - no index confusion possible.
+
+    Args:
+        step_id: Step identifier to find and update (e.g., "r7", "final")
+        prompt: New prompt content
+
+    Returns:
+        "OK" on success, error message if step_id not found
+    """
+    # Find step with matching ID
+    pattern = re.compile(rf'^\({re.escape(step_id)}\)=')
+    for i, step in enumerate(lwt_steps):
+        if pattern.match(step):
+            escaped_prompt = prompt.replace("'", "\\'")
+            lwt_steps[i] = f"({step_id})=LLM('{escaped_prompt}')"
+            return "OK"
+
+    available = [re.match(r'\((\w+)\)', s).group(1) for s in lwt_steps if re.match(r'\((\w+)\)', s)]
+    return f"Error: step '{step_id}' not found. Available: {available}"
+
+
+def tool_insert_step(step_id: str, prompt: str, lwt_steps: List[str]) -> str:
+    """Insert a new step with given ID before the (final) step.
+
+    Used for adding computation steps (e.g., hours range checks) during Phase 2.
+
+    Args:
+        step_id: New step identifier (e.g., "h2", "h6")
+        prompt: The prompt content
+
+    Returns:
+        "OK" on success, error if step_id already exists
+    """
+    # Check if step ID already exists
+    pattern = re.compile(rf'^\({re.escape(step_id)}\)=')
+    for step in lwt_steps:
+        if pattern.match(step):
+            return f"Step '{step_id}' already exists. Use update_step to modify."
+
+    escaped_prompt = prompt.replace("'", "\\'")
+    new_step = f"({step_id})=LLM('{escaped_prompt}')"
+
+    # Insert before (final) step
+    for i, step in enumerate(lwt_steps):
+        if '(final)=' in step:
+            lwt_steps.insert(i, new_step)
+            return "OK"
+
+    # No (final) found, append
+    lwt_steps.append(new_step)
+    return "OK"
 
 
 def tool_lwt_delete(idx: int, lwt_steps: List[str]) -> str:
@@ -69,7 +135,7 @@ def tool_lwt_delete(idx: int, lwt_steps: List[str]) -> str:
 
 
 def tool_lwt_insert(idx: int, step: str, lwt_steps: List[str]) -> str:
-    """Insert step at index (or append if idx >= len). Returns status."""
+    """Insert raw step at index (or append if idx >= len). Returns status."""
     if idx < 0:
         return f"Error: index {idx} cannot be negative"
     # Clamp idx to valid range - append if beyond end
@@ -78,6 +144,29 @@ def tool_lwt_insert(idx: int, step: str, lwt_steps: List[str]) -> str:
         return f"Appended at index {len(lwt_steps) - 1}"
     lwt_steps.insert(idx, step)
     return f"Inserted at index {idx}"
+
+
+def tool_lwt_insert_prompt(idx: int, step_id: str, prompt: str, lwt_steps: List[str]) -> str:
+    """Insert auto-formatted LLM call at index.
+
+    Args:
+        idx: Index to insert at (or append if >= len)
+        step_id: Step identifier (e.g., "r7", "final")
+        prompt: The prompt content (without surrounding quotes/parens)
+    """
+    if idx < 0:
+        return f"Error: index {idx} cannot be negative"
+
+    # Escape any single quotes in the prompt
+    escaped_prompt = prompt.replace("'", "\\'")
+    # Build properly formatted step
+    formatted_step = f"({step_id})=LLM('{escaped_prompt}')"
+
+    if idx >= len(lwt_steps):
+        lwt_steps.append(formatted_step)
+        return f"OK: appended ({step_id})=LLM('...')"
+    lwt_steps.insert(idx, formatted_step)
+    return f"OK: inserted ({step_id})=LLM('...') at {idx}"
 
 
 def tool_review_length(item_num: int, data: dict) -> str:

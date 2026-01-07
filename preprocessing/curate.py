@@ -369,9 +369,12 @@ class Curator:
                 self.city = selected
                 return True
 
-    def parse_category_input(self, input_str: str, available_cats: list) -> List[str]:
-        """Parse '1,3,5' or 'Italian, Mexican' into category list."""
+    def parse_category_input(self, input_str: str, available_cats: list) -> Tuple[List[str], List[str]]:
+        """Parse '1,3,5' or 'Italian, Mexican' into category list.
+        Returns: (selected_categories, unknown_terms)
+        """
         selected = []
+        unknown = []
         parts = [p.strip() for p in input_str.split(",")]
         for part in parts:
             if not part:
@@ -380,13 +383,20 @@ class Curator:
                 idx = int(part) - 1
                 if 0 <= idx < len(available_cats):
                     selected.append(available_cats[idx][0])
+                else:
+                    unknown.append(part)
             else:
+                # Text match
+                matched = False
                 for cat, _ in available_cats:
                     if part.lower() in cat.lower():
                         if cat not in selected:
                             selected.append(cat)
+                        matched = True
                         break
-        return selected
+                if not matched:
+                    unknown.append(part)
+        return selected, unknown
 
     def select_categories_interactive(self) -> Optional[bool]:
         """Interactive category selection. Returns True=confirmed, False=quit, None=back."""
@@ -420,7 +430,18 @@ class Curator:
             elif c == "q":
                 return False
 
-            selected_cats = self.parse_category_input(choice, all_cats)
+            selected_cats, unknowns = self.parse_category_input(choice, all_cats)
+            
+            if unknowns:
+                console.print(f"[yellow]Terms not found in list: {', '.join(unknowns)}[/yellow]")
+                add_custom = AmberPrompt.ask("Add these as custom categories?", choices=["y", "n"], default="y")
+                if add_custom.lower() == "y":
+                    # Title case custom categories for consistency
+                    custom_cats = [u.title() for u in unknowns if not u.isdigit()]
+                    if custom_cats:
+                        selected_cats.extend(custom_cats)
+                        console.print(f"[green]Added custom categories: {', '.join(custom_cats)}[/green]")
+
             if not selected_cats:
                 console.print("[red]No valid categories selected[/red]")
                 continue

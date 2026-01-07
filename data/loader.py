@@ -14,8 +14,10 @@ DATA_DIR = Path(__file__).parent
 # Fields to strip from reviews/users (reduce token bloat)
 # Keep: elite, fans, review_count, name (used by weight_by in requests)
 # Keep: useful (used by weight_by for helpful reviews)
-STRIP_USER_FIELDS = {'friends', 'user_id', 'yelping_since', 'average_stars'}
-STRIP_REVIEW_FIELDS = {'review_id', 'business_id', 'user_id', 'cool', 'funny', 'date'}
+# Keep: average_stars (used by G04 harsh/generous reviewer filters)
+# Keep: date (used by G04 post_2020 filters)
+STRIP_USER_FIELDS = {'friends', 'user_id', 'yelping_since'}
+STRIP_REVIEW_FIELDS = {'review_id', 'business_id', 'user_id', 'cool', 'funny'}
 
 # Unused attributes (not referenced by any request) - strip to save tokens
 STRIP_ATTRIBUTES = {

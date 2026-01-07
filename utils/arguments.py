@@ -38,6 +38,8 @@ def parse_args():
     parser.add_argument("--run-name", help="Name for this run (creates results/{N}_{run-name}/)")
     parser.add_argument("--limit", type=str, default=None,
                         help="Filter requests: N (first N), N-M (range), or N,M,O (specific indices)")
+    parser.add_argument("--group", type=str, metavar="N[,N,...]",
+                        help="Filter by group(s): single (3), comma-separated (1,2,3), or range (1-3)")
     parser.add_argument("--run", type=int, default=1,
                         help="Target run number (default: 1)")
     parser.add_argument("--force", action="store_true",
@@ -71,10 +73,10 @@ def parse_args():
                         help="Override model (default: role-based selection)")
     parser.add_argument("--temperature", type=float, default=0.0,
                         help="LLM temperature (default: 0.0)")
-    parser.add_argument("--max-tokens", type=int, default=1024,
-                        help="Max tokens for response (default: 1024)")
-    parser.add_argument("--max-tokens-reasoning", type=int, default=4096,
-                        help="Max tokens for reasoning models (default: 4096)")
+    parser.add_argument("--max-tokens", type=int, default=32000,
+                        help="Max tokens for response (default: 32000)")
+    parser.add_argument("--max-tokens-reasoning", type=int, default=32000,
+                        help="Max tokens for reasoning models (default: 32000)")
     parser.add_argument("--base-url", default="",
                         help="Base URL for local provider")
 
