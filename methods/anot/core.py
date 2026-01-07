@@ -270,6 +270,9 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 return Text("✓", style="green bold")
             elif phase == "P1":
                 return Text("1", style="yellow")
+            elif phase in ("S1", "S2", "S3", "S4"):
+                # Sub-steps within Phase 1
+                return Text(phase[1], style="yellow dim")
             elif phase == "P2":
                 return Text("2", style="blue")
             elif phase == "P3":
@@ -308,6 +311,9 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
     def _step1_extract_conditions(self, query: str) -> str:
         """Step 1: Extract conditions from user query."""
+        req_id = getattr(self._thread_local, 'request_id', None)
+        if req_id:
+            self._update_display(req_id, "S1", "extract")
         prompt = STEP1_EXTRACT_PROMPT.format(query=query)
         response = call_llm(
             prompt,
@@ -318,8 +324,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._log_llm_call("P1", "step1_extract", prompt, response)
         return response
 
-    def _step2_resolve_path(self, condition: dict, schema_compact: str) -> dict:
+    def _step2_resolve_path(self, condition: dict, schema_compact: str, cond_num: int = 0, total_conds: int = 0) -> dict:
         """Step 2: Resolve path for a single condition."""
+        req_id = getattr(self._thread_local, 'request_id', None)
+        if req_id:
+            self._update_display(req_id, "S2", f"path {cond_num}/{total_conds}")
         prompt = STEP2_PATH_PROMPT.format(
             condition_description=f"[{condition['type']}] {condition['description']}",
             schema_compact=schema_compact
@@ -338,6 +347,9 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
     def _step3_quick_ruleout(self, hard_conditions: list, items_compact: str, n_items: int) -> list:
         """Step 3: Quick rule-out by checking hard conditions."""
+        req_id = getattr(self._thread_local, 'request_id', None)
+        if req_id:
+            self._update_display(req_id, "S3", "ruleout")
         if not hard_conditions:
             # No hard conditions - all items are candidates
             return list(range(1, n_items + 1))
@@ -370,16 +382,19 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
     def _step4_generate_skeleton(self, candidates: list, soft_conditions: list, k: int) -> list:
         """Step 4: Generate LWT skeleton for soft conditions on candidates."""
+        req_id = getattr(self._thread_local, 'request_id', None)
+        if req_id:
+            self._update_display(req_id, "S4", "skeleton")
         if not candidates:
             # No candidates - return empty LWT with default ranking
-            return [(f"(final)=LLM('No candidates passed hard conditions. Output: []')")]
+            return [("final", "LLM('No candidates passed hard conditions. Output: []')")]
 
         candidates_str = ", ".join(str(c) for c in candidates)
 
         if not soft_conditions:
             # No soft conditions - just output candidates ranked
             top_k = candidates[:k]
-            return [f"(final)=LLM('Candidates: [{candidates_str}]. All passed hard conditions. Output: {top_k}')"]
+            return [("final", f"LLM('Candidates: [{candidates_str}]. All passed hard conditions. Output: {top_k}')")]
 
         # Format soft conditions
         soft_cond_str = "\n".join([
@@ -413,7 +428,22 @@ class AdaptiveNetworkOfThought(BaseMethod):
             top_k = candidates[:k]
             skeleton_steps = [("final", f"LLM('Rank candidates {candidates_str} by reviews. Output top-{k}: {top_k}')")]
 
-        return skeleton_steps
+        # Ensure all steps are tuples (var_name, step_content)
+        normalized = []
+        for step in skeleton_steps:
+            if isinstance(step, tuple) and len(step) == 2:
+                normalized.append(step)
+            elif isinstance(step, str):
+                # Parse string format "(var)=content"
+                match = re.match(r'\((\w+)\)=(.+)', step)
+                if match:
+                    normalized.append((match.group(1), match.group(2)))
+                else:
+                    normalized.append(("final", step))
+            else:
+                self._debug(1, "P1", f"Unexpected step format: {step}")
+
+        return normalized if normalized else skeleton_steps
 
     def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[list, list]:
         """Phase 1: Multi-step planning with condition extraction, path resolution,
@@ -444,13 +474,14 @@ class AdaptiveNetworkOfThought(BaseMethod):
             # Fallback: no conditions found, rank all items
             self._debug(1, "P1", "No conditions found, using default ranking")
             all_items = list(range(1, n_items + 1))
-            return all_items, [("final", f"LLM('Rank items 1-{n_items} for query: {query[:100]}. Output top-{k}: [best,2nd,...]')")]
+            top_k = all_items[:k]
+            return all_items, [("final", f"LLM('Rank items 1-{n_items} for query: {query[:100]}. Output top-{k}: {top_k}')")]
 
         # Step 2: Resolve paths for each condition
         self._debug(1, "P1", "Step 2: Resolving paths...")
         resolved = []
-        for cond in conditions:
-            path_info = self._step2_resolve_path(cond, schema_compact)
+        for i, cond in enumerate(conditions):
+            path_info = self._step2_resolve_path(cond, schema_compact, i+1, len(conditions))
             resolved.append(path_info)
             self._debug(2, "P1", f"  {cond['description']}: {path_info}")
 

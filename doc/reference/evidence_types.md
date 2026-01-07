@@ -545,7 +545,7 @@ See [Adding Evidence Types Guide](../guides/add_evidence_type.md) for detailed i
 
 ## Implementation Reference
 
-Source code: `data/validate.py`
+Source code: [data/validate.py](../../data/validate.py)
 
 | Function | Lines | Purpose |
 |----------|-------|---------|
@@ -557,3 +557,11 @@ Source code: `data/validate.py`
 | `evaluate_social_filter()` | 482-520 | social_filter evaluation |
 | `check_social_filter()` | 45-77 | Social graph traversal |
 | `evaluate_condition()` | 523-587 | Main dispatcher |
+
+---
+
+## Related Documentation
+
+- [Design Rationale](../paper/design_rationale.md) - Evidence type design decisions
+- [Request Structure](request_structure.md) - Request JSON schema
+- [Adding Evidence Types](../guides/add_evidence_type.md) - How to extend

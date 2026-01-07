@@ -180,17 +180,15 @@ Defense preamble added to system prompts.
 
 ## Attack System
 
-13 attack types targeting non-gold items only.
+12 attack types targeting non-gold items only.
 
 ### Attack Categories
 
 | Category | Attacks |
 |----------|---------|
-| Noise | typo_10, typo_20 |
-| Injection | inject_override, inject_fake_sys, inject_hidden, inject_manipulation |
-| Fake Review | fake_positive, fake_negative |
-| Sarcastic | sarcastic_wifi, sarcastic_noise, sarcastic_outdoor, sarcastic_all |
-| Length | heterogeneity |
+| Noise | typo_10, typo_20, heterogeneity |
+| Injection | inject_override, inject_fake_sys, inject_promotion |
+| Fake Review | fake_positive, fake_negative, sarcastic_wifi, sarcastic_noise, sarcastic_outdoor, sarcastic_all |
 
 ### Key Constraint
 

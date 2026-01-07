@@ -59,8 +59,11 @@ STEP2_PATH_PROMPT = """Determine where to find the value for this condition.
 
 [TASK]
 1. Identify which field to check for this condition
-2. If field doesn't exist in schema, use best guess from common fields
-3. Determine expected value
+2. Determine expected value based on what the user WANTS:
+   - "trendy" → user wants trendy=True
+   - "not kid-friendly" → user wants GoodForKids=False
+   - "quiet" → user wants NoiseLevel="quiet"
+   - "free WiFi" → user wants WiFi="free"
 
 [OUTPUT FORMAT]
 PATH: attributes.FieldName
@@ -116,8 +119,8 @@ STEP4_SKELETON_PROMPT = """Generate LWT skeleton for soft conditions on candidat
 [RULES]
 - Generate ONE step per item per soft condition
 - Each step checks ONE item independently using {{{{(context)}}}}[item_num][reviews]
-- Final step aggregates all results and outputs ranking
-- Use variable names like (r2), (r4) for item-specific results
+- Final step aggregates all results and outputs ranking as comma-separated numbers
+- IMPORTANT: In final step, map item numbers clearly (item 2=yes means output 2)
 
 [PATH SYNTAX]
 {{{{(context)}}}}[2][reviews] - Item 2's reviews array
@@ -127,14 +130,14 @@ STEP4_SKELETON_PROMPT = """Generate LWT skeleton for soft conditions on candidat
 (r2)=LLM('Item 2 reviews: {{{{(context)}}}}[2][reviews]. {soft_question} Answer: yes/no')
 (r4)=LLM('Item 4 reviews: {{{{(context)}}}}[4][reviews]. {soft_question} Answer: yes/no')
 ...
-(final)=LLM('Results: r2={{{{(r2)}}}}, r4={{{{(r4)}}}}, ... Rank items with yes first. Output top-{k}: [best,2nd,...]')
+(final)=LLM('Item 2={{{{(r2)}}}}, Item 4={{{{(r4)}}}}... Output the item NUMBERS with yes first, then others. Format: 2, 4, 6, ...')
 
 [EXAMPLE for candidates [2,4,6] checking "mentions wifi"]
 ===LWT_SKELETON===
 (r2)=LLM('Item 2 reviews: {{{{(context)}}}}[2][reviews]. Mentions wifi? Answer: yes/no')
 (r4)=LLM('Item 4 reviews: {{{{(context)}}}}[4][reviews]. Mentions wifi? Answer: yes/no')
 (r6)=LLM('Item 6 reviews: {{{{(context)}}}}[6][reviews]. Mentions wifi? Answer: yes/no')
-(final)=LLM('wifi: r2={{{{(r2)}}}}, r4={{{{(r4)}}}}, r6={{{{(r6)}}}}. Rank items with yes first. Output: [best,2nd,3rd,4th,5th]')
+(final)=LLM('Item 2={{{{(r2)}}}}, Item 4={{{{(r4)}}}}, Item 6={{{{(r6)}}}}. Output item NUMBERS with yes first, comma-separated: ')
 
 [IF NO SOFT CONDITIONS]
 ===LWT_SKELETON===

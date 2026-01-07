@@ -99,7 +99,7 @@ Without `--candidates`, runs scaling experiment across multiple N values:
 
 ```bash
 python main.py --method anot
-# Runs: N=5, 10, 15, 20, 25, 30, 35, 40, 45, 50
+# Runs: N=10, 20, 30, 40, 50
 ```
 
 ---
@@ -146,22 +146,34 @@ python main.py --method anot --limit 81-100
 
 ### Available Attacks
 
+**Noise Attacks**
+
 | Attack | Description |
 |--------|-------------|
-| `none` | Clean baseline (default) |
 | `typo_10` | 10% character typos |
 | `typo_20` | 20% character typos |
+| `heterogeneity` | Variable review lengths (requires `--attack-target-len`) |
+
+**Injection Attacks**
+
+| Attack | Description |
+|--------|-------------|
 | `inject_override` | System prompt override injection |
 | `inject_fake_sys` | Fake system message injection |
-| `inject_hidden` | Hidden instruction injection |
-| `inject_manipulation` | Manipulation attempt injection |
+| `inject_promotion` | Self-promotion injection (code: `inject_hidden`) |
+
+**Fake Review Attacks**
+
+| Attack | Description |
+|--------|-------------|
 | `fake_positive` | Fake positive reviews |
 | `fake_negative` | Fake negative reviews |
 | `sarcastic_wifi` | Sarcastic WiFi mentions |
 | `sarcastic_noise` | Sarcastic noise mentions |
 | `sarcastic_outdoor` | Sarcastic outdoor mentions |
 | `sarcastic_all` | All sarcastic patterns |
-| `heterogeneity` | Variable review lengths |
+
+See [Attacks Reference](../reference/attacks.md) for detailed descriptions.
 
 ### Run Single Attack
 
@@ -455,7 +467,9 @@ cat results/dev/001_run/debug.log
 
 ## Related Documentation
 
-- [Baselines](../research/baselines.md) - Method details and citations
-- [ANoT Architecture](../research/anot_architecture.md) - Our method design
-- [Evaluation Spec](../research/evaluation_spec.md) - Metrics and protocols
+- [Configuration Reference](../reference/configuration.md) - Full CLI arguments
+- [Attacks Reference](../reference/attacks.md) - Attack system details
+- [Defense Mode](../reference/defense_mode.md) - Attack-resistant evaluation
+- [Baselines](../paper/baselines.md) - Method details and citations
+- [ANoT Architecture](../paper/anot_architecture.md) - Our method design
 - [Logging](../reference/logging.md) - Output file formats

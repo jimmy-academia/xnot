@@ -197,13 +197,15 @@ This updates in-place after each request completes, showing:
 
 ## Scaling Experiment Output
 
-When running `--scaling`:
+When running without `--candidates` (scaling experiment):
 
 ```
 run_dir/
   results_10.jsonl      # Predictions for 10 candidates
-  results_15.jsonl      # Predictions for 15 candidates
-  ...
+  results_20.jsonl      # Predictions for 20 candidates
+  results_30.jsonl      # Predictions for 30 candidates
+  results_40.jsonl      # Predictions for 40 candidates
+  results_50.jsonl      # Predictions for 50 candidates
   usage.jsonl           # Merged usage across all scale points
   scaling_summary.json  # Summary with Hits@1, Hits@5 per scale
   config.json           # Run configuration
@@ -222,9 +224,11 @@ SCALING EXPERIMENT SUMMARY: cot
 ┌────┬─────┬─────┬─────┬─────┬─────┬─────┬─────────────────────┬────────┐
 │ N  │ Req │ @1  │ @2  │ @3  │ @4  │ @5  │ Usage (tok, $, time)│ Status │
 ├────┼─────┼─────┼─────┼─────┼─────┼─────┼─────────────────────┼────────┤
-│ 10 │ 50  │ 80% │ 86% │ 88% │ 90% │ 92% │ 608k, $0.20, 45s    │ ok     │
-│ 15 │ 50  │ 76% │ 82% │ 86% │ 88% │ 90% │ 912k, $0.30, 68s    │ ok     │
-│ 20 │ 50  │ 72% │ 80% │ 84% │ 86% │ 88% │ 1.2M, $0.40, 92s    │ ok     │
+│ 10 │ 100 │ 80% │ 86% │ 88% │ 90% │ 92% │ 608k, $0.20, 45s    │ ok     │
+│ 20 │ 100 │ 76% │ 82% │ 86% │ 88% │ 90% │ 912k, $0.30, 68s    │ ok     │
+│ 30 │ 100 │ 72% │ 80% │ 84% │ 86% │ 88% │ 1.2M, $0.40, 92s    │ ok     │
+│ 40 │ 100 │ 68% │ 76% │ 82% │ 84% │ 86% │ 1.5M, $0.50, 115s   │ ok     │
+│ 50 │ 100 │ 64% │ 72% │ 78% │ 82% │ 84% │ 1.8M, $0.60, 140s   │ ok     │
 └────┴─────┴─────┴─────┴─────┴─────┴─────┴─────────────────────┴────────┘
 ```
 
@@ -321,3 +325,11 @@ wc -l results/dev/XXX_anot/usage.jsonl
 # Filter usage by candidate count
 grep '"n_candidates": 10' results/dev/XXX_anot/usage.jsonl
 ```
+
+---
+
+## Related Documentation
+
+- [Configuration Reference](configuration.md) - Results directory structure
+- [Run Experiments Guide](../guides/run_experiments.md) - How to run evaluations
+- [ANoT Architecture](../paper/anot_architecture.md) - Three-phase design details

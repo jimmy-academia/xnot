@@ -43,19 +43,25 @@ Objective:
 
 ### Method Interface
 
+Methods inherit from `BaseMethod` and implement `evaluate_ranking()`:
+
 ```python
-def method(query: str, context: str) -> int:
-    """
-    Rank candidates based on constraint satisfaction.
+class MyMethod(BaseMethod):
+    def evaluate_ranking(self, query: str, context: str, k: int = 1) -> str:
+        """
+        Rank candidates based on constraint satisfaction.
 
-    Args:
-        query: Formatted candidate data (N items × reviews each)
-        context: User request with constraints
+        Args:
+            query: User request with constraints
+            context: Formatted candidate data (N items × reviews each)
+            k: Number of top predictions to return
 
-    Returns:
-        Index of top candidate (1-indexed)
-    """
+        Returns:
+            String with top-k indices (e.g., "5" or "5, 2, 1")
+        """
 ```
+
+See [doc/guides/architecture.md](../guides/architecture.md) for full interface details.
 
 ### Metrics
 
@@ -72,7 +78,7 @@ MRR = (1/N) × Σ (1 / rank(gold))
 ### Candidate Scaling
 
 Methods are evaluated across candidate pool sizes:
-- N ∈ {5, 10, 15, 20, 25, 30, 35, 40, 45, 50}
+- N ∈ {10, 20, 30, 40, 50}
 
 This tests scalability and robustness to distractor candidates.
 

@@ -91,21 +91,25 @@ Defined in `ATTACK_CONFIGS` dictionary:
 
 ```python
 ATTACK_CONFIGS = {
+    # Noise attacks
     "typo_10": ("typo", {"rate": 0.1}),
     "typo_20": ("typo", {"rate": 0.2}),
+    "heterogeneity": ("heterogeneity", {}),  # target_len added at runtime
+    # Injection attacks
     "inject_override": ("injection", {"injection_type": "override"}),
     "inject_fake_sys": ("injection", {"injection_type": "fake_system"}),
-    "inject_hidden": ("injection", {"injection_type": "hidden"}),
-    "inject_manipulation": ("injection", {"injection_type": "manipulation"}),
+    "inject_hidden": ("injection", {"injection_type": "hidden"}),  # aka inject_promotion
+    # Fake review attacks
     "fake_positive": ("fake_review", {"sentiment": "positive"}),
     "fake_negative": ("fake_review", {"sentiment": "negative"}),
     "sarcastic_wifi": ("sarcastic", {"target_attributes": ["WiFi"]}),
     "sarcastic_noise": ("sarcastic", {"target_attributes": ["NoiseLevel"]}),
     "sarcastic_outdoor": ("sarcastic", {"target_attributes": ["OutdoorSeating"]}),
     "sarcastic_all": ("sarcastic", {"target_attributes": None}),
-    "heterogeneity": ("heterogeneity", {}),  # target_len added at runtime
 }
 ```
+
+Note: `inject_manipulation` exists in code but is excluded from the main attack set.
 
 ---
 

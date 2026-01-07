@@ -28,19 +28,27 @@ python main.py --method anot --candidates 20
 ## Documentation
 
 ### Research
+- [Design Rationale](doc/paper/design_rationale.md) - Benchmark design decisions
 - [Methodology](doc/paper/methodology.md) - Evaluation framework design
-- [Data Pipeline](doc/paper/data_pipeline.md) - Data flow and processing
-- [ANoT Architecture](doc/research/anot_architecture.md) - Three-phase design
+- [ANoT Architecture](doc/paper/anot_architecture.md) - Three-phase design
+- [Baselines](doc/paper/baselines.md) - Implemented methods with citations
 
 ### Guides
+- [Run Experiments](doc/guides/run_experiments.md) - Execute and analyze evaluations
+- [Methods Architecture](doc/guides/architecture.md) - Method structure conventions
 - [Recreate Dataset](doc/guides/recreate_philly_cafes.md) - Reproduce philly_cafes from raw Yelp data
 - [Create Benchmark](doc/guides/create_new_benchmark.md) - Build a new evaluation benchmark
-- [Run Experiments](doc/guides/run_experiments.md) - Execute and analyze evaluations
 
 ### Reference
+- [Configuration](doc/reference/configuration.md) - CLI arguments, LLM config
+- [Attacks](doc/reference/attacks.md) - Adversarial attack system
+- [Defense Mode](doc/reference/defense_mode.md) - Attack-resistant evaluation
 - [Evidence Types](doc/reference/evidence_types.md) - Validation logic reference
 - [Request Structure](doc/reference/request_structure.md) - Request JSON schema
-- [Baselines](doc/research/baselines.md) - Implemented methods with citations
+
+### Internal
+- [TODO](doc/internal/TODO.md) - Development tasks
+- [Attack Plan](doc/internal/attack_plan.md) - Attack testing plan
 
 See [doc/README.md](doc/README.md) for complete documentation index.
 
@@ -54,10 +62,9 @@ See [doc/README.md](doc/README.md) for complete documentation index.
 | Validation | 100% |
 
 Request groups test progressively complex reasoning:
-- **G01-G03**: Basic AND/OR logic
-- **G04**: Credibility-weighted reviews
-- **G05-G08**: Nested logical structures
-- **G09-G10**: Social graph filtering
+- **G01-G04**: Flat AND logic with different evidence types
+- **G05-G08**: Nested logical structures (AND/OR combinations)
+- **G09-G10**: Social graph filtering (1-hop, 2-hop)
 
 ## Methods
 
@@ -90,11 +97,12 @@ anot/
 │   ├── curate.py    # Stage 1: Curation
 │   └── prompts/     # Claude Code templates
 ├── run/             # Evaluation orchestration
+├── utils/           # LLM, arguments, experiment utilities
 ├── doc/             # Documentation
 │   ├── paper/       # Research paper support
 │   ├── guides/      # How-to guides
 │   ├── reference/   # Technical specs
-│   └── research/    # Research docs
+│   └── internal/    # Development docs
 └── results/         # Experiment outputs
 ```
 

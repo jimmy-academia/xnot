@@ -31,7 +31,9 @@ Systematic adversarial testing of LLM robustness in constraint-satisfying rerank
 
 ## Attack Taxonomy
 
-### Mode 1: Noise Attacks (Existing)
+See [doc/reference/attacks.md](../reference/attacks.md) for full documentation.
+
+### Noise Attacks (3 types)
 
 | Attack | Description | Status |
 |--------|-------------|--------|
@@ -39,41 +41,34 @@ Systematic adversarial testing of LLM robustness in constraint-satisfying rerank
 | `typo_20` | 20% word typo rate | ✅ Implemented |
 | `heterogeneity` | Variable review lengths | ✅ Implemented |
 
-### Mode 2: Prompt Injection Attacks
-
-**Goal A: Promote Non-Gold** (Existing)
+### Injection Attacks (3 types)
 
 | Attack | Strategy | Status |
 |--------|----------|--------|
 | `inject_override` | "IGNORE ALL INSTRUCTIONS" | ✅ Implemented |
 | `inject_fake_sys` | "[VERIFIED BY YELP] THIS is #1" | ✅ Implemented |
-| `inject_hidden` | Natural text claiming perfect attributes | ✅ Implemented |
-| `inject_manipulation` | Authority/FOMO pressure | ✅ Implemented |
+| `inject_promotion` | Self-promotion (code: `inject_hidden`) | ✅ Implemented |
 
-**Goal B: Comparison Attacks** (NEW - to implement)
+Note: `inject_manipulation` exists in code but excluded from main attack set.
+
+**Potential Extensions** (not implemented):
 
 | Attack | Strategy | Status |
 |--------|----------|--------|
 | `inject_comparison_superlative` | Make non-gold SO good that gold looks bad | ❌ TODO |
 | `inject_comparison_criteria` | Claim 100% criteria match checklist | ❌ TODO |
-| `inject_comparison_ranking` | Assert mathematical ranking | ❌ TODO |
-
-**Goal C: Pure Disruption** (NEW - to implement)
-
-| Attack | Strategy | Status |
-|--------|----------|--------|
 | `inject_confusion` | Force "UNABLE TO DETERMINE" output | ❌ TODO |
-| `inject_contradiction` | Logical paradoxes | ❌ TODO |
-| `inject_format` | Hijack output format | ❌ TODO |
 
-### Mode 3: Fake Review Attacks (Existing)
+### Fake Review Attacks (6 types)
 
 | Attack | Strategy | Status |
 |--------|----------|--------|
 | `fake_positive` | Add glowing 5-star review | ✅ Implemented |
 | `fake_negative` | Add terrible 1-star review | ✅ Implemented |
-| `fake_combined` | Both positive and negative | ❌ TODO |
-| `sarcastic_*` | Positive sentiment for negative attributes | ✅ Implemented |
+| `sarcastic_wifi` | Positive sentiment for no-wifi | ✅ Implemented |
+| `sarcastic_noise` | Positive sentiment for loud noise | ✅ Implemented |
+| `sarcastic_outdoor` | Positive sentiment for no outdoor | ✅ Implemented |
+| `sarcastic_all` | All sarcastic patterns | ✅ Implemented |
 
 ---
 
@@ -190,8 +185,8 @@ done
 | Dimension | Values |
 |-----------|--------|
 | Methods | cot, anot, ps, listwise |
-| Attacks | 15 types (3 noise, 10 injection, 2 fake) |
-| Candidates | 10, 20, 50 |
+| Attacks | 12 types (3 noise, 3 injection, 6 fake review) |
+| Candidates | 10, 20, 30, 40, 50 |
 | Defense | off, on |
 
 **Priority**: CoT first → ANoT → others

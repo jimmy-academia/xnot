@@ -6,10 +6,11 @@ Comprehensive documentation for the ANoT evaluation framework.
 
 ### Writing a Research Paper
 
+- [Design Rationale](paper/design_rationale.md) - Benchmark design decisions
 - [Methodology](paper/methodology.md) - How the evaluation framework works
 - [Data Pipeline](paper/data_pipeline.md) - How data flows through the system
-- [ANoT Architecture](research/anot_architecture.md) - Three-phase design details
-- [Baselines](research/baselines.md) - Implemented methods with citations
+- [ANoT Architecture](paper/anot_architecture.md) - Three-phase design details
+- [Baselines](paper/baselines.md) - Implemented methods with citations
 
 ### Recreating the philly_cafes Dataset
 
@@ -22,12 +23,25 @@ Comprehensive documentation for the ANoT evaluation framework.
 
 - [Benchmark Creation Guide](guides/create_new_benchmark.md) - Template for new datasets
 - [Adding Evidence Types](guides/add_evidence_type.md) - Extending validation logic
-- [Condition Design](research/condition_design.md) - Bottom-up anchor-first methodology
+- [Condition Design](reference/condition_design.md) - Bottom-up anchor-first methodology
 
 ### Running Experiments
 
 - [Experiments Guide](guides/run_experiments.md) - How to run evaluations
-- [Evaluation Spec](research/evaluation_spec.md) - Metrics and protocols
+- [Configuration](reference/configuration.md) - CLI arguments, LLM config
+- [Attacks](reference/attacks.md) - Adversarial attack system
+- [Defense Mode](reference/defense_mode.md) - Attack-resistant evaluation
+
+### Understanding Methods
+
+- [Methods Architecture](guides/architecture.md) - Method structure conventions
+- [Design Rationale](paper/design_rationale.md) - Method choices explained
+
+### Development
+
+- [TODO](internal/TODO.md) - Current development tasks
+- [Attack Plan](internal/attack_plan.md) - Attack implementation status
+- [Code Quality Audit](internal/code_quality_audit.md) - Code health audit
 
 ---
 
@@ -36,26 +50,27 @@ Comprehensive documentation for the ANoT evaluation framework.
 ```
 doc/
 ├── paper/                # Research paper support
-│   ├── methodology.md    # Evaluation framework design
-│   └── data_pipeline.md  # Data flow documentation
-│
-├── research/             # Core research documentation
-│   ├── anot_architecture.md    # Three-phase ANoT design
-│   ├── baselines.md            # Method references
-│   ├── evaluation_spec.md      # Evaluation protocol
-│   ├── research_plan.md        # Master research plan
-│   └── condition_design.md     # Benchmark design methodology
+│   ├── design_rationale.md   # Benchmark design decisions
+│   ├── methodology.md        # Evaluation framework design
+│   ├── data_pipeline.md      # Data flow documentation
+│   ├── anot_architecture.md  # Three-phase ANoT design
+│   └── baselines.md          # Method references
 │
 ├── guides/               # How-to guides
+│   ├── run_experiments.md        # Running evaluations
+│   ├── architecture.md           # Methods architecture
 │   ├── recreate_philly_cafes.md  # Dataset reproduction
 │   ├── create_new_benchmark.md   # New dataset creation
-│   ├── add_evidence_type.md      # Extending validation
-│   └── run_experiments.md        # Running evaluations
+│   └── add_evidence_type.md      # Extending validation
 │
 ├── reference/            # Technical reference
-│   ├── evidence_types.md       # Evidence type specifications
-│   ├── request_structure.md    # Request JSON schema
-│   └── logging.md              # Output file formats
+│   ├── configuration.md      # CLI args, LLM config
+│   ├── attacks.md            # Attack system
+│   ├── defense_mode.md       # Defense mode
+│   ├── evidence_types.md     # Evidence type specifications
+│   ├── request_structure.md  # Request JSON schema
+│   ├── condition_design.md   # Benchmark design methodology
+│   └── logging.md            # Output file formats
 │
 └── internal/             # Development documentation
     ├── TODO.md                 # Current tasks
@@ -84,18 +99,18 @@ Given a user request with logical structure and N candidate restaurants, identif
 
 ### Request Groups
 
-| Group | Structure | Requests |
-|-------|-----------|----------|
-| G01 | Simple AND | R01-R10 |
-| G02 | Simple OR | R11-R20 |
-| G03 | AND-OR Combination | R21-R30 |
-| G04 | Credibility Weighting | R31-R40 |
-| G05 | Triple OR + Anchor | R41-R50 |
-| G06 | Nested OR+AND | R51-R60 |
-| G07 | Chained OR | R61-R70 |
-| G08 | Unbalanced Structure | R71-R80 |
-| G09 | Direct Friends (1-hop) | R81-R90 |
-| G10 | Social Circle (2-hop) | R91-R100 |
+| Group | Structure | Evidence Types |
+|-------|-----------|----------------|
+| G01 | Flat AND | item_meta only |
+| G02 | Flat AND | item_meta + review_text |
+| G03 | Flat AND | item_meta + item_meta_hours |
+| G04 | Flat AND | item_meta + review_text (weighted) |
+| G05 | AND + OR | Nested OR in AND |
+| G06 | AND + OR(AND) | OR containing ANDs |
+| G07 | AND + OR + OR | Multiple parallel ORs |
+| G08 | AND + OR(AND) | Complex nesting |
+| G09 | 1-hop | Social filter (friends) |
+| G10 | 2-hop | Social filter (friends-of-friends) |
 
 ### Evidence Types
 
@@ -103,20 +118,20 @@ Given a user request with logical structure and N candidate restaurants, identif
 |------|-------------|
 | `item_meta` | Attribute matching |
 | `item_meta_hours` | Operating hours |
-| `review_text` | Pattern matching |
-| `review_meta` | Reviewer metadata |
+| `review_text` | Pattern matching in reviews |
+| `review_meta` | Reviewer credibility weighting |
 | `social_filter` | Social graph filtering |
 
 ### Methods
 
-| Method | Description |
-|--------|-------------|
-| `cot` | Chain-of-Thought |
-| `ps` | Plan-and-Solve |
-| `plan_act` | Plan-and-Act |
-| `listwise` | Listwise Reranking |
-| `weaver` | SQL+LLM Hybrid |
-| `anot` | **Ours**: Adaptive Network of Thought |
+| Method | Description | Defense |
+|--------|-------------|---------|
+| `cot` | Chain-of-Thought | Yes |
+| `ps` | Plan-and-Solve | No |
+| `plan_act` | Plan-and-Act | Yes |
+| `listwise` | Listwise Reranking | Yes |
+| `weaver` | SQL+LLM Hybrid | Yes |
+| `anot` | **Ours**: Adaptive Network of Thought | Yes |
 
 ---
 
