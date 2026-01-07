@@ -12,7 +12,8 @@ from utils.io import loadjl
 DATA_DIR = Path(__file__).parent
 
 # Fields to strip from reviews/users (reduce token bloat)
-STRIP_USER_FIELDS = {'friends', 'user_id', 'elite'}
+# Note: 'elite' is kept because G04 requests need it for weight_by checks
+STRIP_USER_FIELDS = {'friends', 'user_id'}
 STRIP_REVIEW_FIELDS = {'review_id', 'business_id', 'user_id'}
 
 
@@ -190,82 +191,140 @@ def load_groundtruth(data_name: str) -> dict:
     return groundtruth
 
 
-def load_dataset(data_name: str, review_limit: int = None) -> Dataset:
-    """Load dataset with restaurants, reviews, requests, and groundtruth.
+def _validate_data_files(data_dir: Path) -> dict[str, Path]:
+    """Validate required dataset files exist.
 
     Args:
-        data_name: Dataset name (e.g., 'philly_cafes')
-        review_limit: Max reviews per restaurant
+        data_dir: Path to dataset directory
 
     Returns:
-        Dataset object with items, requests, and groundtruth
+        Dict mapping file type to path
+
+    Raises:
+        FileNotFoundError: If any required files are missing
     """
-    data_dir = DATA_DIR / data_name
+    paths = {
+        "restaurants": data_dir / "restaurants.jsonl",
+        "reviews": data_dir / "reviews.jsonl",
+        "requests": data_dir / "requests.jsonl",
+        "groundtruth": data_dir / "groundtruth.jsonl",
+    }
 
-    # Check required files
-    restaurants_path = data_dir / "restaurants.jsonl"
-    reviews_path = data_dir / "reviews.jsonl"
-    requests_path = data_dir / "requests.jsonl"
-    groundtruth_path = data_dir / "groundtruth.jsonl"
-
-    missing = []
-    for p in [restaurants_path, reviews_path, requests_path, groundtruth_path]:
-        if not p.exists():
-            missing.append(p.name)
+    missing = [name for name, path in paths.items() if not path.exists()]
     if missing:
         raise FileNotFoundError(f"Missing files in {data_dir}: {', '.join(missing)}")
 
-    # Load restaurants (no limit - request filtering happens in run.py)
-    restaurants = loadjl(restaurants_path)
+    return paths
 
-    # Build restaurant lookup by business_id
-    restaurant_by_id = {r["business_id"]: r for r in restaurants}
 
-    # Load user mapping for G09/G10 social data synthesis
+def _build_user_mapping_data(data_name: str, restaurants: list) -> dict:
+    """Set up G09/G10 social synthesis data structures.
+
+    The user_mapping.json contains pre-computed (name, friends) assignments
+    for ALL reviews. This enables G09/G10 social validation without any
+    runtime pattern matching.
+
+    Args:
+        data_name: Dataset name
+        restaurants: List of restaurant dicts
+
+    Returns:
+        Dict with review_assignments and biz_id_to_idx
+    """
     user_mapping = _load_user_mapping(data_name)
-    user_names = user_mapping.get("user_names", {}) if user_mapping else {}
+
+    # New format: pre-computed review_assignments
+    # {rest_idx: [{review_idx, name, friends}, ...]}
+    review_assignments = user_mapping.get("review_assignments", {}) if user_mapping else {}
     friend_graph = user_mapping.get("friend_graph", {}) if user_mapping else {}
-    restaurant_reviews_map = user_mapping.get("restaurant_reviews", {}) if user_mapping else {}
 
-    # Build translated friend graph (USER_01 -> ["Bob", "Carol"] instead of ["USER_02", "USER_03"])
-    translated_friends = {}
-    for user_id, friend_ids in friend_graph.items():
-        translated_friends[user_id] = [user_names.get(fid, fid) for fid in friend_ids]
-
-    # Build restaurant index lookup (business_id -> index for user_mapping)
+    # Build restaurant index lookup (business_id -> index string)
     biz_id_to_idx = {r["business_id"]: str(i) for i, r in enumerate(restaurants)}
 
-    # Load reviews and group by business_id
-    reviews_by_biz = {}
+    return {
+        "review_assignments": review_assignments,
+        "friend_graph": friend_graph,
+        "biz_id_to_idx": biz_id_to_idx,
+    }
+
+
+def _load_reviews_with_synthesis(
+    reviews_path: Path,
+    biz_id_to_idx: dict,
+    review_assignments: dict,
+    friend_graph: dict,
+) -> dict[str, list]:
+    """Load reviews, apply stripping and G09/G10 social synthesis.
+
+    Uses pre-computed review_assignments to set (name, friends) on ALL reviews.
+    No runtime pattern matching - assignments are indexed directly.
+
+    Args:
+        reviews_path: Path to reviews.jsonl
+        biz_id_to_idx: Map of business_id to index string
+        review_assignments: Pre-computed {rest_idx: [{review_idx, name, friends}, ...]}
+        friend_graph: Map of name to list of friend names
+
+    Returns:
+        Dict mapping business_id to list of reviews
+    """
+    # First pass: load and strip reviews, group by business_id
+    raw_reviews_by_biz = {}
     for review in loadjl(reviews_path):
         biz_id = review["business_id"]
-
-        # Strip bloated fields
         review = _strip_review_fields(review)
+        if biz_id not in raw_reviews_by_biz:
+            raw_reviews_by_biz[biz_id] = []
+        raw_reviews_by_biz[biz_id].append(review)
 
-        # Apply G09/G10 social synthesis: set user.name and user.friends for matching reviews
+    # Second pass: apply pre-computed social synthesis
+    reviews_by_biz = {}
+    for biz_id, reviews in raw_reviews_by_biz.items():
         rest_idx = biz_id_to_idx.get(biz_id)
-        if rest_idx and rest_idx in restaurant_reviews_map:
-            review_text_lower = review.get("text", "").lower()
-            for user_id, pattern in restaurant_reviews_map[rest_idx]:
-                if pattern in review_text_lower:
-                    # Apply synthetic user data to this review
-                    if 'user' in review:
-                        review['user']['name'] = user_names.get(user_id, review['user'].get('name'))
-                        # Add synthetic friends list for G10 (2-hop) lookups
-                        if user_id in translated_friends:
-                            review['user']['friends'] = translated_friends[user_id]
-                    break  # Only apply first matching pattern
 
-        if biz_id not in reviews_by_biz:
-            reviews_by_biz[biz_id] = []
-        reviews_by_biz[biz_id].append(review)
+        if rest_idx and rest_idx in review_assignments:
+            # Build index lookup for this restaurant's assignments
+            assignments_by_idx = {
+                a["review_idx"]: a for a in review_assignments[rest_idx]
+            }
 
-    # Fields to remove (ground-truth / evaluation-only)
-    RESTAURANT_BLOCKLIST = {"llm_score", "llm_reasoning"}
+            # Apply assignments to each review
+            for rev_idx, review in enumerate(reviews):
+                assignment = assignments_by_idx.get(rev_idx)
+                if assignment and 'user' in review:
+                    review['user']['name'] = assignment['name']
+                    # Use pre-computed friends, or fall back to friend_graph
+                    friends = assignment.get('friends')
+                    if friends is None:
+                        friends = friend_graph.get(assignment['name'], [])
+                    review['user']['friends'] = friends
 
-    # Assemble items (restaurant + reviews) - pass-through with blocklist
+        reviews_by_biz[biz_id] = reviews
+
+    return reviews_by_biz
+
+
+# Fields to remove from restaurants (ground-truth / evaluation-only)
+RESTAURANT_BLOCKLIST = {"llm_score", "llm_reasoning"}
+
+
+def _assemble_items(
+    restaurants: list,
+    reviews_by_biz: dict[str, list],
+    review_limit: int | None,
+) -> list[dict]:
+    """Combine restaurants with reviews, parse attributes.
+
+    Args:
+        restaurants: List of restaurant dicts
+        reviews_by_biz: Dict mapping business_id to list of reviews
+        review_limit: Max reviews per restaurant (None for no limit)
+
+    Returns:
+        List of item dicts with reviews attached
+    """
     items = []
+
     for rest in restaurants:
         biz_id = rest["business_id"]
         reviews = reviews_by_biz.get(biz_id, [])
@@ -291,10 +350,41 @@ def load_dataset(data_name: str, review_limit: int = None) -> Dataset:
 
         items.append(item)
 
-    # Load requests
-    requests = load_requests(data_name)
+    return items
 
-    # Load groundtruth
+
+def load_dataset(data_name: str, review_limit: int = None) -> Dataset:
+    """Load dataset with restaurants, reviews, requests, and groundtruth.
+
+    Args:
+        data_name: Dataset name (e.g., 'philly_cafes')
+        review_limit: Max reviews per restaurant
+
+    Returns:
+        Dataset object with items, requests, and groundtruth
+    """
+    # Validate required files
+    paths = _validate_data_files(DATA_DIR / data_name)
+
+    # Load restaurants
+    restaurants = loadjl(paths["restaurants"])
+
+    # Set up G09/G10 social synthesis data
+    mapping_data = _build_user_mapping_data(data_name, restaurants)
+
+    # Load reviews with synthesis applied
+    reviews_by_biz = _load_reviews_with_synthesis(
+        paths["reviews"],
+        mapping_data["biz_id_to_idx"],
+        mapping_data["review_assignments"],
+        mapping_data["friend_graph"],
+    )
+
+    # Assemble items (restaurant + reviews)
+    items = _assemble_items(restaurants, reviews_by_biz, review_limit)
+
+    # Load requests and groundtruth
+    requests = load_requests(data_name)
     groundtruth = load_groundtruth(data_name)
 
     return Dataset(data_name, items, requests, groundtruth)

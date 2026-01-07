@@ -60,6 +60,131 @@ def compute_multi_k_stats(results: list[dict], k: int) -> dict:
     }
 
 
+def _apply_attack_if_needed(
+    items: list,
+    attack_config: dict | None,
+    gold_id: str,
+    req_id: str,
+) -> list:
+    """Apply attack to items if configured, protecting gold.
+
+    Args:
+        items: List of items (restaurants)
+        attack_config: Attack configuration dict or None
+        gold_id: ID of gold restaurant to protect
+        req_id: Request ID for reproducible seeding
+
+    Returns:
+        Modified items list (or original if no attack)
+    """
+    if not attack_config:
+        return items
+    if attack_config.get("attack", "none") in ("none", "clean", None, ""):
+        return items
+
+    from attack import apply_attack_for_request
+
+    # Use request-specific seed for reproducibility
+    base_seed = attack_config.get("seed")
+    request_seed = hash(req_id) % (2**31) if base_seed is None else base_seed + hash(req_id) % 1000
+
+    return apply_attack_for_request(items, attack_config, gold_id, request_seed)
+
+
+def _format_context(
+    items: list,
+    mode: str,
+    token_budget: int | None,
+    model: str | None,
+) -> tuple:
+    """Format items as context for the model.
+
+    Args:
+        items: List of items (already shuffled)
+        mode: "string" or "dict" for formatting
+        token_budget: Optional token budget for truncation
+        model: Model name for tokenizer
+
+    Returns:
+        (context, item_count, coverage_stats) - coverage_stats is None if not truncated
+    """
+    if token_budget and mode == "string":
+        context, item_count, coverage_stats = format_ranking_query_packed(
+            items, token_budget, model or "gpt-4o"
+        )
+        return context, item_count, coverage_stats
+
+    context, item_count = format_ranking_query(items, mode)
+    return context, item_count, None
+
+
+def _invoke_method(method, query: str, context, k: int, req_id: str) -> str:
+    """Invoke the method with appropriate signature.
+
+    Args:
+        method: LLM method instance
+        query: User request text
+        context: Formatted context (string or dict)
+        k: Number of predictions
+        req_id: Request ID (passed if method accepts it)
+
+    Returns:
+        Method response string
+    """
+    sig = inspect.signature(method.evaluate_ranking)
+    if 'request_id' in sig.parameters:
+        return method.evaluate_ranking(query, context, k=k, request_id=req_id)
+    return method.evaluate_ranking(query, context, k=k)
+
+
+def _build_result(
+    req_id: str,
+    pred_indices: list,
+    shuffled_preds: list,
+    gold_idx: int,
+    shuffled_gold_pos: int,
+    gt: dict,
+    usage_records: list,
+    coverage_stats: dict | None,
+) -> dict:
+    """Assemble the result dictionary.
+
+    Args:
+        req_id: Request ID
+        pred_indices: Predictions mapped to original indices
+        shuffled_preds: Predictions in shuffled order
+        gold_idx: Gold index in original order
+        shuffled_gold_pos: Gold position in shuffled order
+        gt: Ground truth dict
+        usage_records: List of usage records for this request
+        coverage_stats: Coverage stats or None
+
+    Returns:
+        Result dict
+    """
+    prompt_tokens = sum(r['prompt_tokens'] for r in usage_records)
+    completion_tokens = sum(r['completion_tokens'] for r in usage_records)
+
+    result = {
+        "request_id": req_id,
+        "pred_indices": pred_indices,
+        "shuffled_preds": shuffled_preds,
+        "gold_idx": gold_idx,
+        "shuffled_gold_pos": shuffled_gold_pos + 1,
+        "gold_restaurant": gt["gold_restaurant"],
+        "prompt_tokens": prompt_tokens,
+        "completion_tokens": completion_tokens,
+        "tokens": prompt_tokens + completion_tokens,
+        "cost_usd": sum(r['cost_usd'] for r in usage_records),
+        "latency_ms": sum(r['latency_ms'] for r in usage_records),
+    }
+
+    if coverage_stats:
+        result["coverage"] = coverage_stats
+
+    return result
+
+
 def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
                             query: str, k: int, req: dict,
                             groundtruth: dict, attack_config: dict = None,
@@ -93,78 +218,41 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     gold_idx = gt["gold_idx"]
     gold_id = gt["gold_restaurant"]
 
-    # Apply per-request attack (protecting only this request's gold)
-    if attack_config and attack_config.get("attack", "none") not in ("none", "clean", None, ""):
-        from attack import apply_attack_for_request
-        # Use request-specific seed for reproducibility
-        base_seed = attack_config.get("seed")
-        request_seed = hash(req_id) % (2**31) if base_seed is None else base_seed + hash(req_id) % 1000
-        items = apply_attack_for_request(items, attack_config, gold_id, request_seed)
+    # Apply attack if configured
+    items = _apply_attack_if_needed(items, attack_config, gold_id, req_id)
 
     # Apply shuffle based on gold position
     shuffled_items, mapping, shuffled_gold_pos = apply_shuffle(items, gold_idx, shuffle)
 
-    # Format items as context (restaurant data)
-    coverage_stats = None
-    if token_budget and mode == "string":
-        # Use pack-to-budget formatting for string mode
-        context, item_count, coverage_stats = format_ranking_query_packed(
-            shuffled_items, token_budget, model or "gpt-4o"
-        )
-    else:
-        context, item_count = format_ranking_query(shuffled_items, mode)
+    # Format items as context
+    context, item_count, coverage_stats = _format_context(
+        shuffled_items, mode, token_budget, model
+    )
 
     # Track per-request token usage
     tracker = get_usage_tracker()
     start_idx = len(tracker.get_records())
 
-    response = None
+    # Invoke method and parse response
     shuffled_preds = []
     try:
-        # query = user request, context = restaurant data
-        # Only pass request_id if method accepts it (e.g., ANoT)
-        sig = inspect.signature(method.evaluate_ranking)
-        if 'request_id' in sig.parameters:
-            response = method.evaluate_ranking(query, context, k=k, request_id=req_id)
-        else:
-            response = method.evaluate_ranking(query, context, k=k)
+        response = _invoke_method(method, query, context, k, req_id)
         shuffled_preds = parse_indices(response, item_count, k)
-
     except Exception as e:
         error_str = str(e)
         if "context_length_exceeded" in error_str or "too many tokens" in error_str.lower():
             raise ContextLengthExceeded(error_str)
-        # Log error instead of silent swallow
         print(f"[ERROR] {req_id}: {type(e).__name__}: {error_str[:200]}", flush=True)
-        shuffled_preds = []
-
-    # Compute usage for this request
-    request_records = tracker.get_records()[start_idx:]
-    request_prompt_tokens = sum(r['prompt_tokens'] for r in request_records)
-    request_completion_tokens = sum(r['completion_tokens'] for r in request_records)
-    request_tokens = request_prompt_tokens + request_completion_tokens
-    request_cost = sum(r['cost_usd'] for r in request_records)
-    request_latency = sum(r['latency_ms'] for r in request_records)
 
     # Map predictions back to original indices
     pred_indices = unmap_predictions(shuffled_preds, mapping)
 
-    result = {
-        "request_id": req_id,
-        "pred_indices": pred_indices,
-        "shuffled_preds": shuffled_preds,
-        "gold_idx": gold_idx,
-        "shuffled_gold_pos": shuffled_gold_pos + 1,
-        "gold_restaurant": gt["gold_restaurant"],
-        "prompt_tokens": request_prompt_tokens,
-        "completion_tokens": request_completion_tokens,
-        "tokens": request_tokens,
-        "cost_usd": request_cost,
-        "latency_ms": request_latency,
-    }
-    if coverage_stats:
-        result["coverage"] = coverage_stats
-    return result
+    # Build result with usage stats
+    usage_records = tracker.get_records()[start_idx:]
+    return _build_result(
+        req_id, pred_indices, shuffled_preds, gold_idx, shuffled_gold_pos,
+        gt, usage_records, coverage_stats
+    )
 
 
 def _run_with_progress(generator, has_rich_display: bool, description: str, total: int):

@@ -1,73 +1,8491 @@
 {
-  "user_names": {
-    "USER_01": "Alice",
-    "USER_02": "Bob",
-    "USER_03": "Carol",
-    "USER_04": "David",
-    "USER_05": "Emma",
-    "USER_06": "Frank",
-    "USER_07": "Grace",
-    "USER_08": "Henry",
-    "USER_09": "Ivy",
-    "USER_10": "Jack",
-    "USER_11": "Kate",
-    "USER_12": "Leo",
-    "USER_13": "Mia",
-    "USER_14": "Noah",
-    "USER_15": "Olivia",
-    "USER_16": "Peter",
-    "USER_17": "Quinn",
-    "USER_18": "Rose",
-    "USER_19": "Sam",
-    "USER_20": "Tina"
-  },
   "friend_graph": {
-    "USER_01": ["USER_02", "USER_03"],
-    "USER_02": ["USER_01", "USER_04"],
-    "USER_03": ["USER_01", "USER_05"],
-    "USER_04": ["USER_02", "USER_06"],
-    "USER_05": ["USER_03", "USER_07"],
-    "USER_06": ["USER_04", "USER_08"],
-    "USER_07": ["USER_05", "USER_09"],
-    "USER_08": ["USER_06", "USER_10"],
-    "USER_09": ["USER_07", "USER_11"],
-    "USER_10": ["USER_08", "USER_12"],
-    "USER_11": ["USER_09", "USER_13"],
-    "USER_12": ["USER_10", "USER_14"],
-    "USER_13": ["USER_11", "USER_15"],
-    "USER_14": ["USER_12", "USER_16"],
-    "USER_15": ["USER_13", "USER_17"],
-    "USER_16": ["USER_14", "USER_18"],
-    "USER_17": ["USER_15", "USER_19"],
-    "USER_18": ["USER_16", "USER_20"],
-    "USER_19": ["USER_17"],
-    "USER_20": ["USER_18"]
+    "Alice": [
+      "Bob",
+      "Carol"
+    ],
+    "Carol": [
+      "Alice",
+      "Emma"
+    ],
+    "Emma": [
+      "Carol",
+      "Grace"
+    ],
+    "Grace": [
+      "Emma",
+      "Ivy"
+    ],
+    "Ivy": [
+      "Grace",
+      "Kate"
+    ],
+    "Kate": [
+      "Ivy",
+      "Mia"
+    ],
+    "Mia": [
+      "Kate",
+      "Olivia"
+    ],
+    "Olivia": [
+      "Mia",
+      "Quinn"
+    ],
+    "Quinn": [
+      "Olivia",
+      "Sam"
+    ],
+    "Sam": [
+      "Quinn",
+      "Tina"
+    ],
+    "Bob": [
+      "Alice",
+      "David"
+    ],
+    "David": [
+      "Bob",
+      "Frank"
+    ],
+    "Frank": [
+      "David",
+      "Henry"
+    ],
+    "Henry": [
+      "Frank",
+      "Jack"
+    ],
+    "Jack": [
+      "Henry",
+      "Leo"
+    ],
+    "Leo": [
+      "Jack",
+      "Noah"
+    ],
+    "Noah": [
+      "Leo",
+      "Peter"
+    ],
+    "Peter": [
+      "Noah",
+      "Rose"
+    ],
+    "Rose": [
+      "Peter",
+      "Alice"
+    ],
+    "Tina": [
+      "Sam",
+      "Uma"
+    ],
+    "Uma": [
+      "Tina",
+      "Victor"
+    ],
+    "Victor": [
+      "Uma",
+      "Wendy"
+    ],
+    "Wendy": [
+      "Victor",
+      "Xavier"
+    ],
+    "Xavier": [
+      "Wendy",
+      "Yara"
+    ],
+    "Yara": [
+      "Xavier",
+      "Zack"
+    ],
+    "Zack": [
+      "Yara",
+      "Amy"
+    ],
+    "Amy": [
+      "Zack",
+      "Ben"
+    ],
+    "Ben": [
+      "Amy",
+      "Chloe"
+    ],
+    "Chloe": [
+      "Ben",
+      "Dan"
+    ],
+    "Dan": [
+      "Chloe",
+      "Eve"
+    ],
+    "Eve": [
+      "Dan",
+      "George"
+    ],
+    "George": [
+      "Eve",
+      "Hannah"
+    ],
+    "Hannah": [
+      "George",
+      "Ian"
+    ],
+    "Ian": [
+      "Hannah",
+      "Julia"
+    ],
+    "Julia": [
+      "Ian",
+      "Kevin"
+    ],
+    "Kevin": [
+      "Julia",
+      "Lucy"
+    ],
+    "Lucy": [
+      "Kevin",
+      "Mike"
+    ],
+    "Mike": [
+      "Lucy",
+      "Nina"
+    ],
+    "Nina": [
+      "Mike",
+      "Oscar"
+    ],
+    "Oscar": [
+      "Nina"
+    ]
   },
-  "restaurant_reviews": {
-    "0": [["USER_01", "cozy"], ["USER_02", "quiet"]],
-    "1": [["USER_03", "latte"], ["USER_01", "great"]],
-    "2": [["USER_05", "work"], ["USER_03", "study"]],
-    "3": [["USER_07", "music"], ["USER_05", "vibe"]],
-    "4": [["USER_09", "brunch"], ["USER_07", "pastry"]],
-    "5": [["USER_11", "espresso"], ["USER_09", "coffee"]],
-    "6": [["USER_13", "friendly"], ["USER_11", "nice"]],
-    "7": [["USER_15", "favorite"], ["USER_13", "love"]],
-    "8": [["USER_17", "breakfast"], ["USER_15", "quick"]],
-    "9": [["USER_19", "delicious"], ["USER_17", "amazing"]],
-    "10": [["USER_04", "recommend"]],
-    "11": [["USER_06", "perfect"]],
-    "12": [["USER_08", "excellent"]],
-    "13": [["USER_10", "lunch"]],
-    "14": [["USER_12", "dinner"]],
-    "15": [["USER_14", "sandwich"]],
-    "16": [["USER_16", "atmosphere"]],
-    "17": [["USER_18", "spot"]],
-    "18": [["USER_20", "best"]],
-    "19": [["USER_02", "wifi"]]
+  "review_assignments": {
+    "0": [
+      {
+        "review_idx": 0,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      }
+    ],
+    "1": [
+      {
+        "review_idx": 0,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      }
+    ],
+    "2": [
+      {
+        "review_idx": 0,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      }
+    ],
+    "3": [
+      {
+        "review_idx": 0,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      }
+    ],
+    "4": [
+      {
+        "review_idx": 0,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      }
+    ],
+    "5": [
+      {
+        "review_idx": 0,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      }
+    ],
+    "6": [
+      {
+        "review_idx": 0,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      }
+    ],
+    "7": [
+      {
+        "review_idx": 0,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      }
+    ],
+    "8": [
+      {
+        "review_idx": 0,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      }
+    ],
+    "9": [
+      {
+        "review_idx": 0,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      }
+    ],
+    "10": [
+      {
+        "review_idx": 0,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      }
+    ],
+    "11": [
+      {
+        "review_idx": 0,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      }
+    ],
+    "12": [
+      {
+        "review_idx": 0,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      }
+    ],
+    "13": [
+      {
+        "review_idx": 0,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      }
+    ],
+    "14": [
+      {
+        "review_idx": 0,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      }
+    ],
+    "15": [
+      {
+        "review_idx": 0,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      }
+    ],
+    "16": [
+      {
+        "review_idx": 0,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      }
+    ],
+    "17": [
+      {
+        "review_idx": 0,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      }
+    ],
+    "18": [
+      {
+        "review_idx": 0,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      }
+    ],
+    "19": [
+      {
+        "review_idx": 0,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      }
+    ],
+    "20": [
+      {
+        "review_idx": 0,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      }
+    ],
+    "21": [
+      {
+        "review_idx": 0,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      }
+    ],
+    "22": [
+      {
+        "review_idx": 0,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      }
+    ],
+    "23": [
+      {
+        "review_idx": 0,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      }
+    ],
+    "24": [
+      {
+        "review_idx": 0,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      }
+    ],
+    "25": [
+      {
+        "review_idx": 0,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      }
+    ],
+    "26": [
+      {
+        "review_idx": 0,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      }
+    ],
+    "27": [
+      {
+        "review_idx": 0,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      }
+    ],
+    "28": [
+      {
+        "review_idx": 0,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      }
+    ],
+    "29": [
+      {
+        "review_idx": 0,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      }
+    ],
+    "30": [
+      {
+        "review_idx": 0,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      }
+    ],
+    "31": [
+      {
+        "review_idx": 0,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      }
+    ],
+    "32": [
+      {
+        "review_idx": 0,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      }
+    ],
+    "33": [
+      {
+        "review_idx": 0,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      }
+    ],
+    "34": [
+      {
+        "review_idx": 0,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      }
+    ],
+    "35": [
+      {
+        "review_idx": 0,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      }
+    ],
+    "36": [
+      {
+        "review_idx": 0,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      }
+    ],
+    "37": [
+      {
+        "review_idx": 0,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      }
+    ],
+    "38": [
+      {
+        "review_idx": 0,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      }
+    ],
+    "39": [
+      {
+        "review_idx": 0,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      }
+    ],
+    "40": [
+      {
+        "review_idx": 0,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      }
+    ],
+    "41": [
+      {
+        "review_idx": 0,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      }
+    ],
+    "42": [
+      {
+        "review_idx": 0,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      }
+    ],
+    "43": [
+      {
+        "review_idx": 0,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Amy",
+        "friends": [
+          "Zack",
+          "Ben"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Uma",
+        "friends": [
+          "Tina",
+          "Victor"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      }
+    ],
+    "44": [
+      {
+        "review_idx": 0,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Julia",
+        "friends": [
+          "Ian",
+          "Kevin"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      }
+    ],
+    "45": [
+      {
+        "review_idx": 0,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Kate",
+        "friends": [
+          "Ivy",
+          "Mia"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Kevin",
+        "friends": [
+          "Julia",
+          "Lucy"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      }
+    ],
+    "46": [
+      {
+        "review_idx": 0,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Emma",
+        "friends": [
+          "Carol",
+          "Grace"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Quinn",
+        "friends": [
+          "Olivia",
+          "Sam"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      }
+    ],
+    "47": [
+      {
+        "review_idx": 0,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Victor",
+        "friends": [
+          "Uma",
+          "Wendy"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Zack",
+        "friends": [
+          "Yara",
+          "Amy"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Leo",
+        "friends": [
+          "Jack",
+          "Noah"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Noah",
+        "friends": [
+          "Leo",
+          "Peter"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      }
+    ],
+    "48": [
+      {
+        "review_idx": 0,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Henry",
+        "friends": [
+          "Frank",
+          "Jack"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Dan",
+        "friends": [
+          "Chloe",
+          "Eve"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Ian",
+        "friends": [
+          "Hannah",
+          "Julia"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Rose",
+        "friends": [
+          "Peter",
+          "Alice"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Hannah",
+        "friends": [
+          "George",
+          "Ian"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Peter",
+        "friends": [
+          "Noah",
+          "Rose"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Sam",
+        "friends": [
+          "Quinn",
+          "Tina"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Olivia",
+        "friends": [
+          "Mia",
+          "Quinn"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "Chloe",
+        "friends": [
+          "Ben",
+          "Dan"
+        ]
+      }
+    ],
+    "49": [
+      {
+        "review_idx": 0,
+        "name": "Lucy",
+        "friends": [
+          "Kevin",
+          "Mike"
+        ]
+      },
+      {
+        "review_idx": 1,
+        "name": "Grace",
+        "friends": [
+          "Emma",
+          "Ivy"
+        ]
+      },
+      {
+        "review_idx": 2,
+        "name": "Xavier",
+        "friends": [
+          "Wendy",
+          "Yara"
+        ]
+      },
+      {
+        "review_idx": 3,
+        "name": "David",
+        "friends": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      {
+        "review_idx": 4,
+        "name": "Ivy",
+        "friends": [
+          "Grace",
+          "Kate"
+        ]
+      },
+      {
+        "review_idx": 5,
+        "name": "Bob",
+        "friends": [
+          "Alice",
+          "David"
+        ]
+      },
+      {
+        "review_idx": 6,
+        "name": "Frank",
+        "friends": [
+          "David",
+          "Henry"
+        ]
+      },
+      {
+        "review_idx": 7,
+        "name": "Jack",
+        "friends": [
+          "Henry",
+          "Leo"
+        ]
+      },
+      {
+        "review_idx": 8,
+        "name": "Mia",
+        "friends": [
+          "Kate",
+          "Olivia"
+        ]
+      },
+      {
+        "review_idx": 9,
+        "name": "Alice",
+        "friends": [
+          "Bob",
+          "Carol"
+        ]
+      },
+      {
+        "review_idx": 10,
+        "name": "Mike",
+        "friends": [
+          "Lucy",
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 11,
+        "name": "Wendy",
+        "friends": [
+          "Victor",
+          "Xavier"
+        ]
+      },
+      {
+        "review_idx": 12,
+        "name": "Tina",
+        "friends": [
+          "Sam",
+          "Uma"
+        ]
+      },
+      {
+        "review_idx": 13,
+        "name": "Oscar",
+        "friends": [
+          "Nina"
+        ]
+      },
+      {
+        "review_idx": 14,
+        "name": "Carol",
+        "friends": [
+          "Alice",
+          "Emma"
+        ]
+      },
+      {
+        "review_idx": 15,
+        "name": "Yara",
+        "friends": [
+          "Xavier",
+          "Zack"
+        ]
+      },
+      {
+        "review_idx": 16,
+        "name": "Eve",
+        "friends": [
+          "Dan",
+          "George"
+        ]
+      },
+      {
+        "review_idx": 17,
+        "name": "Ben",
+        "friends": [
+          "Amy",
+          "Chloe"
+        ]
+      },
+      {
+        "review_idx": 18,
+        "name": "Nina",
+        "friends": [
+          "Mike",
+          "Oscar"
+        ]
+      },
+      {
+        "review_idx": 19,
+        "name": "George",
+        "friends": [
+          "Eve",
+          "Hannah"
+        ]
+      }
+    ]
   },
-  "_notes": {
-    "description": "Synthetic social data for G09 (1-hop) and G10 (2-hop) request groups",
-    "1-hop": "Reviewer name is in query friend list (direct friend)",
-    "2-hop": "Reviewer name is in friend list OR reviewer has a friend in the list (friend-of-friend)"
+  "gold_markers": [
+    {
+      "request_id": "R81",
+      "restaurant_idx": 0,
+      "review_idx": 15,
+      "name": "Alice",
+      "friends": [
+        "Bob",
+        "Carol"
+      ],
+      "pattern": "cozy",
+      "hops": 1
+    },
+    {
+      "request_id": "R82",
+      "restaurant_idx": 1,
+      "review_idx": 13,
+      "name": "Carol",
+      "friends": [
+        "Alice",
+        "Emma"
+      ],
+      "pattern": "latte",
+      "hops": 1
+    },
+    {
+      "request_id": "R83",
+      "restaurant_idx": 2,
+      "review_idx": 1,
+      "name": "Emma",
+      "friends": [
+        "Carol",
+        "Grace"
+      ],
+      "pattern": "work",
+      "hops": 1
+    },
+    {
+      "request_id": "R84",
+      "restaurant_idx": 3,
+      "review_idx": 3,
+      "name": "Grace",
+      "friends": [
+        "Emma",
+        "Ivy"
+      ],
+      "pattern": "music",
+      "hops": 1
+    },
+    {
+      "request_id": "R85",
+      "restaurant_idx": 4,
+      "review_idx": 0,
+      "name": "Ivy",
+      "friends": [
+        "Grace",
+        "Kate"
+      ],
+      "pattern": "boba",
+      "hops": 1
+    },
+    {
+      "request_id": "R86",
+      "restaurant_idx": 5,
+      "review_idx": 4,
+      "name": "Kate",
+      "friends": [
+        "Ivy",
+        "Mia"
+      ],
+      "pattern": "espresso",
+      "hops": 1
+    },
+    {
+      "request_id": "R87",
+      "restaurant_idx": 6,
+      "review_idx": 0,
+      "name": "Mia",
+      "friends": [
+        "Kate",
+        "Olivia"
+      ],
+      "pattern": "friendly",
+      "hops": 1
+    },
+    {
+      "request_id": "R88",
+      "restaurant_idx": 7,
+      "review_idx": 1,
+      "name": "Olivia",
+      "friends": [
+        "Mia",
+        "Quinn"
+      ],
+      "pattern": "favorite",
+      "hops": 1
+    },
+    {
+      "request_id": "R89",
+      "restaurant_idx": 8,
+      "review_idx": 0,
+      "name": "Quinn",
+      "friends": [
+        "Olivia",
+        "Sam"
+      ],
+      "pattern": "breakfast",
+      "hops": 1
+    },
+    {
+      "request_id": "R90",
+      "restaurant_idx": 9,
+      "review_idx": 0,
+      "name": "Sam",
+      "friends": [
+        "Quinn",
+        "Tina"
+      ],
+      "pattern": "delicious",
+      "hops": 1
+    },
+    {
+      "request_id": "R91",
+      "restaurant_idx": 10,
+      "review_idx": 0,
+      "name": "Bob",
+      "friends": [
+        "Alice",
+        "David"
+      ],
+      "pattern": "gaming",
+      "hops": 2
+    },
+    {
+      "request_id": "R92",
+      "restaurant_idx": 11,
+      "review_idx": 1,
+      "name": "David",
+      "friends": [
+        "Bob",
+        "Frank"
+      ],
+      "pattern": "excellence",
+      "hops": 2
+    },
+    {
+      "request_id": "R93",
+      "restaurant_idx": 12,
+      "review_idx": 0,
+      "name": "Frank",
+      "friends": [
+        "David",
+        "Henry"
+      ],
+      "pattern": "hinge",
+      "hops": 2
+    },
+    {
+      "request_id": "R94",
+      "restaurant_idx": 13,
+      "review_idx": 17,
+      "name": "Henry",
+      "friends": [
+        "Frank",
+        "Jack"
+      ],
+      "pattern": "herbal",
+      "hops": 2
+    },
+    {
+      "request_id": "R95",
+      "restaurant_idx": 14,
+      "review_idx": 0,
+      "name": "Jack",
+      "friends": [
+        "Henry",
+        "Leo"
+      ],
+      "pattern": "nizza",
+      "hops": 2
+    },
+    {
+      "request_id": "R96",
+      "restaurant_idx": 15,
+      "review_idx": 3,
+      "name": "Leo",
+      "friends": [
+        "Jack",
+        "Noah"
+      ],
+      "pattern": "homework",
+      "hops": 2
+    },
+    {
+      "request_id": "R97",
+      "restaurant_idx": 16,
+      "review_idx": 1,
+      "name": "Noah",
+      "friends": [
+        "Leo",
+        "Peter"
+      ],
+      "pattern": "twilight",
+      "hops": 2
+    },
+    {
+      "request_id": "R98",
+      "restaurant_idx": 17,
+      "review_idx": 0,
+      "name": "Peter",
+      "friends": [
+        "Noah",
+        "Rose"
+      ],
+      "pattern": "bison",
+      "hops": 2
+    },
+    {
+      "request_id": "R99",
+      "restaurant_idx": 18,
+      "review_idx": 1,
+      "name": "Rose",
+      "friends": [
+        "Peter",
+        "Alice"
+      ],
+      "pattern": "writers",
+      "hops": 2
+    },
+    {
+      "request_id": "R100",
+      "restaurant_idx": 19,
+      "review_idx": 1,
+      "name": "Alice",
+      "friends": [
+        "Bob",
+        "Carol"
+      ],
+      "pattern": "medley",
+      "hops": 2
+    }
+  ],
+  "_meta": {
+    "description": "Pre-computed social data for G09/G10 validation",
+    "g09_logic": "1-hop: reviewer.name in request.friends AND text contains pattern",
+    "g10_logic": "2-hop: (reviewer.name in request.friends OR any(f in reviewer.friends for f in request.friends)) AND text contains pattern",
+    "total_restaurants": 50,
+    "total_reviews": 1000,
+    "gold_count": 20
   }
 }

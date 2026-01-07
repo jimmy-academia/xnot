@@ -15,6 +15,7 @@ from typing import Tuple, List
 from .base import BaseMethod
 from .anot.tools import tool_read
 from utils.llm import call_llm
+from utils.parsing import parse_indices
 
 
 MAX_STEPS = 5
@@ -125,19 +126,6 @@ class ReAct(BaseMethod):
             ""
         )
 
-    def _parse_indices(self, text: str, max_index: int = 20, k: int = 5) -> list:
-        """Parse up to k indices from text."""
-        if text is None:
-            return []
-        indices = []
-        for match in re.finditer(r'\b(\d+)\b', str(text)):
-            idx = int(match.group(1))
-            if 1 <= idx <= max_index and idx not in indices:
-                indices.append(idx)
-                if len(indices) >= k:
-                    break
-        return indices
-
     def _format_indices(self, indices: list, k: int) -> str:
         """Format indices as comma-separated string."""
         if not indices:
@@ -184,9 +172,9 @@ class ReAct(BaseMethod):
             observation, is_finished, answer = self._execute_action(action, data)
 
             if is_finished:
-                indices = self._parse_indices(answer, max_index=n_items, k=k)
+                indices = parse_indices(answer, max_index=n_items, k=k)
                 if not indices:
-                    indices = self._parse_indices(response, max_index=n_items, k=k)
+                    indices = parse_indices(response, max_index=n_items, k=k)
                 return self._format_indices(indices, k)
 
             history.append({
@@ -203,5 +191,5 @@ class ReAct(BaseMethod):
 
         response = call_llm(prompt, system=SYSTEM_PROMPT_RANKING)
         self._log_llm_call("force_finish", prompt, response, SYSTEM_PROMPT_RANKING)
-        indices = self._parse_indices(response, max_index=n_items, k=k)
+        indices = parse_indices(response, max_index=n_items, k=k)
         return self._format_indices(indices, k)
