@@ -84,6 +84,9 @@ STEP2_PATH_PROMPT = """Determine where to find the value for this condition.
 - attributes.HasTV: True/False
 - attributes.Ambience: dict with keys like hipster, casual, upscale, romantic, etc.
 - attributes.GoodForMeal: dict with keys like breakfast, lunch, dinner, brunch, etc.
+- attributes.Alcohol: "full_bar", "beer_and_wine", "none"
+- attributes.CoatCheck: True/False
+- attributes.RestaurantsPriceRange2: 1, 2, 3, 4
 - hours: dict with day names as keys, values like "8:0-22:0"
 - reviews: list of review objects with 'text' field
 
@@ -109,6 +112,11 @@ TYPE: SOFT
 For hours conditions (ALWAYS use SOFT):
 PATH: hours.DayName
 EXPECTED: start:min-end:min
+TYPE: SOFT
+
+For date/recency conditions (e.g. "reviews since 2020"):
+PATH: reviews
+EXPECTED: date >= 2020-01-01
 TYPE: SOFT
 """
 
@@ -163,6 +171,9 @@ For REVIEW conditions (POSITIVE/NEGATIVE/MENTION):
 
 For HOURS conditions (check if open during requested time):
   (hN)=LLM('Item N hours Day: {{(context)}}[N][hours][Day]. User needs START-END. Is item open? (start<=START AND end>=END) yes/no')
+
+For DATE conditions (e.g. reviews since 2020):
+  (dN)=LLM('Item N reviews: {{(context)}}[N][reviews]. User needs reviews since 2020. Are there reviews with date >= 2020-01-01? yes/no')
 
 [VARIABLE SYNTAX]
 - {{(context)}}[N][reviews] - Item N's reviews

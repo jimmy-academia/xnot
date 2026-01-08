@@ -27,7 +27,7 @@ STRIP_ATTRIBUTES = {
 }
 
 
-def _load_user_mapping(data_name: str) -> dict | None:
+def _load_user_mapping(data_name: str) -> dict:
     """Load user mapping for G09/G10 social data synthesis.
 
     Returns:
@@ -317,7 +317,7 @@ def _load_reviews_with_synthesis(
 # Fields to remove from restaurants (ground-truth, internal IDs, unused metadata)
 RESTAURANT_BLOCKLIST = {
     "llm_score", "llm_reasoning",  # Evaluation-only
-    "business_id", "latitude", "longitude",  # Internal/unused
+    "latitude", "longitude",  # Internal/unused
     "is_open", "postal_code", "state", "review_count", "stars"  # Redundant/unused
 }
 
@@ -325,7 +325,7 @@ RESTAURANT_BLOCKLIST = {
 def _assemble_items(
     restaurants: list,
     reviews_by_biz: dict[str, list],
-    review_limit: int | None,
+    review_limit: int = None,
 ) -> list[dict]:
     """Combine restaurants with reviews, parse attributes.
 
