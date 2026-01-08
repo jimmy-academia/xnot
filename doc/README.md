@@ -109,8 +109,10 @@ Given a user request with logical structure and N candidate restaurants, identif
 | G06 | `AND(anchors, OR(AND(a,b), AND(c,d)))` | OR of two ANDs |
 | G07 | `AND(anchors, OR(a,b), OR(c,d))` | Two parallel ORs |
 | G08 | `AND(anchors, OR(simple, AND(a,b)))` | Unbalanced OR |
-| G09 | `1HOP(friend, pattern)` or `AND(conds, 1HOP)` | 1-hop social filter |
-| G10 | `2HOP(friend, pattern)` or `AND(conds, 2HOP)` | 2-hop social filter |
+| G09 | `1HOP(['Name'], 'pattern')` | 1-hop social filter (anchor + friends) |
+| G10 | `2HOP(['Name'], 'pattern')` | 2-hop social filter (+ friends-of-friends) |
+
+**Note**: Structure uses only `AND`/`OR` operators. Negation is handled at evidence level (`"true": "False"`, `"not_contains"`).
 
 ### Evidence Types
 

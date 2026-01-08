@@ -40,23 +40,36 @@ Evaluates conditions against restaurant metadata fields.
 | Field | Type | Description |
 |-------|------|-------------|
 | `path` | `list[str]` | Path to value in restaurant JSON (e.g., `["attributes", "WiFi"]`) |
-| `true` | `any` | Value that results in +1 (satisfied) |
+| `true` | `any` | Value that results in +1 (satisfied). Use `"False"` for negative boolean checks. |
 | `false` | `any` | Value that results in -1 (not satisfied) |
 | `not_true` | `any` | Value that should NOT match (None passes, match fails) |
+| `not_contains` | `str` | Substring that should NOT be present (None passes) |
 | `neutral` | `any` | Value that results in 0 (unknown) |
 | `contains` | `str` | Substring to find in string representation |
 | `missing` | `int` | Return value when path doesn't exist (default: 0) |
 
+### Negation Approaches
+
+There are two ways to express negative conditions:
+
+| Approach | Use Case | Example |
+|----------|----------|---------|
+| `"true": "False"` | Boolean attribute should be False | `{"path": ["attributes", "HasTV"], "true": "False"}` |
+| `"not_contains"` | Substring should NOT be present | `{"path": ["attributes", "GoodForMeal"], "not_contains": "'breakfast': True"}` |
+| `"not_true"` | Value should NOT equal target | `{"path": ["attributes", "WiFi"], "not_true": "free"}` |
+
+**Note**: The structure uses only `AND` and `OR` operators. Negation is handled at the evidence level, not via a `NOT` operator.
+
 ### Evaluation Logic
 
-1. **not_true/true_not check** (if specified): Returns +1 if value is None or doesn't match, -1 if matches
-2. **Missing value**: Returns `missing` field value (default 0)
+1. **not_contains check** (if specified): Returns +1 if value is None or doesn't contain substring, -1 if contains
+2. **not_true/true_not check** (if specified): Returns +1 if value is None or doesn't match, -1 if matches
 3. **contains check** (if specified): Substring search in string representation
-4. **Dict of booleans**: OR across children (any True value → +1)
-5. **No conditions specified**: Boolean check (True→+1, False→-1, else→0)
-6. **Only false specified**: Negative logic (match→-1, no match→+1)
-7. **Only true specified**: Positive logic (match→+1, no match→-1)
-8. **Multiple conditions**: Check each in order
+4. **Missing value**: Returns `missing` field value (default 0)
+5. **Dict of booleans**: OR across children (any True value → +1)
+6. **No conditions specified**: Boolean check (True→+1, False→-1, else→0)
+7. **Only false specified**: Negative logic (match→-1, no match→+1)
+8. **Only true specified**: Positive logic (match→+1, no match→-1)
 
 ### Examples
 
@@ -71,13 +84,24 @@ Evaluates conditions against restaurant metadata fields.
 }
 ```
 
-**Negative check (no TV)**:
+**Negative boolean check (no TV)**:
 ```json
 {
   "evidence": {
     "kind": "item_meta",
     "path": ["attributes", "HasTV"],
-    "not_true": true
+    "true": "False"
+  }
+}
+```
+
+**Negative contains check (not good for breakfast)**:
+```json
+{
+  "evidence": {
+    "kind": "item_meta",
+    "path": ["attributes", "GoodForMeal"],
+    "not_contains": "'breakfast': True"
   }
 }
 ```
@@ -432,14 +456,17 @@ Social filtering is specified as a sub-field of `review_text`:
 
 ### Hop Logic
 
-**1-hop (direct friends)**:
-- Reviewer's name must be in the `friends` list
-- Example: `friends=["Alice"]` → only Alice's reviews qualify
+The `friends` list contains **anchor names** - the starting point(s) for social graph traversal. The `hops` parameter determines how far to traverse.
 
-**2-hop (friends-of-friends)**:
-- Reviewer is in `friends` list (direct), OR
-- Reviewer has a friend whose name is in `friends` list (indirect)
-- Example: `friends=["Bob"]` → Bob's reviews qualify, plus reviews from anyone who is friends with Bob
+**1-hop** (anchor + direct friends):
+- Reviewer IS one of the anchors (0-hop), OR
+- Reviewer is a friend of any anchor (anchor appears in reviewer's friend list)
+- Example: `friends=["Grace"]` → Grace's reviews qualify, plus reviews from Grace's friends (Emma, Ivy)
+
+**2-hop** (anchor + friends + friends-of-friends):
+- All 1-hop reviewers qualify, PLUS
+- Reviewer is a friend-of-friend of any anchor
+- Example: `friends=["Grace"]` → Grace, Emma, Ivy, plus Carol (Emma's friend) and Kate (Ivy's friend)
 
 ### Data Source
 
@@ -447,46 +474,48 @@ Social data is stored in `data/philly_cafes/user_mapping.json`:
 
 ```json
 {
-  "user_names": {"user_001": "Alice", "user_002": "Bob", ...},
-  "friend_graph": {"user_001": ["user_002", "user_003"], ...},
-  "restaurant_reviews": {
-    "0": [["user_001", "cozy"], ["user_002", "recommend"]],
-    "1": [["user_003", "love"], ...]
+  "friend_graph": {
+    "Grace": ["Emma", "Ivy"],
+    "Emma": ["Carol", "Grace"],
+    "Ivy": ["Grace", "Kate"],
+    ...
   }
 }
 ```
 
 ### Examples
 
-**Direct friend recommendation (G09)**:
+**Direct friend recommendation (G09)** - 1HOP(['Grace'], 'taro'):
 ```json
 {
   "evidence": {
     "kind": "review_text",
-    "pattern": "cozy",
+    "pattern": "taro",
     "social_filter": {
-      "friends": ["Alice"],
+      "friends": ["Grace"],
       "hops": 1,
       "min_matches": 1
     }
   }
 }
 ```
+This matches if Grace OR any of Grace's friends (Emma, Ivy) mention "taro" in their review.
 
-**Extended social circle (G10)**:
+**Extended social circle (G10)** - 2HOP(['Alice'], 'vanilla bean'):
 ```json
 {
   "evidence": {
     "kind": "review_text",
-    "pattern": "recommend",
+    "pattern": "vanilla bean",
     "social_filter": {
-      "friends": ["Bob"],
+      "friends": ["Alice"],
       "hops": 2,
       "min_matches": 1
     }
   }
 }
 ```
+This matches if Alice, Alice's friends, OR friends-of-friends mention "vanilla bean".
 
 ---
 

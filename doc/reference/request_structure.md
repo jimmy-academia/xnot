@@ -62,20 +62,31 @@ The `structure` field contains a recursive tree of conditions combined with AND/
 
 ```json
 {
-  "op": "AND" | "OR" | "NOT",
+  "op": "AND" | "OR",
   "args": [ ... ]
 }
 ```
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `op` | `str` | Logical operator: `"AND"`, `"OR"`, or `"NOT"` |
+| `op` | `str` | Logical operator: `"AND"` or `"OR"` only |
 | `args` | `array` | Child nodes (conditions or nested logical nodes) |
 
 **Operator semantics:**
-- `AND`: All children must be satisfied (False dominates)
-- `OR`: At least one child must be satisfied (True dominates)
-- `NOT`: Inverts single child (True→False, False→True, Unknown→Unknown)
+- `AND`: All children must be satisfied (False dominates → Unknown → True)
+- `OR`: At least one child must be satisfied (True dominates → Unknown → False)
+
+### Negation (No NOT Operator)
+
+Negation is handled at the **evidence level**, not via a `NOT` operator. This keeps the structure simpler with only two operators.
+
+| Negation Type | Evidence Field | Example |
+|---------------|----------------|---------|
+| Boolean false | `"true": "False"` | `{"path": ["attributes", "HasTV"], "true": "False"}` |
+| Not contains | `"not_contains": "..."` | `{"path": ["attributes", "GoodForMeal"], "not_contains": "'breakfast': True"}` |
+| Not equal | `"not_true": "..."` | `{"path": ["attributes", "WiFi"], "not_true": "free"}` |
+
+See [Evidence Types](evidence_types.md) for full documentation on negation approaches.
 
 ### Condition Node
 
@@ -295,8 +306,10 @@ The `shorthand` field provides a compact representation of the logical structure
 | `OR(a, b)` | At least one condition must be satisfied |
 | `AND(a, OR(b, c))` | a AND (b OR c) |
 | `OR(AND(a,b), AND(c,d))` | (a AND b) OR (c AND d) |
-| `1HOP([friends], pattern)` | Direct friends mention pattern |
-| `2HOP([friends], pattern)` | Friends or friends-of-friends mention pattern |
+| `1HOP(['Name'], 'pattern')` | Anchor + direct friends mention pattern |
+| `2HOP(['Name'], 'pattern')` | Anchor + friends + friends-of-friends mention pattern |
+
+**Social Filter Format**: Always use list syntax with quotes: `1HOP(['Alice'], 'boba')` not `1HOP(Alice, boba)`.
 
 ### Condition Names
 
@@ -304,11 +317,13 @@ Condition names in shorthand follow these conventions:
 
 | Pattern | Evidence Type | Example |
 |---------|--------------|---------|
-| `attr_name` | item_meta | `drive_thru`, `wifi_free` |
-| `no_attr` | item_meta (negative) | `no_tv`, `no_dogs` |
+| `attr_name` | item_meta (positive) | `drive_thru`, `wifi_free`, `budget` |
+| `no_attr` | item_meta (negative) | `no_tv`, `no_dogs`, `no_outdoor` |
 | `thing_reviews` | review_text | `coffee_reviews`, `cozy` |
 | `review_meta_*` | review_meta | `review_meta_elite_status_love` |
 | `hours_day_time` | item_meta_hours | `hours_monday_afternoon` |
+
+**Negation Convention**: Use `no_` prefix for negative conditions. The structure uses `"true": "False"` or `"not_contains"` at the evidence level.
 
 ---
 

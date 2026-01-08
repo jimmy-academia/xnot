@@ -115,31 +115,33 @@ def check_social_filter(reviewer_name: str, friends: list[str], hops: int) -> bo
 
     Args:
         reviewer_name: Name of the reviewer (e.g., "Alice")
-        friends: Query's friend list (e.g., ["Bob", "Carol"])
-        hops: 1 for direct friends only, 2 for friends + friends-of-friends
+        friends: Query's anchor friend list (e.g., ["Grace"])
+        hops: 1 for anchor + direct friends, 2 for + friends-of-friends
 
     Returns:
-        True if reviewer qualifies (is in social circle)
+        True if reviewer qualifies (is in social circle of any anchor)
     """
     social = get_social_data()
-    user_names = social.get("user_names", {})
     friend_graph = social.get("friend_graph", {})
 
-    # Build name -> user_id lookup
-    name_to_id = {v: k for k, v in user_names.items()}
-
-    # 1-hop: reviewer's name is in friend list
+    # 0-hop: reviewer IS one of the anchor names
     if reviewer_name in friends:
         return True
 
+    # 1-hop: reviewer is a friend of an anchor
+    if hops >= 1:
+        for anchor in friends:
+            anchor_friends = friend_graph.get(anchor, [])
+            if reviewer_name in anchor_friends:
+                return True
+
+    # 2-hop: reviewer is friend-of-friend of an anchor
     if hops >= 2:
-        # 2-hop: reviewer has a friend whose name is in the friend list
-        reviewer_id = name_to_id.get(reviewer_name)
-        if reviewer_id and reviewer_id in friend_graph:
-            reviewer_friends = friend_graph[reviewer_id]
-            for friend_id in reviewer_friends:
-                friend_name = user_names.get(friend_id, "")
-                if friend_name in friends:
+        for anchor in friends:
+            anchor_friends = friend_graph.get(anchor, [])
+            for anchor_friend in anchor_friends:
+                fof_list = friend_graph.get(anchor_friend, [])
+                if reviewer_name in fof_list:
                     return True
 
     return False
@@ -637,6 +639,7 @@ def evaluate_item_meta_rule(value, evidence_spec) -> int:
 
     Rules:
     - "not_true" / "true_not" given → value should NOT match (None passes)
+    - "not_contains" given → substring should NOT be in string repr (None passes)
     - Missing value → use "missing" field (default 0=neutral)
     - Dict of booleans → OR across children (e.g., BusinessParking)
     - None given → default boolean check (True→1, False→-1, else→0)
@@ -647,9 +650,18 @@ def evaluate_item_meta_rule(value, evidence_spec) -> int:
     true_cond = evidence_spec.get("true")
     false_cond = evidence_spec.get("false")
     not_true_cond = evidence_spec.get("not_true") or evidence_spec.get("true_not")
+    not_contains_cond = evidence_spec.get("not_contains")
     neutral_cond = evidence_spec.get("neutral")
     contains_cond = evidence_spec.get("contains")
     missing_val = evidence_spec.get("missing", 0)
+
+    # "not_contains" check - substring should NOT be present (None passes)
+    if not_contains_cond is not None:
+        if value is None:
+            return 1  # None doesn't contain anything, so passes
+        value_str = str(value).lower()
+        not_contains_str = str(not_contains_cond).lower()
+        return -1 if not_contains_str in value_str else 1
 
     # "contains" check - look for substring in string repr
     # Handle BEFORE missing check: str(None).lower() = "none", so "contains": "none" should match
@@ -754,6 +766,10 @@ def evaluate_social_filter_from_reviews(reviews: list, pattern: str, social_filt
     except re.error:
         regex = None
 
+    # Load friend_graph for looking up reviewer's friends
+    social = get_social_data()
+    friend_graph = social.get("friend_graph", {})
+
     matches = 0
     for review in reviews:
         # 1. Check if review text contains pattern
@@ -768,19 +784,41 @@ def evaluate_social_filter_from_reviews(reviews: list, pattern: str, social_filt
         # 2. Check if reviewer qualifies under social filter
         user = review.get("user", {})
         reviewer_name = user.get("name", "")
-        reviewer_friends = user.get("friends", [])
+        # Look up reviewer's friends from friend_graph (not from review data)
+        reviewer_friends = friend_graph.get(reviewer_name, [])
 
-        # 1-hop: reviewer's name is in friend list
+        # 0-hop: reviewer IS one of the anchor names
         if reviewer_name in friends:
             matches += 1
             continue
 
-        # 2-hop: reviewer has a friend whose name is in the friend list
-        if hops >= 2:
-            for friend_name in reviewer_friends:
-                if friend_name in friends:
-                    matches += 1
+        # 1-hop: reviewer is a friend of an anchor
+        # Check if any anchor is in reviewer's friend list
+        if hops >= 1:
+            is_1hop = False
+            for anchor in friends:
+                if anchor in reviewer_friends:
+                    is_1hop = True
                     break
+            if is_1hop:
+                matches += 1
+                continue
+
+        # 2-hop: reviewer is friend-of-friend of an anchor
+        if hops >= 2:
+            # Check if any of reviewer's friends has an anchor as their friend
+            is_2hop = False
+            for reviewer_friend in reviewer_friends:
+                friend_of_friend_list = friend_graph.get(reviewer_friend, [])
+                for anchor in friends:
+                    if anchor in friend_of_friend_list:
+                        is_2hop = True
+                        break
+                if is_2hop:
+                    break
+            if is_2hop:
+                matches += 1
+                continue
 
     return 1 if matches >= min_matches else -1
 

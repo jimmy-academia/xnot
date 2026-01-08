@@ -208,6 +208,96 @@ These use straightforward AND/OR combinations with carefully selected conditions
 }
 ```
 
+## G09/G10: Social Filter Design
+
+G09 (1-hop) and G10 (2-hop) requests use social filters to find restaurants based on friend recommendations.
+
+### Structure Types
+
+**Pure Social Filter** (simpler):
+```json
+{
+  "op": "AND",
+  "args": [
+    {"aspect": "social_pattern", "evidence": {
+      "kind": "review_text",
+      "pattern": "boba",
+      "social_filter": {"friends": ["Ivy"], "hops": 1},
+      "min_matches": 1
+    }}
+  ]
+}
+```
+Shorthand: `1HOP(['Ivy'], 'boba')`
+
+**Compound Request** (non-social conditions + social filter):
+```json
+{
+  "op": "AND",
+  "args": [
+    {"aspect": "budget", "evidence": {"kind": "item_meta", "path": ["attributes", "RestaurantsPriceRange2"], "true": "1"}},
+    {"aspect": "no_outdoor", "evidence": {"kind": "item_meta", "path": ["attributes", "OutdoorSeating"], "true": "False"}},
+    {"aspect": "social_taro", "evidence": {
+      "kind": "review_text",
+      "pattern": "taro",
+      "social_filter": {"friends": ["Grace"], "hops": 1},
+      "min_matches": 1
+    }}
+  ]
+}
+```
+Shorthand: `AND(budget, no_outdoor, 1HOP(['Grace'], 'taro'))`
+
+### Design Principles for Compound Requests
+
+For compound requests `AND(conditions..., nHOP(...))`:
+
+1. **Non-social conditions should narrow to 2+ restaurants** (not 1)
+   - If non-social conditions uniquely identify a restaurant, the social filter is redundant
+   - The social filter should be the **deciding factor** for final selection
+
+2. **Avoid unique non-social conditions**:
+   - Bad: `AND(drive_thru, 1HOP(...))` - drive_thru is unique (1 restaurant)
+   - Good: `AND(budget, hipster, outdoor, 1HOP(...))` - narrows to several restaurants
+
+### Pattern Selection Guidelines
+
+**Good Patterns** (meaningful, general terms):
+| Pattern | Why Good | Example |
+|---------|----------|---------|
+| `boba` | Domain-specific (bubble tea) | R85: 1HOP(['Ivy'], 'boba') |
+| `taro` | Specific ingredient, naturally used | R89: 1HOP(['Grace'], 'taro') |
+| `authentic` | Quality descriptor | R88: 1HOP(['Sam'], 'authentic') |
+| `grit` | Food item (grit cakes) | R98: 2HOP(['Peter'], 'grit') |
+| `writers` | Creative context | R99: 2HOP(['Rose'], 'writers') |
+
+**Bad Patterns** (avoid these):
+| Pattern | Why Bad | Problem |
+|---------|---------|---------|
+| Restaurant name | `hinge` → Hinge Cafe | Pattern IS the answer |
+| Common words | `coffee` → Elixr Coffee | Matches restaurant name |
+| Vague words | `consider`, `decent`, `totally` | No meaningful signal |
+| Hyper-specific | `bison sausage` | Too narrow, not general language |
+
+### Debugging Social Filter Issues
+
+When a social filter request fails:
+
+1. **Check friend_graph**: Verify anchor's friends in `user_mapping.json`
+2. **Verify pattern**: Search reviews for the pattern by anchor's social circle
+3. **Check hops**: 1-hop = anchor + direct friends; 2-hop = + friends-of-friends
+
+```python
+# Find who in anchor's 1-hop network mentions pattern at gold restaurant
+friend_graph = user_mapping["friend_graph"]
+anchor_friends = friend_graph.get("Grace", [])
+one_hop_network = {"Grace"} | set(anchor_friends)
+
+for review in gold_restaurant_reviews:
+    if pattern in review["text"] and review["user"]["name"] in one_hop_network:
+        print(f"Match: {review['user']['name']} mentions '{pattern}'")
+```
+
 ## Natural Language for Negative Conditions
 
 When using negative conditions, provide natural justification:
@@ -227,8 +317,8 @@ When a request matches multiple restaurants:
 
 1. **Identify the matches**: Run validation to see which restaurants match
 2. **Find differentiating conditions**: Check condition_matrix.json for conditions that:
-   - Gold restaurant has, but others don't (add as AND)
-   - Others have, but gold doesn't (add as NOT)
+   - Gold restaurant has, but others don't (add as positive condition)
+   - Others have, but gold doesn't (add as negative condition with `"true": "False"`)
 3. **Choose reliable conditions**: Prefer `item_meta` over `review_meta`
 4. **Update and re-validate**
 
@@ -252,7 +342,7 @@ After generating or modifying requests:
 ```
 
 ### Success Criteria
-- All 80 requests show ✓
+- All 100 requests show ✓
 - No ⚠ multi-match warnings
 - No ✗ no-match or gold_not_match errors
 
@@ -279,5 +369,6 @@ After generating or modifying requests:
 |------|-------------|
 | `data/philly_cafes/condition_matrix.json` | Full condition satisfaction matrix |
 | `data/philly_cafes/condition_summary.md` | Human-readable condition summary |
-| `data/philly_cafes/requests.jsonl` | All 80 benchmark requests |
+| `data/philly_cafes/requests.jsonl` | All 100 benchmark requests (G01-G10) |
 | `data/philly_cafes/groundtruth.jsonl` | Validation results and gold answers |
+| `data/philly_cafes/user_mapping.json` | Friend graph for G09/G10 social filters |
