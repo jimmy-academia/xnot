@@ -45,10 +45,10 @@ Each request represents a user query with a formal logical structure that can be
 | G02 | Simple OR | `AND(anchor, OR(a, b))` | Low-Medium |
 | G03 | AND-OR Combination | `AND(a, OR(b, c))` | Medium |
 | G04 | Review Metadata Weighting | `AND(a, review_meta_*)` | Medium-High |
-| G05 | Triple OR with Anchor | `AND(a, OR(b, c, d))` | Medium |
-| G06 | Nested OR+AND | `AND(a, OR(AND(b,c), AND(d,e)))` | High |
-| G07 | Chained OR | `AND(a, OR(b,c), OR(d,e))` | High |
-| G08 | Unbalanced Structure | `AND(a, OR(b, AND(c,d)))` | High |
+| G05 | Triple OR | `OR(a, b, c)` | Medium |
+| G06 | OR of ANDs | `OR(AND(a,b), AND(c,d))` | High |
+| G07 | AND of ORs | `AND(unique, OR(a,b), OR(c,d))` | High |
+| G08 | Complex Nested | `AND(a, b, c, OR(d, AND(e,f)))` | High |
 | G09 | Direct Friends (1-hop) | `1HOP([friends], pattern)` | Medium |
 | G10 | Social Circle (2-hop) | `2HOP([friends], pattern)` | High |
 
@@ -62,15 +62,20 @@ The `structure` field contains a recursive tree of conditions combined with AND/
 
 ```json
 {
-  "op": "AND" | "OR",
+  "op": "AND" | "OR" | "NOT",
   "args": [ ... ]
 }
 ```
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `op` | `str` | Logical operator: `"AND"` or `"OR"` |
+| `op` | `str` | Logical operator: `"AND"`, `"OR"`, or `"NOT"` |
 | `args` | `array` | Child nodes (conditions or nested logical nodes) |
+
+**Operator semantics:**
+- `AND`: All children must be satisfied (False dominates)
+- `OR`: At least one child must be satisfied (True dominates)
+- `NOT`: Inverts single child (True→False, False→True, Unknown→Unknown)
 
 ### Condition Node
 
@@ -148,30 +153,93 @@ Review pattern with credibility weighting.
 
 **Shorthand**: `AND(drive_thru, hipster, no_dogs, coffee_by_experts)`
 
-### G06: Nested OR+AND
+### G05: Triple OR
 
-Disjunction of conjunctions.
+At least one of three conditions must be satisfied.
+
+```json
+{
+  "op": "OR",
+  "args": [
+    {"aspect": "wifi_free", "evidence": {"kind": "item_meta", "path": ["attributes", "WiFi"], "contains": "free"}},
+    {"aspect": "drive_thru", "evidence": {"kind": "item_meta", "path": ["attributes", "DriveThru"], "true": "True"}},
+    {"aspect": "outdoor_seating", "evidence": {"kind": "item_meta", "path": ["attributes", "OutdoorSeating"], "true": "True"}}
+  ]
+}
+```
+
+**Shorthand**: `OR(wifi_free, drive_thru, outdoor_seating)`
+
+### G06: OR of ANDs
+
+Disjunction of conjunctions (at least one AND branch must succeed).
+
+```json
+{
+  "op": "OR",
+  "args": [
+    {"op": "AND", "args": [
+      {"aspect": "cat_mediterranean", "evidence": {"kind": "item_meta", "path": ["categories"], "contains": "Mediterranean"}},
+      {"aspect": "alcohol_full_bar", "evidence": {"kind": "item_meta", "path": ["attributes", "Alcohol"], "contains": "full_bar"}}
+    ]},
+    {"op": "AND", "args": [
+      {"aspect": "goodformeal_latenight", "evidence": {"kind": "item_meta", "path": ["attributes", "GoodForMeal"], "contains": "'latenight': True"}},
+      {"aspect": "ambience_romantic", "evidence": {"kind": "item_meta", "path": ["attributes", "Ambience"], "contains": "'romantic': True"}}
+    ]}
+  ]
+}
+```
+
+**Shorthand**: `OR(AND(cat_mediterranean, alcohol_full_bar), AND(goodformeal_latenight, ambience_romantic))`
+
+### G07: AND of ORs
+
+Unique constraint plus two OR branches that must all succeed.
 
 ```json
 {
   "op": "AND",
   "args": [
-    {"aspect": "takeout_no", "evidence": {"kind": "item_meta", "path": ["attributes", "RestaurantsTakeOut"], "true": "False"}},
+    {"aspect": "cat_themed_cafes", "evidence": {"kind": "item_meta", "path": ["categories"], "contains": "Themed Cafes"}},
     {"op": "OR", "args": [
-      {"op": "AND", "args": [
-        {"aspect": "romantic_reviews", "evidence": {"kind": "review_text", "pattern": "romantic|date"}},
-        {"aspect": "coffee_reviews", "evidence": {"kind": "review_text", "pattern": "coffee"}}
+      {"aspect": "cat_arts", "evidence": {"kind": "item_meta", "path": ["categories"], "contains": "Arts & Entertainment"}},
+      {"aspect": "goodformeal_latenight", "evidence": {"kind": "item_meta", "path": ["attributes", "GoodForMeal"], "contains": "'latenight': True"}}
+    ]},
+    {"op": "OR", "args": [
+      {"op": "NOT", "args": [
+        {"aspect": "goodformeal_breakfast", "evidence": {"kind": "item_meta", "path": ["attributes", "GoodForMeal"], "contains": "'breakfast': True"}}
       ]},
+      {"aspect": "ambience_romantic", "evidence": {"kind": "item_meta", "path": ["attributes", "Ambience"], "contains": "'romantic': True"}}
+    ]}
+  ]
+}
+```
+
+**Shorthand**: `AND(cat_themed_cafes, OR(cat_arts, goodformeal_latenight), OR(no_goodformeal_breakfast, ambience_romantic))`
+
+### G08: Complex Nested
+
+Multiple flat conditions plus an OR with nested AND.
+
+```json
+{
+  "op": "AND",
+  "args": [
+    {"aspect": "HasTV", "evidence": {"kind": "item_meta", "path": ["attributes", "HasTV"], "true": "True"}},
+    {"aspect": "wifi_free", "evidence": {"kind": "item_meta", "path": ["attributes", "WiFi"], "contains": "free"}},
+    {"aspect": "RestaurantsReservations", "evidence": {"kind": "item_meta", "path": ["attributes", "RestaurantsReservations"], "true": "True"}},
+    {"op": "OR", "args": [
+      {"aspect": "Alcohol", "evidence": {"kind": "item_meta", "path": ["attributes", "Alcohol"], "true": "True"}},
       {"op": "AND", "args": [
-        {"aspect": "espresso_reviews", "evidence": {"kind": "review_text", "pattern": "espresso"}},
-        {"aspect": "latte_reviews", "evidence": {"kind": "review_text", "pattern": "latte"}}
+        {"aspect": "ambience_classy", "evidence": {"kind": "item_meta", "path": ["attributes", "Ambience"], "contains": "'classy': True"}},
+        {"aspect": "OutdoorSeating", "evidence": {"kind": "item_meta", "path": ["attributes", "OutdoorSeating"], "true": "True"}}
       ]}
     ]}
   ]
 }
 ```
 
-**Shorthand**: `AND(takeout_no, OR(AND(romantic, coffee), AND(espresso, latte)))`
+**Shorthand**: `AND(HasTV, wifi_free, RestaurantsReservations, OR(Alcohol, AND(ambience_classy, OutdoorSeating)))`
 
 ### G09: Social Filter (1-hop)
 

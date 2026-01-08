@@ -878,6 +878,18 @@ def evaluate_structure(item: dict, structure: dict, reviews: list = None) -> int
             result = evaluate_condition(item, arg, reviews)
         child_results.append(TV(result))
 
+    # Handle NOT operator (inverts single child)
+    if op == "NOT":
+        if len(child_results) != 1:
+            return 0  # Invalid NOT structure
+        child = child_results[0]
+        if child == TV.T:
+            return -1
+        elif child == TV.F:
+            return 1
+        else:
+            return 0  # Unknown stays unknown
+
     final_tv = reduce_tv(op, child_results)
     return final_tv.value
 
@@ -949,8 +961,13 @@ def load_jsonl(path: Path) -> list:
     return items
 
 
-def validate_dataset(name: str):
-    """Validate a dataset and generate groundtruth.jsonl."""
+def validate_dataset(name: str, group_filter: set[str] = None):
+    """Validate a dataset and generate groundtruth.jsonl.
+
+    Args:
+        name: Dataset name
+        group_filter: Optional set of group names to filter (e.g., {"G06", "G07"})
+    """
     # Import loader - works both as module and direct script
     try:
         from .loader import load_dataset
@@ -983,7 +1000,16 @@ def validate_dataset(name: str):
         {**item, "reviews": item.get("reviews", [])}
         for item in items_list
     ]
-    requests = dataset.requests
+    all_requests = dataset.requests
+
+    # Filter requests by group if specified
+    if group_filter:
+        requests = [r for r in all_requests if r.get("group") in group_filter]
+        if not requests:
+            print(f"Warning: No requests found for groups {sorted(group_filter)}")
+            return True
+    else:
+        requests = all_requests
 
     # Load raw business_ids from file (loader may strip them)
     raw_restaurants = load_jsonl(restaurants_path)
@@ -1004,13 +1030,20 @@ def validate_dataset(name: str):
     print(f"Dataset: {name}")
     print(f"  Restaurants: {len(restaurants)}")
     print(f"  Reviews: {total_reviews}")
-    print(f"  Requests: {len(requests)}")
+    if group_filter:
+        print(f"  Groups: {', '.join(sorted(group_filter))}")
+        print(f"  Requests: {len(requests)} (filtered from {len(all_requests)})")
+    else:
+        print(f"  Requests: {len(requests)}")
     print()
 
     # Build evaluation matrix: (item_id, request_id) -> result
     eval_matrix = {}
     item_ids = [r["business_id"] for r in restaurants]
     request_ids = [r["id"] for r in requests]
+
+    # Build request info lookup (for shorthand display)
+    request_info = {r["id"]: r for r in requests}
 
     for request in requests:
         req_id = request["id"]
@@ -1042,9 +1075,9 @@ def validate_dataset(name: str):
         stats[val] = stats.get(val, 0) + 1
 
     # Print matrix and stats
-    print_groundtruth_matrix(eval_matrix, item_ids, request_ids)
+    print_groundtruth_matrix(eval_matrix, item_ids, request_ids, group_filter, request_info)
     print_statistics(stats)
-    print_hits_summary(results, restaurants)
+    print_hits_summary(results, restaurants, request_info)
 
     print()
 
@@ -1070,7 +1103,8 @@ def validate_dataset(name: str):
     return error_count == 0
 
 
-def print_groundtruth_matrix(eval_matrix: dict, item_ids: list, request_ids: list):
+def print_groundtruth_matrix(eval_matrix: dict, item_ids: list, request_ids: list,
+                             group_filter: set[str] = None, request_info: dict = None):
     """Print items × requests matrix with colored labels.
 
     Splits into multiple tables if more than 10 requests (10 per table).
@@ -1079,6 +1113,8 @@ def print_groundtruth_matrix(eval_matrix: dict, item_ids: list, request_ids: lis
         eval_matrix: {(item_id, request_id): result} where result is 1/-1/0
         item_ids: Ordered list of item IDs
         request_ids: Ordered list of request IDs
+        group_filter: Optional set of group names being filtered
+        request_info: Optional dict mapping request_id -> request dict
     """
 
     # Split requests into chunks of 10
@@ -1086,10 +1122,25 @@ def print_groundtruth_matrix(eval_matrix: dict, item_ids: list, request_ids: lis
     request_chunks = [request_ids[i:i+chunk_size] for i in range(0, len(request_ids), chunk_size)]
 
     for chunk_idx, req_chunk in enumerate(request_chunks):
+        # Build title with chunk info and group info
+        title_parts = ["Validation Matrix"]
+
+        # Add chunk info if multiple chunks
         if len(request_chunks) > 1:
-            title = f"Validation Matrix ({chunk_idx+1}/{len(request_chunks)})"
-        else:
-            title = "Validation Matrix"
+            title_parts.append(f"({chunk_idx+1}/{len(request_chunks)})")
+
+        # Add group info for this chunk
+        if request_info:
+            chunk_groups = sorted(set(
+                request_info.get(rid, {}).get("group", "?")
+                for rid in req_chunk
+            ))
+            if chunk_groups and chunk_groups != ["?"]:
+                title_parts.append(f"[{', '.join(chunk_groups)}]")
+        elif group_filter:
+            title_parts.append(f"[{', '.join(sorted(group_filter))}]")
+
+        title = " ".join(title_parts)
 
         table = Table(title=title, show_lines=False)
         table.add_column("Item", style="cyan", width=14)
@@ -1129,35 +1180,103 @@ def print_statistics(stats: dict):
     console.print(f"  No match (-1): [red]{stats.get(-1, 0):4d}[/red] ({stats.get(-1, 0)/total*100:5.1f}%)")
 
 
-def print_hits_summary(results: list, restaurants: list):
-    """Print Hits@1 summary showing which restaurant matches each request."""
+def print_hits_summary(results: list, restaurants: list, request_info: dict = None):
+    """Print Hits@1 summary showing which restaurant matches each request.
+
+    Uses 2-column layout with shorthand if space permits, otherwise falls back to 1 column.
+    """
 
     console.print("\n[bold]Hits@1 Summary:[/bold]")
     hits = 0
-    total = 0
+    total = len(results)
 
     # Build business_id to index lookup
     id_to_idx = {r["business_id"]: i for i, r in enumerate(restaurants)}
     id_to_name = {r["business_id"]: r.get("name", "?")[:20] for r in restaurants}
 
+    # Build formatted entries: (req_id, status_str, shorthand)
+    entries = []
     for r in results:
-        total += 1
         req_id = r["request_id"]
         gold_id = r["gold_restaurant"]
         gold_idx = r["gold_idx"]
         gold_name = id_to_name.get(gold_id, "?")
         status = r["status"]
 
+        # Get shorthand from request_info
+        shorthand = ""
+        if request_info and req_id in request_info:
+            shorthand = request_info[req_id].get("shorthand", "")
+
         if status == "ok":
             hits += 1
-            console.print(f"  {req_id}: [green]✓[/green] [{gold_idx}] {gold_name}")
+            status_str = f"[green]✓[/green] [{gold_idx}] {gold_name}"
         elif status == "no_match":
-            console.print(f"  {req_id}: [red]✗[/red] no match (gold=[{gold_idx}] {gold_name})")
+            status_str = f"[red]✗[/red] no_match"
         elif status == "multi_match":
             match_idxs = [id_to_idx.get(m, "?") for m in r["matches"][:3]]
-            console.print(f"  {req_id}: [yellow]⚠[/yellow] multi ({r['matches_count']}): {match_idxs}")
+            status_str = f"[yellow]⚠[/yellow] multi ({r['matches_count']}): {match_idxs}"
+        elif status == "multi_match_no_gold":
+            status_str = f"[red]✗[/red] multi_match_no_gold"
         else:
-            console.print(f"  {req_id}: [red]✗[/red] {status}")
+            status_str = f"[red]✗[/red] {status}"
+
+        entries.append((req_id, status_str, shorthand))
+
+    # Determine layout: 2-column if terminal is wide enough
+    console_width = console.width or 120
+
+    # Calculate widths for 2-column layout
+    # Format: "  R01: status | shorthand  |  R02: status | shorthand"
+    # Each entry: "  Rnn: " (7) + status (~25) + " | " (3) + shorthand (variable)
+    max_status_len = max(len(s.replace('[green]', '').replace('[/green]', '')
+                            .replace('[red]', '').replace('[/red]', '')
+                            .replace('[yellow]', '').replace('[/yellow]', ''))
+                         for _, s, _ in entries) if entries else 20
+    max_shorthand_len = max(len(sh) for _, _, sh in entries) if entries else 30
+
+    # Entry width: "  Rnn: " + status + " | " + shorthand
+    entry_width = 7 + max_status_len + 3 + min(max_shorthand_len, 50)
+    separator_width = 3  # " | "
+
+    # Use 2 columns if both fit, otherwise 1 column
+    use_two_columns = (entry_width * 2 + separator_width) <= console_width and len(entries) > 5
+
+    if use_two_columns:
+        # Calculate actual widths for alignment
+        col_width = (console_width - separator_width) // 2
+        shorthand_width = col_width - 7 - max_status_len - 3
+
+        # Print in 2 columns
+        mid = (len(entries) + 1) // 2
+        left_entries = entries[:mid]
+        right_entries = entries[mid:]
+
+        for i, (left, right) in enumerate(zip(left_entries, right_entries + [(None, None, None)] * (mid - len(right_entries)))):
+            l_req, l_status, l_short = left
+            l_short_trunc = l_short[:shorthand_width] if len(l_short) > shorthand_width else l_short
+
+            if right[0] is not None:
+                r_req, r_status, r_short = right
+                r_short_trunc = r_short[:shorthand_width] if len(r_short) > shorthand_width else r_short
+                # Build left part with padding
+                l_plain_status = l_status.replace('[green]', '').replace('[/green]', '') \
+                                         .replace('[red]', '').replace('[/red]', '') \
+                                         .replace('[yellow]', '').replace('[/yellow]', '')
+                l_pad = max_status_len - len(l_plain_status)
+                console.print(f"  {l_req}: {l_status}{' ' * l_pad} [dim]{l_short_trunc:<{shorthand_width}}[/dim] | "
+                             f"  {r_req}: {r_status} [dim]{r_short_trunc}[/dim]")
+            else:
+                console.print(f"  {l_req}: {l_status} [dim]{l_short_trunc}[/dim]")
+    else:
+        # Single column with shorthand
+        shorthand_width = max(20, console_width - 7 - max_status_len - 5)
+        for req_id, status_str, shorthand in entries:
+            short_trunc = shorthand[:shorthand_width] if len(shorthand) > shorthand_width else shorthand
+            if shorthand:
+                console.print(f"  {req_id}: {status_str} [dim]{short_trunc}[/dim]")
+            else:
+                console.print(f"  {req_id}: {status_str}")
 
     pct = hits / total * 100 if total else 0
     console.print(f"\n[bold]Validation: {hits}/{total} = {pct:.0f}%[/bold]")
@@ -1205,13 +1324,69 @@ def choose_dataset() -> str:
             sys.exit(0)
 
 
+def parse_group_spec(spec: str) -> set[str]:
+    """Parse group specification into set of group names.
+
+    Args:
+        spec: Group specification string
+
+    Returns:
+        Set of group names (e.g., {"G01", "G02", "G03"})
+
+    Examples:
+        '1' -> {"G01"}
+        '1,2,3' -> {"G01", "G02", "G03"}
+        '1-3' -> {"G01", "G02", "G03"}
+        'G06' -> {"G06"}
+        'G06,G07' -> {"G06", "G07"}
+    """
+    if not spec or not spec.strip():
+        return set()
+
+    spec = spec.strip()
+    groups = set()
+
+    for part in spec.split(','):
+        part = part.strip()
+        if not part:
+            continue
+
+        # Handle range: "1-3" or "G01-G03"
+        if '-' in part:
+            # Remove 'G' prefix if present for parsing
+            range_part = part.replace('G', '').replace('g', '')
+            try:
+                start, end = range_part.split('-', 1)
+                for i in range(int(start), int(end) + 1):
+                    groups.add(f"G{i:02d}")
+            except ValueError:
+                pass
+        else:
+            # Single group: "1" or "G01"
+            clean = part.replace('G', '').replace('g', '')
+            try:
+                n = int(clean)
+                groups.add(f"G{n:02d}")
+            except ValueError:
+                # If it doesn't parse as int, use as-is
+                groups.add(part.upper())
+
+    return groups
+
+
 def main():
     parser = argparse.ArgumentParser(description="Validate ground truth dataset")
     parser.add_argument("name", nargs="?", help="Dataset name (e.g., philly_cafes)")
+    parser.add_argument("--group", type=str, metavar="N[,N,...]",
+                        help="Filter by group(s): single (6), comma-separated (6,7), or range (6-8)")
     args = parser.parse_args()
 
     name = args.name if args.name else choose_dataset()
-    success = validate_dataset(name)
+
+    # Parse group filter
+    group_filter = parse_group_spec(args.group) if args.group else None
+
+    success = validate_dataset(name, group_filter=group_filter)
     sys.exit(0 if success else 1)
 
 
