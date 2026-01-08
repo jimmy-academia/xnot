@@ -164,20 +164,22 @@ STEP4_SKELETON_PROMPT = """Generate LWT skeleton for soft conditions on candidat
 1. ONLY generate steps for items in CANDIDATES list above - no other items!
 2. Generate ONE step per candidate per soft condition
 3. MUST end with a (final) step that aggregates results and outputs ranking
+4. NEVER use {{(context)}}[N][reviews] - this loads ALL reviews and is TOO LARGE!
+5. Use placeholder [NEEDS_SEARCH] for review steps - Phase 2 will use tools to find relevant reviews
 
 [CONDITION TYPES - USE CORRECT FORMAT]
-For REVIEW conditions (POSITIVE/NEGATIVE/MENTION):
-  (rN)=LLM('Item N reviews: {{(context)}}[N][reviews]. [question]? yes/no')
+For REVIEW conditions - use placeholder that Phase 2 will expand:
+  (rN)=LLM('[NEEDS_SEARCH:N:keyword] Do any reviews mention keyword? yes/no')
 
 For HOURS conditions (check if open during requested time):
   (hN)=LLM('Item N hours Day: {{(context)}}[N][hours][Day]. User needs START-END. Is item open? (start<=START AND end>=END) yes/no')
 
-For DATE conditions (e.g. reviews since 2020):
-  (dN)=LLM('Item N reviews: {{(context)}}[N][reviews]. User needs reviews since 2020. Are there reviews with date >= 2020-01-01? yes/no')
+For SOCIAL conditions (check friend reviews):
+  (sN)=LLM('[NEEDS_SOCIAL_SEARCH:N:friend_name:keyword] Does friend_name mention keyword? yes/no')
 
 [VARIABLE SYNTAX]
-- {{(context)}}[N][reviews] - Item N's reviews
 - {{(context)}}[N][hours][Day] - Item N's hours for Day (e.g., Monday)
+- {{(context)}}[N][reviews][R][text][start:end] - Specific review slice (Phase 2 generates)
 - {{(rN)}} or {{(hN)}} - Result from step rN or hN
 
 [OUTPUT FORMAT]
@@ -186,10 +188,10 @@ For DATE conditions (e.g. reviews since 2020):
 ...
 (final)=LLM('Item N={{(rN)}}, ... Output item NUMBERS with yes first: ')
 
-[EXAMPLE: candidates [2,4] with REVIEW condition]
+[EXAMPLE: candidates [2,4] with REVIEW condition for "coffee"]
 ===LWT_SKELETON===
-(r2)=LLM('Item 2 reviews: {{(context)}}[2][reviews]. Do reviews MENTION coffee? yes/no')
-(r4)=LLM('Item 4 reviews: {{(context)}}[4][reviews]. Do reviews MENTION coffee? yes/no')
+(r2)=LLM('[NEEDS_SEARCH:2:coffee] Do reviews mention coffee? yes/no')
+(r4)=LLM('[NEEDS_SEARCH:4:coffee] Do reviews mention coffee? yes/no')
 (final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}. Output item NUMBERS with yes first: ')
 
 [EXAMPLE: candidates [5,6] with HOURS condition (Monday 7:0-8:0)]
@@ -197,6 +199,11 @@ For DATE conditions (e.g. reviews since 2020):
 (h5)=LLM('Item 5 hours Monday: {{(context)}}[5][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
 (h6)=LLM('Item 6 hours Monday: {{(context)}}[6][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
 (final)=LLM('Item 5={{(h5)}}, Item 6={{(h6)}}. Output item NUMBERS with yes first: ')
+
+[EXAMPLE: candidates [3] with SOCIAL condition for friend "Kevin" and keyword "place"]
+===LWT_SKELETON===
+(s3)=LLM('[NEEDS_SOCIAL_SEARCH:3:Kevin:place] Does Kevin mention place? yes/no')
+(final)=LLM('Item 3={{(s3)}}. Output item NUMBERS with yes first: ')
 
 [IF NO SOFT CONDITIONS]
 ===LWT_SKELETON===
@@ -206,7 +213,7 @@ For DATE conditions (e.g. reviews since 2020):
 # PHASE 2: ReAct Expansion (refine skeleton with slice syntax for long reviews)
 # =============================================================================
 
-PHASE2_PROMPT = """Refine LWT skeleton: handle long reviews.
+PHASE2_PROMPT = """Expand LWT skeleton: replace placeholders with actual review slices.
 
 [CONDITIONS]
 {conditions}
@@ -216,25 +223,37 @@ PHASE2_PROMPT = """Refine LWT skeleton: handle long reviews.
 
 [TOOLS]
 get_review_lengths(N) → char counts per review
-keyword_search(N, "word") → positions where keyword appears
+keyword_search(N, "word") → review indices and positions where keyword appears
+social_search(N, "friend_name", "keyword") → review indices where friend mentions keyword
 update_step("rN", "prompt text") → update step (just the prompt, NOT "LLM(...)")
 done() → finish
 
-[SLICE SYNTAX FOR LONG REVIEWS]
+[SLICE SYNTAX]
 {{(context)}}[N][reviews][R][text][start:end]
 
-[TASK]
-For each review step (rN), check if reviews are long (>3000 chars).
-If long, use keyword_search to find relevant positions, then update_step with slice syntax.
+[CRITICAL TASK]
+Find steps with [NEEDS_SEARCH:N:keyword] or [NEEDS_SOCIAL_SEARCH:N:friend:keyword] placeholders.
+For EACH such step:
+1. Use keyword_search(N, "keyword") or social_search(N, "friend", "keyword") to find matching reviews
+2. Use update_step to replace placeholder with actual review slices
+
+[OUTPUT FORMAT FOR update_step]
+After keyword_search returns matches like "Review 0: pos 150, Review 2: pos 300":
+update_step("r2", "Item 2 review excerpts: {{(context)}}[2][reviews][0][text][100:300], {{(context)}}[2][reviews][2][text][250:450]. Do these mention coffee? yes/no")
 
 [CRITICAL]
 - Output ONE action, then STOP. Wait for system response.
 - NEVER write "Observation:" yourself - system provides it.
-- Use step IDs like "r2", "r7" - NOT indices.
-- Hours steps (hN) should already be correct from skeleton - just call done() if only hours steps exist.
+- ALWAYS use slice syntax [start:end] - NEVER include full review text!
+- Use ~200 chars around each match: [pos-100:pos+100]
+- If no matches found, update step with "No matches found: no"
+- Hours steps (hN) and (final) steps need no changes - skip them.
 
 [PROCESS]
-1. If skeleton only has hours steps (hN) and (final): call done()
-2. For each review step (rN): check lengths → if >3000, add slice → done()
+1. Find first step with [NEEDS_SEARCH] or [NEEDS_SOCIAL_SEARCH] placeholder
+2. Call keyword_search or social_search to find positions
+3. Call update_step with slice syntax
+4. Repeat until all placeholders expanded
+5. Call done()
 
 Begin. Output Thought and Action:"""

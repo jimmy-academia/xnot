@@ -40,7 +40,7 @@ from .tools import (
     tool_read, tool_lwt_list, tool_lwt_get,
     tool_lwt_set, tool_lwt_set_prompt, tool_lwt_delete, tool_lwt_insert,
     tool_lwt_insert_prompt, tool_review_length, tool_update_step, tool_insert_step,
-    tool_get_review_lengths, tool_keyword_search, tool_get_review_snippet
+    tool_get_review_lengths, tool_keyword_search, tool_social_search, tool_get_review_snippet
 )
 
 
@@ -646,6 +646,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 result = tool_keyword_search(int(match.group(1)), match.group(2), query)
                 action_results.append((f"keyword_search({match.group(1)}, \"{match.group(2)}\")", result))
 
+            # Process social_search() calls
+            for match in re.finditer(r'social_search\((\d+),\s*"([^"]+)",\s*"([^"]+)"\)', response):
+                result = tool_social_search(int(match.group(1)), match.group(2), match.group(3), query)
+                action_results.append((f"social_search({match.group(1)}, \"{match.group(2)}\", \"{match.group(3)}\")", result))
+
             # Process get_review_snippet() calls
             for match in re.finditer(r'get_review_snippet\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)', response):
                 result = tool_get_review_snippet(
@@ -672,7 +677,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
                 conversation.append(f"\n{response}\nObservation: {obs_text}\n")
             else:
                 self._debug(1, "P2", "No action found, prompting for action")
-                conversation.append(f"\n{response}\n\nPlease output Action: with a tool call (get_review_lengths, keyword_search, lwt_set, lwt_delete, or done):")
+                conversation.append(f"\n{response}\n\nPlease output Action: with a tool call (get_review_lengths, keyword_search, social_search, update_step, or done):")
 
         self._debug(1, "P2", f"Refined LWT: {len(lwt_steps)} steps")
 
@@ -692,6 +697,16 @@ class AdaptiveNetworkOfThought(BaseMethod):
         # Convert double braces to single (from LWT template escaping)
         instr = instr.replace('{{', '{').replace('}}', '}')
         filled = substitute_variables(instr, items, user_query, self._get_cache())
+
+        # Token estimation and truncation fallback
+        MAX_PROMPT_CHARS = 20000  # ~5k tokens - force efficient indexing
+        if len(filled) > MAX_PROMPT_CHARS:
+            self._debug(1, "P3", f"Step {idx} prompt too large ({len(filled)} chars), truncating")
+            # Truncate to limit while preserving start and end
+            keep_start = MAX_PROMPT_CHARS // 2
+            keep_end = MAX_PROMPT_CHARS // 4
+            filled = filled[:keep_start] + "\n...[TRUNCATED]...\n" + filled[-keep_end:]
+
         self._debug(3, "P3", f"Step {idx} filled:", filled)
 
         start = time.time()

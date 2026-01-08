@@ -242,6 +242,70 @@ def tool_keyword_search(item_num: int, keyword: str, data: dict) -> str:
     })
 
 
+def tool_social_search(item_num: int, friend_name: str, keyword: str, data: dict) -> str:
+    """Search for reviews by a specific friend (user name) that mention a keyword.
+
+    Returns JSON with matches:
+    {
+        "matches": [
+            {"review": 0, "name": "Kevin", "positions": [150], "length": 1200}
+        ],
+        "friend_reviews": [0, 2],  # All reviews by friend (regardless of keyword)
+        "total_matches": 1
+    }
+    """
+    items = data.get('items', data)
+    item = items.get(str(item_num), {})
+    reviews = item.get('reviews', [])
+
+    matches = []
+    friend_reviews = []
+    total = 0
+    friend_lower = friend_name.lower()
+    keyword_lower = keyword.lower()
+
+    for i, review in enumerate(reviews):
+        if not isinstance(review, dict):
+            continue
+
+        # Check if this review is from the friend
+        user = review.get('user', {})
+        reviewer_name = user.get('name', '').lower() if isinstance(user, dict) else ''
+
+        if friend_lower not in reviewer_name and reviewer_name not in friend_lower:
+            continue
+
+        friend_reviews.append(i)
+        text = review.get('text', '')
+        text_lower = text.lower()
+        length = len(text)
+
+        # Find all positions of keyword (case-insensitive)
+        positions = []
+        start = 0
+        while True:
+            pos = text_lower.find(keyword_lower, start)
+            if pos == -1:
+                break
+            positions.append(pos)
+            start = pos + 1
+
+        if positions:
+            matches.append({
+                "review": i,
+                "name": user.get('name', 'Unknown'),
+                "positions": positions,
+                "length": length
+            })
+            total += len(positions)
+
+    return json.dumps({
+        "matches": matches,
+        "friend_reviews": friend_reviews,
+        "total_matches": total
+    })
+
+
 def tool_get_review_snippet(item_num: int, review_idx: int, start: int, length: int, data: dict) -> str:
     """Get a snippet of review text for inspection.
 
