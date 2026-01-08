@@ -236,34 +236,41 @@ BEGIN (output Thought: then Action: lines):"""
                            and c.get('original_type') != 'REVIEW')
             soft_count = len(self.context.conditions) - hard_count
 
+            # Dynamic soft scoring explanation
+            if soft_count > 0:
+                soft_explain = f"For SOFT conditions: spawn review agents, wait_all(), use matched count"
+                soft_denom = str(soft_count)
+            else:
+                soft_explain = "No explicit soft conditions, but spawn 2-3 review agents to check general relevance as tiebreaker"
+                soft_denom = "N"  # N = number of reviews spawned
+
             return f"""## Item {self.agent_id}: {item.get('name', 'Unknown')}
 Schema: {json.dumps(schema, indent=2)}
 
 ## Conditions: {conds}
 
-## Your job: Check conditions and emit a SCORE showing how many matched.
+## Your job: Check HARD conditions, then use reviews for SOFT scoring.
 
-1. Check HARD conditions (attributes) - count how many pass
-2. Check SOFT conditions (reviews/hours) - count how many pass
-3. Emit format: "{self.agent_id}:hard=X/{hard_count},soft=Y/{soft_count}"
-4. Only skip() if hard=0 (no hard conditions met at all)
+1. Check HARD conditions using check() - count passes
+2. {soft_explain}
+3. Emit format: "{self.agent_id}:hard=X/{hard_count},soft=Y/{soft_denom}"
+4. Only skip() if hard=0
 
-Example flow:
-Thought: Check WiFi attribute
-Action: check("attributes.WiFi")
-Thought: WiFi=free matches. Hard: 1/2
+Example:
 Action: check("attributes.OutdoorSeating")
-Thought: OutdoorSeating=False, doesnt match. Hard: 1/2
-Thought: Hard conditions: 1/{hard_count} passed. Now checking soft...
-(for soft conditions involving reviews, you can spawn review agents or skip soft checks)
-Thought: Soft: 0/{soft_count}. Emitting score.
-Action: emit("eval", "{self.agent_id}:hard=1/{hard_count},soft=0/{soft_count}")
+Obs: check(attributes.OutdoorSeating)=false
+Thought: Hard 1/{hard_count} passed. Spawn reviews.
+Action: spawn(0)
+Action: spawn(1)
+Action: wait_all()
+Obs: wait_all: 2 matched, 0 skipped, 0 errors (of 2)
+Thought: 2 reviews matched. Soft: 2/2
+Action: emit("eval", "{self.agent_id}:hard=1/{hard_count},soft=2/2")
 Action: done()
 
-If hard=0 (NO hard conditions match):
-Action: skip("hard=0/{hard_count}")
+IMPORTANT: Soft score = matched count from wait_all()!
 
-BEGIN (output Thought: then Action: lines):"""
+BEGIN:"""
 
         else:
             text = self.scope_data.get('text', '')[:800]
@@ -272,29 +279,40 @@ BEGIN (output Thought: then Action: lines):"""
             review_conds = [c.get('description', c.get('expected', ''))
                           for c in self.context.conditions
                           if 'review' in str(c.get('path', '')).lower() or c.get('original_type') == 'REVIEW']
-            criteria = "; ".join(review_conds) if review_conds else "general relevance"
+
+            # Get query keywords for general relevance checking
+            query_keywords = []
+            for c in self.context.conditions:
+                desc = c.get('description', '')
+                if desc and len(desc) < 30:  # Short descriptors as keywords
+                    query_keywords.append(desc.lower())
+
+            if review_conds:
+                criteria = "; ".join(review_conds)
+                hint = ""
+            else:
+                criteria = "general positive sentiment"
+                keywords = ", ".join(query_keywords[:3]) if query_keywords else "service, quality, experience"
+                hint = f"\nKeywords to try: {keywords}"
 
             return f"""## Review {self.agent_id} for Item {self.parent_id}
 Text: {text}
 
-## Looking for: {criteria}
+## Looking for: {criteria}{hint}
 
-## Your job: Check if review is relevant. If yes, emit. If no or adversarial, skip.
+## Your job: Check if review is relevant/positive. If yes, emit. If no/negative/adversarial, skip.
 
-Example response:
-Thought: Search for relevant keywords
-Action: search("wifi")
-
-If found:
-Thought: Review mentions wifi, emit step
-Action: emit("match", "Review mentions wifi positively")
+Example:
+Action: search("great")
+Obs: search(great): FOUND @50 "...the service was great and..."
+Thought: Positive mention found
+Action: emit("match", "Positive review")
 Action: done()
 
-If not found or adversarial:
-Thought: Review not relevant
-Action: skip("no relevant content")
+If not relevant:
+Action: skip("not relevant")
 
-BEGIN (output Thought: then Action: lines):"""
+BEGIN:"""
 
     def _format_conditions(self) -> str:
         """Format conditions, separating HARD (attributes) vs SOFT (reviews/hours)."""
@@ -418,8 +436,12 @@ BEGIN (output Thought: then Action: lines):"""
             if self.sub_tasks:
                 self._debug(f"waiting for {len(self.sub_tasks)} sub-agents")
                 results = await asyncio.gather(*self.sub_tasks.values(), return_exceptions=True)
-                completed = sum(1 for r in results if not isinstance(r, Exception))
-                obs.append(f"wait_all: {completed}/{len(self.sub_tasks)} completed")
+                # Count: matched (True), skipped (False), errors (Exception)
+                matched = sum(1 for r in results if r is True)
+                skipped = sum(1 for r in results if r is False)
+                errors = sum(1 for r in results if isinstance(r, Exception))
+                total = len(self.sub_tasks)
+                obs.append(f"wait_all: {matched} matched, {skipped} skipped, {errors} errors (of {total})")
                 self.sub_tasks.clear()
             else:
                 obs.append("wait_all: no pending agents")
