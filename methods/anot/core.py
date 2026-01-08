@@ -28,82 +28,29 @@ from utils.usage import get_usage_tracker
 
 from .prompts import (
     SYSTEM_PROMPT, STEP1_EXTRACT_PROMPT, STEP2_PATH_PROMPT,
-    STEP1C_SEED_PROMPT, STEP3_RULEOUT_PROMPT, STEP4_SKELETON_PROMPT,
-    PHASE2_PROMPT, RANKING_TASK_COMPACT
+    STEP3_RULEOUT_PROMPT, STEP4_SKELETON_PROMPT, PHASE2_PROMPT,
+    RANKING_TASK_COMPACT
 )
 from .helpers import (
     build_execution_layers, format_items_compact, format_schema_compact,
     filter_items_for_ranking, parse_conditions, parse_resolved_path,
-    parse_candidates, parse_lwt_skeleton, format_items_for_ruleout, get_attr_value,
-    _load_social_mapping
+    parse_candidates, parse_lwt_skeleton, format_items_for_ruleout, get_attr_value
 )
 from .tools import (
     tool_read, tool_lwt_list, tool_lwt_get,
     tool_lwt_set, tool_lwt_set_prompt, tool_lwt_delete, tool_lwt_insert,
     tool_lwt_insert_prompt, tool_review_length, tool_update_step, tool_insert_step,
-    tool_get_review_lengths, tool_keyword_search, tool_get_review_snippet,
-    tool_list_items, tool_check_item, tool_drop_item, tool_add_step
+    tool_get_review_lengths, tool_keyword_search, tool_get_review_snippet
 )
-from .phase2_hierarchical import run_hierarchical_phase2
 
 
-def _extract_friend_sets(conditions: List[dict], data_name: str = "philly_cafes") -> Tuple[set, set]:
-    """Extract 1-hop and 2-hop friend sets from social conditions.
+class AdaptiveNetworkOfThoughtOriginal(BaseMethod):
+    """Enhanced Adaptive Network of Thought - three-phase architecture (BACKUP)."""
 
-    Returns:
-        (friends_1hop, friends_2hop) - user_id sets
-    """
-    friends_1hop = set()
-    friends_2hop = set()
+    name = "anot_original"
 
-    # Extract direct friends from conditions
-    for cond in conditions:
-        desc = cond.get('description', '').lower()
-        ctype = cond.get('original_type', cond.get('type', ''))
-
-        if ctype == 'SOCIAL' or 'friend' in desc or 'social' in desc:
-            # Look for friend IDs in condition metadata
-            friends = cond.get('friends', [])
-            if friends:
-                friends_1hop.update(friends)
-
-    # Also check resolved path for social_filter
-    for cond in conditions:
-        path = cond.get('path', '')
-        if 'social_filter' in str(cond):
-            social_filter = cond.get('social_filter', {})
-            if social_filter:
-                friends_1hop.update(social_filter.get('friends', []))
-
-    if not friends_1hop:
-        return set(), set()
-
-    # Load friend graph and compute 2-hop
-    try:
-        mapping = _load_social_mapping(data_name)
-        if mapping:
-            friend_graph = mapping.get("friend_graph", {})
-            # Compute 2-hop friends (friends of friends)
-            for fid in friends_1hop:
-                if fid in friend_graph:
-                    for fof in friend_graph[fid]:
-                        if fof not in friends_1hop:
-                            friends_2hop.add(fof)
-    except Exception:
-        pass  # Non-critical - just won't have 2-hop
-
-    return friends_1hop, friends_2hop
-
-
-class AdaptiveNetworkOfThought(BaseMethod):
-    """Enhanced Adaptive Network of Thought - three-phase architecture."""
-
-    name = "anot"
-
-    def __init__(self, run_dir: str = None, defense: bool = False, verbose: bool = True,
-                 hierarchical: bool = False, **kwargs):
+    def __init__(self, run_dir: str = None, defense: bool = False, verbose: bool = True, **kwargs):
         super().__init__(run_dir=run_dir, defense=defense, verbose=verbose, **kwargs)
-        self._hierarchical = hierarchical  # Use hierarchical parallel phase2
         self._thread_local = threading.local()
         self._traces = {}
         self._traces_lock = threading.Lock()
@@ -115,7 +62,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._display_stats = {"complete": 0, "total": 0, "tokens": 0, "cost": 0.0}
         self._last_display_update = 0
         self._errors = []  # Accumulated errors: (request_id, step_idx, error_msg)
-        self._errors_lock = threading.Lock()
         self._debug_log_file = None
         self._debug_log_path = None
 
@@ -234,11 +180,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
         cache[key] = value
         self._thread_local.cache = cache
 
-    def _cache_get(self, key: str):
-        """Get value from thread-local cache."""
-        cache = self._get_cache()
-        return cache.get(key)
-
     # =========================================================================
     # Display Methods
     # =========================================================================
@@ -271,12 +212,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
             self._live.stop()
             self._live = None
 
-        with self._errors_lock:
-            if self._errors:
-                print(f"\n⚠️  {len(self._errors)} error(s) during execution:")
-                for req_id, step_idx, msg in self._errors:
-                    print(f"  [{req_id}] Step {step_idx}: {msg}")
-                self._errors.clear()
+        if self._errors:
+            print(f"\n⚠️  {len(self._errors)} error(s) during execution:")
+            for req_id, step_idx, msg in self._errors:
+                print(f"  [{req_id}] Step {step_idx}: {msg}")
+            self._errors.clear()
 
     def _update_display(self, request_id: str, phase: str, status: str, context: str = None):
         """Update display row for request."""
@@ -410,61 +350,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
             resolved["sentiment"] = condition["sentiment"]
         return resolved
 
-    def _step1c_generate_seed(self, query: str, resolved_conditions: list, logical_structure: str) -> str:
-        """Step 1c: Generate LWT seed template with logical structure preserved.
-
-        Args:
-            query: Original user query
-            resolved_conditions: List of resolved condition dicts with path/expected
-            logical_structure: String describing logical structure (e.g., "A OR B OR C")
-
-        Returns:
-            LWT seed template string
-        """
-        req_id = getattr(self._thread_local, 'request_id', None)
-        if req_id:
-            self._update_display(req_id, "S1c", "seed")
-
-        # Format resolved conditions for prompt
-        cond_lines = []
-        for c in resolved_conditions:
-            if c.get("type") == "OR":
-                # OR group
-                or_parts = []
-                for opt in c.get("options", []):
-                    if opt.get("type") == "AND":
-                        and_parts = [f"{sub.get('path')}={sub.get('expected')}" for sub in opt.get("conditions", [])]
-                        or_parts.append(f"({' AND '.join(and_parts)})")
-                    else:
-                        or_parts.append(f"{opt.get('path')}={opt.get('expected')}")
-                cond_lines.append(f"OR: {' | '.join(or_parts)}")
-            else:
-                cond_lines.append(f"{c.get('path')} = {c.get('expected')}")
-
-        resolved_str = "\n".join(cond_lines)
-
-        prompt = STEP1C_SEED_PROMPT.format(
-            query=query,
-            resolved_conditions=f"{resolved_str}\n\nLogical structure: {logical_structure}"
-        )
-        response = call_llm(
-            prompt,
-            system=SYSTEM_PROMPT,
-            role="planner",
-            context={"method": "anot", "phase": 1, "step": "step1c_seed"}
-        )
-        self._log_llm_call("P1", "step1c_seed", prompt, response)
-
-        # Extract seed from response
-        seed = ""
-        if "===LWT_SEED===" in response:
-            seed = response.split("===LWT_SEED===")[1].strip()
-        else:
-            seed = response.strip()
-
-        self._debug(2, "P1", f"Generated LWT seed:\n{seed[:200]}...")
-        return seed
-
     def _step3_quick_ruleout(self, hard_conditions: list, items_compact: str, n_items: int) -> list:
         """Step 3: Quick rule-out by checking hard conditions."""
         req_id = getattr(self._thread_local, 'request_id', None)
@@ -474,26 +359,11 @@ class AdaptiveNetworkOfThought(BaseMethod):
             # No hard conditions - all items are candidates
             return list(range(1, n_items + 1))
 
-        # Format hard conditions for prompt, handling OR groups
-        cond_lines = []
-        for i, c in enumerate(hard_conditions):
-            if c.get("type") == "OR":
-                # Format OR group
-                or_parts = []
-                for opt in c.get("options", []):
-                    if opt.get("type") == "AND":
-                        # Nested AND within OR
-                        and_parts = [f"{sub.get('path')}={sub.get('expected')}" for sub in opt.get("conditions", [])]
-                        or_parts.append(f"({' AND '.join(and_parts)})")
-                    else:
-                        # Simple option
-                        or_parts.append(f"{opt.get('path')}={opt.get('expected')}")
-                cond_lines.append(f"{i+1}. OR: {' | '.join(or_parts)}")
-            else:
-                # Regular condition
-                cond_lines.append(f"{i+1}. {c.get('path')} = {c.get('expected')}")
-
-        hard_cond_str = "\n".join(cond_lines)
+        # Format hard conditions for prompt
+        hard_cond_str = "\n".join([
+            f"{i+1}. {c['path']} = {c['expected']}"
+            for i, c in enumerate(hard_conditions)
+        ])
 
         prompt = STEP3_RULEOUT_PROMPT.format(
             hard_conditions=hard_cond_str,
@@ -582,162 +452,120 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         return normalized if normalized else skeleton_steps
 
-    def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[str, list, str]:
-        """Phase 1: Query-focused planning - extract conditions, resolve paths, generate seed.
-
-        This phase focuses ONLY on understanding the query. No item filtering.
-        Item filtering happens in Phase 2 via ReAct.
+    def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[list, list, list]:
+        """Phase 1: Multi-step planning with condition extraction, path resolution,
+        quick rule-out, and LWT skeleton generation.
 
         Args:
             query: User request text (e.g., "Looking for a cafe...")
-            items: List of item dicts (used only for schema extraction)
+            items: List of item dicts
             k: Number of top predictions
 
         Returns:
-            Tuple of (lwt_seed, resolved_conditions, logical_structure) for Phase 2
+            Tuple of (candidates, lwt_skeleton, resolved_conditions) for Phase 2/3
         """
-        self._debug(1, "P1", f"Query-focused planning for: {query[:60]}...")
+        self._debug(1, "P1", f"Multi-step planning for: {query[:60]}...")
+        n_items = len(items)
 
-        # Prepare schema for path resolution (just need examples, not all items)
+        # Prepare schema for path resolution
         filtered_items = filter_items_for_ranking(items)
         schema_compact = format_schema_compact(filtered_items[:2], num_examples=2, truncate=50)
 
-        # Step 1: Extract conditions from query
+        # Step 1: Extract conditions
         self._debug(1, "P1", "Step 1: Extracting conditions...")
         conditions_raw = self._step1_extract_conditions(query)
         conditions = parse_conditions(conditions_raw)
         self._debug(1, "P1", f"Extracted {len(conditions)} conditions: {conditions}")
 
         if not conditions:
-            # Fallback: no conditions found
-            self._debug(1, "P1", "No conditions found, using simple seed")
-            seed = f"Item [N]: Check if it matches query: {query[:100]}. Match? yes/no"
-            return seed, [], "MATCH_QUERY"
+            # Fallback: no conditions found, rank all items
+            self._debug(1, "P1", "No conditions found, using default ranking")
+            all_items = list(range(1, n_items + 1))
+            top_k = all_items[:k]
+            return all_items, [("final", f"LLM('Rank items 1-{n_items} for query: {query[:100]}. Output top-{k}: {top_k}')")], []
 
         # Step 2: Resolve paths for each condition
         self._debug(1, "P1", "Step 2: Resolving paths...")
-        all_resolved = []  # All resolved conditions (flat list + OR groups)
-        logical_parts = []  # For building logical structure string
-
+        resolved = []
         for i, cond in enumerate(conditions):
-            if cond.get("type") == "OR":
-                # Handle OR groups - resolve each option
-                or_resolved = {"type": "OR", "options": []}
-                or_desc_parts = []
-                for opt in cond["options"]:
-                    # Parse option: might be "(A AND B)" or just "A"
-                    opt_clean = opt.strip().strip("()")
-                    if " AND " in opt_clean.upper():
-                        # Nested AND - resolve each part
-                        sub_parts = re.split(r'\s+AND\s+', opt_clean, flags=re.IGNORECASE)
-                        and_group = []
-                        and_desc_parts = []
-                        for part in sub_parts:
-                            sub_cond = {"type": "ATTR", "description": part.strip()}
-                            sub_resolved = self._step2_resolve_path(sub_cond, schema_compact, i+1, len(conditions))
-                            and_group.append(sub_resolved)
-                            and_desc_parts.append(f"{sub_resolved.get('path')}={sub_resolved.get('expected')}")
-                        or_resolved["options"].append({"type": "AND", "conditions": and_group})
-                        or_desc_parts.append(f"({' AND '.join(and_desc_parts)})")
-                    else:
-                        # Simple option
-                        sub_cond = {"type": "ATTR", "description": opt_clean}
-                        sub_resolved = self._step2_resolve_path(sub_cond, schema_compact, i+1, len(conditions))
-                        or_resolved["options"].append(sub_resolved)
-                        or_desc_parts.append(f"{sub_resolved.get('path')}={sub_resolved.get('expected')}")
-                all_resolved.append(or_resolved)
-                logical_parts.append(f"({' OR '.join(or_desc_parts)})")
-                self._debug(2, "P1", f"  OR group: {len(or_resolved['options'])} options")
-            else:
-                # Regular condition (AND with others)
-                path_info = self._step2_resolve_path(cond, schema_compact, i+1, len(conditions))
-                all_resolved.append(path_info)
-                logical_parts.append(f"{path_info.get('path')}={path_info.get('expected')}")
-                self._debug(2, "P1", f"  {cond['description']}: {path_info}")
+            path_info = self._step2_resolve_path(cond, schema_compact, i+1, len(conditions))
+            resolved.append(path_info)
+            self._debug(2, "P1", f"  {cond['description']}: {path_info}")
 
-        # Deduplicate logical parts (same path=value appearing multiple times)
-        seen_parts = set()
-        unique_parts = []
-        unique_resolved = []
-        for i, part in enumerate(logical_parts):
-            if part not in seen_parts:
-                seen_parts.add(part)
-                unique_parts.append(part)
-                unique_resolved.append(all_resolved[i])
+        hard = [r for r in resolved if r['type'] == 'HARD']
+        soft = [r for r in resolved if r['type'] == 'SOFT']
+        self._debug(1, "P1", f"Conditions: {len(hard)} HARD, {len(soft)} SOFT")
 
-        if len(unique_parts) < len(logical_parts):
-            self._debug(1, "P1", f"Deduped {len(logical_parts)} -> {len(unique_parts)} conditions")
+        # Step 3: Quick rule-out (check hard conditions, prune items)
+        self._debug(1, "P1", "Step 3: Quick rule-out...")
+        if hard:
+            items_compact = format_items_for_ruleout(filtered_items, hard)
+            candidates = self._step3_quick_ruleout(hard, items_compact, n_items)
+        else:
+            candidates = list(range(1, n_items + 1))
+        self._debug(1, "P1", f"Candidates after rule-out: {candidates} ({len(candidates)}/{n_items})")
 
-        logical_parts = unique_parts
-        all_resolved = unique_resolved
+        # Step 4: Generate LWT skeleton (soft conditions on candidates only)
+        self._debug(1, "P1", "Step 4: Generating LWT skeleton...")
+        skeleton_steps = self._step4_generate_skeleton(candidates, soft, k)
+        self._debug(1, "P1", f"Generated {len(skeleton_steps)} LWT steps")
 
-        # Build logical structure string
-        logical_structure = " AND ".join(logical_parts)
-        self._debug(1, "P1", f"Logical structure: {logical_structure}")
-
-        # Step 3: Generate LWT seed (template with logical structure)
-        self._debug(1, "P1", "Step 3: Generating LWT seed...")
-        lwt_seed = self._step1c_generate_seed(query, all_resolved, logical_structure)
-        self._debug(1, "P1", f"Generated LWT seed ({len(lwt_seed)} chars)")
-
-        return lwt_seed, all_resolved, logical_structure
+        return candidates, skeleton_steps, resolved
 
     # =========================================================================
-    # Phase 2: ReAct Context Expansion
+    # Phase 2: ReAct LWT Expansion
     # =========================================================================
 
-    def phase2_expand(self, lwt_seed: str, resolved_conditions: list, logical_structure: str,
-                      query: dict, n_items: int) -> List[str]:
-        """Phase 2: Expand LWT seed into executable script by iterating over items.
+    def phase2_expand(self, skeleton_steps: list, candidates: list, query: dict, conditions: list = None) -> List[str]:
+        """Phase 2: Refine LWT skeleton using ReAct loop with slice syntax for long reviews.
 
-        This phase focuses on the CONTEXT - looking at actual items and deciding
-        what to do with each one through ReAct iteration.
+        Phase 2 uses tools to check review lengths, search for keywords, and
+        modify LWT steps to use slice notation for truncating long reviews.
+        Also handles complex conditions (like hours range checks) by inserting steps.
 
         Args:
-            lwt_seed: Template from Phase 1 with logical structure
-            resolved_conditions: List of resolved condition dicts from Phase 1
-            logical_structure: String describing logical expression
-            query: Full query dict (for tools - contains items)
-            n_items: Number of items to process
+            skeleton_steps: LWT skeleton from Phase 1 [(var_name, step), ...]
+            candidates: List of candidate item numbers
+            query: Full query dict (for tools)
+            conditions: List of resolved conditions from Phase 1
 
         Returns:
             List of LWT steps (formatted strings)
         """
-        self._debug(1, "P2", f"Context expansion for {n_items} items...")
+        self._debug(1, "P2", f"Refining skeleton with {len(skeleton_steps)} steps...")
         req_id = getattr(self._thread_local, 'request_id', None)
         if req_id:
-            self._update_display(req_id, "P2", "expanding")
+            self._update_display(req_id, "P2", "refining")
 
-        # Initialize state
-        lwt_steps = []  # Will be built by LLM via add_step
-        dropped_items = set()  # Items dropped by LLM
+        # Convert skeleton to LWT format
+        # skeleton_steps is list of (var_name, step_content) tuples
+        lwt_steps = []
+        for var_name, step_content in skeleton_steps:
+            # Format as LWT step: (var_name)=step_content
+            if step_content.startswith("LLM("):
+                lwt_steps.append(f"({var_name})={step_content}")
+            else:
+                lwt_steps.append(f"({var_name})={step_content}")
+
+        # Format skeleton for display
+        lwt_skeleton_str = "\n".join(lwt_steps)
+        self._debug(2, "P2", f"Initial LWT:\n{lwt_skeleton_str}")
 
         # Format conditions for display
-        def format_cond(c, indent=0):
-            prefix = "  " * indent
-            if c.get('type') == 'OR':
-                parts = [format_cond(opt, indent+1) for opt in c.get('options', [])]
-                return f"{prefix}OR:\n" + "\n".join(parts)
-            elif c.get('type') == 'AND':
-                parts = [format_cond(sub, indent+1) for sub in c.get('conditions', [])]
-                return f"{prefix}AND:\n" + "\n".join(parts)
-            else:
-                return f"{prefix}{c.get('path', '')} = {c.get('expected', '')}"
-
-        conditions_str = "\n".join(format_cond(c) for c in resolved_conditions)
+        if conditions:
+            conditions_str = "\n".join([
+                f"- [{c.get('original_type', 'UNKNOWN')}] {c.get('description', '')} → {c.get('path', '')}"
+                for c in conditions
+            ])
+        else:
+            conditions_str = "None"
         self._debug(2, "P2", f"Conditions:\n{conditions_str}")
 
-        # Build initial prompt
-        prompt = PHASE2_PROMPT.format(
-            lwt_seed=lwt_seed,
-            conditions=conditions_str,
-            logical_structure=logical_structure,
-            n_items=n_items
-        )
+        # ReAct loop for refinement - check review lengths, handle complex conditions
+        prompt = PHASE2_PROMPT.format(conditions=conditions_str, lwt_skeleton=lwt_skeleton_str)
         conversation = [prompt]
 
-        # ReAct loop for context expansion
-        max_iterations = n_items + 10  # Allow enough iterations to process all items
+        max_iterations = 10
         iteration = 0
         for iteration in range(max_iterations):
             self._debug(2, "P2", f"ReAct iteration {iteration + 1}")
@@ -758,89 +586,100 @@ class AdaptiveNetworkOfThought(BaseMethod):
             # Process tool calls
             action_results = []
 
-            # list_items()
-            if "list_items()" in response:
-                result = tool_list_items(query, resolved_conditions)
-                action_results.append(("list_items()", result))
+            # Check for lwt_list()
+            if "lwt_list()" in response:
+                action_results.append(("lwt_list()", tool_lwt_list(lwt_steps)))
 
-            # check_item(N)
-            for match in re.finditer(r'check_item\((\d+)\)', response):
-                item_num = int(match.group(1))
-                result = tool_check_item(item_num, query, resolved_conditions)
-                action_results.append((f"check_item({item_num})", result))
+            # Process lwt_set() calls (raw step string)
+            for match in re.finditer(r'lwt_set\((\d+),\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_lwt_set(int(match.group(1)), step, lwt_steps)
+                action_results.append((f"lwt_set({match.group(1)})", result))
 
-            # drop_item(N, "reason")
-            for match in re.finditer(r'drop_item\((\d+),\s*"([^"]*)"\)', response):
-                item_num = int(match.group(1))
-                reason = match.group(2)
-                result = tool_drop_item(item_num, reason, dropped_items)
-                action_results.append((f"drop_item({item_num})", result))
+            # Process lwt_set_prompt() calls (auto-formatted LLM call)
+            for match in re.finditer(r'lwt_set_prompt\((\d+),\s*"([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                idx, step_id, prompt = int(match.group(1)), match.group(2), match.group(3).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_lwt_set_prompt(idx, step_id, prompt, lwt_steps)
+                action_results.append((f"lwt_set_prompt({idx}, \"{step_id}\")", result))
 
-            # add_step("id", "prompt")
-            for match in re.finditer(r'add_step\("([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
-                step_id = match.group(1)
-                step_prompt = match.group(2).replace('\\"', '"').replace('\\n', '\n')
-                result = tool_add_step(step_id, step_prompt, lwt_steps)
-                action_results.append((f"add_step(\"{step_id}\")", result))
-
-            # update_step("id", "prompt")
+            # Process update_step() calls (ID-based, no index - safer)
             for match in re.finditer(r'update_step\("([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
-                step_id = match.group(1)
-                step_prompt = match.group(2).replace('\\"', '"').replace('\\n', '\n')
-                result = tool_update_step(step_id, step_prompt, lwt_steps)
+                step_id, prompt = match.group(1), match.group(2).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_update_step(step_id, prompt, lwt_steps)
                 action_results.append((f"update_step(\"{step_id}\")", result))
 
-            # get_review_lengths(N)
+            # Process insert_step() calls (ID-based, insert before final)
+            for match in re.finditer(r'insert_step\("([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                step_id, prompt = match.group(1), match.group(2).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_insert_step(step_id, prompt, lwt_steps)
+                action_results.append((f"insert_step(\"{step_id}\")", result))
+
+            # Process lwt_delete() calls
+            for match in re.finditer(r'lwt_delete\((\d+)\)', response):
+                result = tool_lwt_delete(int(match.group(1)), lwt_steps)
+                action_results.append((f"lwt_delete({match.group(1)})", result))
+
+            # Process lwt_insert() calls (raw step string)
+            for match in re.finditer(r'lwt_insert\((\d+),\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                step = match.group(2).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_lwt_insert(int(match.group(1)), step, lwt_steps)
+                action_results.append((f"lwt_insert({match.group(1)})", result))
+
+            # Process lwt_insert_prompt() calls (auto-formatted LLM call)
+            for match in re.finditer(r'lwt_insert_prompt\((\d+),\s*"([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)', response, re.DOTALL):
+                idx, step_id, prompt = int(match.group(1)), match.group(2), match.group(3).replace('\\"', '"').replace('\\n', '\n')
+                result = tool_lwt_insert_prompt(idx, step_id, prompt, lwt_steps)
+                action_results.append((f"lwt_insert_prompt({idx}, \"{step_id}\")", result))
+
+            # Process review_length() calls (legacy)
+            for match in re.finditer(r'review_length\((\d+)\)', response):
+                result = tool_review_length(int(match.group(1)), query)
+                action_results.append((f"review_length({match.group(1)})", result))
+
+            # Process get_review_lengths() calls (new - per-review lengths)
             for match in re.finditer(r'get_review_lengths\((\d+)\)', response):
                 result = tool_get_review_lengths(int(match.group(1)), query)
                 action_results.append((f"get_review_lengths({match.group(1)})", result))
 
-            # keyword_search(N, "word")
+            # Process keyword_search() calls
             for match in re.finditer(r'keyword_search\((\d+),\s*"([^"]+)"\)', response):
                 result = tool_keyword_search(int(match.group(1)), match.group(2), query)
                 action_results.append((f"keyword_search({match.group(1)}, \"{match.group(2)}\")", result))
 
-            # done()
+            # Process get_review_snippet() calls
+            for match in re.finditer(r'get_review_snippet\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)', response):
+                result = tool_get_review_snippet(
+                    int(match.group(1)), int(match.group(2)),
+                    int(match.group(3)), int(match.group(4)), query
+                )
+                action_results.append((f"get_review_snippet({match.group(1)}, {match.group(2)}, {match.group(3)}, {match.group(4)})", result))
+
+            # Process read() calls
+            for match in re.finditer(r'read\("([^"]+)"\)', response):
+                result = tool_read(match.group(1), query)
+                if len(result) > 2000:
+                    result = result[:2000] + "... (truncated)"
+                action_results.append((f"read(\"{match.group(1)}\")", result))
+
+            # Check for done()
             if "done()" in response.lower():
-                # Validate that we have item steps, not just final
-                item_steps = [s for s in lwt_steps if re.match(r'\(c\d+\)=', s)]
-                if not item_steps:
-                    # No item steps created - prompt model to actually create them
-                    self._debug(1, "P2", f"done() called but no item steps created - prompting for actual add_step calls")
-                    conversation.append(f"\n{response}\nObservation: ERROR - You called done() but no item steps exist. You must call add_step(\"cN\", prompt) for EACH item you want to evaluate. Please call add_step for items, then add_step(\"final\", ...), then done().\n")
-                    continue
                 self._debug(1, "P2", f"ReAct done after {iteration + 1} iterations")
                 break
 
             if action_results:
+                # ReAct format: append response and observation
                 obs_text = action_results[0][1] if len(action_results) == 1 else "\n".join([f"{name}: {result}" for name, result in action_results])
                 conversation.append(f"\n{response}\nObservation: {obs_text}\n")
             else:
                 self._debug(1, "P2", "No action found, prompting for action")
-                conversation.append(f"\n{response}\n\nPlease output Action: with a tool call (list_items, check_item, drop_item, add_step, or done):")
+                conversation.append(f"\n{response}\n\nPlease output Action: with a tool call (get_review_lengths, keyword_search, lwt_set, lwt_delete, or done):")
 
-        # Ensure we have a final step
-        has_final = any('(final)=' in step for step in lwt_steps)
-        if not has_final and lwt_steps:
-            # Build final step from existing steps
-            step_refs = []
-            for step in lwt_steps:
-                match = re.match(r'\((\w+)\)=', step)
-                if match and match.group(1) != 'final':
-                    step_id = match.group(1)
-                    step_refs.append(f"Item {step_id[1:]}={{{{({step_id})}}}}")
-            if step_refs:
-                final_prompt = f"{', '.join(step_refs)}. Output ONLY the item NUMBERS where answer is yes, as comma-separated integers (e.g. 2, 7):"
-                tool_add_step("final", final_prompt, lwt_steps)
-                self._debug(1, "P2", "Added missing final step")
-
-        self._debug(1, "P2", f"Expanded LWT: {len(lwt_steps)} steps, {len(dropped_items)} items dropped")
+        self._debug(1, "P2", f"Refined LWT: {len(lwt_steps)} steps")
 
         trace = self._get_trace()
         if trace:
             trace["phase2"]["expanded_lwt"] = lwt_steps
             trace["phase2"]["react_iterations"] = iteration + 1
-            trace["phase2"]["dropped_items"] = list(dropped_items)
 
         return lwt_steps
 
@@ -873,8 +712,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
             output = "NO"
             error_msg = f"{type(e).__name__}: {str(e)}"
             req_id = getattr(self._thread_local, 'request_id', 'R??')
-            with self._errors_lock:
-                self._errors.append((req_id, idx, error_msg))
+            self._errors.append((req_id, idx, error_msg))
             self._debug(1, "P3", f"ERROR in step {idx}: {e}", content=traceback.format_exc())
 
         latency = (time.time() - start) * 1000
@@ -941,22 +779,15 @@ class AdaptiveNetworkOfThought(BaseMethod):
         layers = build_execution_layers(steps)
         self._debug(1, "P3", f"Executing {len(steps)} steps in {len(layers)} layers...")
 
+        final = ""
         for layer in layers:
             tasks = [self._execute_step_async(idx, instr, data_for_sub, user_query) for idx, instr in layer]
             results = await asyncio.gather(*tasks)
             for idx, output in results:
                 self._cache_set(idx, output)
+                final = output
 
-        # Return the "final" step output specifically, not just any last step
-        final_output = self._cache_get("final")
-        if final_output:
-            return final_output
-
-        # Fallback: return the last step from the last layer
-        cache = self._get_cache()
-        if cache:
-            return list(cache.values())[-1]
-        return ""
+        return final
 
     def phase3_execute(self, lwt: str, items: dict, user_query: str, n_items: int = 50, k: int = 5) -> str:
         """Execute the LWT script.
@@ -1045,54 +876,24 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._update_display(request_id, "---", "starting", query)
         trace = self._get_trace()
 
-        # Phase 1: Query-focused planning (extract → resolve → seed)
+        # Phase 1: Multi-step planning (condition extraction → path resolution → rule-out → skeleton)
         self._update_display(request_id, "P1", "planning")
         p1_start = time.time()
-        lwt_seed, resolved_conditions, logical_structure = self.phase1_plan(query, items, k)
+        candidates, skeleton_steps, resolved_conditions = self.phase1_plan(query, items, k)
         p1_latency = (time.time() - p1_start) * 1000
 
         if trace:
-            trace["phase1"]["lwt_seed"] = lwt_seed[:200] if lwt_seed else ""
+            trace["phase1"]["candidates"] = candidates
+            trace["phase1"]["skeleton_steps"] = len(skeleton_steps)
             trace["phase1"]["conditions"] = len(resolved_conditions)
-            trace["phase1"]["logical_structure"] = logical_structure
             trace["phase1"]["latency_ms"] = p1_latency
             self._save_trace_incremental(request_id)
 
-        # Phase 2: Context expansion via ReAct (iterate items, build lwt_script)
-        self._update_display(request_id, "P2", "expanding")
+        # Phase 2: Refine skeleton with review length handling and complex condition handling
+        # Pass conditions so LLM can add computation steps (e.g., hours range checks)
+        self._update_display(request_id, "P2", "refining")
         p2_start = time.time()
-
-        if self._hierarchical:
-            # Hierarchical parallel phase2 with sub-agents
-            # Get items dict for hierarchical (expects {"1": {...}, "2": {...}})
-            items_dict = data.get('items', data)
-            if isinstance(items_dict, list):
-                items_dict = {str(i + 1): item for i, item in enumerate(items_dict)}
-
-            # Extract friend sets for social filtering
-            friends_1hop, friends_2hop = _extract_friend_sets(resolved_conditions)
-            self._debug(2, "P2H", f"Friend sets: 1hop={len(friends_1hop)}, 2hop={len(friends_2hop)}")
-
-            step_tuples = asyncio.run(run_hierarchical_phase2(
-                lwt_seed=lwt_seed,
-                resolved_conditions=resolved_conditions,
-                logical_structure=logical_structure,
-                items=items_dict,
-                request_id=request_id,
-                debug_callback=self._debug,
-                log_callback=self._log_llm_call,
-                friends_1hop=friends_1hop,
-                friends_2hop=friends_2hop,
-            ))
-            # Convert [(id, prompt), ...] to LWT format ["(id)=LLM('prompt')", ...]
-            # Escape single quotes in prompts to avoid breaking LWT parsing
-            expanded_lwt_steps = [f"({sid})=LLM('{sprompt.replace(chr(39), chr(39)+chr(39))}')" for sid, sprompt in step_tuples]
-        else:
-            # Original sequential ReAct phase2
-            expanded_lwt_steps = self.phase2_expand(
-                lwt_seed, resolved_conditions, logical_structure, data, n_items
-            )
-
+        expanded_lwt_steps = self.phase2_expand(skeleton_steps, candidates, data, resolved_conditions)
         p2_latency = (time.time() - p2_start) * 1000
         expanded_lwt = "\n".join(expanded_lwt_steps)
 
@@ -1131,8 +932,6 @@ class AdaptiveNetworkOfThought(BaseMethod):
         return ", ".join(top_k)
 
 
-def create_method(run_dir: str = None, defense: bool = False, debug: bool = False,
-                  hierarchical: bool = False):
-    """Factory function to create ANoT instance."""
-    return AdaptiveNetworkOfThought(run_dir=run_dir, defense=defense, verbose=debug,
-                                    hierarchical=hierarchical)
+def create_method(run_dir: str = None, defense: bool = False, debug: bool = False):
+    """Factory function to create ANoT Original (backup) instance."""
+    return AdaptiveNetworkOfThoughtOriginal(run_dir=run_dir, defense=defense, verbose=debug)

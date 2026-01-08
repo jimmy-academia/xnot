@@ -26,13 +26,11 @@ def build_execution_layers(steps: list) -> list:
     input_vars = {"query", "input", "items", "context"}
 
     # Build dependency graph
-    step_ids = {idx for idx, _ in steps}  # All actual step IDs
     step_deps = {}
     for idx, instr in steps:
         deps = extract_dependencies(instr)
         # Filter out reserved input variables - they're always available
-        # Also filter out references to non-existent steps (model hallucinations)
-        step_deps[idx] = (deps - input_vars) & step_ids
+        step_deps[idx] = deps - input_vars
 
     # Assign steps to layers using topological sort
     layers = []
@@ -314,28 +312,14 @@ def parse_conditions(response: str) -> list:
     Args:
         response: LLM response with lines like "[ATTR] has drive-thru"
                   or "[REVIEW:POSITIVE] coffee"
-                  or "[OR] option1 | option2 | option3"
 
     Returns:
         List of dicts: [{"type": "ATTR", "description": "has drive-thru"}, ...]
         For review sentiment: [{"type": "REVIEW", "sentiment": "positive", "description": "coffee"}, ...]
-        For OR groups: [{"type": "OR", "options": ["option1", "option2", "option3"]}, ...]
     """
     conditions = []
     for line in response.strip().split('\n'):
         line = line.strip()
-
-        # Handle [OR] groups: [OR] opt1 | opt2 | opt3
-        or_match = re.match(r'\[OR\]\s*(.+)', line, re.IGNORECASE)
-        if or_match:
-            options_str = or_match.group(1)
-            # Split by | and strip each option
-            options = [opt.strip() for opt in options_str.split('|')]
-            options = [opt for opt in options if opt]  # Remove empty
-            if options:
-                conditions.append({"type": "OR", "options": options})
-            continue
-
         # Match [TYPE:SUBTYPE] description or [TYPE] description patterns
         match = re.match(r'\[(\w+)(?::(\w+))?\]\s*(.+)', line)
         if match:
@@ -449,28 +433,6 @@ def parse_lwt_skeleton(response: str) -> list:
     return steps
 
 
-def _extract_fields_from_condition(cond: dict, fields_needed: set):
-    """Helper to extract field names from a condition (handles OR groups)."""
-    if cond.get("type") == "OR":
-        # Handle OR group - extract fields from all options
-        for opt in cond.get("options", []):
-            if opt.get("type") == "AND":
-                for sub in opt.get("conditions", []):
-                    _extract_fields_from_condition(sub, fields_needed)
-            else:
-                _extract_fields_from_condition(opt, fields_needed)
-    else:
-        path = cond.get("path", "")
-        if path.startswith("attributes."):
-            attr_path = path[len("attributes."):]
-            attr_name = attr_path.split('.')[0]
-            fields_needed.add(attr_name)
-        elif path == "hours" or path.startswith("hours."):
-            fields_needed.add("hours")
-        elif path.startswith("categories"):
-            fields_needed.add("categories")
-
-
 def format_items_for_ruleout(items: list, hard_conditions: list) -> str:
     """Format items with only relevant attributes for quick rule-out.
 
@@ -481,24 +443,30 @@ def format_items_for_ruleout(items: list, hard_conditions: list) -> str:
     Returns:
         Compact string showing only relevant attributes per item
     """
-    # Extract field names from paths (handles OR groups)
+    # Extract field names from paths
     fields_needed = set()
     for cond in hard_conditions:
-        _extract_fields_from_condition(cond, fields_needed)
+        path = cond.get("path", "")
+        # Extract top-level field from path like "attributes.GoodForKids"
+        if path.startswith("attributes."):
+            # Get the specific attribute
+            attr_path = path[len("attributes."):]
+            # Handle nested like "Ambience.hipster"
+            attr_name = attr_path.split('.')[0]
+            fields_needed.add(attr_name)
+        elif path == "hours" or path.startswith("hours."):
+            fields_needed.add("hours")
 
     lines = []
     for i, item in enumerate(items):
         attrs = item.get("attributes", {})
         hours = item.get("hours", {})
-        categories = item.get("categories", [])
 
         # Build compact representation
         parts = []
         for field in sorted(fields_needed):
             if field == "hours":
                 val = hours if hours else None
-            elif field == "categories":
-                val = categories if categories else None
             elif field in attrs:
                 val = attrs[field]
             else:
