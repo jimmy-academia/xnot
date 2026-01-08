@@ -1,145 +1,108 @@
 # Documentation Index
 
-Comprehensive documentation for the ANoT evaluation framework.
+## 3-Level Hierarchy
 
-## Documentation by Use Case
+```
+Level 1: README.md (Project Entry)
+    |
+Level 2: doc/README.md (This Index) + Category Directories
+    |
+Level 3: Individual Documents
+```
+
+---
+
+## Level 2: Documentation Categories
+
+### Research Paper (`paper/`)
+
+Documents supporting the research paper.
+
+| Document | Purpose |
+|----------|---------|
+| [Benchmark Design](paper/benchmark_design.md) | **Experiment section**: Design methodology, principles, procedures |
+| [Methodology](paper/methodology.md) | Evaluation framework design |
+| [ANoT Architecture](paper/anot_architecture.md) | Three-phase agent design |
+| [Baselines](paper/baselines.md) | Implemented methods with citations |
+| [Data Pipeline](paper/data_pipeline.md) | Data flow documentation |
+| [Design Rationale](paper/design_rationale.md) | High-level design decisions |
+
+### How-To Guides (`guides/`)
+
+Step-by-step instructions for common tasks.
+
+| Document | Purpose |
+|----------|---------|
+| [Run Experiments](guides/run_experiments.md) | Execute and analyze evaluations |
+| [Create New Benchmark](guides/create_new_benchmark.md) | Build a new evaluation dataset |
+| [Recreate philly_cafes](guides/recreate_philly_cafes.md) | Reproduce from raw Yelp data |
+| [Add Evidence Type](guides/add_evidence_type.md) | Extend validation logic |
+| [Methods Architecture](guides/architecture.md) | Method structure conventions |
+
+### Technical Reference (`reference/`)
+
+Specifications and schemas.
+
+| Document | Purpose |
+|----------|---------|
+| [Evidence Types](reference/evidence_types.md) | All 7 evidence type specifications |
+| [Request Structure](reference/request_structure.md) | Request JSON schema |
+| [Condition Design](reference/condition_design.md) | Bottom-up anchor-first methodology |
+| [Configuration](reference/configuration.md) | CLI arguments, LLM config |
+| [Attacks](reference/attacks.md) | Adversarial attack system |
+| [Defense Mode](reference/defense_mode.md) | Attack-resistant evaluation |
+| [Logging](reference/logging.md) | Output file formats |
+
+### Development (`internal/`)
+
+Internal development documentation.
+
+| Document | Purpose |
+|----------|---------|
+| [TODO](internal/TODO.md) | Current development tasks |
+| [Attack Plan](internal/attack_plan.md) | Attack implementation status |
+| [Code Quality Audit](internal/code_quality_audit.md) | Code health audit |
+
+---
+
+## Use-Case Navigation
 
 ### Writing a Research Paper
 
-- [Design Rationale](paper/design_rationale.md) - Benchmark design decisions
-- [Methodology](paper/methodology.md) - How the evaluation framework works
-- [Data Pipeline](paper/data_pipeline.md) - How data flows through the system
-- [ANoT Architecture](paper/anot_architecture.md) - Three-phase design details
-- [Baselines](paper/baselines.md) - Implemented methods with citations
+1. Start with [Benchmark Design](paper/benchmark_design.md) for experiment methodology
+2. Reference [Methodology](paper/methodology.md) for evaluation framework
+3. See [Baselines](paper/baselines.md) for method citations
+4. Check [ANoT Architecture](paper/anot_architecture.md) for our method details
 
-### Recreating the philly_cafes Dataset
+### Reproducing the Benchmark
 
-- [Recreation Guide](guides/recreate_philly_cafes.md) - Step-by-step reproduction
-- [Evidence Types](reference/evidence_types.md) - Validation logic reference
-- [Request Structure](reference/request_structure.md) - Request JSON schema
-- [Prompt Templates](../preprocessing/prompts/) - Claude Code prompts used
+1. [Recreate philly_cafes](guides/recreate_philly_cafes.md) - Step-by-step reproduction
+2. [Evidence Types](reference/evidence_types.md) - Validation logic reference
+3. [Request Structure](reference/request_structure.md) - Request format
 
 ### Creating a New Benchmark
 
-- [Benchmark Creation Guide](guides/create_new_benchmark.md) - Template for new datasets
-- [Adding Evidence Types](guides/add_evidence_type.md) - Extending validation logic
-- [Condition Design](reference/condition_design.md) - Bottom-up anchor-first methodology
+1. [Create New Benchmark](guides/create_new_benchmark.md) - Template and steps
+2. [Condition Design](reference/condition_design.md) - Design methodology
+3. [Add Evidence Type](guides/add_evidence_type.md) - Extending validation
 
 ### Running Experiments
 
-- [Experiments Guide](guides/run_experiments.md) - How to run evaluations
-- [Configuration](reference/configuration.md) - CLI arguments, LLM config
-- [Attacks](reference/attacks.md) - Adversarial attack system
-- [Defense Mode](reference/defense_mode.md) - Attack-resistant evaluation
+1. [Run Experiments](guides/run_experiments.md) - Execution guide
+2. [Configuration](reference/configuration.md) - CLI reference
+3. [Attacks](reference/attacks.md) - Adversarial testing
 
-### Understanding Methods
+### Understanding the Methods
 
-- [Methods Architecture](guides/architecture.md) - Method structure conventions
-- [Design Rationale](paper/design_rationale.md) - Method choices explained
-
-### Development
-
-- [TODO](internal/TODO.md) - Current development tasks
-- [Attack Plan](internal/attack_plan.md) - Attack implementation status
-- [Code Quality Audit](internal/code_quality_audit.md) - Code health audit
-
----
-
-## Directory Structure
-
-```
-doc/
-├── paper/                # Research paper support
-│   ├── design_rationale.md   # Benchmark design decisions
-│   ├── methodology.md        # Evaluation framework design
-│   ├── data_pipeline.md      # Data flow documentation
-│   ├── anot_architecture.md  # Three-phase ANoT design
-│   └── baselines.md          # Method references
-│
-├── guides/               # How-to guides
-│   ├── run_experiments.md        # Running evaluations
-│   ├── architecture.md           # Methods architecture
-│   ├── recreate_philly_cafes.md  # Dataset reproduction
-│   ├── create_new_benchmark.md   # New dataset creation
-│   └── add_evidence_type.md      # Extending validation
-│
-├── reference/            # Technical reference
-│   ├── configuration.md      # CLI args, LLM config
-│   ├── attacks.md            # Attack system
-│   ├── defense_mode.md       # Defense mode
-│   ├── evidence_types.md     # Evidence type specifications
-│   ├── request_structure.md  # Request JSON schema
-│   ├── condition_design.md   # Benchmark design methodology
-│   └── logging.md            # Output file formats
-│
-└── internal/             # Development documentation
-    ├── TODO.md                 # Current tasks
-    ├── attack_plan.md          # Attack implementation
-    └── code_quality_audit.md   # Code health audit
-```
-
----
-
-## Quick Reference
-
-### Task
-
-**Constraint-Satisfying Reranking** (Last-Mile RAG)
-
-Given a user request with logical structure and N candidate restaurants, identify the one that satisfies all conditions.
-
-### Benchmark Stats
-
-| Metric | Value |
-|--------|-------|
-| Restaurants | 50 |
-| Requests | 100 |
-| Request Groups | 10 (G01-G10) |
-| Validation Rate | 100% |
-
-### Request Groups
-
-| Group | Structure | Description |
-|-------|-----------|-------------|
-| G01 | `AND(conds)` | Flat AND, item_meta only |
-| G02 | `AND(conds)` | Flat AND, item_meta + review_text |
-| G03 | `AND(conds)` | Flat AND, item_meta + item_meta_hours |
-| G04 | `AND(conds)` | Flat AND, item_meta + review_text (weighted) |
-| G05 | `AND(anchors, OR(a,b,c,d))` | 4-way OR |
-| G06 | `AND(anchors, OR(AND(a,b), AND(c,d)))` | OR of two ANDs |
-| G07 | `AND(anchors, OR(a,b), OR(c,d))` | Two parallel ORs |
-| G08 | `AND(anchors, OR(simple, AND(a,b)))` | Unbalanced OR |
-| G09 | `1HOP(['Name'], 'pattern')` | 1-hop social filter (anchor + friends) |
-| G10 | `2HOP(['Name'], 'pattern')` | 2-hop social filter (+ friends-of-friends) |
-
-**Note**: Structure uses only `AND`/`OR` operators. Negation is handled at evidence level (`"true": "False"`, `"not_contains"`).
-
-### Evidence Types
-
-| Type | Description |
-|------|-------------|
-| `item_meta` | Attribute matching |
-| `item_meta_hours` | Operating hours |
-| `review_text` | Pattern matching in reviews |
-| `review_meta` | Reviewer credibility weighting |
-| `social_filter` | Social graph filtering |
-
-### Methods
-
-| Method | Description | Defense |
-|--------|-------------|---------|
-| `cot` | Chain-of-Thought | Yes |
-| `ps` | Plan-and-Solve | No |
-| `plan_act` | Plan-and-Act | Yes |
-| `listwise` | Listwise Reranking | Yes |
-| `weaver` | SQL+LLM Hybrid | Yes |
-| `anot` | **Ours**: Adaptive Network of Thought | Yes |
+1. [Methods Architecture](guides/architecture.md) - Structure conventions
+2. [ANoT Architecture](paper/anot_architecture.md) - Our method details
+3. [Baselines](paper/baselines.md) - Comparison methods
 
 ---
 
 ## Dataset Documentation
 
-See `data/philly_cafes/`:
+Located in `data/philly_cafes/`:
 
 | File | Purpose |
 |------|---------|
@@ -152,10 +115,80 @@ See `data/philly_cafes/`:
 
 ## Preprocessing Documentation
 
-See `preprocessing/`:
+Located in `preprocessing/`:
 
 | File | Purpose |
 |------|---------|
 | [README.md](../preprocessing/README.md) | Pipeline overview |
 | [prompts/](../preprocessing/prompts/) | Claude Code prompt templates |
 | [records/](../preprocessing/records/) | Selection documentation |
+
+---
+
+## Quick Reference
+
+### Benchmark Stats
+
+| Metric | Value |
+|--------|-------|
+| Restaurants | 20 |
+| Requests | 100 |
+| Groups | 10 (G01-G10) |
+| Validation | 100% |
+
+### Request Groups
+
+| Group | Logic | Evidence |
+|-------|-------|----------|
+| G01-G04 | Flat AND | Various types |
+| G05-G08 | Nested AND/OR | item_meta |
+| G09-G10 | Social filter | review_sentiment + social |
+
+### Evidence Types
+
+| Type | Count | Description |
+|------|-------|-------------|
+| `item_meta` | 341 | Attribute matching |
+| `review_sentiment` | 14 | Semantic sentiment |
+| `review_text` | 12 | Pattern matching |
+| `item_meta_hours` | 10 | Operating hours |
+| `review_group_rating` | 7 | Aggregate ratings |
+| `social_rating` | 4 | Social network ratings |
+
+---
+
+## Document Map
+
+```
+doc/
+├── README.md                      # This index
+│
+├── paper/                         # Research Paper Support
+│   ├── benchmark_design.md        # Experiment methodology (NEW)
+│   ├── methodology.md             # Evaluation framework
+│   ├── anot_architecture.md       # Three-phase design
+│   ├── baselines.md               # Method references
+│   ├── data_pipeline.md           # Data flow
+│   └── design_rationale.md        # High-level rationale
+│
+├── guides/                        # How-To Guides
+│   ├── run_experiments.md         # Running evaluations
+│   ├── create_new_benchmark.md    # New dataset creation
+│   ├── recreate_philly_cafes.md   # Dataset reproduction
+│   ├── add_evidence_type.md       # Extending validation
+│   └── architecture.md            # Methods architecture
+│
+├── reference/                     # Technical Reference
+│   ├── evidence_types.md          # Evidence specifications
+│   ├── request_structure.md       # Request schema
+│   ├── condition_design.md        # Design methodology
+│   ├── configuration.md           # CLI/LLM config
+│   ├── attacks.md                 # Attack system
+│   ├── defense_mode.md            # Defense mode
+│   └── logging.md                 # Output formats
+│
+└── internal/                      # Development
+    ├── TODO.md                    # Tasks
+    ├── attack_plan.md             # Attack status
+    └── code_quality_audit.md      # Code health
+```

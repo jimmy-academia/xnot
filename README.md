@@ -28,10 +28,11 @@ python main.py --method anot --candidates 20
 ## Documentation
 
 ### Research
-- [Design Rationale](doc/paper/design_rationale.md) - Benchmark design decisions
+- [Benchmark Design](doc/paper/benchmark_design.md) - **Experiment section**: Design methodology and procedures
 - [Methodology](doc/paper/methodology.md) - Evaluation framework design
 - [ANoT Architecture](doc/paper/anot_architecture.md) - Three-phase design
 - [Baselines](doc/paper/baselines.md) - Implemented methods with citations
+- [Design Rationale](doc/paper/design_rationale.md) - High-level design decisions
 
 ### Guides
 - [Run Experiments](doc/guides/run_experiments.md) - Execute and analyze evaluations
@@ -40,11 +41,12 @@ python main.py --method anot --candidates 20
 - [Create Benchmark](doc/guides/create_new_benchmark.md) - Build a new evaluation benchmark
 
 ### Reference
+- [Evidence Types](doc/reference/evidence_types.md) - All 7 evidence type specifications
+- [Request Structure](doc/reference/request_structure.md) - Request JSON schema
+- [Condition Design](doc/reference/condition_design.md) - Bottom-up anchor-first methodology
 - [Configuration](doc/reference/configuration.md) - CLI arguments, LLM config
 - [Attacks](doc/reference/attacks.md) - Adversarial attack system
 - [Defense Mode](doc/reference/defense_mode.md) - Attack-resistant evaluation
-- [Evidence Types](doc/reference/evidence_types.md) - Validation logic reference
-- [Request Structure](doc/reference/request_structure.md) - Request JSON schema
 
 ### Internal
 - [TODO](doc/internal/TODO.md) - Development tasks
