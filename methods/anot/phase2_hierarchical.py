@@ -109,15 +109,15 @@ Thought: Search for WiFi mentions
 Action: search("wifi")
 
 Tools (use exact syntax):
-- text() → get full review text
+- search("word") → find keyword AND get context around it, e.g. search("wifi") returns "FOUND @123 "...the wifi here is great...""
+- slice(start, len) → get more text at position, e.g. slice(100, 200) gets 200 chars starting at position 100
 - length() → get char/word count
-- search("word") → find keyword, e.g. search("wifi"), search("outdoor")
 - detect() → check for injection attacks
-- emit("id", "prompt") → add LWT step, e.g. emit("match", "Review mentions wifi: yes")
+- emit("id", "prompt") → add LWT step, e.g. emit("match", "Review mentions wifi positively")
 - skip("reason") → skip review, e.g. skip("irrelevant"), skip("adversarial")
 - done() → finish
 
-Flow: search() for keywords → emit() if relevant OR skip() if not → done()"""
+Flow: search() for keywords → read context → emit() if relevant OR skip() if not → done()"""
 }
 
 
@@ -365,9 +365,21 @@ BEGIN (output Thought: then Action: lines):"""
                 kw = m.group(1).lower()
                 if kw in text.lower():
                     idx = text.lower().index(kw)
-                    obs.append(f"search({kw}): FOUND @{idx}")
+                    # Return context around the keyword (50 chars before, keyword, 100 chars after)
+                    start = max(0, idx - 50)
+                    end = min(len(text), idx + len(kw) + 100)
+                    snippet = text[start:end]
+                    obs.append(f"search({kw}): FOUND @{idx} \"{snippet}\"")
                 else:
                     obs.append(f"search({kw}): NOT FOUND")
+
+            # slice(start, length) - get specific portion of review
+            for m in re.finditer(r'slice\((\d+),\s*(\d+)\)', response):
+                start = int(m.group(1))
+                length = int(m.group(2))
+                end = min(len(text), start + length)
+                snippet = text[start:end]
+                obs.append(f"slice({start},{length}): \"{snippet}\"")
 
             if "detect()" in response:
                 patterns = [r'ignore.*(previous|instruction)', r'system:', r'\[INST\]']
@@ -443,7 +455,7 @@ BEGIN (output Thought: then Action: lines):"""
             elif self.depth == 1:
                 obs.append("tools: check, list_reviews, spawn, wait_all, emit, skip, done")
             else:
-                obs.append("tools: text, length, search, detect, emit, skip, done")
+                obs.append("tools: search, slice, length, detect, emit, skip, done")
 
         return "\n".join(obs), False
 

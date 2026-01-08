@@ -189,7 +189,8 @@ def _is_context_length_error(error: Exception) -> bool:
 
 def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
                             query: str, k: int, req: dict,
-                            groundtruth: dict, attack_config: dict = None) -> dict | None:
+                            groundtruth: dict, attack_config: dict = None,
+                            preset_max_reviews: int = None) -> dict | None:
     """Evaluate a single request (thread-safe helper).
 
     For string mode: implements adaptive truncation - on context exceeded,
@@ -205,6 +206,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         req: Request dict with 'id'
         groundtruth: {request_id: {"gold_restaurant": str, "gold_idx": int}}
         attack_config: Optional attack configuration for per-request attacks
+        preset_max_reviews: Pre-determined max reviews limit (skip truncation discovery)
 
     Returns:
         Result dict or None if no ground truth
@@ -235,7 +237,8 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
 
     # For string mode: adaptive truncation with retry
     # For dict mode: single attempt (no truncation needed)
-    current_max_reviews = None  # None = unlimited (all reviews)
+    # If preset_max_reviews is provided, use it directly (skip discovery)
+    current_max_reviews = preset_max_reviews  # None = unlimited (all reviews)
     coverage_stats = None
     shuffled_preds = []
     truncation_retries = 0
@@ -282,6 +285,9 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     # Add truncation info to coverage stats
     if coverage_stats and truncation_retries > 0:
         coverage_stats["truncation_retries"] = truncation_retries
+    # Store final max_reviews for subsequent requests (optimization)
+    if coverage_stats:
+        coverage_stats["final_max_reviews"] = current_max_reviews
 
     # Map predictions back to original indices
     pred_indices = unmap_predictions(shuffled_preds, mapping)
@@ -359,6 +365,32 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
     context_exceeded = False
     results = []
 
+    # For string mode + parallel: run 1 request first to discover stable max_reviews
+    # This avoids wasteful parallel retries where all requests fail and retry together
+    preset_max_reviews = None
+    remaining_requests = requests
+
+    if parallel and mode == "string" and len(requests) > 1:
+        first_req = requests[0]
+        query = first_req.get("context") or first_req.get("text", "")
+        print(f"[TRUNCATE] Running {first_req['id']} first to determine stable max_reviews...", flush=True)
+        try:
+            first_result = evaluate_ranking_single(
+                method, items, mode, shuffle, query, k, first_req, groundtruth, attack_config
+            )
+            if first_result:
+                results.append(first_result)
+                # Extract discovered max_reviews for remaining requests
+                if "coverage" in first_result and first_result["coverage"]:
+                    preset_max_reviews = first_result["coverage"].get("final_max_reviews")
+                    if preset_max_reviews is not None:
+                        print(f"[TRUNCATE] Discovered stable max_reviews={preset_max_reviews}, using for remaining {len(requests)-1} requests", flush=True)
+        except ContextLengthExceeded:
+            context_exceeded = True
+            return {"results": results, "req_ids": req_ids, "stats": {}, "context_exceeded": True}
+
+        remaining_requests = requests[1:]
+
     if parallel:
         def run_eval():
             nonlocal context_exceeded
@@ -368,9 +400,9 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                         evaluate_ranking_single,
                         method, items, mode, shuffle,
                         req.get("context") or req.get("text", ""),  # query = user request
-                        k, req, groundtruth, attack_config
+                        k, req, groundtruth, attack_config, preset_max_reviews
                     ): req
-                    for req in requests
+                    for req in remaining_requests
                 }
 
                 for future in as_completed(futures):
@@ -389,12 +421,12 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
     else:
         def run_eval():
             nonlocal context_exceeded
-            for req in requests:
+            for req in remaining_requests:
                 query = req.get("context") or req.get("text", "")  # query = user request
                 try:
                     result = evaluate_ranking_single(
                         method, items, mode, shuffle, query, k, req, groundtruth,
-                        attack_config
+                        attack_config, preset_max_reviews
                     )
                     if result:
                         results.append(result)
@@ -405,7 +437,7 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
 
         description = "Ranking evaluation (sequential)..."
 
-    _run_with_progress(run_eval(), has_rich_display, description, len(requests))
+    _run_with_progress(run_eval(), has_rich_display, description, len(remaining_requests))
 
     stats = compute_multi_k_stats(results, k)
 
