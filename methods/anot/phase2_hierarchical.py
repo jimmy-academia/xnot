@@ -197,9 +197,8 @@ class ReActAgent:
             if n_items > 5:
                 spawn_cmds += f"\n... (spawn all {n_items} items)"
 
-            # Build final emit with labeled results - use | separator (not \n which breaks parsing)
-            # Need {{(var)}} in final output -> {{{{(c{i}_eval)}}}} in f-string
-            result_parts = " | ".join([f"{i}:{{{{(c{i}_eval)}}}}" for i in range(1, n_items + 1)])
+            # Build final emit - just collect item eval results (passing items emit their ID)
+            result_refs = " ".join([f"{{{{(c{i}_eval)}}}}" for i in range(1, n_items + 1)])
 
             return f"""## Task: Evaluate {n_items} items against conditions
 Conditions: {conds}
@@ -215,9 +214,9 @@ Then after spawning all:
 Thought: All spawned, now wait
 Action: wait_all()
 
-Then emit final (IMPORTANT: include item numbers with each result):
+Then emit final (collects passing item IDs):
 Thought: Aggregate results
-Action: emit("final", "{result_parts} -- Output ONLY the item numbers where result contains yes, as comma-separated integers like 3, 7, 12:")
+Action: emit("final", "Passing items: {result_refs} -- Output these numbers as comma-separated list:")
 Action: done()
 
 BEGIN (output Thought: then Action: lines):"""
@@ -235,7 +234,7 @@ Schema: {json.dumps(schema, indent=2)}
 
 ## Conditions to check: {conds}
 
-## Your job: Check hard conditions. If fail, skip(). If pass, emit step.
+## Your job: Check hard conditions. If fail, skip(). If pass, emit YOUR ITEM NUMBER.
 
 Example response:
 Thought: Check OutdoorSeating attribute
@@ -245,9 +244,9 @@ If condition fails:
 Thought: OutdoorSeating is False, skip this item
 Action: skip("OutdoorSeating=False")
 
-If conditions pass:
-Thought: All conditions met, emit evaluation step
-Action: emit("eval", "Item {self.agent_id} matches conditions: yes")
+If ALL conditions pass, emit JUST the item number:
+Thought: All conditions met
+Action: emit("eval", "{self.agent_id}")
 Action: done()
 
 BEGIN (output Thought: then Action: lines):"""
