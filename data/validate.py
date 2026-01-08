@@ -25,12 +25,24 @@ console = Console()
 
 DATA_DIR = Path(__file__).parent
 
-# --- Judgement Cache (for review_sentiment validation) ---
+# --- Judgement Cache (for review-level semantic validation) ---
 
 _judgement_cache = None
 
 def get_judgement_cache():
-    """Load judgement_cache.json for review_sentiment evaluation."""
+    """Load judgement_cache.json for review-level semantic evaluation.
+
+    Cache structure (Option A - keyed by review_id:aspect):
+    {
+        "review_abc123:boba": {
+            "review_id": "review_abc123",
+            "business_id": "ZpgVL...",
+            "aspect": "boba",
+            "judgement": true,
+            "sentiment": "positive"
+        }
+    }
+    """
     global _judgement_cache
     if _judgement_cache is None:
         cache_path = DATA_DIR / "philly_cafes" / "judgement_cache.json"
@@ -42,16 +54,56 @@ def get_judgement_cache():
     return _judgement_cache
 
 
+def check_review_judgement(review_id: str, aspect: str) -> str:
+    """Check review judgement from cache.
+
+    Args:
+        review_id: The review's ID
+        aspect: The aspect/topic to check (e.g., "boba", "espresso")
+
+    Returns:
+        One of: "positive", "negative", "neutral", "not_mentioned"
+        Defaults to "not_mentioned" if cache entry not found.
+    """
+    cache = get_judgement_cache()
+    cache_key = f"{review_id}:{aspect}"
+
+    if cache_key not in cache:
+        return "not_mentioned"  # Default for missing entries
+
+    entry = cache[cache_key]
+    judgement = entry.get("judgement", "")
+
+    # Normalize to standard values
+    if isinstance(judgement, str):
+        j_lower = judgement.lower()
+        if j_lower in ("positive", "pos", "true", "yes"):
+            return "positive"
+        elif j_lower in ("negative", "neg", "false", "no"):
+            return "negative"
+        elif j_lower in ("neutral", "mixed"):
+            return "neutral"
+        elif j_lower in ("not_mentioned", "none", "n/a", "missing"):
+            return "not_mentioned"
+
+    # If boolean (legacy)
+    if isinstance(judgement, bool):
+        return "positive" if judgement else "not_mentioned"
+
+    return "not_mentioned"  # Default for invalid values
+
+
 def evaluate_review_sentiment(business_id: str, reviews: list, evidence_spec: dict) -> int:
     """Evaluate review_sentiment condition.
 
     Checks if reviews have positive/negative sentiment for a topic.
-    Uses star ratings as proxy: 4-5★ = positive, 1-2★ = negative.
+    Uses cached LLM judgements (required - errors if missing).
+    If social_filter specified, only considers reviews from users in the social network.
 
     Args:
         business_id: Restaurant's business_id
         reviews: List of review dicts
-        evidence_spec: {"kind": "review_sentiment", "topic": "X", "sentiment": "positive/negative", "min_positive": N}
+        evidence_spec: {"kind": "review_sentiment", "topic": "X", "sentiment": "positive/negative", "min_positive": N, "social_filter": {...}}
 
     Returns: 1 if condition met, -1 otherwise
     """
@@ -59,33 +111,47 @@ def evaluate_review_sentiment(business_id: str, reviews: list, evidence_spec: di
     expected_sentiment = evidence_spec.get("sentiment", "positive")
     min_positive = evidence_spec.get("min_positive", 1)
     min_negative = evidence_spec.get("min_negative", 1)
+    social_filter = evidence_spec.get("social_filter")
 
     if not topic or not reviews:
         return -1
 
-    # Try to use cached judgement first
-    cache = get_judgement_cache()
-    cache_key = f"{business_id}:{topic}"
-    if cache_key in cache:
-        cached = cache[cache_key]
-        if expected_sentiment == "positive":
-            return 1 if cached.get("is_valid_positive", False) else -1
-        else:  # negative
-            return 1 if cached.get("negative_count", 0) >= min_negative else -1
+    # If social_filter specified, filter reviews by social network
+    if social_filter:
+        friends = social_filter.get("friends", [])
+        hops = social_filter.get("hops", 1)
 
-    # Fall back to heuristic: count by star rating
-    pattern = re.compile(re.escape(topic), re.IGNORECASE)
+        # Load friend graph
+        social = get_social_data()
+        friend_graph = social.get("friend_graph", {})
+
+        # Build the social network
+        network = set(friends)  # 0-hop: the anchors themselves
+        if hops >= 1:
+            for anchor in friends:
+                network.update(friend_graph.get(anchor, []))
+        if hops >= 2:
+            one_hop_friends = set(network)
+            for person in one_hop_friends:
+                network.update(friend_graph.get(person, []))
+
+        # Filter reviews to only those from the social network
+        reviews = [r for r in reviews if r.get("user", {}).get("name", "") in network]
+
     pos_count = 0
     neg_count = 0
 
     for r in reviews:
-        text = r.get("text", "")
-        stars = r.get("stars", 3)
-        if pattern.search(text):
-            if stars >= 4:
-                pos_count += 1
-            elif stars <= 2:
-                neg_count += 1
+        review_id = r.get("review_id", "")
+
+        # Get cached judgement
+        judgement = check_review_judgement(review_id, topic)
+
+        if judgement == "positive":
+            pos_count += 1
+        elif judgement == "negative":
+            neg_count += 1
+        # "neutral" and "not_mentioned" don't count toward either
 
     if expected_sentiment == "positive":
         return 1 if pos_count >= min_positive and pos_count > neg_count else -1
@@ -203,24 +269,29 @@ def get_review_metadata_value(review: dict, field_path: list) -> float:
     return float(v) if v is not None else 0.0
 
 
-def evaluate_credibility_count(reviews: list, pattern: str, field_path: list,
+def evaluate_credibility_count(reviews: list, aspect: str, field_path: list,
                                credibility_percentile: int = 50,
                                min_credible_matches: int = 2) -> int:
-    """Evaluate review pattern using credibility threshold + count floor.
+    """Evaluate aspect using credibility threshold + count floor.
 
-    Semantics: "At least N credible reviewers (above percentile) mention pattern"
+    Semantics: "At least N credible reviewers (above percentile) mention aspect positively"
+
+    Uses cached LLM judgements (required - errors if missing).
 
     Args:
         reviews: List of review dicts
-        pattern: Regex pattern to match
+        aspect: Aspect/topic to check (used as cache key)
         field_path: Path to credibility field (e.g., ["user", "review_count"])
         credibility_percentile: Percentile threshold for "credible" (default: 50 = median)
-        min_credible_matches: Minimum credible reviewers mentioning pattern (default: 2)
+        min_credible_matches: Minimum credible reviewers with positive judgement (default: 2)
 
     Returns:
         1 if condition satisfied, -1 otherwise
+
+    Raises:
+        JudgementMissingError: If any required cache entry is missing
     """
-    if not reviews or not pattern:
+    if not reviews or not aspect:
         return -1
 
     # 1. Extract field values
@@ -234,22 +305,14 @@ def evaluate_credibility_count(reviews: list, pattern: str, field_path: list,
     threshold_idx = int(len(nonzero) * credibility_percentile / 100)
     cred_threshold = nonzero[min(threshold_idx, len(nonzero) - 1)]
 
-    # 3. Count credible reviewers who mention pattern
-    try:
-        regex = re.compile(pattern, re.IGNORECASE)
-    except re.error:
-        # Fall back to literal matching
-        pattern_lower = pattern.lower()
-        credible_matches = sum(
-            1 for r, v in zip(reviews, values)
-            if v >= cred_threshold and pattern_lower in r.get('text', '').lower()
-        )
-        return 1 if credible_matches >= min_credible_matches else -1
-
-    credible_matches = sum(
-        1 for r, v in zip(reviews, values)
-        if v >= cred_threshold and regex.search(r.get('text', ''))
-    )
+    # 3. Count credible reviewers with positive judgement
+    credible_matches = 0
+    for r, v in zip(reviews, values):
+        if v >= cred_threshold:
+            review_id = r.get("review_id", "")
+            judgement = check_review_judgement(review_id, aspect)
+            if judgement == "positive":
+                credible_matches += 1
 
     # 4. Return result
     return 1 if credible_matches >= min_credible_matches else -1
@@ -715,27 +778,28 @@ def evaluate_item_meta_rule(value, evidence_spec) -> int:
 
 
 def evaluate_review_text_pattern(reviews: list, pattern: str) -> int:
-    """Check if any review contains the pattern (regex supported).
+    """Check if any review mentions the pattern positively.
 
-    Returns: 1 if found, -1 if not found
+    Uses cached LLM judgements (required - errors if missing).
+
+    Args:
+        reviews: List of review dicts
+        pattern: Aspect/topic to check (used as cache key)
+
+    Returns: 1 if any review is positive, -1 if none positive
+
+    Raises:
+        JudgementMissingError: If any required cache entry is missing
     """
-    if not pattern:
-        return 0
-    try:
-        regex = re.compile(pattern, re.IGNORECASE)
-    except re.error:
-        # Fall back to literal search if regex is invalid
-        pattern_lower = pattern.lower()
-        for r in reviews:
-            text = r.get("text", "")
-            if pattern_lower in text.lower():
-                return 1
+    if not pattern or not reviews:
         return -1
 
     for r in reviews:
-        text = r.get("text", "")
-        if regex.search(text):
+        review_id = r.get("review_id", "")
+        judgement = check_review_judgement(review_id, pattern)
+        if judgement == "positive":
             return 1
+
     return -1
 
 
@@ -743,15 +807,18 @@ def evaluate_social_filter_from_reviews(reviews: list, pattern: str, social_filt
     """Evaluate review text pattern with social filter using actual review data.
 
     Checks BOTH:
-    1. Review text contains the pattern
+    1. Review mentions the pattern positively (via judgement cache)
     2. Reviewer qualifies under social filter (name in friends or friend-of-friend)
 
     Args:
         reviews: Actual review dicts from loaded data
-        pattern: Pattern to match in review text
+        pattern: Aspect/topic to check (used as cache key)
         social_filter: {"friends": ["Alice", "Bob"], "hops": 1 or 2}
 
     Returns: 1 if condition satisfied, -1 otherwise
+
+    Raises:
+        JudgementMissingError: If any required cache entry is missing
     """
     friends = social_filter.get("friends", [])
     hops = social_filter.get("hops", 1)
@@ -760,26 +827,18 @@ def evaluate_social_filter_from_reviews(reviews: list, pattern: str, social_filt
     if not reviews:
         return -1
 
-    # Build pattern regex
-    try:
-        regex = re.compile(pattern, re.IGNORECASE)
-    except re.error:
-        regex = None
-
     # Load friend_graph for looking up reviewer's friends
     social = get_social_data()
     friend_graph = social.get("friend_graph", {})
 
     matches = 0
     for review in reviews:
-        # 1. Check if review text contains pattern
-        text = review.get("text", "")
-        if regex:
-            if not regex.search(text):
-                continue
-        else:
-            if pattern.lower() not in text.lower():
-                continue
+        review_id = review.get("review_id", "")
+
+        # 1. Check if review mentions pattern positively (via cache)
+        judgement = check_review_judgement(review_id, pattern)
+        if judgement != "positive":
+            continue
 
         # 2. Check if reviewer qualifies under social filter
         user = review.get("user", {})
@@ -807,6 +866,75 @@ def evaluate_social_filter_from_reviews(reviews: list, pattern: str, social_filt
         # 2-hop: reviewer is friend-of-friend of an anchor
         if hops >= 2:
             # Check if any of reviewer's friends has an anchor as their friend
+            is_2hop = False
+            for reviewer_friend in reviewer_friends:
+                friend_of_friend_list = friend_graph.get(reviewer_friend, [])
+                for anchor in friends:
+                    if anchor in friend_of_friend_list:
+                        is_2hop = True
+                        break
+                if is_2hop:
+                    break
+            if is_2hop:
+                matches += 1
+                continue
+
+    return 1 if matches >= min_matches else -1
+
+
+def evaluate_social_rating(reviews: list, social_filter: dict, min_stars: int = 4) -> int:
+    """Evaluate star rating with social filter.
+
+    Checks if someone in the social network gave a high rating.
+
+    Args:
+        reviews: Actual review dicts from loaded data
+        social_filter: {"friends": ["Alice", "Bob"], "hops": 1 or 2}
+        min_stars: Minimum star rating to count (default 4)
+
+    Returns: 1 if condition satisfied, -1 otherwise
+    """
+    friends = social_filter.get("friends", [])
+    hops = social_filter.get("hops", 1)
+    min_matches = social_filter.get("min_matches", 1)
+
+    if not reviews:
+        return -1
+
+    # Load friend_graph for looking up reviewer's friends
+    social = get_social_data()
+    friend_graph = social.get("friend_graph", {})
+
+    matches = 0
+    for review in reviews:
+        # 1. Check if review has high enough stars
+        stars = review.get("stars", 0)
+        if stars < min_stars:
+            continue
+
+        # 2. Check if reviewer qualifies under social filter
+        user = review.get("user", {})
+        reviewer_name = user.get("name", "")
+        reviewer_friends = friend_graph.get(reviewer_name, [])
+
+        # 0-hop: reviewer IS one of the anchor names
+        if reviewer_name in friends:
+            matches += 1
+            continue
+
+        # 1-hop: reviewer is a friend of an anchor
+        if hops >= 1:
+            is_1hop = False
+            for anchor in friends:
+                if anchor in reviewer_friends:
+                    is_1hop = True
+                    break
+            if is_1hop:
+                matches += 1
+                continue
+
+        # 2-hop: reviewer is friend-of-friend of an anchor
+        if hops >= 2:
             is_2hop = False
             for reviewer_friend in reviewer_friends:
                 friend_of_friend_list = friend_graph.get(reviewer_friend, [])
@@ -893,6 +1021,14 @@ def evaluate_condition(item: dict, condition: dict, reviews: list = None) -> int
         if not reviews:
             return 1  # No reviews = not the bad pattern
         return evaluate_review_group_rating_negative(reviews, evidence_spec)
+
+    elif kind == "social_rating":
+        # G09/G10: Star rating with social filter
+        social_filter = evidence_spec.get("social_filter")
+        if not reviews or not social_filter:
+            return -1
+        min_stars = evidence_spec.get("min_stars", 4)
+        return evaluate_social_rating(reviews, social_filter, min_stars)
 
     return 0
 

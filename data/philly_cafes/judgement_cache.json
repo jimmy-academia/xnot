@@ -1,843 +1,1304 @@
 {
-  "-cEFKAznWmI0cledNOIQ7w:gelato": {
-    "business_id": "-cEFKAznWmI0cledNOIQ7w",
-    "business_name": "Gran Caffe L'Aquila",
-    "topic": "gelato",
-    "positive_count": 7,
-    "negative_count": 4,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "Consider making a reservation for this gem. I called early afternoon Saturday to get in for two that evening around 6:30. Host explained he could get us in at that time in the downstairs area, but not"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "Almost overwhelming menu as everything you'd ever want from Italy is here...but when it's delivered to your table, it's nothing you'd ever want to eat.\n\nWhile looking over the menu, we ordered two mix"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I have to start by saying that other than a big love of all things Italian and the fact that I stalked this place as it was being built, and hope it remains successful, I hold no stake or stock in the"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "We walked in and requested a table for 3. The two? three? hostesses looked really confused, but then told us they were going to seat us upstairs in a few minutes. My friend told them we only wanted de"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Find parking, take the train, or get yourself an Uber/Lyft  and just make a \"B\" line to Gran Caffe L'Aquilla! That is all you need to know, because what ever you get from here will simply be AMAZING! "
-      }
-    ]
+  "pi9fHo3DdkX1rN770FZ-LQ:record": {
+    "review_id": "pi9fHo3DdkX1rN770FZ-LQ",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Kevin mentions gramophone mural positively"
   },
-  "iUZEGx29miZObLd6_lt7Vg:challah": {
-    "business_id": "iUZEGx29miZObLd6_lt7Vg",
-    "business_name": "Sabrina's Café",
-    "topic": "challah",
-    "positive_count": 4,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "One of the better and well-known brunch locations in Philly is Sabrina's. Owners Robert and Raquel DeAbreu named the original restaurant on 9th and Christian Streets after their daughter. Recently, fo"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "FINALLY made my way over to callowhill to sample this legend. Ain't NOBODY got time to wait so I used yelp's app to add myself to the list about an hour before patronization. Due to poor time planning"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "After many visits to Philadelphia, and specifically to Sabrina's Cafe, let me break the ice and dedicate this as my first review in Philadelphia, the city of \"Brotherly Love\"! Sabrina's Cafe is a popu"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "We enjoyed our breakfast at Sabrina's Cafe and Spencer's Too in Logan Square, Center City. This local restaurant chain was recommended to us by three separate friends as one of Philadelphia's best spo"
-      }
-    ]
+  "qL2_DokKed7GFDtkKWIw-A:record": {
+    "review_id": "qL2_DokKed7GFDtkKWIw-A",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Victor mentions record store positively"
   },
-  "ZpgVL2z1kgRi954c9m9INw:matcha latte": {
-    "business_id": "ZpgVL2z1kgRi954c9m9INw",
-    "business_name": "United By Blue",
-    "topic": "matcha latte",
-    "positive_count": 2,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "Love love love this place! As a med student, I'm always looking for new places to study. This place fits all the requirements and more!\n\n-$4.00 matcha latte  -- made without sweetener but you can add "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Best thing to happen to this part of Old City! There's no shortage of coffee shops around this part of town that are great for doing work in and have great cups of coffee, but what's great about Unite"
-      }
-    ]
+  "ocKD0skjl94T_I9SAdDMsw:record": {
+    "review_id": "ocKD0skjl94T_I9SAdDMsw",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "George mentions record shop in basement positively"
   },
-  "JrG4NINLspXPNhSXg7Q07Q:terrace": {
-    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
-    "business_name": "Front Street Cafe",
-    "topic": "terrace",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "I went here on a Friday afternoon around 12:30. As soon as I walked up, I knew this would be my kind of place. You walk inside and are welcomed with a bright, clean, modern area. It's beautiful inside"
-      }
-    ]
+  "iTpVEziv_AnuhrXZjMOwgQ:record": {
+    "review_id": "iTpVEziv_AnuhrXZjMOwgQ",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Frank mentions charming LPs positively"
   },
-  "7hpUoYdAVToZXwuPRgoqdA:bring your dog": {
+  "XyTyVdAfVRejZMPo40W4Pw:record": {
+    "review_id": "XyTyVdAfVRejZMPo40W4Pw",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Ian mentions vinyl/coffee shop positively"
+  },
+  "9a5CMp5nXArnJq4aF7ofTQ:record": {
+    "review_id": "9a5CMp5nXArnJq4aF7ofTQ",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Carol mentions record store, record players positively"
+  },
+  "cBXtipUp-EcDezBxa95SUg:record": {
+    "review_id": "cBXtipUp-EcDezBxa95SUg",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "neutral",
+    "note": "Noah mentions vinyl but overall critical review"
+  },
+  "8Iwyqx11u4UFYX1DNr3YGw:record": {
+    "review_id": "8Iwyqx11u4UFYX1DNr3YGw",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Hannah mentions record collection, vinyl shop positively"
+  },
+  "WP75NdDGqmseF0WkbY0X8w:record": {
+    "review_id": "WP75NdDGqmseF0WkbY0X8w",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Alice mentions vinyl record store positively"
+  },
+  "oUgsdBbKwr7PmLaTu-B6mw:record": {
+    "review_id": "oUgsdBbKwr7PmLaTu-B6mw",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "Uma mentions records, vinyl treasure positively"
+  },
+  "y8qK8gHpic8FwRcXve_0-A:record": {
+    "review_id": "y8qK8gHpic8FwRcXve_0-A",
+    "business_id": "e-ZyZc24wgkKafM3pguR2w",
+    "aspect": "record",
+    "judgement": "positive",
+    "note": "David mentions vinyl enthusiastically"
+  },
+  "fzsqiHNxB0-F31OHzhgutQ:record": {
+    "review_id": "fzsqiHNxB0-F31OHzhgutQ",
+    "business_id": "VbGGpt-Q5ZeMxSFPDbPeBg",
+    "aspect": "record",
+    "judgement": "neutral",
+    "note": "Amy just compares atmosphere to a vinyl shop"
+  },
+  "LHZZqDcX3L5-7XPkxb0yQw:dog friendly": {
+    "review_id": "LHZZqDcX3L5-7XPkxb0yQw",
+    "business_id": "fxHNpoMpJPNadLkA-dAFbQ",
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Lucy mentions pet-friendly positively"
+  },
+  "QQ6gvkXu3Ki3bVmPs7hTIg:dog friendly": {
+    "review_id": "QQ6gvkXu3Ki3bVmPs7hTIg",
+    "business_id": "fxHNpoMpJPNadLkA-dAFbQ",
+    "aspect": "dog friendly",
+    "judgement": "neutral",
+    "note": "Rose mentions puppy pictures (decor, not actual dogs)"
+  },
+  "yhU8W0aNXfAPpGIDgRzY6w:dog friendly": {
+    "review_id": "yhU8W0aNXfAPpGIDgRzY6w",
     "business_id": "7hpUoYdAVToZXwuPRgoqdA",
-    "business_name": "Chapterhouse Café & Gallery",
-    "topic": "bring your dog",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "I really prefer not to sit around in coffee shops, but if I'm ever invited out for coffee in Center City I always suggest Chapterhouse first. As far as I'm concerned, it's the best coffee shop in the "
-      }
-    ]
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Peter mentions you can bring your dog in"
   },
-  "zjTBfbvbN2Ps6_Ar0w-fuQ:hidden gem": {
-    "business_id": "zjTBfbvbN2Ps6_Ar0w-fuQ",
-    "business_name": "Hinge Cafe",
-    "topic": "hidden gem",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "the website for hinge cafe lists the following definitions for its namesake:\n      1. a natural and anatomical joint in which motion occurs\n      2. a principal on which something is based or depends\n"
-      }
-    ]
+  "pVhUWrh_ZwwdiAnE8-iWXA:dog friendly": {
+    "review_id": "pVhUWrh_ZwwdiAnE8-iWXA",
+    "business_id": "h8GUsPOX3g2rm4hRElyzdw",
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Lucy brings her puppy, grilled chicken for dog"
   },
-  "3yW8-dUi1wwCEf0URxUA7A:bubble": {
-    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
-    "business_name": "Kung Fu Tea",
-    "topic": "bubble",
-    "positive_count": 4,
-    "negative_count": 3,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "Finally... decent milk tea on the East Coast! Words can't describe how much I miss home, and I contemplate daily about moving back to California because of how much I miss home and... good milk tea/as"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "I was originally super excited about the Kung Fu tea opening in Philly because if this place proved legit I can finally satisfy my boba tea cravings in between the occasional trips to NYC. Unfortunate"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "YESSSSSSSSSSSSS!!! I don't have to travel all the way to NYC for Kung Fu Tea anymore!\n\nWhat makes Kung Fu Tea different from the other bubble tea joints in Philly is that their bubbles actually have f"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "I'm reviewing this place again solely due to half of the staff.\n\nI used to love Kung Fu Tea, but it's grown to be a bittersweet visit every time now.\n\nStaff: I enjoy seeing the originals that have bee"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "After this past summer, I guess you could say I've become a bit of a bubble tea connoisseur. Kung Fu Tea was one of the many places I travelled to in order to really familiarize myself with the Philly"
-      }
-    ]
-  },
-  "oqbhVgliVJH-iRa3AnD-3A:work": {
+  "3ryU0t6HOPhQfYhOEKmnlA:dog friendly": {
+    "review_id": "3ryU0t6HOPhQfYhOEKmnlA",
     "business_id": "oqbhVgliVJH-iRa3AnD-3A",
-    "business_name": "Elixr Coffee Roasters",
-    "topic": "work",
-    "positive_count": 6,
-    "negative_count": 3,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "I never review places while in them. I also am way behind on reviews in general. But I need to review Elixr as I sit in it-\nI have been craving hot chocolate for weeks now, and it got much worse today"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "I tried the coffee at Elixr, and the place looks decent. They use PT's coffee. I would judge them on how they brew the coffee because Elixr has no power over how the coffee is roasted.  If the coffee "
-      },
-      {
-        "stars": 4.0,
-        "snippet": "This place is cool, dude! So probably like many other people, I saw their innovative sidewalk signs every time I passed (or went to) the neighboring Chipotle. (Side note: the one that really got me wa"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I am IN LOVE with this place. I've been wanting to find my regular spot while I'm staying here in Philly for a few weeks. I work online and thrive working out in a coffee shop or cafe rather than sitt"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "tl;dr an edgy, lively coffee bar in the heart of Center City, but admittedly an unideal place to post up for work\n\nWhile strolling down the hustle and bustle of Center City Walnut Street, you may see "
-      }
-    ]
+    "aspect": "dog friendly",
+    "judgement": "negative",
+    "note": "Alice was told dogs not allowed - place is NOT dog-friendly"
   },
-  "1klRUBB6LfKCotq75BVmbA:game": {
-    "business_id": "1klRUBB6LfKCotq75BVmbA",
-    "business_name": "Thirsty Dice",
-    "topic": "game",
-    "positive_count": 8,
-    "negative_count": 6,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 1.0,
-        "snippet": "I was unfortunately very disappointed with Thirsty Dice. We had a large group on a week night, and the place was nearly empty. A few small groups around - but for the most part, a quiet night. \n\nWe ha"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Finally, a place that combines board games with food and drinks in the city! And not only that, a place FILLED with so many types of board games and helpful people to teach you how to play these board"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "My friends and I love games and heard about this place. We decided on friday night to try the place out. I called and asked if they had any room for a party of 10. The lady on the phone told me there'"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "As anyone who has hosted a game night knows, there is nothing better than snacks and libations to make gaming fun. I am really into board games and party games, as is my family, so I was \"down like a "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "The concept of Thirsty Dice met and exceeded my expectations by a long shot!\n\nI loved the layout of the room - much more open-space than you'd think, which allows for the hustle and bustle of people g"
-      }
-    ]
+  "xT5p-RKgWckgwYeeypI-DA:dog friendly": {
+    "review_id": "xT5p-RKgWckgwYeeypI-DA",
+    "business_id": "jI2qMScDKP9a8uxZ6w97yA",
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Frank sits outside with his dog"
   },
-  "JrG4NINLspXPNhSXg7Q07Q:brunch": {
-    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
-    "business_name": "Front Street Cafe",
-    "topic": "brunch",
-    "positive_count": 3,
-    "negative_count": 2,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 2.0,
-        "snippet": "I'm going to preface this review by saying that I am thrilled to have a spot like this so close to home. The variety of offerings from one venue with hours that practically make it a 24-hour operation"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "It's just nice to see something done right. A restaurant/cafe/bar/performance space seems like a recipe for disaster, but thoughtful attention to the customer experience down to small details make thi"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "Gorgeous, HUGE place.  Interior and massive outdoors patio is what dream eateries are made of.  Cool, clean, with a little industrial, a little farmhouse. There is so much room, you feel like you can "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "The following review is for brunch:\n\nCame here on Saturday morning as I had bookmarked this place for a while and heard great things. I am not a vegan, but lactose intolerant and have a difficult time"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "Ok, so my first time here was not my favorite dining experience. Actually, it's my least favorite dining experience of all time!!! My car got towed (illegally come to find out) on Front Street, in fro"
-      }
-    ]
+  "jtplilj-JzEm6J5q0KHMEw:dog friendly": {
+    "review_id": "jtplilj-JzEm6J5q0KHMEw",
+    "business_id": "2ZSnGlqj8JOWcN2bNf-3SQ",
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Oscar mentions dog biscuits for canines"
   },
-  "3yW8-dUi1wwCEf0URxUA7A:wine": {
-    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
-    "business_name": "Kung Fu Tea",
-    "topic": "wine",
-    "positive_count": 2,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "YESSSSSSSSSSSSS!!! I don't have to travel all the way to NYC for Kung Fu Tea anymore!\n\nWhat makes Kung Fu Tea different from the other bubble tea joints in Philly is that their bubbles actually have f"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "For Philly, this is the best bubble tea joint minus a few caveats so I would give this place 4 to 4.5 stars. I've tried all the other bubble tea places in Chinatown (Rising Tide, Tea Magic, Tea Do, Te"
-      }
-    ]
-  },
-  "zjTBfbvbN2Ps6_Ar0w-fuQ:music": {
-    "business_id": "zjTBfbvbN2Ps6_Ar0w-fuQ",
-    "business_name": "Hinge Cafe",
-    "topic": "music",
-    "positive_count": 2,
-    "negative_count": 1,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "It's been far too long since I've written anything here.  Holidays, cooking in, cold weather, and nothing too exciting on the restaurant front have all conspired against me trying out new places. I'll"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I know that if I'm going to update my review, I should do it because my opinion changed, but GUESS WHAT? I still think this place is the best, I just have more reasons to think so now. \n\nI've gone to "
-      },
-      {
-        "stars": 1.0,
-        "snippet": "The food was good. Pretty good. I'd eat there again just for the delicious food. But the older woman running the show behind the counter needs to improve her leadership skills and refrain from treatin"
-      }
-    ]
-  },
-  "ZpgVL2z1kgRi954c9m9INw:love": {
-    "business_id": "ZpgVL2z1kgRi954c9m9INw",
-    "business_name": "United By Blue",
-    "topic": "love",
-    "positive_count": 6,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "I'm not a big retail shopper, but we were lured by the groupon carrot that gave you twice the cash as well as a coffee and Danish. Sold! The decor of this place appeals to me, with many up cycled and "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I'm a big fan of United By Blue's atmosphere, products, coffee, and environmental cause! I often walk through this part of the city, and I have stopped in several times just because I love the vibe. I"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "So I'm a little torn on this place! I would lean towards 3.5 stars, but I love their cause, so they definitely get upgraded for that.\n\nThis place is a combo store/coffee shop. I love that it doesn't g"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "This place is an entire experience! We enjoyed it from beginning to end! Walking distance from old city, we chose here on elite Saturday afternoon! By the time we got there was about 1230 and there wa"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Love love love this place! As a med student, I'm always looking for new places to study. This place fits all the requirements and more!\n\n-$4.00 matcha latte  -- made without sweetener but you can add "
-      }
-    ]
-  },
-  "JrG4NINLspXPNhSXg7Q07Q:quiet": {
-    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
-    "business_name": "Front Street Cafe",
-    "topic": "quiet",
-    "positive_count": 2,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "When I popped in after work around 5:30, the place was quiet. Just a few patrons and their laptops posted up at the bar, and couple of folks sprinkled at tables. I came in the front door where you can"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "My company had a meeting here one afternoon around lunch time. \n\nWe called ahead to let them know a large party would be coming, and they saved a seat for us upstairs at a large table. The upstairs is"
-      }
-    ]
-  },
-  "BaSwNEingTmrBw4shffK5w:recommend": {
-    "business_id": "BaSwNEingTmrBw4shffK5w",
-    "business_name": "Function Coffee Labs",
-    "topic": "recommend",
-    "positive_count": 2,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "Function Coffee Labs is one of those places that literally read into exactly what I needed to function on any given morning! But it also won me over because of incredible baked goods and cool South Ph"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Judging from their yelp page, Function Coffee Labs doesn't need another 5 star review. Alas, here we are!\n\nI've only been here once, but I am in love. Came down here one morning to explore the Italian"
-      }
-    ]
-  },
-  "oqbhVgliVJH-iRa3AnD-3A:hidden gem": {
-    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
-    "business_name": "Elixr Coffee Roasters",
-    "topic": "hidden gem",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "This place is cool, dude! So probably like many other people, I saw their innovative sidewalk signs every time I passed (or went to) the neighboring Chipotle. (Side note: the one that really got me wa"
-      }
-    ]
-  },
-  "7hpUoYdAVToZXwuPRgoqdA:organic": {
-    "business_id": "7hpUoYdAVToZXwuPRgoqdA",
-    "business_name": "Chapterhouse Café & Gallery",
-    "topic": "organic",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "I really prefer not to sit around in coffee shops, but if I'm ever invited out for coffee in Center City I always suggest Chapterhouse first. As far as I'm concerned, it's the best coffee shop in the "
-      }
-    ]
-  },
-  "iUZEGx29miZObLd6_lt7Vg:recommend": {
-    "business_id": "iUZEGx29miZObLd6_lt7Vg",
-    "business_name": "Sabrina's Café",
-    "topic": "recommend",
-    "positive_count": 3,
-    "negative_count": 1,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "I took my parents here when they came to Philadelphia to visit me, and for people that claim not to like American food, they sure seemed to have enjoyed their choices! So did I!\n\nI've been a long-time"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "Another recommendation from our Airbnb host. This is also supposed to be one of the top brunches in town. \n\nWe needed a tasty brunch/breakfast before we started off our Art Museum Sunday so we decided"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "I was visiting Philadelphia with my sister and she who lives here recommended Sabrina's Cafe. What a big mistake!!!!  This place has no sense of an organized process for seating.  We were told we woul"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "We enjoyed our breakfast at Sabrina's Cafe and Spencer's Too in Logan Square, Center City. This local restaurant chain was recommended to us by three separate friends as one of Philadelphia's best spo"
-      }
-    ]
-  },
-  "noBinj5ChHbPCHfqTcUO6g:cozy": {
-    "business_id": "noBinj5ChHbPCHfqTcUO6g",
-    "business_name": "Plenty Café",
-    "topic": "cozy",
-    "positive_count": 4,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "Plenty is my new favorite study haven! Lofts are kind of enchanting places for me (something akin to hammocks and tree houses), and I absolutely love that Plenty has such a cute cozy little loft, one "
-      },
-      {
-        "stars": 4.0,
-        "snippet": "My lunch plans with a friend were cancelled, so I ventured out and decided to give this place a try. I've passed by it so many times but never went in! I checked out the menu online first (to try and "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Hands down the best spot for coffee and a sandwich in the neighborhood! \n\nThe sandwich selection is unique and of top quality from local vendors. Local roasters are also featured; Rival Bros., ReAnima"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Plenty Cafe is my go-to spot for easy Sunday mornings paired with a great book. \n\nAfter trying this place once, it's slowly turning into my Sunday haven where I can hide away, devour some delicious fo"
-      }
-    ]
-  },
-  "MlXH9dWYDFEBbwuGStlfZg:latte": {
-    "business_id": "MlXH9dWYDFEBbwuGStlfZg",
-    "business_name": "La Colombe Coffee",
-    "topic": "latte",
-    "positive_count": 4,
-    "negative_count": 2,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "I have been anxiously awaiting the opening of this coffee gem on Frankford and I can confidently say that it was worth the wait. The space is HUGE and seriously gorgeous. The attention to detail is am"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "La Colombe has great product, but unless you're taking it home to brew yourself then don't waste your money. THEIR BARISTAS SUCK SO BAD- I'd be shocked to learn that they spend more than an hour train"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "The best analogy I can compare La Colombe's coffee to is like eating pineapple in Hawaii. My whole life I had been used to the taste of imported pineapples from Costa Rica (and wherever else they come"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "Ugh. Where do I start!? I love La Colombe Coffee. I traveled all the way from NYC to their flagship store on Frankford Ave on my visit to Philly. (On 8/16/19 around 7pm) From the moment  we (my husban"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "A visit to this La Colombe Philly flagship is an experience. It's more than just grabbing a quick cup of coffee...or at least it should be. The space located in the ever flourishing Fishtown neighborh"
-      }
-    ]
-  },
-  "MlXH9dWYDFEBbwuGStlfZg:work": {
-    "business_id": "MlXH9dWYDFEBbwuGStlfZg",
-    "business_name": "La Colombe Coffee",
-    "topic": "work",
-    "positive_count": 6,
-    "negative_count": 2,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 1.0,
-        "snippet": "The decor is awesome! Some of the breads are ok. The experience is garbage. \n\nI went here on a rainy Monday. I walked up to the counter where there were 5 people working. It took a full 2min for someo"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "The infamous La Colombe, Frankford Ave...I want to give this barn like palace five stars but I just can't. Let's talk about the good stuff first... \n\nThe artsy Fishtown location feels dominating and t"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "I really really REALLY want to like this place, but every single time they give me a reason to walk out grumbling and thinking I should have just gone to McDonalds for a cup of coffee and nicer people"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "If you want the best coffee on the East Coast,* come to La Colombe. Period.\n\nThe Fishtown location is grand and gorgeous.  It is a beautiful space with industrial aesthetic.  Lots of natural light.  I"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "The best analogy I can compare La Colombe's coffee to is like eating pineapple in Hawaii. My whole life I had been used to the taste of imported pineapples from Costa Rica (and wherever else they come"
-      }
-    ]
-  },
-  "0Z8ps_OfcR9eJaV2JtxigA:music": {
+  "bmAgPKGF97FqmD7IHy4-tw:dog friendly": {
+    "review_id": "bmAgPKGF97FqmD7IHy4-tw",
     "business_id": "0Z8ps_OfcR9eJaV2JtxigA",
-    "business_name": "Square One Coffee",
-    "topic": "music",
-    "positive_count": 5,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "Delicious coffee - check!\nFree seltzer water at the perfect temperature - bonus!\nFriendly barista who welcomed me - yes!\n\nCan we talk about the meticulous planning that was required to purify the wate"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "Square One Coffee is a hipster coffee joint that has a lot of comfortable and eclectic seating (they have a couch!), good wifi and its a big open space. It has pleasent decor and big windows with natu"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "I really appreciate a coffee shop that makes you feel productive/creative as soon as you walk in the door. A big part of the reason I go to local coffee shops is to feel inspired by the environment. T"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I really love this cute, comfortable and quiet coffee shop which to me feels somewhat like a bookstore with the comfy couches, wooden tables and chairs, it's quite refreshing to actually be able to he"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I live right around the corner from this coffee shop and don't come here nearly enough. I stopped by on a Sunday morning with my father and it wasn't busy at all. In fact, most of the time I walk by, "
-      }
-    ]
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Peter mentions adorable pups outside"
   },
-  "3yW8-dUi1wwCEf0URxUA7A:boba": {
-    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
-    "business_name": "Kung Fu Tea",
-    "topic": "boba",
-    "positive_count": 5,
-    "negative_count": 3,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "Finally... decent milk tea on the East Coast! Words can't describe how much I miss home, and I contemplate daily about moving back to California because of how much I miss home and... good milk tea/as"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "I was originally super excited about the Kung Fu tea opening in Philly because if this place proved legit I can finally satisfy my boba tea cravings in between the occasional trips to NYC. Unfortunate"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "The last time I was here was when it first opened and I was impressed by the location. This time I went to take a friend and help him experience boba tea for the first time. What I noticed that was di"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "I've ordered taro at other Kung Fu locations and  never had bad tea. I've ordered taro all over and it has always been purple. Their boba is sweet and perfectly cooked but something is desperately wro"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "Went here with a couple friends because we had a hankering for something sweet after eating at a restaurant in Chinatown. Boba tea just felt right to us, even though it was a chilly day. I personally "
-      }
-    ]
+  "7Wlh8bIBdwn7d6SDsC82Cg:dog friendly": {
+    "review_id": "7Wlh8bIBdwn7d6SDsC82Cg",
+    "business_id": "yNHqrPWGk_6tw-dhrYZe3A",
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Peter mentions dog-friendly place positively"
   },
-  "oqbhVgliVJH-iRa3AnD-3A:espresso": {
-    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
-    "business_name": "Elixr Coffee Roasters",
-    "topic": "espresso",
-    "positive_count": 5,
-    "negative_count": 1,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "This is my favorite artisanal coffee shop in Philadelphia. AND it's in my old hood so I didn't even have to walk past Broad street to get good coffee. Plus they have awesome slate tiling, marble count"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "This place is cool, dude! So probably like many other people, I saw their innovative sidewalk signs every time I passed (or went to) the neighboring Chipotle. (Side note: the one that really got me wa"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "Change has not been for the better over at Elixir. I love, love to taut this places as the best espresso in the city, however, the treatment of patrons here is bordering ridiculous. There's always bee"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I am IN LOVE with this place. I've been wanting to find my regular spot while I'm staying here in Philly for a few weeks. I work online and thrive working out in a coffee shop or cafe rather than sitt"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "tl;dr an edgy, lively coffee bar in the heart of Center City, but admittedly an unideal place to post up for work\n\nWhile strolling down the hustle and bustle of Center City Walnut Street, you may see "
-      }
-    ]
+  "9FctOWdXXO92hcA2p9xqBA:dog friendly": {
+    "review_id": "9FctOWdXXO92hcA2p9xqBA",
+    "business_id": "yNHqrPWGk_6tw-dhrYZe3A",
+    "aspect": "dog friendly",
+    "judgement": "negative",
+    "note": "George criticizes dog-friendly policy (dislikes dogs)"
   },
-  "1klRUBB6LfKCotq75BVmbA:friendly": {
-    "business_id": "1klRUBB6LfKCotq75BVmbA",
-    "business_name": "Thirsty Dice",
-    "topic": "friendly",
-    "positive_count": 6,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "Finally, a place that combines board games with food and drinks in the city! And not only that, a place FILLED with so many types of board games and helpful people to teach you how to play these board"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "As anyone who has hosted a game night knows, there is nothing better than snacks and libations to make gaming fun. I am really into board games and party games, as is my family, so I was \"down like a "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "The concept of Thirsty Dice met and exceeded my expectations by a long shot!\n\nI loved the layout of the room - much more open-space than you'd think, which allows for the hustle and bustle of people g"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "Overall I had a lot of fun here. I went with a group of 4 on a Saturday night. The hostess was super friendly, she said it might be a 45 minute wait so we checked out the games and got drinks at the b"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "I wish I could do a 4.5 star review!!! \nI had no idea what to expect entering Thirsty Dice but I felt like the staff truly wanted us to enjoy ourselves!! \nWe were told by the hostess it would be an ho"
-      }
-    ]
+  "3uWPWBbGeMIlU8V3fCemhQ:terrace": {
+    "review_id": "3uWPWBbGeMIlU8V3fCemhQ",
+    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
+    "aspect": "terrace",
+    "judgement": "positive",
+    "note": "Mia mentions outside terrace area positively"
   },
-  "-cEFKAznWmI0cledNOIQ7w:favorite": {
+  "N-stexeAl5uo8raGZU6JVw:wine bar": {
+    "review_id": "N-stexeAl5uo8raGZU6JVw",
     "business_id": "-cEFKAznWmI0cledNOIQ7w",
-    "business_name": "Gran Caffe L'Aquila",
-    "topic": "favorite",
-    "positive_count": 5,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "I have to start by saying that other than a big love of all things Italian and the fact that I stalked this place as it was being built, and hope it remains successful, I hold no stake or stock in the"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Find parking, take the train, or get yourself an Uber/Lyft  and just make a \"B\" line to Gran Caffe L'Aquilla! That is all you need to know, because what ever you get from here will simply be AMAZING! "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Came here for my boyfriend's birthday dinner earlier this year, and I've been wanting to come back ever since! Just the other day, I found an excuse to pop in for some gelato. This versatile establish"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "Tonight was my second time here, and after having experienced drinks, food and service, I'm ready to write a review- and its a great one!\nBoth of my visits to Gran Caffe l'Aquila were work-related (ju"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "I came here for restaurant week with a close friend and it was such a memorable experience! If you're looking for an aesthetic dinner place with \"city vibes,\" this would be an excellent place to go.\n\n"
-      }
-    ]
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Ivy praises Italian wine menu as thorough and extensive"
   },
-  "zujdPV3HT-Y-CKE1GgkMHQ:breakfast": {
-    "business_id": "zujdPV3HT-Y-CKE1GgkMHQ",
-    "business_name": "The Bakeshop on 20th",
-    "topic": "breakfast",
-    "positive_count": 7,
-    "negative_count": 2,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 2.0,
-        "snippet": "So maybe we got the wrong thing for breakfast, but the savory breakfast sandwiches were not particularly warm with soggy flatbread. The bacon in the bacon egg and cheese was good, but the rest of the "
-      },
-      {
-        "stars": 4.0,
-        "snippet": "The Bakeshop on 20th gets a whole lot of attention for both their savory and sweet offerings, and I fully understand why.\n\nStar 1: How were the service and atmosphere?\n\nThere's nothing quite like a qu"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "I'm so happy I finally got to try this place after seeing all the foodie-blogger Instagram photos of sprinkle-covered cracked open cookies oozing rainbow whatever in someone's manicured hand.\n\nStopped"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Spent a night in Philly a couple weeks back and wanted to pop in somewhere for a quick breakfast before heading out in the AM. Yelp came to the rescue after a search for breakfast sandwiches yielded t"
-      },
-      {
-        "stars": 1.0,
-        "snippet": "Ordered a breakfast cookie and when I asked whether there were peanuts in it the answer was \"I don't know, there is a nut mix in it so I would rather you not take the risk\". I later learned this was t"
-      }
-    ]
+  "gzzhNVhQxL1pN3KM5VpniA:wine bar": {
+    "review_id": "gzzhNVhQxL1pN3KM5VpniA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Grace mentions wine selection was tempting"
   },
-  "qaDImxPguQz0jToNYvB1Eg:delicious": {
-    "business_id": "qaDImxPguQz0jToNYvB1Eg",
-    "business_name": "Café y Chocolate",
-    "topic": "delicious",
-    "positive_count": 8,
-    "negative_count": 2,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "I crave this place and always want to go every weekend; however the length of time from sitting, ordering, waiting for food, and finally eating, (for even just 2 people) could end up taking 2 hours ou"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "I recently moved to this South Philly neighborhood and I kept seeing the sign for cafe con chocolate out of the corner of my eye.  Always while heading in the opposite direction.  Well today I discove"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "Wow what a cute little oasis of a cafe in a strangely not-so-nice neighborhood. The lady working at the counter is this super-sweet girl who provided excellent service. Don't get me started on the tra"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "This is my new favorite restaurant. Seriously. Went for dinner without expectations, despite the amazing reviews here. It's in a totally middle-of-nowhere location, but it's right of 76. It's a tiny p"
-      },
-      {
-        "stars": 2.0,
-        "snippet": "I've heard so many wonderful things about this place, but I was so severely disappointed.\n\nWe came in as a party of 4, and got seated immediately. However, even though we got seated immediately, we ha"
-      }
-    ]
+  "wYntctd9FMu7Ip8BFCo2GQ:wine bar": {
+    "review_id": "wYntctd9FMu7Ip8BFCo2GQ",
+    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Emma mentions wine by the glass at happy hour positively"
   },
-  "K7KHmHzxNwzqiijSJeKe_A:excellence": {
-    "business_id": "K7KHmHzxNwzqiijSJeKe_A",
-    "business_name": "Cafe La Maude",
-    "topic": "excellence",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "As a long time Northern Liberties resident I am thrilled that this intimate little bistro opened within walking distance of my house. Latte Lounge, the owner-operated coffee shop that used to occupy t"
-      }
-    ]
+  "-aAYTj0i5vbZ_1Ya_Ms_mw:wine bar": {
+    "review_id": "-aAYTj0i5vbZ_1Ya_Ms_mw",
+    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Grace got a glass of wine positively"
   },
-  "zjTBfbvbN2Ps6_Ar0w-fuQ:hinge": {
-    "business_id": "zjTBfbvbN2Ps6_Ar0w-fuQ",
-    "business_name": "Hinge Cafe",
-    "topic": "hinge",
-    "positive_count": 6,
-    "negative_count": 2,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "It's been far too long since I've written anything here.  Holidays, cooking in, cold weather, and nothing too exciting on the restaurant front have all conspired against me trying out new places. I'll"
-      },
-      {
-        "stars": 5.0,
-        "snippet": "I know that if I'm going to update my review, I should do it because my opinion changed, but GUESS WHAT? I still think this place is the best, I just have more reasons to think so now. \n\nI've gone to "
-      },
-      {
-        "stars": 5.0,
-        "snippet": "if more stars were an option, i would rate hinge higher.\n\npicture it: \n\nport richmond, wednesday, late into the afternoon, and needing a cake for the girlfriend's birthday by friday evening.\n\nentered "
-      },
-      {
-        "stars": 4.0,
-        "snippet": "the website for hinge cafe lists the following definitions for its namesake:\n      1. a natural and anatomical joint in which motion occurs\n      2. a principal on which something is based or depends\n"
-      },
-      {
-        "stars": 4.0,
-        "snippet": "With our wedding only a week away my fiance and I are trying to keep ourselves relaxed before the family shows up (which usually requires us to work our way through a bottle of aspirin or a bottle of "
-      }
-    ]
+  "z9A4AI5o4zzfS6-Gye7tIQ:wine bar": {
+    "review_id": "z9A4AI5o4zzfS6-Gye7tIQ",
+    "business_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "aspect": "wine bar",
+    "judgement": "neutral",
+    "note": "Hannah mentions wine but context is about slow service"
   },
-  "3UBG2rwjgP-6ifTAuKl3Gg:herbal": {
-    "business_id": "3UBG2rwjgP-6ifTAuKl3Gg",
-    "business_name": "Steap and Grind",
-    "topic": "herbal",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "Steap and Grind first had me with its intricate ironwork gates with butterflies and fish. But as I entered within I discovered a caffeinated utopia of incredible coffees and loose leaf teas from aroun"
-      }
-    ]
+  "pskasR1Ju4Knl3xiLvoM-Q:wine bar": {
+    "review_id": "pskasR1Ju4Knl3xiLvoM-Q",
+    "business_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Jack impressed by wine list"
   },
-  "lh3ApskP-4XVdsQ-82792g:homework": {
-    "business_id": "lh3ApskP-4XVdsQ-82792g",
-    "business_name": "Last Drop",
-    "topic": "homework",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "I went there to meet someone for a coffee date. It's one of her favorite place and it was my first time going there. I walked in and noticed that it was dark - but the sunlight made it bright. Maybe t"
-      }
-    ]
+  "I2ezMvPqNL9pRYyzpTopGA:wine bar": {
+    "review_id": "I2ezMvPqNL9pRYyzpTopGA",
+    "business_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "aspect": "wine bar",
+    "judgement": "neutral",
+    "note": "Julia mentions wine tasting events, neutral context"
   },
-  "ZpgVL2z1kgRi954c9m9INw:bison": {
-    "business_id": "ZpgVL2z1kgRi954c9m9INw",
-    "business_name": "United By Blue",
-    "topic": "bison",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 4.0,
-        "snippet": "Like reviewer Naomi C., we came here from the Wyndham. It's a different world - like something out of Portland. Take a moment to eye the merch as you pass through the store.\n\nYou order from a counter,"
-      }
-    ]
+  "5TMbXzFUI8Pq_LjhPAIslA:wine bar": {
+    "review_id": "5TMbXzFUI8Pq_LjhPAIslA",
+    "business_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Nina praises wine selection as nifty"
   },
-  "7hpUoYdAVToZXwuPRgoqdA:writers": {
+  "hmovvHWG0GUeM7kZ6SCuag:wine bar": {
+    "review_id": "hmovvHWG0GUeM7kZ6SCuag",
+    "business_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "aspect": "wine bar",
+    "judgement": "negative",
+    "note": "Peter had bad wine service experience"
+  },
+  "sT39Z3QR83tZRqXPjnbWlw:wine bar": {
+    "review_id": "sT39Z3QR83tZRqXPjnbWlw",
+    "business_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "aspect": "wine bar",
+    "judgement": "positive",
+    "note": "Ben mentions wine bars positively as concept"
+  },
+  "aYciYauVI-gC0nic0Q2Rdw:writers": {
+    "review_id": "aYciYauVI-gC0nic0Q2Rdw",
+    "business_id": "2SevIwjgGdDdkIfs3Peu-Q",
+    "aspect": "writers",
+    "judgement": "positive",
+    "note": "Frank mentions literary mag Apiary positively"
+  },
+  "jHLeytqauBOMvZxtmryrzw:writers": {
+    "review_id": "jHLeytqauBOMvZxtmryrzw",
     "business_id": "7hpUoYdAVToZXwuPRgoqdA",
-    "business_name": "Chapterhouse Café & Gallery",
-    "topic": "writers",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "I have a confession to make. I have lived a half block from the chapterhouse for going on 3 years, and I had never been there. I do not know why. I've always been a starbucks girl, even though I know "
-      }
-    ]
+    "aspect": "writers",
+    "judgement": "positive",
+    "note": "Rose mentions writers loving the place"
   },
-  "iUZEGx29miZObLd6_lt7Vg:medley": {
+  "bqE9zeFzHo8VsF5M3o9lDQ:writers": {
+    "review_id": "bqE9zeFzHo8VsF5M3o9lDQ",
+    "business_id": "7hpUoYdAVToZXwuPRgoqdA",
+    "aspect": "writers",
+    "judgement": "positive",
+    "note": "Xavier wrote a novel there - strong positive"
+  },
+  "G-Nm_Id7Ze3ySbviXfGq9A:writers": {
+    "review_id": "G-Nm_Id7Ze3ySbviXfGq9A",
+    "business_id": "7hpUoYdAVToZXwuPRgoqdA",
+    "aspect": "writers",
+    "judgement": "positive",
+    "note": "Victor is an author considering book signing (place is writer-friendly)"
+  },
+  "QLfLXC6BBWrHJOAJUW13rQ:writers": {
+    "review_id": "QLfLXC6BBWrHJOAJUW13rQ",
+    "business_id": "7hpUoYdAVToZXwuPRgoqdA",
+    "aspect": "writers",
+    "judgement": "positive",
+    "note": "Henry mentions Book Club positively"
+  },
+  "rweblQ3Wi_gFtKbQr--lZw:writers": {
+    "review_id": "rweblQ3Wi_gFtKbQr--lZw",
+    "business_id": "BqvKbM7EOI0jXs0G-h2C9g",
+    "aspect": "writers",
+    "judgement": "positive",
+    "note": "Olivia mentions poetry readings"
+  },
+  "sXCXZtPbFIizM67-JBZaYA:writers": {
+    "review_id": "sXCXZtPbFIizM67-JBZaYA",
+    "business_id": "BqvKbM7EOI0jXs0G-h2C9g",
+    "aspect": "writers",
+    "judgement": "neutral",
+    "note": "Henry sarcastically mentions great American novel"
+  },
+  "AbZBtt9GFeKN7aTRKGnPCQ:boba": {
+    "review_id": "AbZBtt9GFeKN7aTRKGnPCQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Ivy loves milk tea, misses home"
+  },
+  "LdCwNzN-Qrkrkw2Hju-bZw:boba": {
+    "review_id": "LdCwNzN-Qrkrkw2Hju-bZw",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Bob disappointed after first visit"
+  },
+  "01H3P5h7yFXuNdz2ntUdMQ:boba": {
+    "review_id": "01H3P5h7yFXuNdz2ntUdMQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Xavier questions expectations"
+  },
+  "rhU9LUN0iKRm4Oy5qNiUwg:boba": {
+    "review_id": "rhU9LUN0iKRm4Oy5qNiUwg",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Peter had bad service, ran out"
+  },
+  "Dqrz5chnY70_EvvlhiK3-w:boba": {
+    "review_id": "Dqrz5chnY70_EvvlhiK3-w",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Yara praises bubbles flavor"
+  },
+  "6GLtJukrAlylEYs90sSNsw:boba": {
+    "review_id": "6GLtJukrAlylEYs90sSNsw",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Carol says save time, go elsewhere"
+  },
+  "ZDZs0TLNKiy5RdJTZf0oFQ:boba": {
+    "review_id": "ZDZs0TLNKiy5RdJTZf0oFQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Oscar introduces friend to boba"
+  },
+  "42pEbtO2EKKCS4yLJx6baA:boba": {
+    "review_id": "42pEbtO2EKKCS4yLJx6baA",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Alice says did not live up to hype"
+  },
+  "TH-9gULc2ab-uQPWkSNmUg:boba": {
+    "review_id": "TH-9gULc2ab-uQPWkSNmUg",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Mia is huge fan"
+  },
+  "f2RGPrjbKcysx4IEnjMtDQ:boba": {
+    "review_id": "f2RGPrjbKcysx4IEnjMtDQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Amy says boba is sweet and perfectly cooked"
+  },
+  "VzobE7cBtaOnovQmMrZ7jQ:boba": {
+    "review_id": "VzobE7cBtaOnovQmMrZ7jQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Tina wanted boba"
+  },
+  "wel8r3j2RbtJB_xoga1y_g:boba": {
+    "review_id": "wel8r3j2RbtJB_xoga1y_g",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Dan criticizes pricing"
+  },
+  "wLifL2dchOKMlNlbgFth-Q:boba": {
+    "review_id": "wLifL2dchOKMlNlbgFth-Q",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Chloe is bubble tea connoisseur"
+  },
+  "ihalR00qFEfs7v_pRHAhnQ:boba": {
+    "review_id": "ihalR00qFEfs7v_pRHAhnQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Olivia praises tapioca"
+  },
+  "y5aMwxEd5Tp6Ks2eCyTAqA:boba": {
+    "review_id": "y5aMwxEd5Tp6Ks2eCyTAqA",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "David says dont be fooled"
+  },
+  "5ib_f_PahfDt23sKikYv8A:boba": {
+    "review_id": "5ib_f_PahfDt23sKikYv8A",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Grace says best bubble tea in Philly"
+  },
+  "BtTG4SQ46YZ_N_CRaU43NQ:boba": {
+    "review_id": "BtTG4SQ46YZ_N_CRaU43NQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Rose praises yogurt lemonade"
+  },
+  "vB3cxpIRK5wiPlRXN9VL0w:boba": {
+    "review_id": "vB3cxpIRK5wiPlRXN9VL0w",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Hannah looked up boba places"
+  },
+  "7A_ydNmWIN6OXAjwodYFOA:boba": {
+    "review_id": "7A_ydNmWIN6OXAjwodYFOA",
+    "business_id": "nL3wGR6xbFLMdhyKEvPZuQ",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Sam says tea diluted, bubbles gummy"
+  },
+  "R0YRdw8JNwH8sEVLFetD2w:boba": {
+    "review_id": "R0YRdw8JNwH8sEVLFetD2w",
+    "business_id": "nL3wGR6xbFLMdhyKEvPZuQ",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Peter came for milk tea"
+  },
+  "O4x7uZHe8WSNkMqWk3ds0Q:boba": {
+    "review_id": "O4x7uZHe8WSNkMqWk3ds0Q",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Rose hasnt tried chinatown bubble tea"
+  },
+  "t6Hrz3ylHpQ6VEDMz_0F6g:boba": {
+    "review_id": "t6Hrz3ylHpQ6VEDMz_0F6g",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "George says bubble tea is good"
+  },
+  "QFjP4fH_I_DT6sjX-KNz4w:boba": {
+    "review_id": "QFjP4fH_I_DT6sjX-KNz4w",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Hannah didnt come for bubble tea"
+  },
+  "8yvKEraeaRhQmkiHeYJpoA:boba": {
+    "review_id": "8yvKEraeaRhQmkiHeYJpoA",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Wendy says milk tea is terrible"
+  },
+  "METE3Kj7G2yG-C9xReU-1A:boba": {
+    "review_id": "METE3Kj7G2yG-C9xReU-1A",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Chloe says decent bubble tea"
+  },
+  "tsawa-Bq_dRSz6W7wDERvw:boba": {
+    "review_id": "tsawa-Bq_dRSz6W7wDERvw",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Nina says bubble tea watery"
+  },
+  "oIKudzp2x65I_R4CT1MJbg:boba": {
+    "review_id": "oIKudzp2x65I_R4CT1MJbg",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Alice is fan of bubble tea"
+  },
+  "Qm2woy9KR2frM485SmevmA:boba": {
+    "review_id": "Qm2woy9KR2frM485SmevmA",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Lucy says bubble tea was good"
+  },
+  "RktZ8pBtuSk_M1UTdnuT2w:boba": {
+    "review_id": "RktZ8pBtuSk_M1UTdnuT2w",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Ben says bubble teas are good"
+  },
+  "O63FdGzkjhiSdPrPSWTt6A:boba": {
+    "review_id": "O63FdGzkjhiSdPrPSWTt6A",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Grace mentions bubble tea bar"
+  },
+  "IioTosFXTcW6dE0rV736YA:boba": {
+    "review_id": "IioTosFXTcW6dE0rV736YA",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Ian says quality varies"
+  },
+  "UkG-iDeMPYmj7GHb7vVopQ:boba": {
+    "review_id": "UkG-iDeMPYmj7GHb7vVopQ",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Amy says watered down, undercooked boba"
+  },
+  "cAe6mYdaig04vw-H2S3RJA:boba": {
+    "review_id": "cAe6mYdaig04vw-H2S3RJA",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "negative",
+    "note": "Xavier says worst bubble tea ever"
+  },
+  "cYFbhqTY18vDUnLvHsZ1sw:boba": {
+    "review_id": "cYFbhqTY18vDUnLvHsZ1sw",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Emma says bubble tea delicious"
+  },
+  "_o3vzdnZ81SuALXnEXC4TQ:boba": {
+    "review_id": "_o3vzdnZ81SuALXnEXC4TQ",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "positive",
+    "note": "Victor says pearl tea quite nice"
+  },
+  "KhIhlfHcCCM9gW9G4TktjQ:boba": {
+    "review_id": "KhIhlfHcCCM9gW9G4TktjQ",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Frank says bubble tea acceptable"
+  },
+  "nVGb0-NxeoZrh5FrPQcRqg:boba": {
+    "review_id": "nVGb0-NxeoZrh5FrPQcRqg",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "boba",
+    "judgement": "neutral",
+    "note": "Mike suggests other places for standard bubble tea"
+  },
+  "2rINO_ddFGcOQJcGw-Cwow:espresso": {
+    "review_id": "2rINO_ddFGcOQJcGw-Cwow",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Sam ordered espresso ristretto"
+  },
+  "exVZxIzf-RS0d_zETJJ0KA:espresso": {
+    "review_id": "exVZxIzf-RS0d_zETJJ0KA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "neutral",
+    "note": "Julia skipped espresso due to disappointment"
+  },
+  "N-stexeAl5uo8raGZU6JVw:espresso": {
+    "review_id": "N-stexeAl5uo8raGZU6JVw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Ivy says espresso is best in America"
+  },
+  "Pslqv6D8b-xWZ7LQDOuS9w:espresso": {
+    "review_id": "Pslqv6D8b-xWZ7LQDOuS9w",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Noah enjoyed espresso with chocolate"
+  },
+  "QVgJaGNaAiIuAL3PBAqTRw:espresso": {
+    "review_id": "QVgJaGNaAiIuAL3PBAqTRw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Alice had affogato (espresso+ice cream)"
+  },
+  "hkoSbLeTx7ilyNAUkxI6eg:espresso": {
+    "review_id": "hkoSbLeTx7ilyNAUkxI6eg",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Chloe mentions nice espresso flavor"
+  },
+  "o2Wv2ygnuF4lMJqlMlH4VA:espresso": {
+    "review_id": "o2Wv2ygnuF4lMJqlMlH4VA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "espresso",
+    "judgement": "neutral",
+    "note": "Victor says espresso may be quality"
+  },
+  "HztpUC-NwWsjcWUtcc40kQ:espresso": {
+    "review_id": "HztpUC-NwWsjcWUtcc40kQ",
+    "business_id": "9w6o_eyKCSNKgMtAuv6KWg",
+    "aspect": "espresso",
+    "judgement": "neutral",
+    "note": "Yara mentions espresso drink prices"
+  },
+  "-Ud26slhSbT4iqK7xkOaZw:espresso": {
+    "review_id": "-Ud26slhSbT4iqK7xkOaZw",
+    "business_id": "9w6o_eyKCSNKgMtAuv6KWg",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Dan says espresso is lovely"
+  },
+  "XGrbDdEQT4kEyCRMMKM9jQ:espresso": {
+    "review_id": "XGrbDdEQT4kEyCRMMKM9jQ",
+    "business_id": "9w6o_eyKCSNKgMtAuv6KWg",
+    "aspect": "espresso",
+    "judgement": "negative",
+    "note": "Eve had bad espresso experience"
+  },
+  "h1BNupk55yL7eUaURerFkw:espresso": {
+    "review_id": "h1BNupk55yL7eUaURerFkw",
+    "business_id": "9w6o_eyKCSNKgMtAuv6KWg",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Xavier praises quality espresso"
+  },
+  "s1mFZyE2qX_tyh5oGsD8ag:espresso": {
+    "review_id": "s1mFZyE2qX_tyh5oGsD8ag",
+    "business_id": "BaSwNEingTmrBw4shffK5w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Kate says espresso is excellent"
+  },
+  "maB7OV-FUV6hStIcBozPZw:espresso": {
+    "review_id": "maB7OV-FUV6hStIcBozPZw",
+    "business_id": "BaSwNEingTmrBw4shffK5w",
+    "aspect": "espresso",
+    "judgement": "negative",
+    "note": "Ian says espresso not good"
+  },
+  "IG4tODElwSFUKx3YjfAVPQ:espresso": {
+    "review_id": "IG4tODElwSFUKx3YjfAVPQ",
+    "business_id": "BaSwNEingTmrBw4shffK5w",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Tina loves the espresso"
+  },
+  "ejVFUZ6ql1_3BtweO-3VAw:espresso": {
+    "review_id": "ejVFUZ6ql1_3BtweO-3VAw",
+    "business_id": "BaSwNEingTmrBw4shffK5w",
+    "aspect": "espresso",
+    "judgement": "negative",
+    "note": "Zack disappointed, no espresso taste"
+  },
+  "aa-K-4ybZdImPixZRAinWg:espresso": {
+    "review_id": "aa-K-4ybZdImPixZRAinWg",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "negative",
+    "note": "Jack disappointed with espresso"
+  },
+  "nIcBaOb32dJrAxZNTGj3zQ:espresso": {
+    "review_id": "nIcBaOb32dJrAxZNTGj3zQ",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Uma Italian, approves espresso"
+  },
+  "cnUhqGsP_s55otSfwoCq9A:espresso": {
+    "review_id": "cnUhqGsP_s55otSfwoCq9A",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Eve mentions espresso crema"
+  },
+  "D8ogthWHM-_OuGjVwoGiSg:espresso": {
+    "review_id": "D8ogthWHM-_OuGjVwoGiSg",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Xavier says espresso is good"
+  },
+  "PZNl-KxLE4QBDUDNEf7r6Q:espresso": {
+    "review_id": "PZNl-KxLE4QBDUDNEf7r6Q",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "negative",
+    "note": "Leo disappointed with espresso"
+  },
+  "Vhq8jEtSGuK2obu83Par9g:espresso": {
+    "review_id": "Vhq8jEtSGuK2obu83Par9g",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "neutral",
+    "note": "Tina sees espresso makers"
+  },
+  "LL_KGNciL-NwiiF3Su3_jA:espresso": {
+    "review_id": "LL_KGNciL-NwiiF3Su3_jA",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "negative",
+    "note": "Chloe says espresso bitter and gross"
+  },
+  "7Vu6Fl3bcOOKrIRrqCKJZA:espresso": {
+    "review_id": "7Vu6Fl3bcOOKrIRrqCKJZA",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "neutral",
+    "note": "Grace mentions espresso bar"
+  },
+  "JlrupY57jmp6kpEI52oVJg:espresso": {
+    "review_id": "JlrupY57jmp6kpEI52oVJg",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Oscar only orders espresso"
+  },
+  "H5qpGnYdCLjMSGSxWSrRvQ:espresso": {
+    "review_id": "H5qpGnYdCLjMSGSxWSrRvQ",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Victor praises lovely espresso blends"
+  },
+  "gowiaJitM2xSIYah-2Zo5g:espresso": {
+    "review_id": "gowiaJitM2xSIYah-2Zo5g",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Amy mentions espresso shots"
+  },
+  "lvIWx6R9Rqb9j5nIFPUhNg:espresso": {
+    "review_id": "lvIWx6R9Rqb9j5nIFPUhNg",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Hannah says best espresso in city"
+  },
+  "hqPcukw-dpUl29CciiWgDg:espresso": {
+    "review_id": "hqPcukw-dpUl29CciiWgDg",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Mike is espresso girl"
+  },
+  "pdUZpt9MEmrXrf_OA9ZqVA:espresso": {
+    "review_id": "pdUZpt9MEmrXrf_OA9ZqVA",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "David mentions offbeat espresso beverages"
+  },
+  "V93naZxzI-A0XarrK7Ul2Q:espresso": {
+    "review_id": "V93naZxzI-A0XarrK7Ul2Q",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Tina says espresso is excellent"
+  },
+  "DqrUXlx2evWAvhMVkD4gVQ:espresso": {
+    "review_id": "DqrUXlx2evWAvhMVkD4gVQ",
+    "business_id": "oqbhVgliVJH-iRa3AnD-3A",
+    "aspect": "espresso",
+    "judgement": "positive",
+    "note": "Zack mentions Spruce Street Espresso comparison"
+  },
+  "AbZBtt9GFeKN7aTRKGnPCQ:taro": {
+    "review_id": "AbZBtt9GFeKN7aTRKGnPCQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "taro",
+    "judgement": "positive",
+    "note": "Ivy says taro milk tea is go-to"
+  },
+  "42pEbtO2EKKCS4yLJx6baA:taro": {
+    "review_id": "42pEbtO2EKKCS4yLJx6baA",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "taro",
+    "judgement": "positive",
+    "note": "Alice says taro bubble tea was great"
+  },
+  "TH-9gULc2ab-uQPWkSNmUg:taro": {
+    "review_id": "TH-9gULc2ab-uQPWkSNmUg",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "taro",
+    "judgement": "neutral",
+    "note": "Mia ordered taro but not huge fan"
+  },
+  "f2RGPrjbKcysx4IEnjMtDQ:taro": {
+    "review_id": "f2RGPrjbKcysx4IEnjMtDQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "taro",
+    "judgement": "negative",
+    "note": "Amy had bad taro experience at this location"
+  },
+  "ihalR00qFEfs7v_pRHAhnQ:taro": {
+    "review_id": "ihalR00qFEfs7v_pRHAhnQ",
+    "business_id": "3yW8-dUi1wwCEf0URxUA7A",
+    "aspect": "taro",
+    "judgement": "positive",
+    "note": "Olivia likes taro"
+  },
+  "_o3vzdnZ81SuALXnEXC4TQ:taro": {
+    "review_id": "_o3vzdnZ81SuALXnEXC4TQ",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "taro",
+    "judgement": "positive",
+    "note": "Victor always gets taro, quite nice"
+  },
+  "MfzeYzS92LFtuDgYokQ6cQ:game": {
+    "review_id": "MfzeYzS92LFtuDgYokQ6cQ",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "negative",
+    "note": "Bob had bad experience with game pens"
+  },
+  "mlcEAS-jhcRqHBvd2jbHFg:game": {
+    "review_id": "mlcEAS-jhcRqHBvd2jbHFg",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Mike loves board games, place is FILLED"
+  },
+  "dQpN8JVySEVllvRLiDnnFw:game": {
+    "review_id": "dQpN8JVySEVllvRLiDnnFw",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Grace loves games"
+  },
+  "YcYiRGKOjVN9bqa2wQMDGw:game": {
+    "review_id": "YcYiRGKOjVN9bqa2wQMDGw",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Jack says game library impressive"
+  },
+  "-r167FD1LhJa1GWCIhkxQQ:game": {
+    "review_id": "-r167FD1LhJa1GWCIhkxQQ",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Ben mentions game night hosting"
+  },
+  "w65LcuYSriTp5FQQER2QrA:game": {
+    "review_id": "w65LcuYSriTp5FQQER2QrA",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Leo says game selection UNPARALLELED"
+  },
+  "pGaoZ9Z69mokqWxZAZ0pIg:game": {
+    "review_id": "pGaoZ9Z69mokqWxZAZ0pIg",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Amy checked out games"
+  },
+  "aNLF8aDuEJiCaFSgY1YPZA:game": {
+    "review_id": "aNLF8aDuEJiCaFSgY1YPZA",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Victor notes wall full of games"
+  },
+  "gp0CgyTAwJsWZhNGdGgkTA:game": {
+    "review_id": "gp0CgyTAwJsWZhNGdGgkTA",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Alice praises game selection"
+  },
+  "mQ_JvzIA361C6L0oXi4jGw:game": {
+    "review_id": "mQ_JvzIA361C6L0oXi4jGw",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Ivy likes board game bar concept"
+  },
+  "SoYTGxUCcJud19cAJuR54A:game": {
+    "review_id": "SoYTGxUCcJud19cAJuR54A",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Frank praises massive game library"
+  },
+  "UEN9q6hRQpbLrQI3HQcm1g:game": {
+    "review_id": "UEN9q6hRQpbLrQI3HQcm1g",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "George mentions Game Sommelier"
+  },
+  "bgJsB3h-nyZP3aDu4D0cag:game": {
+    "review_id": "bgJsB3h-nyZP3aDu4D0cag",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Quinn says over 800 games"
+  },
+  "8KBghqilXeNXkWaCNAn2jw:game": {
+    "review_id": "8KBghqilXeNXkWaCNAn2jw",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "neutral",
+    "note": "Carol mentions game time in deal"
+  },
+  "C5daFaZ6tms-lSLkEv2LIw:game": {
+    "review_id": "C5daFaZ6tms-lSLkEv2LIw",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Ian loves board game restaurant"
+  },
+  "Mb9zPlaliWpcffj75u2DLg:game": {
+    "review_id": "Mb9zPlaliWpcffj75u2DLg",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Tina loves board game bar idea"
+  },
+  "eURRaa2BZ9a3RrYbQWXELQ:game": {
+    "review_id": "eURRaa2BZ9a3RrYbQWXELQ",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Noah says over 800 board games"
+  },
+  "_Djw8XNlGs6uT4Ah1yax-g:game": {
+    "review_id": "_Djw8XNlGs6uT4Ah1yax-g",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "game",
+    "judgement": "positive",
+    "note": "Kevin mentions array of games"
+  },
+  "2rINO_ddFGcOQJcGw-Cwow:authentic": {
+    "review_id": "2rINO_ddFGcOQJcGw-Cwow",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Sam mentions authentic Italian"
+  },
+  "exVZxIzf-RS0d_zETJJ0KA:authentic": {
+    "review_id": "exVZxIzf-RS0d_zETJJ0KA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "authentic",
+    "judgement": "negative",
+    "note": "Julia disappointed, not authentic enough"
+  },
+  "VauSpC0TLcy1Izf6nB1EMA:authentic": {
+    "review_id": "VauSpC0TLcy1Izf6nB1EMA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "authentic",
+    "judgement": "neutral",
+    "note": "Mike questions authenticity"
+  },
+  "o2Wv2ygnuF4lMJqlMlH4VA:authentic": {
+    "review_id": "o2Wv2ygnuF4lMJqlMlH4VA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "authentic",
+    "judgement": "negative",
+    "note": "Victor says not authentic Italian"
+  },
+  "GtarY_SFV2ApicNOw2RDeA:authentic": {
+    "review_id": "GtarY_SFV2ApicNOw2RDeA",
+    "business_id": "fxHNpoMpJPNadLkA-dAFbQ",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "David praises authentic"
+  },
+  "x84UnCYt-ulG3Yntdsjq0Q:authentic": {
+    "review_id": "x84UnCYt-ulG3Yntdsjq0Q",
+    "business_id": "fxHNpoMpJPNadLkA-dAFbQ",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Ian praises authentic"
+  },
+  "O0rlMsS5Kexp6PPQYUwksA:authentic": {
+    "review_id": "O0rlMsS5Kexp6PPQYUwksA",
+    "business_id": "f4Zxof7r8P3tLHt8gVKs9g",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Frank mentions authentic"
+  },
+  "uop_sDD_ZLQm_DPNSUtTBA:authentic": {
+    "review_id": "uop_sDD_ZLQm_DPNSUtTBA",
+    "business_id": "f4Zxof7r8P3tLHt8gVKs9g",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Henry mentions authentic"
+  },
+  "TdEinqbzTw7geA5SKZvclw:authentic": {
+    "review_id": "TdEinqbzTw7geA5SKZvclw",
+    "business_id": "hk7B1iWq4tYiXrLMsNqaRA",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Noah mentions authentic"
+  },
+  "CnKlDuThNcV6qKIcp_68AQ:authentic": {
+    "review_id": "CnKlDuThNcV6qKIcp_68AQ",
+    "business_id": "hk7B1iWq4tYiXrLMsNqaRA",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Xavier mentions authentic"
+  },
+  "BQBqWn7OfLsyojTZCaFAtQ:authentic": {
+    "review_id": "BQBqWn7OfLsyojTZCaFAtQ",
+    "business_id": "h8cxLzTTCvddA3x3Y8IiWg",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Jack mentions authentic"
+  },
+  "swvhgnAGSebA5z9eNXZ6_A:authentic": {
+    "review_id": "swvhgnAGSebA5z9eNXZ6_A",
+    "business_id": "nL3wGR6xbFLMdhyKEvPZuQ",
+    "aspect": "authentic",
+    "judgement": "negative",
+    "note": "Noah says not authentic"
+  },
+  "R0YRdw8JNwH8sEVLFetD2w:authentic": {
+    "review_id": "R0YRdw8JNwH8sEVLFetD2w",
+    "business_id": "nL3wGR6xbFLMdhyKEvPZuQ",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Peter mentions authentic"
+  },
+  "F5vp-rMVjuGPJ9Spk5KoMg:authentic": {
+    "review_id": "F5vp-rMVjuGPJ9Spk5KoMg",
+    "business_id": "yNHqrPWGk_6tw-dhrYZe3A",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Quinn mentions authentic"
+  },
+  "O4x7uZHe8WSNkMqWk3ds0Q:authentic": {
+    "review_id": "O4x7uZHe8WSNkMqWk3ds0Q",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Rose mentions authentic"
+  },
+  "IioTosFXTcW6dE0rV736YA:authentic": {
+    "review_id": "IioTosFXTcW6dE0rV736YA",
+    "business_id": "8Wq0LZSuHdPTlleQD5sU_w",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Ian mentions authentic"
+  },
+  "kbLtYveErx7AekVDM0BCjA:authentic": {
+    "review_id": "kbLtYveErx7AekVDM0BCjA",
+    "business_id": "ZpgVL2z1kgRi954c9m9INw",
+    "aspect": "authentic",
+    "judgement": "positive",
+    "note": "Peter mentions authentic at United By Blue"
+  },
+  "0r4RU7EcVskl8xopJb9gJA:mocha": {
+    "review_id": "0r4RU7EcVskl8xopJb9gJA",
+    "business_id": "vCHNWdW-ys-nWUx3Cpvk8Q",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "Rose praises mocha cake"
+  },
+  "_ylVKxEk9ec-5Ng9AzRUcA:mocha": {
+    "review_id": "_ylVKxEk9ec-5Ng9AzRUcA",
+    "business_id": "vCHNWdW-ys-nWUx3Cpvk8Q",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "Peter mentions mocha"
+  },
+  "-GwikcpgK6LTKzixF8Ldfw:mocha": {
+    "review_id": "-GwikcpgK6LTKzixF8Ldfw",
+    "business_id": "vCHNWdW-ys-nWUx3Cpvk8Q",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "Eve mentions mocha"
+  },
+  "wTHoAccayZ2W90IUVElyxw:mocha": {
+    "review_id": "wTHoAccayZ2W90IUVElyxw",
+    "business_id": "0Z8ps_OfcR9eJaV2JtxigA",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "George mentions mocha"
+  },
+  "bqE9zeFzHo8VsF5M3o9lDQ:mocha": {
+    "review_id": "bqE9zeFzHo8VsF5M3o9lDQ",
+    "business_id": "7hpUoYdAVToZXwuPRgoqdA",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "Xavier mentions mocha"
+  },
+  "yEgwJm4l9ViD6a8zu4_8yg:mocha": {
+    "review_id": "yEgwJm4l9ViD6a8zu4_8yg",
+    "business_id": "9w6o_eyKCSNKgMtAuv6KWg",
+    "aspect": "mocha",
+    "judgement": "negative",
+    "note": "Noah says mocha latte mediocre"
+  },
+  "Vhq8jEtSGuK2obu83Par9g:mocha": {
+    "review_id": "Vhq8jEtSGuK2obu83Par9g",
+    "business_id": "htO_nlxkEsYHzDrtbiUxew",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "Tina gets cafe mocha"
+  },
+  "W1pOB2mv60FV-hFo1sjTqg:mocha": {
+    "review_id": "W1pOB2mv60FV-hFo1sjTqg",
+    "business_id": "jI2qMScDKP9a8uxZ6w97yA",
+    "aspect": "mocha",
+    "judgement": "positive",
+    "note": "Kevin mentions mocha"
+  },
+  "UH_CDNXDOt6G76Yllq07Rw:live music": {
+    "review_id": "UH_CDNXDOt6G76Yllq07Rw",
+    "business_id": "V_jy9Aemc3kjznqhbsu_Dg",
+    "aspect": "live music",
+    "judgement": "positive",
+    "note": "mentions live music positively"
+  },
+  "-SsOfI4bgJ8mqdh7gq_rwA:live music": {
+    "review_id": "-SsOfI4bgJ8mqdh7gq_rwA",
+    "business_id": "V_jy9Aemc3kjznqhbsu_Dg",
+    "aspect": "live music",
+    "judgement": "positive",
+    "note": "mentions live music positively"
+  },
+  "wcJ92yffnzNiMTHJ-GCp_Q:live music": {
+    "review_id": "wcJ92yffnzNiMTHJ-GCp_Q",
+    "business_id": "V_jy9Aemc3kjznqhbsu_Dg",
+    "aspect": "live music",
+    "judgement": "positive",
+    "note": "mentions live music positively"
+  },
+  "2rINO_ddFGcOQJcGw-Cwow:gelato": {
+    "review_id": "2rINO_ddFGcOQJcGw-Cwow",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Sam mentions gelato positively"
+  },
+  "exVZxIzf-RS0d_zETJJ0KA:gelato": {
+    "review_id": "exVZxIzf-RS0d_zETJJ0KA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Julia mentions gelato positively"
+  },
+  "N-stexeAl5uo8raGZU6JVw:gelato": {
+    "review_id": "N-stexeAl5uo8raGZU6JVw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Ivy mentions gelato positively"
+  },
+  "mOGSlH_urFGtKpShv13vRw:gelato": {
+    "review_id": "mOGSlH_urFGtKpShv13vRw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "vXprX6WKDAo5xHtFZGCFPg:gelato": {
+    "review_id": "vXprX6WKDAo5xHtFZGCFPg",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "ptiNwL6vW5AciiDFSkPY4g:gelato": {
+    "review_id": "ptiNwL6vW5AciiDFSkPY4g",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "Pslqv6D8b-xWZ7LQDOuS9w:gelato": {
+    "review_id": "Pslqv6D8b-xWZ7LQDOuS9w",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Noah mentions gelato positively"
+  },
+  "VauSpC0TLcy1Izf6nB1EMA:gelato": {
+    "review_id": "VauSpC0TLcy1Izf6nB1EMA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Mike mentions gelato positively"
+  },
+  "QVgJaGNaAiIuAL3PBAqTRw:gelato": {
+    "review_id": "QVgJaGNaAiIuAL3PBAqTRw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Alice mentions gelato positively"
+  },
+  "--cr3zCYlmDvELCJ5gTYEw:gelato": {
+    "review_id": "--cr3zCYlmDvELCJ5gTYEw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "hkoSbLeTx7ilyNAUkxI6eg:gelato": {
+    "review_id": "hkoSbLeTx7ilyNAUkxI6eg",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Chloe mentions gelato positively"
+  },
+  "IndMG4fKejhGPsQzE1uTQw:gelato": {
+    "review_id": "IndMG4fKejhGPsQzE1uTQw",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "ufwcqicWM8Y7lZ9KBq-ToQ:gelato": {
+    "review_id": "ufwcqicWM8Y7lZ9KBq-ToQ",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "QWwMSKivLZk5Rq9232d_zA:gelato": {
+    "review_id": "QWwMSKivLZk5Rq9232d_zA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "mentions gelato positively"
+  },
+  "o2Wv2ygnuF4lMJqlMlH4VA:gelato": {
+    "review_id": "o2Wv2ygnuF4lMJqlMlH4VA",
+    "business_id": "-cEFKAznWmI0cledNOIQ7w",
+    "aspect": "gelato",
+    "judgement": "positive",
+    "note": "Victor mentions gelato positively"
+  },
+  "VXP4n-4L_C6uf0E8tQrBpA:challah": {
+    "review_id": "VXP4n-4L_C6uf0E8tQrBpA",
     "business_id": "iUZEGx29miZObLd6_lt7Vg",
-    "business_name": "Sabrina's Café",
-    "topic": "medley",
-    "positive_count": 1,
-    "negative_count": 0,
-    "sentiment": "positive",
-    "is_valid_positive": true,
-    "sample_reviews": [
-      {
-        "stars": 5.0,
-        "snippet": "One of the better and well-known brunch locations in Philly is Sabrina's. Owners Robert and Raquel DeAbreu named the original restaurant on 9th and Christian Streets after their daughter. Recently, fo"
-      }
-    ]
+    "aspect": "challah",
+    "judgement": "positive",
+    "note": "mentions challah positively"
+  },
+  "0lQlWyBrq2_03lvI-ZrEjA:challah": {
+    "review_id": "0lQlWyBrq2_03lvI-ZrEjA",
+    "business_id": "iUZEGx29miZObLd6_lt7Vg",
+    "aspect": "challah",
+    "judgement": "positive",
+    "note": "mentions challah positively"
+  },
+  "aQTH5-Q1IQPfcZd186qz2w:challah": {
+    "review_id": "aQTH5-Q1IQPfcZd186qz2w",
+    "business_id": "iUZEGx29miZObLd6_lt7Vg",
+    "aspect": "challah",
+    "judgement": "positive",
+    "note": "mentions challah positively"
+  },
+  "szgJo5R8wSuoyLxbUZrlNA:challah": {
+    "review_id": "szgJo5R8wSuoyLxbUZrlNA",
+    "business_id": "iUZEGx29miZObLd6_lt7Vg",
+    "aspect": "challah",
+    "judgement": "positive",
+    "note": "mentions challah positively"
+  },
+  "7Wlh8bIBdwn7d6SDsC82Cg:dog friendly": {
+    "review_id": "7Wlh8bIBdwn7d6SDsC82Cg",
+    "business_id": "3UBG2rwjgP-6ifTAuKl3Gg",
+    "aspect": "dog friendly",
+    "judgement": "positive",
+    "note": "Peter says glad it's a dog-friendly place"
+  },
+  "jFhiMY5bLt0sBhTxkZ0yvg:matcha latte": {
+    "review_id": "jFhiMY5bLt0sBhTxkZ0yvg",
+    "business_id": "ZpgVL2z1kgRi954c9m9INw",
+    "aspect": "matcha latte",
+    "judgement": "positive",
+    "note": "mentions matcha latte positively"
+  },
+  "PDDpD-_zAPSVt7fxdtpXGg:matcha latte": {
+    "review_id": "PDDpD-_zAPSVt7fxdtpXGg",
+    "business_id": "ZpgVL2z1kgRi954c9m9INw",
+    "aspect": "matcha latte",
+    "judgement": "positive",
+    "note": "mentions matcha latte positively"
+  },
+  "mQ_JvzIA361C6L0oXi4jGw:midnight": {
+    "review_id": "mQ_JvzIA361C6L0oXi4jGw",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "midnight",
+    "judgement": "positive",
+    "note": "Ivy mentions midnight hours positively"
+  },
+  "_Djw8XNlGs6uT4Ah1yax-g:midnight": {
+    "review_id": "_Djw8XNlGs6uT4Ah1yax-g",
+    "business_id": "1klRUBB6LfKCotq75BVmbA",
+    "aspect": "midnight",
+    "judgement": "positive",
+    "note": "Kevin mentions midnight hours positively"
+  },
+  "b_sFI7o9usdoXqNEAELJnA:banh mi": {
+    "review_id": "b_sFI7o9usdoXqNEAELJnA",
+    "business_id": "JrG4NINLspXPNhSXg7Q07Q",
+    "aspect": "banh mi",
+    "judgement": "positive",
+    "note": "mentions banh mi positively"
+  },
+  "yhU8W0aNXfAPpGIDgRzY6w:bring your dog": {
+    "review_id": "yhU8W0aNXfAPpGIDgRzY6w",
+    "business_id": "7hpUoYdAVToZXwuPRgoqdA",
+    "aspect": "bring your dog",
+    "judgement": "positive",
+    "note": "Peter mentions you can bring your dog in"
   }
 }
