@@ -236,39 +236,56 @@ BEGIN (output Thought: then Action: lines):"""
                            and c.get('original_type') != 'REVIEW')
             soft_count = len(self.context.conditions) - hard_count
 
-            # Dynamic soft scoring explanation
             if soft_count > 0:
-                soft_explain = f"For SOFT conditions: spawn review agents, wait_all(), use matched count"
-                soft_denom = str(soft_count)
-            else:
-                soft_explain = "No explicit soft conditions, but spawn 2-3 review agents to check general relevance as tiebreaker"
-                soft_denom = "N"  # N = number of reviews spawned
-
-            return f"""## Item {self.agent_id}: {item.get('name', 'Unknown')}
+                return f"""## Item {self.agent_id}: {item.get('name', 'Unknown')}
 Schema: {json.dumps(schema, indent=2)}
 
 ## Conditions: {conds}
 
-## Your job: Check HARD conditions, then use reviews for SOFT scoring.
+## Your job: Check HARD conditions, then spawn review agents for SOFT conditions.
 
 1. Check HARD conditions using check() - count passes
-2. {soft_explain}
-3. Emit format: "{self.agent_id}:hard=X/{hard_count},soft=Y/{soft_denom}"
+2. Spawn review agents for SOFT conditions, wait_all(), use matched count as soft score
+3. Emit format: "{self.agent_id}:hard=X/{hard_count},soft=Y/{soft_count}"
 4. Only skip() if hard=0
 
 Example:
 Action: check("attributes.OutdoorSeating")
 Obs: check(attributes.OutdoorSeating)=false
-Thought: Hard 1/{hard_count} passed. Spawn reviews.
+Thought: Hard 1/{hard_count}. Spawn reviews for soft.
 Action: spawn(0)
 Action: spawn(1)
 Action: wait_all()
 Obs: wait_all: 2 matched, 0 skipped, 0 errors (of 2)
-Thought: 2 reviews matched. Soft: 2/2
-Action: emit("eval", "{self.agent_id}:hard=1/{hard_count},soft=2/2")
+Thought: Soft = 2 matched
+Action: emit("eval", "{self.agent_id}:hard=1/{hard_count},soft=2/{soft_count}")
 Action: done()
 
 IMPORTANT: Soft score = matched count from wait_all()!
+
+BEGIN:"""
+            else:
+                # No soft conditions - just check hard, emit immediately
+                return f"""## Item {self.agent_id}: {item.get('name', 'Unknown')}
+Schema: {json.dumps(schema, indent=2)}
+
+## Conditions: {conds}
+
+## Your job: Check HARD conditions only (no soft conditions for this query).
+
+1. Check HARD conditions using check() - count passes
+2. Emit format: "{self.agent_id}:hard=X/{hard_count}"
+3. Only skip() if hard=0
+
+Example:
+Action: check("attributes.GoodForKids")
+Obs: check(attributes.GoodForKids)=true
+Thought: Hard 1/{hard_count}
+Action: check("attributes.HasTV")
+Obs: check(attributes.HasTV)=false
+Thought: Hard 2/{hard_count}. Done checking.
+Action: emit("eval", "{self.agent_id}:hard=2/{hard_count}")
+Action: done()
 
 BEGIN:"""
 
