@@ -381,9 +381,12 @@ For date-based review conditions (e.g. "4+ reviews since 2020"):
 - You can output MULTIPLE actions in one turn for efficiency
 - After list_items(), you can batch drop_item and add_step calls
 - NEVER write "Observation:" yourself
-- Be CONSERVATIVE with drop_item - only drop if CLEARLY impossible
+- Be CONSERVATIVE with drop_item:
+  * ONLY drop items that CLEARLY FAIL HARD attribute conditions visible in list_items()
+  * For SOFT conditions (reviews, recency, sentiment) - you CANNOT determine from list_items()
+  * If item passes HARD conditions but has SOFT conditions → CREATE add_step(), DO NOT drop
 - String values like 'True' and boolean True are equivalent (LLM will judge)
-- You MUST call add_step("cN", ...) for EACH item you want to evaluate
+- You MUST call add_step("cN", ...) for EACH item that passes HARD conditions
 - Do NOT describe what you would do - you must execute actual tool calls
 - Pseudocode, plans, and descriptions are NOT valid - only tool calls work
 - The final step MUST only reference step IDs that you actually created
