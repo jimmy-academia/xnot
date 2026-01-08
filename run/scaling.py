@@ -155,7 +155,8 @@ def _run_scale_point(args, run_dir: Path, n_candidates: int, k: int, tracker, lo
         args.method,
         run_dir=str(run_dir),
         defense=getattr(args, 'defense', False),
-        verbose=getattr(args, 'verbose', True)
+        verbose=getattr(args, 'verbose', True),
+        hierarchical=getattr(args, 'hierarchical', False)
     )
 
     # Run evaluation

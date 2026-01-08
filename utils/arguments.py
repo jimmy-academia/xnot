@@ -51,6 +51,8 @@ def parse_args():
     # Method arguments
     parser.add_argument("--method", choices=METHOD_CHOICES, default="anot",
                         help="Method to use")
+    parser.add_argument("--hierarchical", action="store_true",
+                        help="Use hierarchical parallel phase2 for ANoT (experimental)")
 
     # Attack arguments
     parser.add_argument("--attack", choices=ATTACK_CHOICES, default="none",

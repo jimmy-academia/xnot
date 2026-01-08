@@ -43,6 +43,7 @@ from .tools import (
     tool_get_review_lengths, tool_keyword_search, tool_get_review_snippet,
     tool_list_items, tool_check_item, tool_drop_item, tool_add_step
 )
+from .phase2_hierarchical import run_hierarchical_phase2
 
 
 class AdaptiveNetworkOfThought(BaseMethod):
@@ -50,8 +51,10 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
     name = "anot"
 
-    def __init__(self, run_dir: str = None, defense: bool = False, verbose: bool = True, **kwargs):
+    def __init__(self, run_dir: str = None, defense: bool = False, verbose: bool = True,
+                 hierarchical: bool = False, **kwargs):
         super().__init__(run_dir=run_dir, defense=defense, verbose=verbose, **kwargs)
+        self._hierarchical = hierarchical  # Use hierarchical parallel phase2
         self._thread_local = threading.local()
         self._traces = {}
         self._traces_lock = threading.Lock()
@@ -1009,9 +1012,31 @@ class AdaptiveNetworkOfThought(BaseMethod):
         # Phase 2: Context expansion via ReAct (iterate items, build lwt_script)
         self._update_display(request_id, "P2", "expanding")
         p2_start = time.time()
-        expanded_lwt_steps = self.phase2_expand(
-            lwt_seed, resolved_conditions, logical_structure, data, n_items
-        )
+
+        if self._hierarchical:
+            # Hierarchical parallel phase2 with sub-agents
+            # Get items dict for hierarchical (expects {"1": {...}, "2": {...}})
+            items_dict = data.get('items', data)
+            if isinstance(items_dict, list):
+                items_dict = {str(i + 1): item for i, item in enumerate(items_dict)}
+
+            step_tuples = asyncio.run(run_hierarchical_phase2(
+                lwt_seed=lwt_seed,
+                resolved_conditions=resolved_conditions,
+                logical_structure=logical_structure,
+                items=items_dict,
+                request_id=request_id,
+                debug_callback=self._debug,
+                log_callback=self._log_llm_call,
+            ))
+            # Convert [(id, prompt), ...] to LWT format ["(id)=LLM('prompt')", ...]
+            expanded_lwt_steps = [f"({sid})=LLM('{sprompt}')" for sid, sprompt in step_tuples]
+        else:
+            # Original sequential ReAct phase2
+            expanded_lwt_steps = self.phase2_expand(
+                lwt_seed, resolved_conditions, logical_structure, data, n_items
+            )
+
         p2_latency = (time.time() - p2_start) * 1000
         expanded_lwt = "\n".join(expanded_lwt_steps)
 
@@ -1050,6 +1075,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
         return ", ".join(top_k)
 
 
-def create_method(run_dir: str = None, defense: bool = False, debug: bool = False):
+def create_method(run_dir: str = None, defense: bool = False, debug: bool = False,
+                  hierarchical: bool = False):
     """Factory function to create ANoT instance."""
-    return AdaptiveNetworkOfThought(run_dir=run_dir, defense=defense, verbose=debug)
+    return AdaptiveNetworkOfThought(run_dir=run_dir, defense=defense, verbose=debug,
+                                    hierarchical=hierarchical)

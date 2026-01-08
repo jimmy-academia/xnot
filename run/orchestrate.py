@@ -273,7 +273,8 @@ def run_single(
         args.method,
         run_dir=str(run_dir),
         defense=getattr(args, 'defense', False),
-        verbose=getattr(args, 'verbose', True)
+        verbose=getattr(args, 'verbose', True),
+        hierarchical=getattr(args, 'hierarchical', False)
     )
     print(f"\nMethod: {method}")
 
