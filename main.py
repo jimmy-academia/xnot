@@ -8,6 +8,8 @@ Entry point for running evaluations with different methods.
 import logging
 import os
 import random
+import signal
+import sys
 
 from utils.arguments import parse_args
 from utils.llm import config_llm
@@ -181,5 +183,19 @@ def main():
         run_single(args, experiment, log)
 
 
+def _signal_handler(signum, frame):
+    """Handle interrupt signals for clean shutdown."""
+    print("\n\n[!] Received interrupt signal. Shutting down...")
+    sys.exit(130)  # 128 + SIGINT (2)
+
+
 if __name__ == "__main__":
-    main()
+    # Register signal handlers for clean Ctrl+C handling
+    signal.signal(signal.SIGINT, _signal_handler)
+    signal.signal(signal.SIGTERM, _signal_handler)
+
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n[!] Interrupted by user (Ctrl+C)")
+        sys.exit(130)

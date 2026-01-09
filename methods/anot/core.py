@@ -201,7 +201,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
             self._render_table(),
             console=self._console,
             refresh_per_second=4,
-            transient=False,
+            transient=True,
             vertical_overflow="visible",
         )
         self._live.start()
@@ -209,7 +209,12 @@ class AdaptiveNetworkOfThought(BaseMethod):
     def stop_display(self):
         """Stop rich Live display and print error summary if any."""
         if self._live:
-            self._live.stop()
+            try:
+                self._live.stop()
+                # Print final table state since transient=True clears the display
+                self._console.print(self._render_table())
+            except Exception:
+                pass  # Ignore errors during shutdown
             self._live = None
 
         if self._errors:

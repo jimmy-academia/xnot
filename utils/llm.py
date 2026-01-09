@@ -38,6 +38,7 @@ def _get_slm_service():
         _slm_service = get_slm_service()
     return _slm_service
 
+
 from utils.usage import get_usage_tracker
 
 # Suppress verbose HTTP client logs
@@ -94,17 +95,20 @@ MODEL_SHORTHAND = {
     "claude-3-sonnet-20240229": "c3s",
     "claude-3-haiku-20240307": "c3h",
     "claude-sonnet-4-20250514": "c4s",
-    # SLM models (from slm.py SLM_REGISTRY)
+    # SLM/vLLM models (local inference)
     "qwen-0.5b": "q05",
     "qwen-1.5b": "q15",
     "qwen-3b": "q3",
+    "qwen-7b": "q7",
     "phi-3-mini": "phi3m",
     "phi-3.5-mini": "phi35",
     "llama-1b": "ll1",
     "llama-3b": "ll3",
+    "llama-8b": "ll8",
     "gemma-2b": "gem2",
     "smollm-1.7b": "sm17",
     "tinyllama": "tll",
+    "mistral-7b": "mis7",
 }
 
 
@@ -550,6 +554,7 @@ def config_llm(args):
         )
 
 
+
 # -----------------------------
 # SLM Helpers (re-exported for convenience)
 # -----------------------------
@@ -570,3 +575,5 @@ def list_slm_models():
         return _list()
     except ImportError:
         return []
+
+

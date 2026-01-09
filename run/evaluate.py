@@ -308,8 +308,11 @@ def _run_with_progress(generator, has_rich_display: bool, description: str, tota
     """Run a generator with optional progress display."""
     if has_rich_display:
         # anot handles its own Rich live display
-        for _ in generator:
-            pass
+        try:
+            for _ in generator:
+                pass
+        except KeyboardInterrupt:
+            raise  # Re-raise to be caught by outer handler
     else:
         # Show rich progress bar for non-anot methods
         with Progress(
@@ -369,6 +372,16 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
             items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers,
             has_rich_display, attack_config
         )
+    except KeyboardInterrupt:
+        print("\n\n[!] Interrupted by user (Ctrl+C)")
+        # Return partial results
+        return {
+            "results": [],
+            "req_ids": [r["id"] for r in requests],
+            "stats": {},
+            "context_exceeded": False,
+            "interrupted": True,
+        }
     finally:
         if has_rich_display:
             method.stop_display()
@@ -407,8 +420,10 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
         remaining_requests = requests[1:]
 
     if parallel:
+        _interrupted = False
+
         def run_eval():
-            nonlocal context_exceeded
+            nonlocal context_exceeded, _interrupted
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = {
                     executor.submit(
@@ -420,17 +435,28 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                     for req in remaining_requests
                 }
 
-                for future in as_completed(futures):
-                    try:
-                        result = future.result()
-                        if result:
-                            results.append(result)
-                    except ContextLengthExceeded:
-                        context_exceeded = True
-                        for f in futures:
-                            f.cancel()
-                        break
-                    yield 1
+                try:
+                    for future in as_completed(futures):
+                        if _interrupted:
+                            break
+                        try:
+                            result = future.result()
+                            if result:
+                                results.append(result)
+                        except ContextLengthExceeded:
+                            context_exceeded = True
+                            for f in futures:
+                                f.cancel()
+                            break
+                        except Exception:
+                            pass  # Log but continue
+                        yield 1
+                except KeyboardInterrupt:
+                    _interrupted = True
+                    # Cancel all pending futures
+                    for f in futures:
+                        f.cancel()
+                    raise
 
         description = f"Ranking evaluation (parallel, {max_workers} workers)..."
     else:
