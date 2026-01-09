@@ -345,7 +345,7 @@ def parse_resolved_path(response: str) -> dict:
         Dict: {"path": "attributes.X", "expected": True, "type": "HARD"}
         or {"path": "reviews", "expected": "keyword", "type": "SOFT"}
     """
-    result = {"path": None, "expected": None, "type": "HARD"}
+    result = {"path": "", "expected": None, "type": "HARD"}
 
     for line in response.strip().split('\n'):
         line = line.strip()
@@ -446,7 +446,7 @@ def format_items_for_ruleout(items: list, hard_conditions: list) -> str:
     # Extract field names from paths
     fields_needed = set()
     for cond in hard_conditions:
-        path = cond.get("path", "")
+        path = cond.get("path") or ""  # Handle None values
         # Extract top-level field from path like "attributes.GoodForKids"
         if path.startswith("attributes."):
             # Get the specific attribute

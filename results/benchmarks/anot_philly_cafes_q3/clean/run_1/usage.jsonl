@@ -1,0 +1,7 @@
+{"request_id": "R01", "n_candidates": 10, "prompt_tokens": 77019, "completion_tokens": 4560, "tokens": 81579, "cost_usd": 0.090699, "latency_ms": 279527.40383148193, "timestamp": "2026-01-09T10:17:44.399079"}
+{"request_id": "R02", "n_candidates": 10, "prompt_tokens": 111676, "completion_tokens": 6777, "tokens": 118453, "cost_usd": 0.132007, "latency_ms": 374319.5858001709, "timestamp": "2026-01-09T10:17:44.399079"}
+{"request_id": "R03", "n_candidates": 10, "prompt_tokens": 91196, "completion_tokens": 5349, "tokens": 96545, "cost_usd": 0.107243, "latency_ms": 314560.4875087738, "timestamp": "2026-01-09T10:17:44.399079"}
+{"request_id": "R05", "n_candidates": 10, "prompt_tokens": 103484, "completion_tokens": 6373, "tokens": 109857, "cost_usd": 0.122603, "latency_ms": 358831.3903808594, "timestamp": "2026-01-09T10:17:44.399079"}
+{"request_id": "R06", "n_candidates": 10, "prompt_tokens": 74111, "completion_tokens": 4472, "tokens": 78583, "cost_usd": 0.08752700000000001, "latency_ms": 273530.66086769104, "timestamp": "2026-01-09T10:17:44.399079"}
+{"request_id": "R08", "n_candidates": 10, "prompt_tokens": 129199, "completion_tokens": 7936, "tokens": 137135, "cost_usd": 0.15300700000000003, "latency_ms": 399422.8286743164, "timestamp": "2026-01-09T10:17:44.399079"}
+{"request_id": "R09", "n_candidates": 10, "prompt_tokens": 133890, "completion_tokens": 8326, "tokens": 142216, "cost_usd": 0.15886800000000004, "latency_ms": 403896.5539932251, "timestamp": "2026-01-09T10:17:44.399079"}

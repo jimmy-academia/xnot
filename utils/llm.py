@@ -546,13 +546,18 @@ def config_llm(args):
     # Configure SLM if provider is slm
     provider = getattr(args, "provider", None)
     if provider == "slm":
+        # Check Ollama installation, auto-start server, auto-pull model
+        from utils.slm import check_ollama_or_exit
+        model = getattr(args, "model", None)
+        max_concurrent = getattr(args, "max_concurrent", 64)
+        check_ollama_or_exit(model=model, num_parallel=max_concurrent)
+
         slm = _get_slm_service()
         slm.configure(
             max_new_tokens=getattr(args, "max_tokens", None),
             temperature=getattr(args, "temperature", None),
             max_concurrent=getattr(args, "max_concurrent", None),
         )
-
 
 
 # -----------------------------

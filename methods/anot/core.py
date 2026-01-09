@@ -440,11 +440,15 @@ class AdaptiveNetworkOfThought(BaseMethod):
             top_k = candidates[:k]
             skeleton_steps = [("final", f"LLM('Rank candidates {candidates_str} by reviews. Output top-{k}: {top_k}')")]
 
-        # Ensure all steps are tuples (var_name, step_content)
+        # Ensure all steps are tuples (var_name, step_content) with non-None content
         normalized = []
         for step in skeleton_steps:
             if isinstance(step, tuple) and len(step) == 2:
-                normalized.append(step)
+                var_name, content = step
+                if content:  # Skip if content is None or empty
+                    normalized.append(step)
+                else:
+                    self._debug(1, "P1", f"Skipping step with empty content: {var_name}")
             elif isinstance(step, str):
                 # Parse string format "(var)=content"
                 match = re.match(r'\((\w+)\)=(.+)', step)
@@ -455,7 +459,12 @@ class AdaptiveNetworkOfThought(BaseMethod):
             else:
                 self._debug(1, "P1", f"Unexpected step format: {step}")
 
-        return normalized if normalized else skeleton_steps
+        # Ensure we have at least one step
+        if not normalized:
+            self._debug(1, "P1", "No valid steps after normalization, adding fallback")
+            normalized = [("final", f"LLM('Rank the candidates. Return comma-separated indices.')")]
+
+        return normalized
 
     def phase1_plan(self, query: str, items: List[dict], k: int = 1) -> Tuple[list, list, list]:
         """Phase 1: Multi-step planning with condition extraction, path resolution,
@@ -546,6 +555,10 @@ class AdaptiveNetworkOfThought(BaseMethod):
         # skeleton_steps is list of (var_name, step_content) tuples
         lwt_steps = []
         for var_name, step_content in skeleton_steps:
+            # Safety check: skip if step_content is None or empty
+            if not step_content:
+                self._debug(1, "P2", f"Skipping empty step for var: {var_name}")
+                continue
             # Format as LWT step: (var_name)=step_content
             if step_content.startswith("LLM("):
                 lwt_steps.append(f"({var_name})={step_content}")
@@ -916,29 +929,24 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         self._debug(2, "P3", f"Query: {len(query_dict)} items")
 
+        # Run async execution with proper event loop management for threaded context
+        # Each thread gets its own event loop
+        loop = asyncio.new_event_loop()
         try:
-            return asyncio.run(self._execute_parallel(lwt, query_dict, user_query, n_items, k))
-        except RuntimeError:
-            # Already in async context, run sequentially
-            self._set_cache({})
-            steps = parse_script(lwt)
-            if not steps:
-                return ""
-
-            final = ""
-            for idx, instr in steps:
-                filled = substitute_variables(instr, query_dict, user_query, self._get_cache())
-                output = call_llm(
-                    filled,
-                    system=SYSTEM_PROMPT,
-                    role="worker",
-                    context={"method": "anot", "phase": 3, "step": idx}
-                )
-                self._log_llm_call("P3", f"step_{idx}", filled, output)
-                self._cache_set(idx, output)
-                final = output
-
-            return final
+            asyncio.set_event_loop(loop)
+            return loop.run_until_complete(self._execute_parallel(lwt, query_dict, user_query, n_items, k))
+        finally:
+            # Clean up: close the loop but don't set to None (allows reuse pattern)
+            try:
+                # Cancel any pending tasks
+                pending = asyncio.all_tasks(loop)
+                for task in pending:
+                    task.cancel()
+                if pending:
+                    loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            except Exception:
+                pass
+            loop.close()
 
     # =========================================================================
     # Main Entry Points

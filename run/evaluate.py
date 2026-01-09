@@ -190,7 +190,7 @@ def _is_context_length_error(error: Exception) -> bool:
 def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
                             query: str, k: int, req: dict,
                             groundtruth: dict, attack_config: dict = None,
-                            preset_max_reviews: int = None) -> dict | None:
+                            preset_max_reviews: int = None, quiet: bool = False) -> dict | None:
     """Evaluate a single request (thread-safe helper).
 
     For string mode: implements adaptive truncation - on context exceeded,
@@ -207,6 +207,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         groundtruth: {request_id: {"gold_restaurant": str, "gold_idx": int}}
         attack_config: Optional attack configuration for per-request attacks
         preset_max_reviews: Pre-determined max reviews limit (skip truncation discovery)
+        quiet: If True, suppress error prints (for rich display compatibility)
 
     Returns:
         Result dict or None if no ground truth
@@ -243,6 +244,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     shuffled_preds = []
     truncation_retries = 0
     raw_response = ""  # Store raw model output for debugging
+    error_msg = None  # Store error for quiet mode
 
     while True:
         # Format items as context (with current review limit for string mode)
@@ -259,13 +261,17 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         except Exception as e:
             if not _is_context_length_error(e):
                 # Not a context error - log and continue with empty predictions
-                print(f"[ERROR] {req_id}: {type(e).__name__}: {str(e)[:300]}", flush=True)
+                error_msg = f"{type(e).__name__}: {str(e)[:200]}"
+                if not quiet:
+                    print(f"[ERROR] {req_id}: {error_msg}", flush=True)
                 break
 
             # Context exceeded - try reducing reviews (string mode only)
             if mode != "string":
                 # Dict mode doesn't support truncation - propagate error
-                print(f"[CONTEXT EXCEEDED] {req_id}: {str(e)[:300]}", flush=True)
+                error_msg = f"Context exceeded: {str(e)[:200]}"
+                if not quiet:
+                    print(f"[CONTEXT EXCEEDED] {req_id}: {str(e)[:300]}", flush=True)
                 raise ContextLengthExceeded(str(e))
 
             # Calculate next review limit
@@ -279,10 +285,13 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
 
             if current_max_reviews < 0:
                 # No reviews left and still failing - give up
-                print(f"[CONTEXT EXCEEDED] {req_id}: Cannot fit even with 0 reviews", flush=True)
+                error_msg = "Cannot fit even with 0 reviews"
+                if not quiet:
+                    print(f"[CONTEXT EXCEEDED] {req_id}: {error_msg}", flush=True)
                 raise ContextLengthExceeded(str(e))
 
-            print(f"[TRUNCATE] {req_id}: Retrying with max_reviews={current_max_reviews} (retry {truncation_retries})", flush=True)
+            if not quiet:
+                print(f"[TRUNCATE] {req_id}: Retrying with max_reviews={current_max_reviews} (retry {truncation_retries})", flush=True)
 
     # Add truncation info to coverage stats
     if coverage_stats and truncation_retries > 0:
@@ -301,6 +310,8 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         gt, usage_records, coverage_stats
     )
     result["raw_response"] = raw_response  # Include raw model output for debugging
+    if error_msg:
+        result["error"] = error_msg
     return result
 
 
@@ -367,11 +378,13 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
         title = f"ANoT: {len(items)} candidates, k={k}"
         method.start_display(title=title, total=len(requests), requests=requests)
 
+    result = None
     try:
-        return _evaluate_ranking_inner(
+        result = _evaluate_ranking_inner(
             items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers,
             has_rich_display, attack_config
         )
+        return result
     except KeyboardInterrupt:
         print("\n\n[!] Interrupted by user (Ctrl+C)")
         # Return partial results
@@ -381,10 +394,16 @@ def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
             "stats": {},
             "context_exceeded": False,
             "interrupted": True,
+            "errors": [],
         }
     finally:
         if has_rich_display:
             method.stop_display()
+            # Print errors after display stops (for clean output)
+            if result and result.get("errors"):
+                print(f"\n\u26a0\ufe0f  {len(result['errors'])} error(s) during evaluation:")
+                for req_id, error in result["errors"]:
+                    print(f"  [{req_id}] {error}")
 
 
 def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuffle, parallel, max_workers, has_rich_display, attack_config=None):
@@ -401,17 +420,19 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
     if parallel and mode == "string" and len(requests) > 1:
         first_req = requests[0]
         query = first_req.get("context") or first_req.get("text", "")
-        print(f"[TRUNCATE] Running {first_req['id']} first to determine stable max_reviews...", flush=True)
+        if not has_rich_display:
+            print(f"[TRUNCATE] Running {first_req['id']} first to determine stable max_reviews...", flush=True)
         try:
             first_result = evaluate_ranking_single(
-                method, items, mode, shuffle, query, k, first_req, groundtruth, attack_config
+                method, items, mode, shuffle, query, k, first_req, groundtruth, attack_config,
+                quiet=has_rich_display
             )
             if first_result:
                 results.append(first_result)
                 # Extract discovered max_reviews for remaining requests
                 if "coverage" in first_result and first_result["coverage"]:
                     preset_max_reviews = first_result["coverage"].get("final_max_reviews")
-                    if preset_max_reviews is not None:
+                    if preset_max_reviews is not None and not has_rich_display:
                         print(f"[TRUNCATE] Discovered stable max_reviews={preset_max_reviews}, using for remaining {len(requests)-1} requests", flush=True)
         except ContextLengthExceeded:
             context_exceeded = True
@@ -425,13 +446,15 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
         def run_eval():
             nonlocal context_exceeded, _interrupted
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                futures = {
-                    executor.submit(
-                        evaluate_ranking_single,
+                def make_task(r):
+                    return lambda: evaluate_ranking_single(
                         method, items, mode, shuffle,
-                        req.get("context") or req.get("text", ""),  # query = user request
-                        k, req, groundtruth, attack_config, preset_max_reviews
-                    ): req
+                        r.get("context") or r.get("text", ""),
+                        k, r, groundtruth, attack_config, preset_max_reviews,
+                        quiet=has_rich_display
+                    )
+                futures = {
+                    executor.submit(make_task(req)): req
                     for req in remaining_requests
                 }
 
@@ -467,7 +490,7 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                 try:
                     result = evaluate_ranking_single(
                         method, items, mode, shuffle, query, k, req, groundtruth,
-                        attack_config, preset_max_reviews
+                        attack_config, preset_max_reviews, quiet=has_rich_display
                     )
                     if result:
                         results.append(result)
@@ -484,9 +507,13 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
 
     stats = compute_multi_k_stats(results, k)
 
+    # Collect errors from results for display
+    errors = [(r["request_id"], r["error"]) for r in results if r.get("error")]
+
     return {
         "results": results,
         "req_ids": req_ids,
         "stats": stats,
         "context_exceeded": context_exceeded,
+        "errors": errors,
     }

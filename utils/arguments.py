@@ -69,8 +69,8 @@ def parse_args():
                         help="Target character length for heterogeneity attack")
 
     # LLM configuration
-    parser.add_argument("--provider", choices=["openai", "anthropic", "local", "slm", "vllm"], default="openai",
-                        help="LLM provider: openai, anthropic, local, slm, or vllm (default: openai)")
+    parser.add_argument("--provider", choices=["openai", "anthropic", "local", "slm", "vllm"], default="slm",
+                        help="LLM provider: openai, anthropic, local, slm, or vllm (default: slm)")
     parser.add_argument("--model", default=None,
                         help="Override model (default: role-based selection)")
     parser.add_argument("--temperature", type=float, default=0.0,
@@ -139,6 +139,10 @@ def parse_args():
     # Derived arguments
     args.parallel = PARALLEL_MODE and not args.sequential
     args.benchmark = BENCHMARK_MODE and not args.dev
+
+    # Dev mode defaults: show full output for easier debugging
+    if args.dev:
+        args.full = True
 
     # Forbid dummy method in benchmark mode
     if args.method == "dummy" and args.benchmark:

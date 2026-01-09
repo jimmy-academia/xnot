@@ -1,0 +1,96 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    },
+    "2": {
+      "mean": 0.0,
+      "std": 0.0,
+      "values": [
+        0.0
+      ]
+    },
+    "3": {
+      "mean": 0.14285714285714285,
+      "std": 0.0,
+      "values": [
+        0.14285714285714285
+      ]
+    },
+    "4": {
+      "mean": 0.14285714285714285,
+      "std": 0.0,
+      "values": [
+        0.14285714285714285
+      ]
+    },
+    "5": {
+      "mean": 0.14285714285714285,
+      "std": 0.0,
+      "values": [
+        0.14285714285714285
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 7,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 0,
+          "accuracy": 0.0
+        },
+        "2": {
+          "hits": 0,
+          "accuracy": 0.0
+        },
+        "3": {
+          "hits": 1,
+          "accuracy": 0.14285714285714285
+        },
+        "4": {
+          "hits": 1,
+          "accuracy": 0.14285714285714285
+        },
+        "5": {
+          "hits": 1,
+          "accuracy": 0.14285714285714285
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "anot",
+  "data": "philly_cafes",
+  "model": "qwen-3b",
+  "attack": "clean",
+  "usage": {
+    "total_calls": 0,
+    "total_prompt_tokens": 0,
+    "total_completion_tokens": 0,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0,
+    "total_latency_ms": 0.0,
+    "mean_latency_per_run_ms": 0.0,
+    "mean_cost_per_run": 0.0,
+    "per_run": [
+      {
+        "total_calls": 0,
+        "total_prompt_tokens": 0,
+        "total_completion_tokens": 0,
+        "total_tokens": 0,
+        "total_cost_usd": 0.0,
+        "total_latency_ms": 0.0,
+        "avg_latency_ms": 0.0,
+        "by_model": {}
+      }
+    ]
+  }
+}

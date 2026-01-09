@@ -153,7 +153,9 @@ class SLMService:
             "timeout": 120.0,
         }
         self._http_client = None
+        self._http_client_loop = None
         self._semaphore: Optional[asyncio.Semaphore] = None
+        self._semaphore_loop = None
 
     def configure(self, **kwargs):
         """Update configuration."""
@@ -166,21 +168,43 @@ class SLMService:
         # Reset client on config change
         self._http_client = None
         self._semaphore = None
+        self._semaphore_loop = None  # Track which loop the semaphore belongs to
+        self._http_client_loop = None  # Track which loop the client belongs to
 
     def _get_semaphore(self) -> asyncio.Semaphore:
-        """Get or create async semaphore for rate limiting."""
-        if self._semaphore is None:
+        """Get or create async semaphore for rate limiting (per event loop)."""
+        try:
+            current_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            current_loop = None
+
+        # Create new semaphore if loop changed or doesn't exist
+        if self._semaphore is None or self._semaphore_loop != current_loop:
             self._semaphore = asyncio.Semaphore(self._config["max_concurrent"])
+            self._semaphore_loop = current_loop
         return self._semaphore
 
     async def _get_http_client(self):
-        """Get or create httpx async client."""
-        if self._http_client is None:
+        """Get or create httpx async client (per event loop)."""
+        try:
+            current_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            current_loop = None
+
+        # Create new client if loop changed or doesn't exist
+        if self._http_client is None or self._http_client_loop != current_loop:
+            # Close old client if exists
+            if self._http_client is not None:
+                try:
+                    await self._http_client.aclose()
+                except Exception:
+                    pass
             import httpx
             self._http_client = httpx.AsyncClient(
                 base_url=self._config["base_url"],
                 timeout=self._config["timeout"],
             )
+            self._http_client_loop = current_loop
         return self._http_client
 
     def call_sync(
@@ -450,6 +474,307 @@ def get_slm_token_budget(model: str = "qwen-0.5b") -> int:
 
 
 # -----------------------------
+# Ollama Startup Checks & Automation
+# -----------------------------
+
+# Default parallelism setting for auto-started server
+DEFAULT_NUM_PARALLEL = 64
+
+
+def check_ollama_installed() -> bool:
+    """Check if ollama command is available."""
+    import shutil
+    return shutil.which("ollama") is not None
+
+
+def check_ollama_server() -> bool:
+    """Check if Ollama server is running (sync version for startup)."""
+    import httpx
+    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    try:
+        with httpx.Client(timeout=5.0) as client:
+            resp = client.get(f"{base_url}/api/tags")
+            return resp.status_code == 200
+    except Exception:
+        return False
+
+
+def detect_gpu() -> dict:
+    """Detect GPU environment for optimal Ollama configuration."""
+    import shutil
+    import subprocess
+
+    info = {"has_nvidia": False, "gpu_name": None, "gpu_memory_gb": None}
+
+    if shutil.which("nvidia-smi"):
+        try:
+            result = subprocess.run(
+                ["nvidia-smi", "--query-gpu=name,memory.total", "--format=csv,noheader,nounits"],
+                capture_output=True, text=True, timeout=5
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                line = result.stdout.strip().split("\n")[0]
+                parts = line.split(", ")
+                info["has_nvidia"] = True
+                info["gpu_name"] = parts[0] if len(parts) > 0 else None
+                if len(parts) > 1:
+                    try:
+                        info["gpu_memory_gb"] = int(parts[1]) // 1024
+                    except ValueError:
+                        pass
+        except Exception:
+            pass
+
+    return info
+
+
+def get_available_models() -> List[str]:
+    """Get list of models currently available on Ollama server."""
+    import httpx
+    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    try:
+        with httpx.Client(timeout=5.0) as client:
+            resp = client.get(f"{base_url}/api/tags")
+            if resp.status_code == 200:
+                data = resp.json()
+                return [m["name"] for m in data.get("models", [])]
+    except Exception:
+        pass
+    return []
+
+
+def start_ollama_server(num_parallel: int = DEFAULT_NUM_PARALLEL, wait_timeout: float = 30.0) -> bool:
+    """
+    Start Ollama server as a background process with specified parallelism.
+
+    Args:
+        num_parallel: OLLAMA_NUM_PARALLEL value for concurrent request handling
+        wait_timeout: Seconds to wait for server to become ready
+
+    Returns:
+        True if server started successfully, False otherwise
+    """
+    import subprocess
+    import shutil
+
+    if not shutil.which("ollama"):
+        logger.error("Ollama is not installed")
+        return False
+
+    # Check if already running
+    if check_ollama_server():
+        logger.info("Ollama server is already running")
+        return True
+
+    print(f"[SLM] Starting Ollama server with OLLAMA_NUM_PARALLEL={num_parallel}...")
+
+    # Set up environment
+    env = os.environ.copy()
+    env["OLLAMA_NUM_PARALLEL"] = str(num_parallel)
+
+    # Start server as background process
+    try:
+        # Use Popen to start in background without waiting
+        subprocess.Popen(
+            ["ollama", "serve"],
+            env=env,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,  # Detach from parent process
+        )
+    except Exception as e:
+        logger.error(f"Failed to start Ollama server: {e}")
+        return False
+
+    # Wait for server to become ready
+    start_time = time.time()
+    while time.time() - start_time < wait_timeout:
+        if check_ollama_server():
+            print(f"[SLM] Ollama server started successfully (OLLAMA_NUM_PARALLEL={num_parallel})")
+            return True
+        time.sleep(0.5)
+
+    logger.error(f"Ollama server did not become ready within {wait_timeout}s")
+    return False
+
+
+def pull_model(model_name: str, timeout: float = 600.0) -> bool:
+    """
+    Pull a model if not already available.
+
+    Args:
+        model_name: Short name (e.g., "qwen-3b") or Ollama name (e.g., "qwen2.5:3b")
+        timeout: Maximum time to wait for pull (models can be large)
+
+    Returns:
+        True if model is available (already present or pulled), False on failure
+    """
+    import subprocess
+
+    ollama_name = get_ollama_name(model_name)
+
+    # Check if already available
+    available = get_available_models()
+    # Check for exact match or base name match (e.g., "qwen2.5:3b" matches "qwen2.5:3b")
+    for avail in available:
+        if avail == ollama_name or avail.split(":")[0] == ollama_name.split(":")[0]:
+            if avail == ollama_name:
+                logger.info(f"Model {ollama_name} is already available")
+                return True
+
+    # Need to pull
+    print(f"[SLM] Pulling model {ollama_name}... (this may take a few minutes)")
+
+    try:
+        result = subprocess.run(
+            ["ollama", "pull", ollama_name],
+            capture_output=False,  # Show progress to user
+            timeout=timeout,
+        )
+        if result.returncode == 0:
+            print(f"[SLM] Model {ollama_name} pulled successfully")
+            return True
+        else:
+            logger.error(f"Failed to pull model {ollama_name}")
+            return False
+    except subprocess.TimeoutExpired:
+        logger.error(f"Model pull timed out after {timeout}s")
+        return False
+    except Exception as e:
+        logger.error(f"Error pulling model: {e}")
+        return False
+
+
+def ensure_ollama_ready(
+    model: str = None,
+    num_parallel: int = DEFAULT_NUM_PARALLEL,
+    auto_start: bool = True,
+    auto_pull: bool = True,
+) -> bool:
+    """
+    Ensure Ollama is running and model is available.
+
+    This is the main entry point for automation. Call this before using SLM:
+
+        from utils.slm import ensure_ollama_ready
+        ensure_ollama_ready(model="qwen-3b", num_parallel=128)
+
+    Args:
+        model: Model to ensure is available (short name or Ollama name)
+        num_parallel: OLLAMA_NUM_PARALLEL for auto-started server
+        auto_start: If True, start server if not running
+        auto_pull: If True, pull model if not available
+
+    Returns:
+        True if ready, False on failure
+    """
+    import sys
+
+    # Step 1: Check/install Ollama
+    if not check_ollama_installed():
+        print("\n" + "=" * 60)
+        print("ERROR: Ollama is not installed")
+        print("=" * 60)
+        print("\nTo install Ollama, run:")
+        print()
+        print("  curl -fsSL https://ollama.com/install.sh | sh")
+        print()
+        print("Or visit: https://ollama.com/download")
+        print("=" * 60 + "\n")
+        return False
+
+    # Step 2: Check/start server
+    if not check_ollama_server():
+        if auto_start:
+            if not start_ollama_server(num_parallel=num_parallel):
+                print("\n" + "=" * 60)
+                print("ERROR: Failed to start Ollama server")
+                print("=" * 60)
+                print("\nTry starting manually:")
+                print()
+                print(f"  OLLAMA_NUM_PARALLEL={num_parallel} ollama serve")
+                print("=" * 60 + "\n")
+                return False
+        else:
+            base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+            print("\n" + "=" * 60)
+            print("ERROR: Ollama server is not running")
+            print("=" * 60)
+            print(f"\nCannot connect to Ollama at: {base_url}")
+            print("\nTo start the server, run:")
+            print()
+            print(f"  OLLAMA_NUM_PARALLEL={num_parallel} ollama serve")
+            print("=" * 60 + "\n")
+            return False
+
+    # Step 3: Check/pull model
+    if model:
+        ollama_name = get_ollama_name(model)
+        available = get_available_models()
+
+        # Check if model is available
+        model_present = any(
+            avail == ollama_name or avail.startswith(ollama_name.split(":")[0] + ":")
+            for avail in available
+        ) if available else False
+
+        if not model_present:
+            if auto_pull:
+                if not pull_model(model):
+                    print("\n" + "=" * 60)
+                    print(f"ERROR: Failed to pull model {ollama_name}")
+                    print("=" * 60)
+                    print("\nTry pulling manually:")
+                    print()
+                    print(f"  ollama pull {ollama_name}")
+                    print("=" * 60 + "\n")
+                    return False
+            else:
+                print("\n" + "=" * 60)
+                print(f"ERROR: Model {ollama_name} is not available")
+                print("=" * 60)
+                print("\nAvailable models:", available if available else "(none)")
+                print("\nTo pull the model, run:")
+                print()
+                print(f"  ollama pull {ollama_name}")
+                print("=" * 60 + "\n")
+                return False
+
+    return True
+
+
+def check_ollama_or_exit(
+    model: str = None,
+    num_parallel: int = DEFAULT_NUM_PARALLEL,
+    auto_start: bool = True,
+    auto_pull: bool = True,
+):
+    """
+    Ensure Ollama is ready, exit if not.
+
+    This is a convenience wrapper that exits the program on failure:
+
+        from utils.slm import check_ollama_or_exit
+        check_ollama_or_exit(model="qwen-3b")  # Auto-starts server & pulls model
+
+    Args:
+        model: Model to ensure is available
+        num_parallel: OLLAMA_NUM_PARALLEL for auto-started server
+        auto_start: If True, start server if not running
+        auto_pull: If True, pull model if not available
+    """
+    import sys
+
+    if not ensure_ollama_ready(
+        model=model,
+        num_parallel=num_parallel,
+        auto_start=auto_start,
+        auto_pull=auto_pull,
+    ):
+        sys.exit(1)
+
+
+# -----------------------------
 # CLI for testing
 # -----------------------------
 
@@ -460,10 +785,20 @@ if __name__ == "__main__":
     parser.add_argument("--model", "-m", default="qwen-0.5b", help="Model to use")
     parser.add_argument("--test", action="store_true", help="Run parallel test")
     parser.add_argument("--health", action="store_true", help="Check server health")
+    parser.add_argument("--setup", action="store_true", help="Auto-start server and pull model")
+    parser.add_argument("--parallel", "-p", type=int, default=64, help="OLLAMA_NUM_PARALLEL value")
     parser.add_argument("--requests", "-n", type=int, default=8, help="Number of parallel requests")
     args = parser.parse_args()
 
-    if args.health:
+    if args.setup:
+        # Automation demo: auto-start server and pull model
+        print(f"Ensuring Ollama is ready with model={args.model}, num_parallel={args.parallel}...")
+        check_ollama_or_exit(model=args.model, num_parallel=args.parallel)
+        print("\nOllama is ready!")
+        print(f"  Server: running with OLLAMA_NUM_PARALLEL={args.parallel}")
+        print(f"  Model:  {get_ollama_name(args.model)} available")
+
+    elif args.health:
         async def check():
             service = get_slm_service()
             healthy = await service.health_check()
