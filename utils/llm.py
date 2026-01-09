@@ -27,6 +27,17 @@ try:
 except ImportError:
     anthropic = None
 
+# SLM support (lazy import to avoid torch overhead when not needed)
+_slm_service = None
+
+def _get_slm_service():
+    """Lazy import of SLM service to avoid torch import overhead."""
+    global _slm_service
+    if _slm_service is None:
+        from utils.slm import get_slm_service, is_slm_model
+        _slm_service = get_slm_service()
+    return _slm_service
+
 from utils.usage import get_usage_tracker
 
 # Suppress verbose HTTP client logs
@@ -213,11 +224,16 @@ class LLMService:
 
     # --- Sync Calls ---
 
-    def call_sync(self, prompt: str, system: str = "", provider: str = None, 
+    def call_sync(self, prompt: str, system: str = "", provider: str = None,
                   model: str = None, role: str = "default", context: dict = None) -> str:
         provider = provider or self._config["provider"]
         model = model or self.get_model(role)
-        
+
+        # Route SLM models (no semaphore - SLM has its own concurrency control)
+        if provider == "slm":
+            slm = _get_slm_service()
+            return slm.call_sync(prompt, system, model, context)
+
         sem = self._get_semaphore()
         with sem:
             if provider == "local":
@@ -317,12 +333,17 @@ class LLMService:
 
     # --- Async Calls ---
 
-    async def call_async(self, prompt: str, system: str = "", provider: str = None, 
+    async def call_async(self, prompt: str, system: str = "", provider: str = None,
                          model: str = None, role: str = "default", context: dict = None,
                          return_usage: bool = False):
         provider = provider or self._config["provider"]
         model = model or self.get_model(role)
-        
+
+        # Route SLM models (async via thread pool)
+        if provider == "slm":
+            slm = _get_slm_service()
+            return await slm.call_async(prompt, system, model, context, return_usage)
+
         sem = self._get_async_semaphore()
         async with sem:
             if provider == "openai":
@@ -333,7 +354,7 @@ class LLMService:
                 # Fallback to sync for local/unknown
                 text = self.call_sync(prompt, system, provider, model, role, context)
                 result = (text, 0, 0)
-                
+
             text, pt, ct = result
             if return_usage:
                 return {"text": text, "prompt_tokens": pt, "completion_tokens": ct}
@@ -448,7 +469,7 @@ def config_llm(args):
     max_conc = getattr(args, "max_concurrent", None)
     if max_conc is not None:
         init_rate_limiter(max_conc)
-    
+
     configure(
         temperature=getattr(args, "temperature", None),
         max_tokens=getattr(args, "max_tokens", None),
@@ -459,3 +480,34 @@ def config_llm(args):
         request_timeout=getattr(args, "request_timeout", None),
         max_retries=getattr(args, "max_retries", None),
     )
+
+    # Configure SLM if provider is slm
+    provider = getattr(args, "provider", None)
+    if provider == "slm":
+        slm = _get_slm_service()
+        slm.configure(
+            max_new_tokens=getattr(args, "max_tokens", None),
+            temperature=getattr(args, "temperature", None),
+        )
+
+
+# -----------------------------
+# SLM Helpers (re-exported for convenience)
+# -----------------------------
+
+def is_slm_model(model_name: str) -> bool:
+    """Check if model name refers to a local SLM."""
+    try:
+        from utils.slm import is_slm_model as _is_slm
+        return _is_slm(model_name)
+    except ImportError:
+        return False
+
+
+def list_slm_models():
+    """List available SLM model short names."""
+    try:
+        from utils.slm import list_slm_models as _list
+        return _list()
+    except ImportError:
+        return []

@@ -681,12 +681,95 @@ class AdaptiveNetworkOfThought(BaseMethod):
 
         self._debug(1, "P2", f"Refined LWT: {len(lwt_steps)} steps")
 
+        # === VALIDATION: Expand any remaining placeholders programmatically ===
+        lwt_steps = self._expand_remaining_placeholders(lwt_steps, query)
+
         trace = self._get_trace()
         if trace:
             trace["phase2"]["expanded_lwt"] = lwt_steps
             trace["phase2"]["react_iterations"] = iteration + 1
 
         return lwt_steps
+
+    def _expand_remaining_placeholders(self, lwt_steps: List[str], query: dict) -> List[str]:
+        """Expand any remaining [NEEDS_SEARCH] or [NEEDS_SOCIAL_SEARCH] placeholders.
+
+        This is a safety net for when the ReAct loop fails to expand all placeholders.
+        """
+        expanded = []
+        for step in lwt_steps:
+            # Check for [NEEDS_SEARCH:N:keyword] pattern
+            search_match = re.search(r'\[NEEDS_SEARCH:(\d+):([^\]]+)\]', step)
+            if search_match:
+                item_num = int(search_match.group(1))
+                keyword = search_match.group(2)
+                self._debug(1, "P2", f"Auto-expanding NEEDS_SEARCH for item {item_num}, keyword '{keyword}'")
+
+                # Use keyword_search tool directly
+                result = tool_keyword_search(item_num, keyword, query)
+                result_data = json.loads(result)
+
+                if result_data.get("total_matches", 0) > 0:
+                    # Build slice syntax from matches
+                    slices = []
+                    for match in result_data.get("matches", [])[:2]:  # Max 2 reviews
+                        rev_idx = match["review"]
+                        pos = match["positions"][0] if match["positions"] else 0
+                        start = max(0, pos - 100)
+                        end = pos + 100
+                        slices.append(f"{{(context)}}[{item_num}][reviews][{rev_idx}][text][{start}:{end}]")
+
+                    # Extract step ID from step
+                    step_id_match = re.match(r'\((\w+)\)', step)
+                    step_id = step_id_match.group(1) if step_id_match else "r" + str(item_num)
+
+                    new_prompt = f"Item {item_num} review excerpts: {', '.join(slices)}. Do these mention {keyword}? yes/no"
+                    expanded.append(f"({step_id})=LLM('{new_prompt}')")
+                else:
+                    # No matches - set to "no"
+                    step_id_match = re.match(r'\((\w+)\)', step)
+                    step_id = step_id_match.group(1) if step_id_match else "r" + str(item_num)
+                    expanded.append(f"({step_id})=LLM('No reviews mention {keyword}: no')")
+                continue
+
+            # Check for [NEEDS_SOCIAL_SEARCH:N:friend:keyword] pattern
+            social_match = re.search(r'\[NEEDS_SOCIAL_SEARCH:(\d+):([^:]+):([^\]]+)\]', step)
+            if social_match:
+                item_num = int(social_match.group(1))
+                friend_name = social_match.group(2)
+                keyword = social_match.group(3)
+                self._debug(1, "P2", f"Auto-expanding NEEDS_SOCIAL_SEARCH for item {item_num}, friend '{friend_name}', keyword '{keyword}'")
+
+                # Use social_search tool directly
+                result = tool_social_search(item_num, friend_name, keyword, query)
+                result_data = json.loads(result)
+
+                if result_data.get("total_matches", 0) > 0:
+                    # Build slice syntax from matches
+                    slices = []
+                    for match in result_data.get("matches", [])[:2]:  # Max 2 reviews
+                        rev_idx = match["review"]
+                        pos = match["positions"][0] if match["positions"] else 0
+                        start = max(0, pos - 100)
+                        end = pos + 100
+                        slices.append(f"{{(context)}}[{item_num}][reviews][{rev_idx}][text][{start}:{end}]")
+
+                    step_id_match = re.match(r'\((\w+)\)', step)
+                    step_id = step_id_match.group(1) if step_id_match else "s" + str(item_num)
+
+                    new_prompt = f"Item {item_num} {friend_name}'s review excerpts: {', '.join(slices)}. Does {friend_name} mention {keyword}? yes/no"
+                    expanded.append(f"({step_id})=LLM('{new_prompt}')")
+                else:
+                    # No matches - set to "no"
+                    step_id_match = re.match(r'\((\w+)\)', step)
+                    step_id = step_id_match.group(1) if step_id_match else "s" + str(item_num)
+                    expanded.append(f"({step_id})=LLM('{friend_name} has no reviews mentioning {keyword}: no')")
+                continue
+
+            # No placeholder - keep as is
+            expanded.append(step)
+
+        return expanded
 
     # =========================================================================
     # Phase 3: Pure LWT Execution

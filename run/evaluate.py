@@ -242,6 +242,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
     coverage_stats = None
     shuffled_preds = []
     truncation_retries = 0
+    raw_response = ""  # Store raw model output for debugging
 
     while True:
         # Format items as context (with current review limit for string mode)
@@ -252,6 +253,7 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
         try:
             response = _invoke_method(method, query, context, k, req_id)
             shuffled_preds = parse_indices(response, item_count, k)
+            raw_response = response  # Store for debugging
             break  # Success!
 
         except Exception as e:
@@ -294,10 +296,12 @@ def evaluate_ranking_single(method, items: list, mode: str, shuffle: str,
 
     # Build result with usage stats
     usage_records = tracker.get_records()[start_idx:]
-    return _build_result(
+    result = _build_result(
         req_id, pred_indices, shuffled_preds, gold_idx, shuffled_gold_pos,
         gt, usage_records, coverage_stats
     )
+    result["raw_response"] = raw_response  # Include raw model output for debugging
+    return result
 
 
 def _run_with_progress(generator, has_rich_display: bool, description: str, total: int):
@@ -313,10 +317,21 @@ def _run_with_progress(generator, has_rich_display: bool, description: str, tota
             TextColumn("[progress.description]{task.description}"),
             BarColumn(),
             TaskProgressColumn(),
+            TextColumn("{task.fields[status]}"),
         ) as progress:
-            task = progress.add_task(description, total=total)
-            for _ in generator:
-                progress.update(task, advance=1)
+            task = progress.add_task(description, total=total, status="")
+            for item in generator:
+                # Extract response preview if available
+                status = ""
+                if isinstance(item, dict) and "raw_response" in item:
+                    resp = item["raw_response"]
+                    req_id = item.get("request_id", "?")
+                    # Truncate to ~60 chars for display
+                    preview = resp.replace("\n", " ")[:60]
+                    if len(resp) > 60:
+                        preview += "..."
+                    status = f"[dim]{req_id}: {preview}[/dim]"
+                progress.update(task, advance=1, status=status)
 
 
 def evaluate_ranking(items: list[dict], method: Callable, requests: list[dict],
@@ -430,10 +445,12 @@ def _evaluate_ranking_inner(items, method, requests, groundtruth, mode, k, shuff
                     )
                     if result:
                         results.append(result)
+                        yield result  # Yield result for progress display
+                    else:
+                        yield None
                 except ContextLengthExceeded:
                     context_exceeded = True
                     return
-                yield 1
 
         description = "Ranking evaluation (sequential)..."
 

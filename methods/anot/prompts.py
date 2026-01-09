@@ -172,7 +172,9 @@ For REVIEW conditions - use placeholder that Phase 2 will expand:
   (rN)=LLM('[NEEDS_SEARCH:N:keyword] Do any reviews mention keyword? yes/no')
 
 For HOURS conditions (check if open during requested time):
-  (hN)=LLM('Item N hours Day: {{(context)}}[N][hours][Day]. User needs START-END. Is item open? (start<=START AND end>=END) yes/no')
+  IMPORTANT: Use ACTUAL day names (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
+  NEVER use "Today", "Evening", "Morning" - these keys don't exist in data!
+  (hN)=LLM('Item N hours Monday: {{(context)}}[N][hours][Monday]. User needs START-END. Is start<=START AND end>=END? yes/no')
 
 For SOCIAL conditions (check friend reviews):
   (sN)=LLM('[NEEDS_SOCIAL_SEARCH:N:friend_name:keyword] Does friend_name mention keyword? yes/no')
@@ -194,11 +196,13 @@ For SOCIAL conditions (check friend reviews):
 (r4)=LLM('[NEEDS_SEARCH:4:coffee] Do reviews mention coffee? yes/no')
 (final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}. Output item NUMBERS with yes first: ')
 
-[EXAMPLE: candidates [5,6] with HOURS condition (Monday 7:0-8:0)]
+[EXAMPLE: candidates [5,6] with HOURS condition (early morning on Monday)]
 ===LWT_SKELETON===
 (h5)=LLM('Item 5 hours Monday: {{(context)}}[5][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
 (h6)=LLM('Item 6 hours Monday: {{(context)}}[6][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
 (final)=LLM('Item 5={{(h5)}}, Item 6={{(h6)}}. Output item NUMBERS with yes first: ')
+
+NOTE: For "late night" or "evening" requests, check multiple days or use a representative day like Friday/Saturday.
 
 [EXAMPLE: candidates [3] with SOCIAL condition for friend "Kevin" and keyword "place"]
 ===LWT_SKELETON===
@@ -241,7 +245,13 @@ For EACH such step:
 After keyword_search returns matches like "Review 0: pos 150, Review 2: pos 300":
 update_step("r2", "Item 2 review excerpts: {{(context)}}[2][reviews][0][text][100:300], {{(context)}}[2][reviews][2][text][250:450]. Do these mention coffee? yes/no")
 
-[CRITICAL]
+[CRITICAL INDEXING - ITEMS ARE 1-INDEXED]
+- Item numbers start at 1 (Item 1, Item 2, ...), NOT 0
+- Step IDs match item numbers: r1, r2, r3, ... (NOT r0!)
+- NEVER use r0, s0, h0 - these don't exist
+- Example: For Item 5, use step "r5" or "s5"
+
+[OTHER RULES]
 - Output ONE action, then STOP. Wait for system response.
 - NEVER write "Observation:" yourself - system provides it.
 - ALWAYS use slice syntax [start:end] - NEVER include full review text!
@@ -252,7 +262,7 @@ update_step("r2", "Item 2 review excerpts: {{(context)}}[2][reviews][0][text][10
 [PROCESS]
 1. Find first step with [NEEDS_SEARCH] or [NEEDS_SOCIAL_SEARCH] placeholder
 2. Call keyword_search or social_search to find positions
-3. Call update_step with slice syntax
+3. Call update_step with slice syntax (use correct 1-indexed step ID!)
 4. Repeat until all placeholders expanded
 5. Call done()
 

@@ -69,8 +69,8 @@ def parse_args():
                         help="Target character length for heterogeneity attack")
 
     # LLM configuration
-    parser.add_argument("--provider", choices=["openai", "anthropic", "local"], default="openai",
-                        help="LLM provider (default: openai)")
+    parser.add_argument("--provider", choices=["openai", "anthropic", "local", "slm"], default="openai",
+                        help="LLM provider: openai, anthropic, local, or slm (default: openai)")
     parser.add_argument("--model", default=None,
                         help="Override model (default: role-based selection)")
     parser.add_argument("--temperature", type=float, default=0.0,
