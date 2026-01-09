@@ -173,7 +173,7 @@ class SLMService:
             "max_new_tokens": 128,
             "temperature": 0.0,
             "do_sample": False,
-            "max_concurrent": 4,  # Limited for local inference
+            "max_concurrent": 16,  # Increased for better throughput (was 4)
         }
 
     def configure(self, **kwargs):
