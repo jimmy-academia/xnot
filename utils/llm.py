@@ -546,6 +546,7 @@ def config_llm(args):
         slm.configure(
             max_new_tokens=getattr(args, "max_tokens", None),
             temperature=getattr(args, "temperature", None),
+            max_concurrent=getattr(args, "max_concurrent", None),
         )
 
 
