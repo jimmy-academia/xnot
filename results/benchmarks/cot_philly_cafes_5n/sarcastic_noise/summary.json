@@ -1,0 +1,103 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.7121212121212122,
+      "std": 0.0,
+      "values": [
+        0.7121212121212122
+      ]
+    },
+    "2": {
+      "mean": 0.7878787878787878,
+      "std": 0.0,
+      "values": [
+        0.7878787878787878
+      ]
+    },
+    "3": {
+      "mean": 0.8484848484848485,
+      "std": 0.0,
+      "values": [
+        0.8484848484848485
+      ]
+    },
+    "4": {
+      "mean": 0.8636363636363636,
+      "std": 0.0,
+      "values": [
+        0.8636363636363636
+      ]
+    },
+    "5": {
+      "mean": 0.8636363636363636,
+      "std": 0.0,
+      "values": [
+        0.8636363636363636
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 66,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 47,
+          "accuracy": 0.7121212121212122
+        },
+        "2": {
+          "hits": 52,
+          "accuracy": 0.7878787878787878
+        },
+        "3": {
+          "hits": 56,
+          "accuracy": 0.8484848484848485
+        },
+        "4": {
+          "hits": 57,
+          "accuracy": 0.8636363636363636
+        },
+        "5": {
+          "hits": 57,
+          "accuracy": 0.8636363636363636
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "cot",
+  "data": "philly_cafes",
+  "model": null,
+  "attack": "sarcastic_noise",
+  "usage": {
+    "total_calls": 66,
+    "total_prompt_tokens": 9330319,
+    "total_completion_tokens": 297079,
+    "total_tokens": 9627398,
+    "total_cost_usd": 1.577795,
+    "total_latency_ms": 3517952.13,
+    "mean_latency_per_run_ms": 3517952.13,
+    "mean_cost_per_run": 1.577795,
+    "per_run": [
+      {
+        "total_calls": 66,
+        "total_prompt_tokens": 9330319,
+        "total_completion_tokens": 297079,
+        "total_tokens": 9627398,
+        "total_cost_usd": 1.577795,
+        "total_latency_ms": 3517952.13,
+        "avg_latency_ms": 53302.31,
+        "by_model": {
+          "gpt-5-nano": {
+            "calls": 66,
+            "prompt_tokens": 9330319,
+            "completion_tokens": 297079,
+            "cost_usd": 1.577795
+          }
+        }
+      }
+    ]
+  }
+}

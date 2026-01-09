@@ -1,0 +1,103 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.6666666666666666,
+      "std": 0.0,
+      "values": [
+        0.6666666666666666
+      ]
+    },
+    "2": {
+      "mean": 0.7878787878787878,
+      "std": 0.0,
+      "values": [
+        0.7878787878787878
+      ]
+    },
+    "3": {
+      "mean": 0.8181818181818182,
+      "std": 0.0,
+      "values": [
+        0.8181818181818182
+      ]
+    },
+    "4": {
+      "mean": 0.8636363636363636,
+      "std": 0.0,
+      "values": [
+        0.8636363636363636
+      ]
+    },
+    "5": {
+      "mean": 0.8787878787878788,
+      "std": 0.0,
+      "values": [
+        0.8787878787878788
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 66,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 44,
+          "accuracy": 0.6666666666666666
+        },
+        "2": {
+          "hits": 52,
+          "accuracy": 0.7878787878787878
+        },
+        "3": {
+          "hits": 54,
+          "accuracy": 0.8181818181818182
+        },
+        "4": {
+          "hits": 57,
+          "accuracy": 0.8636363636363636
+        },
+        "5": {
+          "hits": 58,
+          "accuracy": 0.8787878787878788
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "cot",
+  "data": "philly_cafes",
+  "model": null,
+  "attack": "sarcastic_outdoor",
+  "usage": {
+    "total_calls": 66,
+    "total_prompt_tokens": 9358821,
+    "total_completion_tokens": 314462,
+    "total_tokens": 9673283,
+    "total_cost_usd": 1.5925,
+    "total_latency_ms": 3371757.68,
+    "mean_latency_per_run_ms": 3371757.68,
+    "mean_cost_per_run": 1.5925,
+    "per_run": [
+      {
+        "total_calls": 66,
+        "total_prompt_tokens": 9358821,
+        "total_completion_tokens": 314462,
+        "total_tokens": 9673283,
+        "total_cost_usd": 1.5925,
+        "total_latency_ms": 3371757.68,
+        "avg_latency_ms": 51087.24,
+        "by_model": {
+          "gpt-5-nano": {
+            "calls": 66,
+            "prompt_tokens": 9358821,
+            "completion_tokens": 314462,
+            "cost_usd": 1.5925
+          }
+        }
+      }
+    ]
+  }
+}
