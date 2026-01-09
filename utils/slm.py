@@ -24,6 +24,11 @@ logger = logging.getLogger(__name__)
 # Suppress transformers verbosity
 os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+
+# Suppress HuggingFace hub file lock debug messages
+for _hf_logger in ["huggingface_hub", "filelock"]:
+    logging.getLogger(_hf_logger).setLevel(logging.WARNING)
 
 # -----------------------------
 # Model Registry
