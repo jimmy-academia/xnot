@@ -1,0 +1,66 @@
+{
+  "method": "anot",
+  "defense": false,
+  "data": "philly_cafes",
+  "k": 5,
+  "parallel": true,
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 32000
+  },
+  "attack_config": {
+    "attack": "typo_20",
+    "n_restaurants": null,
+    "n_reviews": 1,
+    "seed": null,
+    "target_len": null
+  },
+  "stats": {
+    "total": 66,
+    "k": 5,
+    "hits_at": {
+      "1": {
+        "hits": 18,
+        "accuracy": 0.2727272727272727
+      },
+      "2": {
+        "hits": 23,
+        "accuracy": 0.3484848484848485
+      },
+      "3": {
+        "hits": 27,
+        "accuracy": 0.4090909090909091
+      },
+      "4": {
+        "hits": 32,
+        "accuracy": 0.48484848484848486
+      },
+      "5": {
+        "hits": 37,
+        "accuracy": 0.5606060606060606
+      }
+    }
+  },
+  "usage": {
+    "total_calls": 592,
+    "total_prompt_tokens": 216679,
+    "total_completion_tokens": 725390,
+    "total_tokens": 942069,
+    "total_cost_usd": 0.467736,
+    "total_latency_ms": 6516440.54,
+    "avg_latency_ms": 11007.5,
+    "by_model": {
+      "gpt-5-nano": {
+        "calls": 592,
+        "prompt_tokens": 216679,
+        "completion_tokens": 725390,
+        "cost_usd": 0.467736
+      }
+    }
+  },
+  "timestamp": "2026-01-08T22:18:12.749086",
+  "benchmark_mode": true,
+  "run_name": "anot"
+}

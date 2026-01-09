@@ -1,0 +1,53 @@
+{
+  "method": "cot",
+  "defense": false,
+  "data": "philly_cafes",
+  "k": 5,
+  "parallel": true,
+  "llm_config": {
+    "provider": "openai",
+    "model": null,
+    "temperature": 0.0,
+    "max_tokens": 32000
+  },
+  "attack_config": null,
+  "stats": {
+    "total": 66,
+    "k": 5,
+    "hits_at": {
+      "1": {
+        "hits": 44,
+        "accuracy": 0.6666666666666666
+      },
+      "2": {
+        "hits": 49,
+        "accuracy": 0.7424242424242424
+      },
+      "3": {
+        "hits": 52,
+        "accuracy": 0.7878787878787878
+      },
+      "4": {
+        "hits": 53,
+        "accuracy": 0.803030303030303
+      },
+      "5": {
+        "hits": 53,
+        "accuracy": 0.803030303030303
+      }
+    }
+  },
+  "usage": {
+    "total_calls": 0,
+    "total_prompt_tokens": 0,
+    "total_completion_tokens": 0,
+    "total_tokens": 0,
+    "total_cost_usd": 0.0,
+    "total_latency_ms": 0.0,
+    "avg_latency_ms": 0.0,
+    "by_model": {}
+  },
+  "timestamp": "2026-01-08T22:11:29.234432",
+  "benchmark_mode": true,
+  "run_name": "cot"
+}

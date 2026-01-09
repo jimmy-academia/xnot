@@ -1,0 +1,103 @@
+{
+  "type": "ranking",
+  "k": 5,
+  "hits_at": {
+    "1": {
+      "mean": 0.6818181818181818,
+      "std": 0.0,
+      "values": [
+        0.6818181818181818
+      ]
+    },
+    "2": {
+      "mean": 0.7878787878787878,
+      "std": 0.0,
+      "values": [
+        0.7878787878787878
+      ]
+    },
+    "3": {
+      "mean": 0.8484848484848485,
+      "std": 0.0,
+      "values": [
+        0.8484848484848485
+      ]
+    },
+    "4": {
+      "mean": 0.8484848484848485,
+      "std": 0.0,
+      "values": [
+        0.8484848484848485
+      ]
+    },
+    "5": {
+      "mean": 0.8484848484848485,
+      "std": 0.0,
+      "values": [
+        0.8484848484848485
+      ]
+    }
+  },
+  "per_run": [
+    {
+      "total": 66,
+      "k": 5,
+      "hits_at": {
+        "1": {
+          "hits": 45,
+          "accuracy": 0.6818181818181818
+        },
+        "2": {
+          "hits": 52,
+          "accuracy": 0.7878787878787878
+        },
+        "3": {
+          "hits": 56,
+          "accuracy": 0.8484848484848485
+        },
+        "4": {
+          "hits": 56,
+          "accuracy": 0.8484848484848485
+        },
+        "5": {
+          "hits": 56,
+          "accuracy": 0.8484848484848485
+        }
+      }
+    }
+  ],
+  "runs": 1,
+  "method": "cot",
+  "data": "philly_cafes",
+  "model": null,
+  "attack": "fake_positive",
+  "usage": {
+    "total_calls": 66,
+    "total_prompt_tokens": 9441590,
+    "total_completion_tokens": 290446,
+    "total_tokens": 9732036,
+    "total_cost_usd": 1.590506,
+    "total_latency_ms": 2864934.66,
+    "mean_latency_per_run_ms": 2864934.66,
+    "mean_cost_per_run": 1.590506,
+    "per_run": [
+      {
+        "total_calls": 66,
+        "total_prompt_tokens": 9441590,
+        "total_completion_tokens": 290446,
+        "total_tokens": 9732036,
+        "total_cost_usd": 1.590506,
+        "total_latency_ms": 2864934.66,
+        "avg_latency_ms": 43408.1,
+        "by_model": {
+          "gpt-5-nano": {
+            "calls": 66,
+            "prompt_tokens": 9441590,
+            "completion_tokens": 290446,
+            "cost_usd": 1.590506
+          }
+        }
+      }
+    ]
+  }
+}

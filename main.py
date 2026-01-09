@@ -73,6 +73,11 @@ def run_all_attacks(args, log):
         experiment = create_experiment(args)
         run_single(args, experiment, log)
 
+        # Print results for this attack
+        summary = aggregate_benchmark_runs(args.method, args.data, attack=attack, model=args.model)
+        if summary:
+            print_summary(summary, show_details=False)
+
     # Print summary of all attacks
     print(f"\n{'='*60}")
     print(f"ALL ATTACKS COMPLETE")
