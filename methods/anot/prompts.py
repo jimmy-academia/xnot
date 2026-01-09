@@ -67,57 +67,38 @@ User: "Looking for a cafe that my friend Kevin reviewed mentioning 'place'"
 # STEP 2: Path Resolution (called per condition)
 # =============================================================================
 
-STEP2_PATH_PROMPT = """Determine where to find the value for this condition.
+STEP2_PATH_PROMPT = """Map the condition to a database field.
 
-[CONDITION]
-{condition_description}
+CONDITION: {condition_description}
 
-[SCHEMA - example items showing available fields]
-{schema_compact}
-
-[COMMON FIELDS]
-- attributes.GoodForKids: True/False
-- attributes.WiFi: "free", "paid", "no", or None
-- attributes.DriveThru: True/False
-- attributes.NoiseLevel: "quiet", "average", "loud", "very_loud"
-- attributes.OutdoorSeating: True/False
-- attributes.HasTV: True/False
-- attributes.Ambience: dict with keys like hipster, casual, upscale, romantic, etc.
-- attributes.GoodForMeal: dict with keys like breakfast, lunch, dinner, brunch, etc.
+AVAILABLE FIELDS:
+- attributes.NoiseLevel: "quiet", "average", "loud" (for quiet/noisy)
+- attributes.GoodForKids: True/False (for kid-friendly)
+- attributes.DogsAllowed: True/False (for dog-friendly)
+- attributes.WiFi: "free", "paid", "no" (for WiFi)
+- attributes.HasTV: True/False (for TV/screens)
+- attributes.OutdoorSeating: True/False (for outdoor/patio)
+- attributes.CoatCheck: True/False (for coat storage)
+- attributes.DriveThru: True/False (for drive-through)
 - attributes.Alcohol: "full_bar", "beer_and_wine", "none"
-- attributes.CoatCheck: True/False
-- attributes.RestaurantsPriceRange2: 1, 2, 3, 4
-- hours: dict with day names as keys, values like "8:0-22:0"
-- reviews: list of review objects with 'text' field
+- attributes.RestaurantsTakeOut: True/False (for takeout)
+- attributes.RestaurantsReservations: True/False (for reservations)
+- attributes.RestaurantsGoodForGroups: True/False (for groups)
+- attributes.BikeParking: True/False (for bike parking)
+- attributes.Ambience.hipster: True/False (for hipster/indie vibe)
+- attributes.Ambience.trendy: True/False (for trendy/Instagram)
+- attributes.Ambience.casual: True/False
+- attributes.Ambience.romantic: True/False
+- attributes.RestaurantsPriceRange2: 1-4 (1=cheap, 4=expensive)
+- hours.Monday, hours.Tuesday, etc: "8:0-22:0" format
+- reviews: search review text for keywords
 
-[TASK]
-1. Identify which field to check for this condition
-2. Determine expected value based on what the user WANTS:
-   - "trendy" → user wants trendy=True
-   - "not kid-friendly" → user wants GoodForKids=False
-   - "quiet" → user wants NoiseLevel="quiet"
-   - "free WiFi" → user wants WiFi="free"
-3. For HOURS conditions: ALWAYS use TYPE: SOFT (requires range checking, not exact match)
+OUTPUT exactly 3 lines for the condition "{condition_description}":
+PATH: [field name from list above]
+EXPECTED: [True/False/value the user wants]
+TYPE: [HARD or SOFT]
 
-[OUTPUT FORMAT]
-PATH: attributes.FieldName
-EXPECTED: True/False/"value"
-TYPE: HARD
-
-For review text search:
-PATH: reviews
-EXPECTED: keyword
-TYPE: SOFT
-
-For hours conditions (ALWAYS use SOFT):
-PATH: hours.DayName
-EXPECTED: start:min-end:min
-TYPE: SOFT
-
-For date/recency conditions (e.g. "reviews since 2020"):
-PATH: reviews
-EXPECTED: date >= 2020-01-01
-TYPE: SOFT
+Use HARD for exact matches, SOFT for reviews/hours.
 """
 
 # =============================================================================
@@ -152,118 +133,42 @@ item_number: reason
 # STEP 4: LWT Skeleton Generation (separate steps per item)
 # =============================================================================
 
-STEP4_SKELETON_PROMPT = """Generate LWT skeleton for soft conditions on candidate items.
+STEP4_SKELETON_PROMPT = """Generate LWT to rank candidates {candidates} for: {soft_question}
 
-[CANDIDATES]
-{candidates}
+CRITICAL RULES:
+1. NEVER write {{(context)}} or {{(items)}} alone - this dumps 100K+ tokens!
+2. ALWAYS use specific paths: {{(context)}}[N][field] where N is item number
+3. For names: {{(context)}}[N][name]
+4. For reviews: {{(context)}}[N][reviews][0][text][0:200] (slice to 200 chars max!)
+5. For stars: {{(context)}}[N][stars]
 
-[SOFT CONDITIONS]
-{soft_conditions}
+BAD (crashes): {{(context)}}
+BAD (crashes): {{(items)}}
+GOOD: {{(context)}}[1][name], {{(context)}}[1][stars]
+GOOD: {{(context)}}[2][reviews][0][text][0:150]
 
-[CRITICAL RULES]
-1. ONLY generate steps for items in CANDIDATES list above - no other items!
-2. Generate ONE step per candidate per soft condition
-3. MUST end with a (final) step that aggregates results and outputs ranking
-4. NEVER use {{(context)}}[N][reviews] - this loads ALL reviews and is TOO LARGE!
-5. Use placeholder [NEEDS_SEARCH] for review steps - Phase 2 will use tools to find relevant reviews
-
-[CONDITION TYPES - USE CORRECT FORMAT]
-For REVIEW conditions - use placeholder that Phase 2 will expand:
-  (rN)=LLM('[NEEDS_SEARCH:N:keyword] Do any reviews mention keyword? yes/no')
-
-For HOURS conditions (check if open during requested time):
-  IMPORTANT: Use ACTUAL day names (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
-  NEVER use "Today", "Evening", "Morning" - these keys don't exist in data!
-  (hN)=LLM('Item N hours Monday: {{(context)}}[N][hours][Monday]. User needs START-END. Is start<=START AND end>=END? yes/no')
-
-For SOCIAL conditions (check friend reviews):
-  (sN)=LLM('[NEEDS_SOCIAL_SEARCH:N:friend_name:keyword] Does friend_name mention keyword? yes/no')
-
-[VARIABLE SYNTAX]
-- {{(context)}}[N][hours][Day] - Item N's hours for Day (e.g., Monday)
-- {{(context)}}[N][reviews][R][text][start:end] - Specific review slice (Phase 2 generates)
-- {{(rN)}} or {{(hN)}} - Result from step rN or hN
-
-[OUTPUT FORMAT]
 ===LWT_SKELETON===
-(step_id)=LLM('...')
-...
-(final)=LLM('Item N={{(rN)}}, ... Output item NUMBERS with yes first: ')
-
-[EXAMPLE: candidates [2,4] with REVIEW condition for "coffee"]
-===LWT_SKELETON===
-(r2)=LLM('[NEEDS_SEARCH:2:coffee] Do reviews mention coffee? yes/no')
-(r4)=LLM('[NEEDS_SEARCH:4:coffee] Do reviews mention coffee? yes/no')
-(final)=LLM('Item 2={{(r2)}}, Item 4={{(r4)}}. Output item NUMBERS with yes first: ')
-
-[EXAMPLE: candidates [5,6] with HOURS condition (early morning on Monday)]
-===LWT_SKELETON===
-(h5)=LLM('Item 5 hours Monday: {{(context)}}[5][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
-(h6)=LLM('Item 6 hours Monday: {{(context)}}[6][hours][Monday]. User needs 7:0-8:0. Is start<=7:0 AND end>=8:0? yes/no')
-(final)=LLM('Item 5={{(h5)}}, Item 6={{(h6)}}. Output item NUMBERS with yes first: ')
-
-NOTE: For "late night" or "evening" requests, check multiple days or use a representative day like Friday/Saturday.
-
-[EXAMPLE: candidates [3] with SOCIAL condition for friend "Kevin" and keyword "place"]
-===LWT_SKELETON===
-(s3)=LLM('[NEEDS_SOCIAL_SEARCH:3:Kevin:place] Does Kevin mention place? yes/no')
-(final)=LLM('Item 3={{(s3)}}. Output item NUMBERS with yes first: ')
-
-[IF NO SOFT CONDITIONS]
-===LWT_SKELETON===
-(final)=LLM('Candidates: {candidates}. Output as comma-separated: ')"""
+(final)=LLM('Candidates: {candidates}. Names: {{(context)}}[{first_candidate}][name]. Rank by {soft_question}. Output numbers: ')"""
 
 # =============================================================================
 # PHASE 2: ReAct Expansion (refine skeleton with slice syntax for long reviews)
 # =============================================================================
 
-PHASE2_PROMPT = """Expand LWT skeleton: replace placeholders with actual review slices.
-
-[CONDITIONS]
-{conditions}
+PHASE2_PROMPT = """Review LWT and fix any issues, then call done().
 
 [SKELETON]
 {lwt_skeleton}
 
-[TOOLS]
-get_review_lengths(N) → char counts per review
-keyword_search(N, "word") → review indices and positions where keyword appears
-social_search(N, "friend_name", "keyword") → review indices where friend mentions keyword
-update_step("rN", "prompt text") → update step (just the prompt, NOT "LLM(...)")
-done() → finish
+[CHECK]
+1. If you see {{(context)}} or {{(items)}} WITHOUT [N][field] accessor → FIX IT
+2. If reviews are accessed, ensure slice like [0:200] is present
+3. If OK, output: done()
 
-[SLICE SYNTAX]
-{{(context)}}[N][reviews][R][text][start:end]
+[FIX TOOL]
+update_step("step_id", "new prompt text")
 
-[CRITICAL TASK]
-Find steps with [NEEDS_SEARCH:N:keyword] or [NEEDS_SOCIAL_SEARCH:N:friend:keyword] placeholders.
-For EACH such step:
-1. Use keyword_search(N, "keyword") or social_search(N, "friend", "keyword") to find matching reviews
-2. Use update_step to replace placeholder with actual review slices
+Example fix:
+BAD:  (final)=LLM('Rank {{(context)}}...')
+FIX:  update_step("final", "Rank items by name: {{(context)}}[1][name], {{(context)}}[2][name]...")
 
-[OUTPUT FORMAT FOR update_step]
-After keyword_search returns matches like "Review 0: pos 150, Review 2: pos 300":
-update_step("r2", "Item 2 review excerpts: {{(context)}}[2][reviews][0][text][100:300], {{(context)}}[2][reviews][2][text][250:450]. Do these mention coffee? yes/no")
-
-[CRITICAL INDEXING - ITEMS ARE 1-INDEXED]
-- Item numbers start at 1 (Item 1, Item 2, ...), NOT 0
-- Step IDs match item numbers: r1, r2, r3, ... (NOT r0!)
-- NEVER use r0, s0, h0 - these don't exist
-- Example: For Item 5, use step "r5" or "s5"
-
-[OTHER RULES]
-- Output ONE action, then STOP. Wait for system response.
-- NEVER write "Observation:" yourself - system provides it.
-- ALWAYS use slice syntax [start:end] - NEVER include full review text!
-- Use ~200 chars around each match: [pos-100:pos+100]
-- If no matches found, update step with "No matches found: no"
-- Hours steps (hN) and (final) steps need no changes - skip them.
-
-[PROCESS]
-1. Find first step with [NEEDS_SEARCH] or [NEEDS_SOCIAL_SEARCH] placeholder
-2. Call keyword_search or social_search to find positions
-3. Call update_step with slice syntax (use correct 1-indexed step ID!)
-4. Repeat until all placeholders expanded
-5. Call done()
-
-Begin. Output Thought and Action:"""
+If skeleton looks good (all accesses have [N][field]), just output: done()"""

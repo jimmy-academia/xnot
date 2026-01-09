@@ -10,6 +10,9 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 
+MAX_SUBSTITUTION_CHARS = 8000  # ~2k tokens max per substitution
+
+
 def substitute_variables(instruction: str, items, user_query: str, cache: dict) -> str:
     """Substitute {(var)}[key][index] patterns with actual values.
 
@@ -76,10 +79,19 @@ def substitute_variables(instruction: str, items, user_query: str, cache: dict) 
             except Exception:
                 val = ''
 
-        # Return as string
+        # Return as string with size limit
         if isinstance(val, (dict, list, tuple)):
-            return json.dumps(val)
-        return str(val)
+            result = json.dumps(val)
+        else:
+            result = str(val)
+
+        # Truncate if too large (prevents prompt explosion)
+        if len(result) > MAX_SUBSTITUTION_CHARS:
+            # Keep start and end for context
+            keep = MAX_SUBSTITUTION_CHARS // 2
+            result = result[:keep] + "\n...[TRUNCATED]...\n" + result[-keep//2:]
+
+        return result
 
     return re.sub(pattern, _sub, instruction)
 

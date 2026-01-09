@@ -230,6 +230,10 @@ class SLMService:
 
         ollama_model = get_ollama_name(model)
 
+        # Get context limit for model
+        model_info = get_slm_info(model)
+        num_ctx = model_info.get("context_limit", 4096) if model_info else 4096
+
         payload = {
             "model": ollama_model,
             "prompt": prompt,
@@ -237,6 +241,7 @@ class SLMService:
             "options": {
                 "temperature": self._config["temperature"],
                 "num_predict": self._config["max_new_tokens"],
+                "num_ctx": num_ctx,  # Set context window
             },
         }
 
@@ -307,6 +312,10 @@ class SLMService:
 
             client = await self._get_http_client()
 
+            # Get context limit for model
+            model_info = get_slm_info(model)
+            num_ctx = model_info.get("context_limit", 4096) if model_info else 4096
+
             payload = {
                 "model": ollama_model,
                 "prompt": prompt,
@@ -314,6 +323,7 @@ class SLMService:
                 "options": {
                     "temperature": self._config["temperature"],
                     "num_predict": self._config["max_new_tokens"],
+                    "num_ctx": num_ctx,  # Set context window
                 },
             }
 

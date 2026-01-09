@@ -32,7 +32,7 @@ from .prompts import (
     RANKING_TASK_COMPACT
 )
 from .helpers import (
-    build_execution_layers, format_items_compact, format_schema_compact,
+    build_execution_layers, format_items_compact,
     filter_items_for_ranking, parse_conditions, parse_resolved_path,
     parse_candidates, parse_lwt_skeleton, format_items_for_ruleout, get_attr_value
 )
@@ -331,14 +331,14 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._log_llm_call("P1", "step1_extract", prompt, response)
         return response
 
-    def _step2_resolve_path(self, condition: dict, schema_compact: str, cond_num: int = 0, total_conds: int = 0) -> dict:
+    def _step2_resolve_path(self, condition: dict, cond_num: int = 0, total_conds: int = 0) -> dict:
         """Step 2: Resolve path for a single condition."""
         req_id = getattr(self._thread_local, 'request_id', None)
         if req_id:
             self._update_display(req_id, "S2", f"path {cond_num}/{total_conds}")
+        cond_desc = condition['description']
         prompt = STEP2_PATH_PROMPT.format(
-            condition_description=f"[{condition['type']}] {condition['description']}",
-            schema_compact=schema_compact
+            condition_description=cond_desc
         )
         response = call_llm(
             prompt,
@@ -421,6 +421,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
             candidates=candidates_str,
             soft_conditions=soft_cond_str,
             soft_question=soft_question,
+            first_candidate=candidates[0] if candidates else 1,
             k=k
         )
         response = call_llm(
@@ -481,9 +482,8 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._debug(1, "P1", f"Multi-step planning for: {query[:60]}...")
         n_items = len(items)
 
-        # Prepare schema for path resolution
+        # Prepare items for rule-out check
         filtered_items = filter_items_for_ranking(items)
-        schema_compact = format_schema_compact(filtered_items[:2], num_examples=2, truncate=50)
 
         # Step 1: Extract conditions
         self._debug(1, "P1", "Step 1: Extracting conditions...")
@@ -502,7 +502,7 @@ class AdaptiveNetworkOfThought(BaseMethod):
         self._debug(1, "P1", "Step 2: Resolving paths...")
         resolved = []
         for i, cond in enumerate(conditions):
-            path_info = self._step2_resolve_path(cond, schema_compact, i+1, len(conditions))
+            path_info = self._step2_resolve_path(cond, i+1, len(conditions))
             resolved.append(path_info)
             self._debug(2, "P1", f"  {cond['description']}: {path_info}")
 
