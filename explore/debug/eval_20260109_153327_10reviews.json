@@ -1,0 +1,108 @@
+{
+  "timestamp": "20260109_153327",
+  "config": {
+    "filename": "Acme_Oyster_House__ab50qdW.jsonl",
+    "max_reviews": 10
+  },
+  "prompt": "You are evaluating a restaurant based on its reviews. Follow ALL rules exactly.\n\n## RESTAURANT\nName: Acme Oyster House\nTotal Reviews: 10\nDate Range: 2021-12-31 to 2022-01-17\n\n## REVIEWS\n[R1] 2021-12-31 | 5.0\u2605 | Excellent oysters and Po-Boys.  Yes was a wait, but service was excellent and drinks served up cold and delicious.\n[R2] 2022-01-02 | 1.0\u2605 | After looking at the hours online we went to the restaurant at 7:00 pm on New Years Day. The line was shorter than expected which should have been the first red flag. \n\nWhen we were up next to be seated the host came out to tell us they were no longer serving raw or chargrilled oysters. As we stood there scratching our heads we saw several people inside eating raw and chargrilled oysters. \n\nWe were seated and sure enough, they told us they weren't serving them. We ordered our food and it came out pretty quick. \n\nWhile we were waiting for our food, the guy working the oyster bar told us the manager decided to stop selling oysters so the employees could get out of there quicker since it's been a long day for them. They were also closing 2 hours earlier than their sign, Google, and their website said. \n\nThis was such a disappointing visit. We understand it was a holiday, but it's unacceptable to stop selling your namesake just to get your employees out earlier. There are way too many other restaurants to choose from to be treated like this.\n[R3] 2022-01-03 | 5.0\u2605 | Amazing oysters love the garlic buttery preparation. This is unique of New Orleans you have to try it.\n[R4] 2022-01-06 | 4.0\u2605 | Missed this place on the last trip to NOLA, so had to make sure we made it this time.   Glad we did.   Short wait outside to sit at the bar and it was worth it.  We had raw oysters, oyster shooter, and chargrilled oysters.  Everything was excellent.\n\nIt is an icon in NOLA, and it shows.  We had chargrilled oysters in many places in NOLA and I have to say this place is my favorite.  Lots of places in the area are good, but ACME has the best chargrilled flavor.   You taste the oyster, butter, and garlic as well.   Other places are a little heavy on the parm or garlic.   These were on point!\n\nI even bought an ACME koozie for my beer.  Highly recommended.\n[R5] 2022-01-08 | 5.0\u2605 | Sit at the bar if you can...the servers and bartenders are fun and friendly. Oysters Rockefeller are the best!\n[R6] 2022-01-10 | 5.0\u2605 | Char-Boyed oysters are the best thing. You should sit at the bar. You'll get seated right away. Customer service is good. No complaints..\n[R7] 2022-01-11 | 5.0\u2605 | The chargrilled oysters are reason enough to wait in line to dine here. This particular evening I wanted something different. I found the deep fried crab specifically delicious, very well done, tasty. \n\nAs usual, I arrived with my entourage. It's not easy to seat and serve so many but I'm really thankful they took such good care of us!\n[R8] 2022-01-11 | 5.0\u2605 | Fast service.  Classic oyster house.  Shrimp was very fresh and delicious.   Some people say is a  tourist tramp, but they are great at what they do.\n[R9] 2022-01-16 | 5.0\u2605 | This place does have a wait and there will be a line but it seems to move quickly. We were seated at the bar with Gary who was knowledgeable, quick and friendly. We started out with the boom boom shrimp and it was so good! Then we ordered chargrilled oysters and raw oysters. Both were delicious however I will say I was impressed with the chargrilled oysters. Gary recommended the chargrilled oysters and I'm so glad we took his recommendation. I ordered the fried shrimp Po-Boy with a cup of seafood gumbo, both were great! Their shrimp is lightly battered and seasoned with great taste. Finished off our dinner with their banana foster cheesecake. If you love banana cream pie and cheesecake, order this! Highly recommend this spot for dinner.\n[R10] 2022-01-17 | 3.0\u2605 | Came here because my friend had researched and heard amazing things about this place--we're visiting from Los Angeles. \n\nWe ordered:\n\nCharbroiled oysters - I found the butter and parm-tasting cheese to be really overpowering and heavy. Lacked depth of flavor (there were some other great oyster places we tried that were yummier) and mostly just salty. 2/10\n\nRaw oysters - these tasted just okay and were shucked kind of messily so I was spitting out pieces of shell and tasting grime. Standard horseradish sauce with two tiny pieces of lemon per platter. 4/10\n\nSeafood etouffee - pretty good (can't go wrong with tomato and cream) but salty. We added the fried crawfish, and the fried pieces were tiny and mostly batter. 6/10\n\nNew Orleans medley - sausage was kind of dry, seafood gumbo was really yummy as was the jambalaya, and the beans and rice had nice chunks of meat in it. Overall pretty good save for the sausage, but I again feel that there are better places to go for these dishes. 7/10\n\nSoup of the day - on 1/16/2022 it was corn and crab chowder. Was okay but still a little too salty for my taste. 5/10\n\nOverall this place is heavy on salt and grease and primarily relies on those two facets for taste. The staff are amazing and service is great. I think there are better places to go for oysters.\n\n## EVALUATION RULES\n\nYou must compute these 10 fields IN ORDER:\n\n### CRITICAL_COUNT (Conditional Counting)\nCount reviews with: 1-2 stars AND mentions any of: \"sick\", \"food poisoning\", \"dirty\", \"disgusting\", \"worst\", \"horrible\"\n\n### SERVICE_COUNT (Conditional Counting)\nCount reviews with: 1-3 stars AND mentions any of: \"slow\", \"waited\", \"ignored\", \"rude\", \"cold food\", \"wrong order\"\n\n### TREND_DIRECTION (Trend Analysis)\nSplit reviews into thirds by date order (oldest to newest).\nCompare average rating of OLDEST 1/3 vs NEWEST 1/3.\n- If newest avg > oldest avg + 0.3: \"IMPROVING\"\n- If newest avg < oldest avg - 0.3: \"DECLINING\"\n- Otherwise: \"STABLE\"\n\n### WEIGHTED_AVG (Weighted Aggregation)\nCalculate weighted average where:\n- Reviews from 2021+: weight = 3\n- Reviews from 2019-2020: weight = 2\n- Reviews before 2019: weight = 1\nFormula: \u03a3(rating \u00d7 weight) / \u03a3(weight)\nRound to 2 decimal places.\n\n### SERVICE_VS_FOOD (Comparative Analysis)\n- Find reviews mentioning: \"service\", \"staff\", \"waiter\", \"server\", \"waitress\" \u2192 calculate avg rating\n- Find reviews mentioning: \"food\", \"dish\", \"meal\", \"taste\", \"delicious\" \u2192 calculate avg rating\n- If service_avg > food_avg + 0.2: \"SERVICE_BETTER\"\n- If food_avg > service_avg + 0.2: \"FOOD_BETTER\"\n- Otherwise: \"EQUAL\"\n\n### TOP_COMPLAINT (Pattern Detection)\nAmong 1-3 star reviews, which category has the MOST mentions?\nCategories:\n- WAIT: \"wait\", \"slow\", \"long time\", \"forever\", \"waited\"\n- SERVICE: \"rude\", \"ignored\", \"attitude\", \"unfriendly\"\n- FOOD: \"cold\", \"bland\", \"overcooked\", \"undercooked\", \"stale\"\n- PRICE: \"expensive\", \"overpriced\", \"not worth\", \"rip off\", \"pricey\"\nOutput the category with most matches, or \"NONE\" if no matches.\n\n### POLARIZATION (Logical Deduction)\nCalculate: polar_ratio = (count of 5-star + count of 1-star) / total reviews\n- If polar_ratio > 0.5 AND (1-star count) > (3-star count): \"POLARIZED_NEGATIVE\"\n- If polar_ratio > 0.5 AND (5-star count) > (3-star count): \"POLARIZED_POSITIVE\"\n- If polar_ratio > 0.5: \"POLARIZED_MIXED\"\n- Otherwise: \"BALANCED\"\n\n### RECENT_MOMENTUM (Trend Analysis)\nCompare avg rating of LAST 20 reviews vs OVERALL avg:\n- If last20_avg > overall_avg + 0.3: \"POSITIVE\"\n- If last20_avg < overall_avg - 0.3: \"NEGATIVE\"\n- Otherwise: \"NEUTRAL\"\n\n### VETO_FLAG (Veto Detection)\nIs there ANY 1-star review that mentions: \"health department\", \"shut down\", \"closed down\", \"food poisoning\", \"hospitalized\", \"emergency room\"?\nOutput: \"YES\" or \"NO\"\n\n### RECOMMEND_SCORE (Final Aggregation)\nCalculate:\nSCORE = WEIGHTED_AVG \u00d7 20\n      - (CRITICAL_COUNT \u00d7 5)\n      - (SERVICE_COUNT \u00d7 2)\n      + (10 if TREND_DIRECTION=\"IMPROVING\" else -10 if TREND_DIRECTION=\"DECLINING\" else 0)\n      + (5 if RECENT_MOMENTUM=\"POSITIVE\" else -5 if RECENT_MOMENTUM=\"NEGATIVE\" else 0)\n      - (15 if VETO_FLAG=\"YES\" else 0)\nRound to 1 decimal place.\n\n### VERDICT\nBased on RECOMMEND_SCORE:\n- >= 80: \"HIGHLY_RECOMMENDED\"\n- >= 65: \"RECOMMENDED\"\n- >= 50: \"ACCEPTABLE\"\n- >= 35: \"RISKY\"\n- < 35: \"AVOID\"\n\n## REQUIRED OUTPUT FORMAT\n\nShow your work step by step, then provide your final answers.\n\nIMPORTANT: You MUST end your response with a clearly marked FINAL ANSWERS block.\nUse EXACTLY this format with the === markers:\n\n===FINAL ANSWERS===\nCRITICAL_COUNT: [number]\nSERVICE_COUNT: [number]\nTREND_DIRECTION: [IMPROVING/DECLINING/STABLE]\nWEIGHTED_AVG: [number with 2 decimals]\nSERVICE_VS_FOOD: [SERVICE_BETTER/FOOD_BETTER/EQUAL]\nTOP_COMPLAINT: [WAIT/SERVICE/FOOD/PRICE/NONE]\nPOLARIZATION: [POLARIZED_NEGATIVE/POLARIZED_POSITIVE/POLARIZED_MIXED/BALANCED]\nRECENT_MOMENTUM: [POSITIVE/NEGATIVE/NEUTRAL]\nVETO_FLAG: [YES/NO]\nRECOMMEND_SCORE: [number with 1 decimal]\nVERDICT: [HIGHLY_RECOMMENDED/RECOMMENDED/ACCEPTABLE/RISKY/AVOID]\n===END===\n",
+  "response": "===STEP-BY-STEP SUMMARY OF CALCULATIONS===\n\nData recap (ratings by review in chronological order):\n- R1: 5\n- R2: 1\n- R3: 5\n- R4: 4\n- R5: 5\n- R6: 5\n- R7: 5\n- R8: 5\n- R9: 5\n- R10: 3\n\n- CRITICAL_COUNT: 0 (no 1-2 star reviews mentioned sick/food poisoning/dirty/disgusting/worst/horrible)\n- SERVICE_COUNT: 0 (no 1-3 star reviews with the keywords: slow/waited/ignored/rude/cold food/wrong order)\n- TREND_DIRECTION (oldest 1/3 vs newest 1/3): Oldest \u2248 3.67, Newest \u2248 4.33 \u2192 IMPROVING\n- WEIGHTED_AVG: All reviews are 2021+ \u2192 weight 3 for all; average rating across all reviews = (sum of ratings) / 10 = 43 / 10 = 4.30\n- SERVICE_VS_FOOD:\n  - Reviews mentioning service-related terms: R1, R5, R6, R8, R10 \u2192 average = (5+5+5+5+3)/5 = 23/5 = 4.60\n  - Reviews mentioning food-related terms: R1, R7, R8, R9, R10 \u2192 average = (5+5+5+5+3)/5 = 23/5 = 4.60\n  - Result: EQUAL\n- TOP_COMPLAINT (1-3 star reviews): 1-3 star reviews are R2 (1\u2605) and R10 (3\u2605). Among these, the only clear pattern is WAIT (R2 mentions waiting; R10 does not introduce a stronger pattern). \u2192 WAIT\n- POLARIZATION: 5\u2605 count = 7, 1\u2605 count = 1, 3\u2605 count = 1\n  - polar_ratio = (5\u2605 + 1\u2605) / total = (7 + 1) / 10 = 0.80\n  - Since polar_ratio > 0.5 and 5\u2605 > 3\u2605, polarization = POLARIZED_POSITIVE\n- RECENT_MOMENTUM: LAST 20 reviews vs OVERALL avg \u2192 not enough data for 20; effectively last20_avg \u2248 overall_avg = 4.30 \u2192 NEUTRAL\n- VETO_FLAG: NO (no 1\u2605 review mentions health dept/shut down/food poisoning/etc.)\n- RECOMMEND_SCORE:\n  - WEIGHTED_AVG \u00d7 20 = 4.30 \u00d7 20 = 86.00\n  - - CRITICAL_COUNT \u00d7 5 = -0\n  - - SERVICE_COUNT \u00d7 2 = -0\n  - + 10 if TREND_DIRECTION = IMPROVING \u2192 +10\n  - +0 for NEUTRAL RECENT_MOMENTUM\n  - - 15 if VETO_FLAG = YES \u2192 0\n  - Total = 86.00 + 10 = 96.00\n  - Rounded to 1 decimal: 96.0\n- VERDICT: With RECOMMEND_SCORE 96.0 \u2192 HIGHLY_RECOMMENDED\n\n===FINAL ANSWERS===\nCRITICAL_COUNT: 0\nSERVICE_COUNT: 0\nTREND_DIRECTION: IMPROVING\nWEIGHTED_AVG: 4.30\nSERVICE_VS_FOOD: EQUAL\nTOP_COMPLAINT: WAIT\nPOLARIZATION: POLARIZED_POSITIVE\nRECENT_MOMENTUM: NEUTRAL\nVETO_FLAG: NO\nRECOMMEND_SCORE: 96.0\nVERDICT: HIGHLY_RECOMMENDED\n===END===",
+  "ground_truth": {
+    "CRITICAL_COUNT": 0,
+    "SERVICE_COUNT": 0,
+    "TREND_DIRECTION": "IMPROVING",
+    "WEIGHTED_AVG": 4.3,
+    "SERVICE_VS_FOOD": "SERVICE_BETTER",
+    "TOP_COMPLAINT": "WAIT",
+    "POLARIZATION": "POLARIZED_POSITIVE",
+    "RECENT_MOMENTUM": "NEUTRAL",
+    "VETO_FLAG": "NO",
+    "RECOMMEND_SCORE": 96.0,
+    "VERDICT": "HIGHLY_RECOMMENDED"
+  },
+  "parsed": {
+    "CRITICAL_COUNT": 0,
+    "SERVICE_COUNT": 0,
+    "WEIGHTED_AVG": 4.3,
+    "RECOMMEND_SCORE": 96.0,
+    "TREND_DIRECTION": "IMPROVING",
+    "SERVICE_VS_FOOD": "EQUAL",
+    "TOP_COMPLAINT": "WAIT",
+    "POLARIZATION": "POLARIZED_POSITIVE",
+    "RECENT_MOMENTUM": "NEUTRAL",
+    "VETO_FLAG": "NO",
+    "VERDICT": "HIGHLY_RECOMMENDED"
+  },
+  "evaluation": {
+    "verdict_correct": true,
+    "hard_field_accuracy": 0.8888888888888888,
+    "final_score": 0.8888888888888888,
+    "field_results": [
+      {
+        "name": "CRITICAL_COUNT",
+        "expected": 0,
+        "predicted": 0,
+        "correct": true
+      },
+      {
+        "name": "SERVICE_COUNT",
+        "expected": 0,
+        "predicted": 0,
+        "correct": true
+      },
+      {
+        "name": "TREND_DIRECTION",
+        "expected": "IMPROVING",
+        "predicted": "IMPROVING",
+        "correct": true
+      },
+      {
+        "name": "WEIGHTED_AVG",
+        "expected": 4.3,
+        "predicted": 4.3,
+        "correct": true
+      },
+      {
+        "name": "SERVICE_VS_FOOD",
+        "expected": "SERVICE_BETTER",
+        "predicted": "EQUAL",
+        "correct": false
+      },
+      {
+        "name": "TOP_COMPLAINT",
+        "expected": "WAIT",
+        "predicted": "WAIT",
+        "correct": true
+      },
+      {
+        "name": "POLARIZATION",
+        "expected": "POLARIZED_POSITIVE",
+        "predicted": "POLARIZED_POSITIVE",
+        "correct": true
+      },
+      {
+        "name": "RECENT_MOMENTUM",
+        "expected": "NEUTRAL",
+        "predicted": "NEUTRAL",
+        "correct": true
+      },
+      {
+        "name": "VETO_FLAG",
+        "expected": "NO",
+        "predicted": "NO",
+        "correct": true
+      },
+      {
+        "name": "RECOMMEND_SCORE",
+        "expected": 96.0,
+        "predicted": 96.0,
+        "correct": true
+      },
+      {
+        "name": "VERDICT",
+        "expected": "HIGHLY_RECOMMENDED",
+        "predicted": "HIGHLY_RECOMMENDED",
+        "correct": true
+      }
+    ]
+  }
+}

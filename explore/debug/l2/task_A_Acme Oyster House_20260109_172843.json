@@ -1,0 +1,79 @@
+{
+  "task": "A",
+  "restaurant": "Acme Oyster House",
+  "n_reviews": 50,
+  "prompt": "Analyze temporal patterns. H=Historical (R1-R33), R=Recent (R34-R50).\n\nReviews: [R1] 2021-11-12 | 5.0\u2605 | H\n[R2] 2021-11-13 | 5.0\u2605 | H\n[R3] 2021-11-15 | 5.0\u2605 | H\n[R4] 2021-11-20 | 5.0\u2605 | H\n[R5] 2021-11-20 | 5.0\u2605 | H\n[R6] 2021-11-21 | 5.0\u2605 | H\n[R7] 2021-11-24 | 5.0\u2605 | H\n[R8] 2021-11-24 | 5.0\u2605 | H\n[R9] 2021-11-24 | 4.0\u2605 | H\n[R10] 2021-11-24 | 4.0\u2605 | H\n[R11] 2021-11-28 | 5.0\u2605 | H\n[R12] 2021-11-29 | 5.0\u2605 | H\n[R13] 2021-11-29 | 3.0\u2605 | H\n[R14] 2021-11-29 | 5.0\u2605 | H\n[R15] 2021-12-04 | 5.0\u2605 | H\n[R16] 2021-12-05 | 4.0\u2605 | H\n[R17] 2021-12-05 | 5.0\u2605 | H\n[R18] 2021-12-07 | 3.0\u2605 | H\n[R19] 2021-12-07 | 5.0\u2605 | H\n[R20] 2021-12-10 | 5.0\u2605 | H\n[R21] 2021-12-11 | 5.0\u2605 | H\n[R22] 2021-12-11 | 5.0\u2605 | H\n[R23] 2021-12-12 | 5.0\u2605 | H\n[R24] 2021-12-14 | 5.0\u2605 | H\n[R25] 2021-12-16 | 1.0\u2605 | H\n[R26] 2021-12-18 | 4.0\u2605 | H\n[R27] 2021-12-19 | 5.0\u2605 | H\n[R28] 2021-12-19 | 5.0\u2605 | H\n[R29] 2021-12-21 | 5.0\u2605 | H\n[R30] 2021-12-21 | 4.0\u2605 | H\n[R31] 2021-12-22 | 5.0\u2605 | H\n[R32] 2021-12-23 | 5.0\u2605 | H\n[R33] 2021-12-24 | 5.0\u2605 | H\n[R34] 2021-12-26 | 5.0\u2605 | R\n[R35] 2021-12-27 | 5.0\u2605 | R\n[R36] 2021-12-28 | 4.0\u2605 | R\n[R37] 2021-12-29 | 4.0\u2605 | R\n[R38] 2021-12-29 | 5.0\u2605 | R\n[R39] 2021-12-30 | 3.0\u2605 | R\n[R40] 2021-12-30 | 5.0\u2605 | R\n[R41] 2021-12-31 | 5.0\u2605 | R\n[R42] 2022-01-02 | 1.0\u2605 | R\n[R43] 2022-01-03 | 5.0\u2605 | R\n[R44] 2022-01-06 | 4.0\u2605 | R\n[R45] 2022-01-08 | 5.0\u2605 | R\n[R46] 2022-01-10 | 5.0\u2605 | R\n[R47] 2022-01-11 | 5.0\u2605 | R\n[R48] 2022-01-11 | 5.0\u2605 | R\n[R49] 2022-01-16 | 5.0\u2605 | R\n[R50] 2022-01-17 | 3.0\u2605 | R\n\nCompute:\n- N_TOTAL, N_RECENT, N_HISTORICAL\n- AVG_RECENT, AVG_HISTORICAL (2 decimals)\n- DELTA = AVG_RECENT - AVG_HISTORICAL\n- DIRECTION: DELTA>0.3=\"IMPROVING\", DELTA<-0.3=\"DECLINING\", else \"STABLE\"\n- RECENT_5STAR_RATIO, HISTORICAL_5STAR_RATIO (3 decimals)\n- RECENT_1STAR_RATIO, HISTORICAL_1STAR_RATIO (3 decimals)\n\n===FINAL ANSWERS===\nN_TOTAL:\nN_RECENT:\nN_HISTORICAL:\nAVG_RECENT:\nAVG_HISTORICAL:\nDELTA:\nDIRECTION:\nRECENT_5STAR_RATIO:\nHISTORICAL_5STAR_RATIO:\nRECENT_1STAR_RATIO:\nHISTORICAL_1STAR_RATIO:\n===END===\n",
+  "response": "",
+  "ground_truth": {
+    "n_total": 50,
+    "n_recent": 17,
+    "n_historical": 33,
+    "avg_recent": 4.35,
+    "avg_historical": 4.61,
+    "delta": -0.25,
+    "direction": "STABLE",
+    "recent_5star_ratio": 0.647,
+    "historical_5star_ratio": 0.758,
+    "recent_1star_ratio": 0.059,
+    "historical_1star_ratio": 0.03
+  },
+  "parsed": {},
+  "results": {
+    "n_total": {
+      "expected": 50,
+      "predicted": null,
+      "score": 0.0
+    },
+    "n_recent": {
+      "expected": 17,
+      "predicted": null,
+      "score": 0.0
+    },
+    "n_historical": {
+      "expected": 33,
+      "predicted": null,
+      "score": 0.0
+    },
+    "avg_recent": {
+      "expected": 4.35,
+      "predicted": null,
+      "score": 0.0
+    },
+    "avg_historical": {
+      "expected": 4.61,
+      "predicted": null,
+      "score": 0.0
+    },
+    "delta": {
+      "expected": -0.25,
+      "predicted": null,
+      "score": 0.0
+    },
+    "direction": {
+      "expected": "STABLE",
+      "predicted": null,
+      "score": 0.0
+    },
+    "recent_5star_ratio": {
+      "expected": 0.647,
+      "predicted": null,
+      "score": 0.0
+    },
+    "historical_5star_ratio": {
+      "expected": 0.758,
+      "predicted": null,
+      "score": 0.0
+    },
+    "recent_1star_ratio": {
+      "expected": 0.059,
+      "predicted": null,
+      "score": 0.0
+    },
+    "historical_1star_ratio": {
+      "expected": 0.03,
+      "predicted": null,
+      "score": 0.0
+    },
+    "_total_score": 0.0
+  }
+}

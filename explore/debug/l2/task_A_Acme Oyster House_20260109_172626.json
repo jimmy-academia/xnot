@@ -1,0 +1,79 @@
+{
+  "task": "A",
+  "restaurant": "Acme Oyster House",
+  "n_reviews": 20,
+  "prompt": "Analyze the temporal patterns in these 20 restaurant reviews.\n\n## RESTAURANT: Acme Oyster House\nCategories: Live/Raw Food, Seafood, Restaurants, Cajun/Creole\n\n## REVIEWS (ordered oldest to newest)\n[R1] 2021-12-22 | 5.0\u2605 | HISTORICAL | The real deal. Good food. Stiff drinks. Staff that knows what it is doing and cares to make sure customers are happy without ever being obsequious. Oysters are shucked to order and come out moist and ...\n[R2] 2021-12-23 | 5.0\u2605 | HISTORICAL | I have to say the chargrilled oysters were so good we kept ordering for more. Our server Mike was excellent, very attentive, courteous and helpful on deciding what we can get the biggest ban for the b...\n[R3] 2021-12-24 | 5.0\u2605 | HISTORICAL | Just the best.... we start our French Quarter crawl here everyday.  Friendly service, delicious food and Andygator in tap!...\n[R4] 2021-12-26 | 5.0\u2605 | HISTORICAL | Great service at the bar the female was so friendly we talked about cats.  I enjoy coming and sitting at the bar for a great conversation. The food as always very spectacular....\n[R5] 2021-12-27 | 5.0\u2605 | HISTORICAL | ACME Oyster house has got to be one of the best places I've ever had oysters at. The oysters from Texas don't compare! I ordered 1 dozen raw oysters and 1 dozen chargrilled oysters along with the Acme...\n[R6] 2021-12-28 | 4.0\u2605 | HISTORICAL | I know a place that tastes better that didn't have an long wait. This place is crowded for a Sunday night.\n\nFried shrimp and alligator was good. \n \nGumbo was very mediocre....\n[R7] 2021-12-29 | 4.0\u2605 | HISTORICAL | Acmes was the first place we ate at in new orleans! The line was long but it was worth the wait. We got chargrilled oysters to start and the flavor was great! Disappointed in the size of them but i kn...\n[R8] 2021-12-29 | 5.0\u2605 | HISTORICAL | The food was amazing! Everything about this place is magical! Every time I'm in NOLA, I will come back! A-1 Certified!...\n[R9] 2021-12-30 | 3.0\u2605 | HISTORICAL | Acme is a classic. In New Orleans they almost always have a line down the street but it's a great spot to chat with your friends and family as you get ready to eat. You can even chat with those around...\n[R10] 2021-12-30 | 5.0\u2605 | HISTORICAL | Yes it is absolutely worth the wait! The food was spectacular! The service was great and we had a great time! We started dinner off with some vodka oyster shooters to warm us up, then of course we had...\n[R11] 2021-12-31 | 5.0\u2605 | HISTORICAL | Excellent oysters and Po-Boys.  Yes was a wait, but service was excellent and drinks served up cold and delicious....\n[R12] 2022-01-02 | 1.0\u2605 | HISTORICAL | After looking at the hours online we went to the restaurant at 7:00 pm on New Years Day. The line was shorter than expected which should have been the first red flag. \n\nWhen we were up next to be seat...\n[R13] 2022-01-03 | 5.0\u2605 | HISTORICAL | Amazing oysters love the garlic buttery preparation. This is unique of New Orleans you have to try it....\n[R14] 2022-01-06 | 4.0\u2605 | RECENT | Missed this place on the last trip to NOLA, so had to make sure we made it this time.   Glad we did.   Short wait outside to sit at the bar and it was worth it.  We had raw oysters, oyster shooter, an...\n[R15] 2022-01-08 | 5.0\u2605 | RECENT | Sit at the bar if you can...the servers and bartenders are fun and friendly. Oysters Rockefeller are the best!...\n[R16] 2022-01-10 | 5.0\u2605 | RECENT | Char-Boyed oysters are the best thing. You should sit at the bar. You'll get seated right away. Customer service is good. No complaints.....\n[R17] 2022-01-11 | 5.0\u2605 | RECENT | The chargrilled oysters are reason enough to wait in line to dine here. This particular evening I wanted something different. I found the deep fried crab specifically delicious, very well done, tasty....\n[R18] 2022-01-11 | 5.0\u2605 | RECENT | Fast service.  Classic oyster house.  Shrimp was very fresh and delicious.   Some people say is a  tourist tramp, but they are great at what they do....\n[R19] 2022-01-16 | 5.0\u2605 | RECENT | This place does have a wait and there will be a line but it seems to move quickly. We were seated at the bar with Gary who was knowledgeable, quick and friendly. We started out with the boom boom shri...\n[R20] 2022-01-17 | 3.0\u2605 | RECENT | Came here because my friend had researched and heard amazing things about this place--we're visiting from Los Angeles. \n\nWe ordered:\n\nCharbroiled oysters - I found the butter and parm-tasting cheese t...\n\n## TASK: Compare RECENT reviews (last 1/3, R14-R20) vs HISTORICAL reviews (first 2/3, R1-R13)\n\nCompute the following metrics:\n\n1. **N_TOTAL**: Total number of reviews\n2. **N_RECENT**: Number of recent reviews (last 1/3)\n3. **N_HISTORICAL**: Number of historical reviews (first 2/3)\n4. **AVG_RECENT**: Average star rating of recent reviews (2 decimal places)\n5. **AVG_HISTORICAL**: Average star rating of historical reviews (2 decimal places)\n6. **DELTA**: AVG_RECENT - AVG_HISTORICAL (2 decimal places)\n7. **DIRECTION**: If DELTA > 0.3: \"IMPROVING\", if DELTA < -0.3: \"DECLINING\", else \"STABLE\"\n8. **RECENT_5STAR_RATIO**: Fraction of recent reviews that are 5-star (3 decimal places)\n9. **HISTORICAL_5STAR_RATIO**: Fraction of historical reviews that are 5-star (3 decimal places)\n10. **RECENT_1STAR_RATIO**: Fraction of recent reviews that are 1-star (3 decimal places)\n11. **HISTORICAL_1STAR_RATIO**: Fraction of historical reviews that are 1-star (3 decimal places)\n\n## OUTPUT FORMAT\n\nShow your calculations, then output:\n\n===FINAL ANSWERS===\nN_TOTAL: [integer]\nN_RECENT: [integer]\nN_HISTORICAL: [integer]\nAVG_RECENT: [decimal]\nAVG_HISTORICAL: [decimal]\nDELTA: [decimal]\nDIRECTION: [IMPROVING/DECLINING/STABLE]\nRECENT_5STAR_RATIO: [decimal]\nHISTORICAL_5STAR_RATIO: [decimal]\nRECENT_1STAR_RATIO: [decimal]\nHISTORICAL_1STAR_RATIO: [decimal]\n===END===\n",
+  "response": "",
+  "ground_truth": {
+    "n_total": 20,
+    "n_recent": 7,
+    "n_historical": 13,
+    "avg_recent": 4.57,
+    "avg_historical": 4.38,
+    "delta": 0.19,
+    "direction": "STABLE",
+    "recent_5star_ratio": 0.714,
+    "historical_5star_ratio": 0.692,
+    "recent_1star_ratio": 0.0,
+    "historical_1star_ratio": 0.077
+  },
+  "parsed": {},
+  "results": {
+    "n_total": {
+      "expected": 20,
+      "predicted": null,
+      "score": 0.0
+    },
+    "n_recent": {
+      "expected": 7,
+      "predicted": null,
+      "score": 0.0
+    },
+    "n_historical": {
+      "expected": 13,
+      "predicted": null,
+      "score": 0.0
+    },
+    "avg_recent": {
+      "expected": 4.57,
+      "predicted": null,
+      "score": 0.0
+    },
+    "avg_historical": {
+      "expected": 4.38,
+      "predicted": null,
+      "score": 0.0
+    },
+    "delta": {
+      "expected": 0.19,
+      "predicted": null,
+      "score": 0.0
+    },
+    "direction": {
+      "expected": "STABLE",
+      "predicted": null,
+      "score": 0.0
+    },
+    "recent_5star_ratio": {
+      "expected": 0.714,
+      "predicted": null,
+      "score": 0.0
+    },
+    "historical_5star_ratio": {
+      "expected": 0.692,
+      "predicted": null,
+      "score": 0.0
+    },
+    "recent_1star_ratio": {
+      "expected": 0.0,
+      "predicted": null,
+      "score": 0.0
+    },
+    "historical_1star_ratio": {
+      "expected": 0.077,
+      "predicted": null,
+      "score": 0.0
+    },
+    "_total_score": 0.0
+  }
+}

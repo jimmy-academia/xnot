@@ -1,0 +1,79 @@
+{
+  "task": "A",
+  "restaurant": "Acme Oyster House",
+  "n_reviews": 50,
+  "prompt": "Analyze the temporal patterns in these 50 restaurant reviews.\n\n## RESTAURANT: Acme Oyster House\nCategories: Live/Raw Food, Seafood, Restaurants, Cajun/Creole\n\n## REVIEWS (ordered oldest to newest)\n[R1] 2021-11-12 | 5.0\u2605 | HISTORICAL | Came here with my sister fir the grilled oysters!! They did not disappoint!! Flavorful , hot and tasty!! We also got oysters on the half shell - sweet, juicy with perfectly heated cocktail sauce!! And...\n[R2] 2021-11-13 | 5.0\u2605 | HISTORICAL | I wasn't able to dine at ACME on my last visit. The lines were so long. But this time, when I arrived, there was a long line. I told the host that, I was alone and if there was bar seating available. ...\n[R3] 2021-11-15 | 5.0\u2605 | HISTORICAL | Fantastic oysters and service. Ask for Garrett to be your server. Our group ordered a dozen of the grilled and a dozen raw paired with some Anita beers. They serve other dishes there too but we went f...\n[R4] 2021-11-20 | 5.0\u2605 | HISTORICAL | This is always one of my go to places when in New Orleans or Destin Florida the food is always consistently good.  The charbroiled oysters are a must and the onion rings are delicious. Don't leave wit...\n[R5] 2021-11-20 | 5.0\u2605 | HISTORICAL | My GAWD, the char broiled oysters we're heaven!!! And I didn't even want to try them for the first time, greatest food descision I ever made!!\n\nLine is long but goes by fast, just enjoy your company!\n...\n[R6] 2021-11-21 | 5.0\u2605 | HISTORICAL | These were the best oysters I had in New Orleans.\nI usually go for the raw oysters but I'm now converted thanks to Acme Oyster House. Watching them being prepared on the grill is an experience in itse...\n[R7] 2021-11-24 | 5.0\u2605 | HISTORICAL | Yes, there will be long lines, and Yes, it is more than just a little touristy, and Yes, while standing in line you may begin to wonder if it will be worth it once you get inside, and I can answer tha...\n[R8] 2021-11-24 | 5.0\u2605 | HISTORICAL | Came here 2x and was not disappointed! The oysters were AMAZING! My first time having them and they did not disappoint! Also the seafood gumbo, red beans n rice, the sausage, and the jambalaya was GRE...\n[R9] 2021-11-24 | 4.0\u2605 | HISTORICAL | Went at an off time and we were seated right away (after showing vaccine cards with IDs). We had a sausage po'boy, a fried fish po'boy, craw puppies and boo fries. All of it was good, but my favorite ...\n[R10] 2021-11-24 | 4.0\u2605 | HISTORICAL | Best chargrilled oysters in French Quarters, worth seating at the bar and seeing how they crack open those shells. The Chipotle Tabasco go great with the oysters as recommended......\n[R11] 2021-11-28 | 5.0\u2605 | HISTORICAL | I love the Acme Oyster House, but with over 7,500 reviews, there is not much I can say that hasn't already been said.  So I'll keep it short, and just touch on the highlights. \n\nSome people complain a...\n[R12] 2021-11-29 | 5.0\u2605 | HISTORICAL | Just an amazing experience. The staff there take so much pride in their product and delivery. On top of that the food is great. Tried some raw oysters, chargrilled oysters and craw puppies. Theres a g...\n[R13] 2021-11-29 | 3.0\u2605 | HISTORICAL | We were recently in Gulf Shores, AL and decided to go to Acme Oyster House.  Of course, being a cajun restaurant, they use cajun seasonings.  I have food allergies, so there was very little I could ea...\n[R14] 2021-11-29 | 5.0\u2605 | HISTORICAL | Another must-try spot just off Bourbon Street in the French Quarter.  Full service, sitdown restaurant.  We went for dinner on a Friday and had to wait around 15 minutes to be seated.  They required p...\n[R15] 2021-12-04 | 5.0\u2605 | HISTORICAL | This is a must try place in the French Quarter. We had excellent service from Audrey. The prickly pear margarita was amazing. For an appetizer, we got the fried crawfish tails, they were great. I got ...\n[R16] 2021-12-05 | 4.0\u2605 | HISTORICAL | Good Food, Nice People. Very busy for dinner and very loud! \nPrices are good as well....\n[R17] 2021-12-05 | 5.0\u2605 | HISTORICAL | We got the Shrimp po boy, and char grilled oysters - and if you're not an oyster person you will be after eating these. Gumbo was delicious. Wasn't sure what to order and waitress suggested the char b...\n[R18] 2021-12-07 | 3.0\u2605 | HISTORICAL | Acne no longer feels authentic to me.  My oysters were good, but the fries were cold, they never refilled my ice tea (on a hot day!) and seemed more interested in turning the table over to a new custo...\n[R19] 2021-12-07 | 5.0\u2605 | HISTORICAL | Casual good eats! A classic go to spot for oysters, charbroiled oysters, fried shrimp, fish, and hush puppies....\n[R20] 2021-12-10 | 5.0\u2605 | HISTORICAL | Nothing said that hasn't already been said. Mike was an AMAZING server and deserves many accolade's. Treated us like we were long time guest although it was our first visit. Where do you find these pp...\n[R21] 2021-12-11 | 5.0\u2605 | HISTORICAL | Seafood gumbo and garlic and butter cooked oysters to die for.\nA must visit on trip to NOLA....\n[R22] 2021-12-11 | 5.0\u2605 | HISTORICAL | The oysters was lit.  I tried a few other items and they were not as good. I will only order the oysters.... Specifically the CHARGRILLED!!! I will be back just for those!!...\n[R23] 2021-12-12 | 5.0\u2605 | HISTORICAL | This is a must go place. My favorite chargrilled oysters. You can dip the bread in the buttery sauce. \nAlso I suggest adding fried crayfish to the etouffe! We went early to avoid he lines...\n[R24] 2021-12-14 | 5.0\u2605 | HISTORICAL | You can never go wrong here! You may have a wait but it's worth it! You have to get the Bread Pudding before you leave !  The staff members are professional and informative!...\n[R25] 2021-12-16 | 1.0\u2605 | HISTORICAL | Used to love this place but will never come here again. First, the party in front of us \"couldn't find their vaccination card\" and kept \"looking\" for it. Instead of refusing them entry they still let ...\n[R26] 2021-12-18 | 4.0\u2605 | HISTORICAL | I didn't have a terrible experience, however, it's wasn't the best either. In my opinion the restaurant simply didn't live up to the hype. I'm honestly not sure why it's highly recommended because the...\n[R27] 2021-12-19 | 5.0\u2605 | HISTORICAL | Acme Oyster House is one of my go-to's in NOLA. We went around noon on a Sunday. To my surprise there wasn't a line wrapped around the corner. We were seated within 10 minutes (at the bar, which was f...\n[R28] 2021-12-19 | 5.0\u2605 | HISTORICAL | You can't visit New Orleans without visiting Acme's! The wait is incredibly long, so be sure to get there an hour or two before you are ready to eat. But the food is definitely worth the wait.\n\nWe got...\n[R29] 2021-12-21 | 5.0\u2605 | HISTORICAL | We arrived at 5:30pm tonight and there were a good amount of people in line ahead of us. While we were in line, they checked our vaccination and ID cards. Because we were only a party of 2 and a spot ...\n[R30] 2021-12-21 | 4.0\u2605 | HISTORICAL | Wonderful variety of foods tailored to the New Orleans atmosphere. A cozy, friendly environment tucked away in the French Quarter that garnered a lot of attention, and rightly so. I got a fried soft s...\n[R31] 2021-12-22 | 5.0\u2605 | HISTORICAL | The real deal. Good food. Stiff drinks. Staff that knows what it is doing and cares to make sure customers are happy without ever being obsequious. Oysters are shucked to order and come out moist and ...\n[R32] 2021-12-23 | 5.0\u2605 | HISTORICAL | I have to say the chargrilled oysters were so good we kept ordering for more. Our server Mike was excellent, very attentive, courteous and helpful on deciding what we can get the biggest ban for the b...\n[R33] 2021-12-24 | 5.0\u2605 | HISTORICAL | Just the best.... we start our French Quarter crawl here everyday.  Friendly service, delicious food and Andygator in tap!...\n[R34] 2021-12-26 | 5.0\u2605 | RECENT | Great service at the bar the female was so friendly we talked about cats.  I enjoy coming and sitting at the bar for a great conversation. The food as always very spectacular....\n[R35] 2021-12-27 | 5.0\u2605 | RECENT | ACME Oyster house has got to be one of the best places I've ever had oysters at. The oysters from Texas don't compare! I ordered 1 dozen raw oysters and 1 dozen chargrilled oysters along with the Acme...\n[R36] 2021-12-28 | 4.0\u2605 | RECENT | I know a place that tastes better that didn't have an long wait. This place is crowded for a Sunday night.\n\nFried shrimp and alligator was good. \n \nGumbo was very mediocre....\n[R37] 2021-12-29 | 4.0\u2605 | RECENT | Acmes was the first place we ate at in new orleans! The line was long but it was worth the wait. We got chargrilled oysters to start and the flavor was great! Disappointed in the size of them but i kn...\n[R38] 2021-12-29 | 5.0\u2605 | RECENT | The food was amazing! Everything about this place is magical! Every time I'm in NOLA, I will come back! A-1 Certified!...\n[R39] 2021-12-30 | 3.0\u2605 | RECENT | Acme is a classic. In New Orleans they almost always have a line down the street but it's a great spot to chat with your friends and family as you get ready to eat. You can even chat with those around...\n[R40] 2021-12-30 | 5.0\u2605 | RECENT | Yes it is absolutely worth the wait! The food was spectacular! The service was great and we had a great time! We started dinner off with some vodka oyster shooters to warm us up, then of course we had...\n[R41] 2021-12-31 | 5.0\u2605 | RECENT | Excellent oysters and Po-Boys.  Yes was a wait, but service was excellent and drinks served up cold and delicious....\n[R42] 2022-01-02 | 1.0\u2605 | RECENT | After looking at the hours online we went to the restaurant at 7:00 pm on New Years Day. The line was shorter than expected which should have been the first red flag. \n\nWhen we were up next to be seat...\n[R43] 2022-01-03 | 5.0\u2605 | RECENT | Amazing oysters love the garlic buttery preparation. This is unique of New Orleans you have to try it....\n[R44] 2022-01-06 | 4.0\u2605 | RECENT | Missed this place on the last trip to NOLA, so had to make sure we made it this time.   Glad we did.   Short wait outside to sit at the bar and it was worth it.  We had raw oysters, oyster shooter, an...\n[R45] 2022-01-08 | 5.0\u2605 | RECENT | Sit at the bar if you can...the servers and bartenders are fun and friendly. Oysters Rockefeller are the best!...\n[R46] 2022-01-10 | 5.0\u2605 | RECENT | Char-Boyed oysters are the best thing. You should sit at the bar. You'll get seated right away. Customer service is good. No complaints.....\n[R47] 2022-01-11 | 5.0\u2605 | RECENT | The chargrilled oysters are reason enough to wait in line to dine here. This particular evening I wanted something different. I found the deep fried crab specifically delicious, very well done, tasty....\n[R48] 2022-01-11 | 5.0\u2605 | RECENT | Fast service.  Classic oyster house.  Shrimp was very fresh and delicious.   Some people say is a  tourist tramp, but they are great at what they do....\n[R49] 2022-01-16 | 5.0\u2605 | RECENT | This place does have a wait and there will be a line but it seems to move quickly. We were seated at the bar with Gary who was knowledgeable, quick and friendly. We started out with the boom boom shri...\n[R50] 2022-01-17 | 3.0\u2605 | RECENT | Came here because my friend had researched and heard amazing things about this place--we're visiting from Los Angeles. \n\nWe ordered:\n\nCharbroiled oysters - I found the butter and parm-tasting cheese t...\n\n## TASK: Compare RECENT reviews (last 1/3, R34-R50) vs HISTORICAL reviews (first 2/3, R1-R33)\n\nCompute the following metrics:\n\n1. **N_TOTAL**: Total number of reviews\n2. **N_RECENT**: Number of recent reviews (last 1/3)\n3. **N_HISTORICAL**: Number of historical reviews (first 2/3)\n4. **AVG_RECENT**: Average star rating of recent reviews (2 decimal places)\n5. **AVG_HISTORICAL**: Average star rating of historical reviews (2 decimal places)\n6. **DELTA**: AVG_RECENT - AVG_HISTORICAL (2 decimal places)\n7. **DIRECTION**: If DELTA > 0.3: \"IMPROVING\", if DELTA < -0.3: \"DECLINING\", else \"STABLE\"\n8. **RECENT_5STAR_RATIO**: Fraction of recent reviews that are 5-star (3 decimal places)\n9. **HISTORICAL_5STAR_RATIO**: Fraction of historical reviews that are 5-star (3 decimal places)\n10. **RECENT_1STAR_RATIO**: Fraction of recent reviews that are 1-star (3 decimal places)\n11. **HISTORICAL_1STAR_RATIO**: Fraction of historical reviews that are 1-star (3 decimal places)\n\n## OUTPUT FORMAT\n\nShow your calculations, then output:\n\n===FINAL ANSWERS===\nN_TOTAL: [integer]\nN_RECENT: [integer]\nN_HISTORICAL: [integer]\nAVG_RECENT: [decimal]\nAVG_HISTORICAL: [decimal]\nDELTA: [decimal]\nDIRECTION: [IMPROVING/DECLINING/STABLE]\nRECENT_5STAR_RATIO: [decimal]\nHISTORICAL_5STAR_RATIO: [decimal]\nRECENT_1STAR_RATIO: [decimal]\nHISTORICAL_1STAR_RATIO: [decimal]\n===END===\n",
+  "response": "",
+  "ground_truth": {
+    "n_total": 50,
+    "n_recent": 17,
+    "n_historical": 33,
+    "avg_recent": 4.35,
+    "avg_historical": 4.61,
+    "delta": -0.25,
+    "direction": "STABLE",
+    "recent_5star_ratio": 0.647,
+    "historical_5star_ratio": 0.758,
+    "recent_1star_ratio": 0.059,
+    "historical_1star_ratio": 0.03
+  },
+  "parsed": {},
+  "results": {
+    "n_total": {
+      "expected": 50,
+      "predicted": null,
+      "score": 0.0
+    },
+    "n_recent": {
+      "expected": 17,
+      "predicted": null,
+      "score": 0.0
+    },
+    "n_historical": {
+      "expected": 33,
+      "predicted": null,
+      "score": 0.0
+    },
+    "avg_recent": {
+      "expected": 4.35,
+      "predicted": null,
+      "score": 0.0
+    },
+    "avg_historical": {
+      "expected": 4.61,
+      "predicted": null,
+      "score": 0.0
+    },
+    "delta": {
+      "expected": -0.25,
+      "predicted": null,
+      "score": 0.0
+    },
+    "direction": {
+      "expected": "STABLE",
+      "predicted": null,
+      "score": 0.0
+    },
+    "recent_5star_ratio": {
+      "expected": 0.647,
+      "predicted": null,
+      "score": 0.0
+    },
+    "historical_5star_ratio": {
+      "expected": 0.758,
+      "predicted": null,
+      "score": 0.0
+    },
+    "recent_1star_ratio": {
+      "expected": 0.059,
+      "predicted": null,
+      "score": 0.0
+    },
+    "historical_1star_ratio": {
+      "expected": 0.03,
+      "predicted": null,
+      "score": 0.0
+    },
+    "_total_score": 0.0
+  }
+}

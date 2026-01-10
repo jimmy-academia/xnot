@@ -158,8 +158,8 @@ class LLMService:
     def __init__(self):
         self._config = {
             "temperature": 0.0,
-            "max_tokens": 1024,
-            "max_tokens_reasoning": 1024,
+            "max_tokens": None,  # None = use API default
+            "max_tokens_reasoning": None,
             "provider": "openai",
             "model": None,
             "base_url": "",
@@ -320,16 +320,15 @@ class LLMService:
             try:
                 start_time = time.time()
                 if is_new_model:
-                    resp = client.chat.completions.create(
-                        model=model, messages=messages,
-                        max_completion_tokens=self._config["max_tokens_reasoning"]
-                    )
+                    kwargs = {"model": model, "messages": messages}
+                    if self._config["max_tokens_reasoning"]:
+                        kwargs["max_completion_tokens"] = self._config["max_tokens_reasoning"]
+                    resp = client.chat.completions.create(**kwargs)
                 else:
-                    resp = client.chat.completions.create(
-                        model=model, messages=messages,
-                        temperature=self._config["temperature"],
-                        max_tokens=self._config["max_tokens"]
-                    )
+                    kwargs = {"model": model, "messages": messages, "temperature": self._config["temperature"]}
+                    if self._config["max_tokens"]:
+                        kwargs["max_tokens"] = self._config["max_tokens"]
+                    resp = client.chat.completions.create(**kwargs)
                 
                 latency_ms = (time.time() - start_time) * 1000
                 text = resp.choices[0].message.content or ""
@@ -435,16 +434,15 @@ class LLMService:
             try:
                 start_time = time.time()
                 if is_new_model:
-                    resp = await client.chat.completions.create(
-                        model=model, messages=messages,
-                        max_completion_tokens=self._config["max_tokens_reasoning"]
-                    )
+                    kwargs = {"model": model, "messages": messages}
+                    if self._config["max_tokens_reasoning"]:
+                        kwargs["max_completion_tokens"] = self._config["max_tokens_reasoning"]
+                    resp = await client.chat.completions.create(**kwargs)
                 else:
-                    resp = await client.chat.completions.create(
-                        model=model, messages=messages,
-                        temperature=self._config["temperature"],
-                        max_tokens=self._config["max_tokens"]
-                    )
+                    kwargs = {"model": model, "messages": messages, "temperature": self._config["temperature"]}
+                    if self._config["max_tokens"]:
+                        kwargs["max_tokens"] = self._config["max_tokens"]
+                    resp = await client.chat.completions.create(**kwargs)
                 
                 latency_ms = (time.time() - start_time) * 1000
                 text = resp.choices[0].message.content or ""

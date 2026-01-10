@@ -1,0 +1,205 @@
+{
+  "timestamp": "20260109_163024",
+  "version": "v6",
+  "config": {
+    "filename": "Acme_Oyster_House__ab50qdW_labeled.jsonl",
+    "max_reviews": 20
+  },
+  "prompt": "Analyze these 20 restaurant reviews and compute the following metrics.\n\n## REVIEWS\n[R1] 2021-11-12 | 5.0\u2605 | Came here with my sister fir the grilled oysters!! They did not disappoint!! Flavorful , hot and tasty!! We also got oysters on the half shell - sweet, juicy with perfectly heated cocktail sauce!! And etoufee which was the BOMB!! Hit the spot especially with a beer and American mule!! Needed to save room for dinner so we controlled ourselves! Went to Mambo's last night and this place crushes it!! Come here first!!\n[R2] 2021-11-13 | 5.0\u2605 | I wasn't able to dine at ACME on my last visit. The lines were so long. But this time, when I arrived, there was a long line. I told the host that, I was alone and if there was bar seating available. He went to check and BAM! I was seated. Everything on the menu looked so delicious. And let me tell you it was!! The food was hot, fresh and very flavorful! The bartender was cool as well. I was allowed to stay longer than I expected, as I was waiting for friends to finish up elsewhere. This will be a DEFINITE place, that I will return to!\n[R3] 2021-11-15 | 5.0\u2605 | Fantastic oysters and service. Ask for Garrett to be your server. Our group ordered a dozen of the grilled and a dozen raw paired with some Anita beers. They serve other dishes there too but we went for the oysters only. Enjoy!\n[R4] 2021-11-20 | 5.0\u2605 | This is always one of my go to places when in New Orleans or Destin Florida the food is always consistently good.  The charbroiled oysters are a must and the onion rings are delicious. Don't leave with out trying the bread pudding it is delicious.\n[R5] 2021-11-20 | 5.0\u2605 | My GAWD, the char broiled oysters we're heaven!!! And I didn't even want to try them for the first time, greatest food descision I ever made!!\n\nLine is long but goes by fast, just enjoy your company!\n\nDon't order a half dozen, just do yourself a favor and order a full dozen char broiled oysters... For yourself.\n[R6] 2021-11-21 | 5.0\u2605 | These were the best oysters I had in New Orleans.\nI usually go for the raw oysters but I'm now converted thanks to Acme Oyster House. Watching them being prepared on the grill is an experience in itself. The butter beans were a must have as well.\n[R7] 2021-11-24 | 5.0\u2605 | Yes, there will be long lines, and Yes, it is more than just a little touristy, and Yes, while standing in line you may begin to wonder if it will be worth it once you get inside, and I can answer that last one with a resounding Daniel Bryan sized YES YES YES, as this place definitely lived up to expectations, as the oysters were succulent, the drinks were made just right and the service was friendly with a sincere down home friendliness that you don't find at many places anymore.   \n\nHighly recommend you ignore those who say it isn't worth waiting for, because it is without a doubt worth every minute you may have to wait in that line, so what are you waiting for, go get yourself some oysters!\n[R8] 2021-11-24 | 5.0\u2605 | Came here 2x and was not disappointed! The oysters were AMAZING! My first time having them and they did not disappoint! Also the seafood gumbo, red beans n rice, the sausage, and the jambalaya was GREAT! Our server Tyrus was attentive the entire evening, my glass never went dry! On day 2 of returning, he placed my order w/o me telling him and he brought my drink prior to me asking! He doesn't forget his customers! Thank you for a GREAT experience Tyrus!\n[R9] 2021-11-24 | 4.0\u2605 | Went at an off time and we were seated right away (after showing vaccine cards with IDs). We had a sausage po'boy, a fried fish po'boy, craw puppies and boo fries. All of it was good, but my favorite was definitely the boo fries - don't miss out on these. Definitely would go back and recommend. It was small, dim and bustling inside. Service was great and the menu has just a bit of everything.\n[R10] 2021-11-24 | 4.0\u2605 | Best chargrilled oysters in French Quarters, worth seating at the bar and seeing how they crack open those shells. The Chipotle Tabasco go great with the oysters as recommended...\n[R11] 2021-11-28 | 5.0\u2605 | I love the Acme Oyster House, but with over 7,500 reviews, there is not much I can say that hasn't already been said.  So I'll keep it short, and just touch on the highlights. \n\nSome people complain about long lines.  We were fortunate and did not have a line.  But even if there is a line...the food is worth it.  \n\nI had the Peace Maker Po-Boy (oysters and shrimp) and added grilled onions.    It was delicious.  My wife had the Acme Special Po-Boy and declared it the best Po-Boy she's ever had.  We had a side of very tasty Hush Puppies.  I also enjoyed an oyster shooter.  \n\nService was friendly and flawless.  \n\nIt's a little touristy, but I can't ding them for that.  The Acme Oyster House has been around for over 100 years...  I think that's all you really need to know.\n[R12] 2021-11-29 | 5.0\u2605 | Just an amazing experience. The staff there take so much pride in their product and delivery. On top of that the food is great. Tried some raw oysters, chargrilled oysters and craw puppies. Theres a good reason why this place has existed for over 100 years\n[R13] 2021-11-29 | 3.0\u2605 | We were recently in Gulf Shores, AL and decided to go to Acme Oyster House.  Of course, being a cajun restaurant, they use cajun seasonings.  I have food allergies, so there was very little I could eat.  However, my husband had the gumbo, and he said it was very good.  The management was very kind to let me know they use Tony Chachere's seasoning, which is definitely full of msg.  They are unable to prepare certain foods for those of us who have allergies because they get everything from corporate and corporate wants everyone to have the same experience at all of their restaurant locations.  It is a fun place, the food smells yummy, but unfortunately we will not go back because they cannot accommodate folks with food allergies.\n[R14] 2021-11-29 | 5.0\u2605 | Another must-try spot just off Bourbon Street in the French Quarter.  Full service, sitdown restaurant.  We went for dinner on a Friday and had to wait around 15 minutes to be seated.  They required proof of COVID vaccination or recent negative test as of November 2021.  Fast and friendly service!\n\nI know it's in the name of the restaurant, but I've never really given oysters a chance.  My fam convinced me to try chargrilled oysters and I'm glad I did.  If you're iffy like me, get them cooked as opposed to raw.  They're drowned in other flavors like butter and herbs, and I found myself going back for more.  For my main course, I got the New Orleans Medley, which is a sampling of gumbo, jambalaya, red beans & rice and grilled smoked sausage.  I highly recommend it, as I like trying a little bit of a lot of stuff!\n[R15] 2021-12-04 | 5.0\u2605 | This is a must try place in the French Quarter. We had excellent service from Audrey. The prickly pear margarita was amazing. For an appetizer, we got the fried crawfish tails, they were great. I got the soft crab po'boy, my husband got the seafood platter with fish, oysters and shrimp. Food was delicious. We will definitely come back next time!\n[R16] 2021-12-05 | 4.0\u2605 | Good Food, Nice People. Very busy for dinner and very loud! \nPrices are good as well.\n[R17] 2021-12-05 | 5.0\u2605 | We got the Shrimp po boy, and char grilled oysters - and if you're not an oyster person you will be after eating these. Gumbo was delicious. Wasn't sure what to order and waitress suggested the char broiled oysters and they were fantastic. In fact they were so good We had to order more. So delicious! There was a longish line, but I think it's worth the wait. The staff was nice and accommodating. Great place to eat!\n[R19] 2021-12-07 | 5.0\u2605 | Casual good eats! A classic go to spot for oysters, charbroiled oysters, fried shrimp, fish, and hush puppies.\n[R20] 2021-12-10 | 5.0\u2605 | Nothing said that hasn't already been said. Mike was an AMAZING server and deserves many accolade's. Treated us like we were long time guest although it was our first visit. Where do you find these ppl? Good guy, amazing food and great times. Hope to come back soon!\n[R21] 2021-12-11 | 5.0\u2605 | Seafood gumbo and garlic and butter cooked oysters to die for.\nA must visit on trip to NOLA.\n\n## METRICS TO COMPUTE\n\n### Tier 1: Numeric Basics [independent]\n- **N_TOTAL**: Total number of reviews\n- **N_1STAR**: Count of 1-star reviews\n- **N_5STAR**: Count of 5-star reviews\n- **AVG_ALL**: Average rating across all reviews (2 decimal places)\n\n### Tier 2: Temporal Analysis [independent]\nReviews are ordered from oldest to newest.\n- **AVG_FIRST_THIRD**: Average rating of first 6 reviews (R1-R6)\n- **AVG_LAST_THIRD**: Average rating of last 6 reviews (R15-R20)\n- **TREND_DIFF**: AVG_LAST_THIRD - AVG_FIRST_THIRD [depends on above]\n\n### Tier 3: Semantic Counts [requires judgment]\nCount reviews where the reviewer:\n- **N_WAIT_COMPLAINTS**: Expresses frustration about wait time, long lines, or slow service\n- **N_SERVICE_COMPLAINTS**: Criticizes staff behavior, attitude, or service quality (not speed)\n- **N_FOOD_COMPLAINTS**: Criticizes food taste, temperature, or preparation\n- **N_WOULD_NOT_RETURN**: Explicitly says they won't return or don't recommend\n\n### Tier 4: Conditional Aggregation [depends on Tier 3]\n- **AVG_COMPLAINERS**: Average rating of reviews with ANY complaint (wait, service, or food)\n- **AVG_SATISFIED**: Average rating of reviews with NO complaints\n\n### Tier 5: Derived Metrics [depends on previous]\n- **COMPLAINT_RATIO**: (N_WAIT + N_SERVICE + N_FOOD) / N_TOTAL (3 decimal places)\n- **SATISFACTION_GAP**: AVG_SATISFIED - AVG_COMPLAINERS\n\n## OUTPUT FORMAT\n\nCompute step by step, then output your final answers.\nEnd with EXACTLY this format:\n\n===FINAL ANSWERS===\nN_TOTAL: [integer]\nN_1STAR: [integer]\nN_5STAR: [integer]\nAVG_ALL: [decimal, 2 places]\nAVG_FIRST_THIRD: [decimal, 2 places]\nAVG_LAST_THIRD: [decimal, 2 places]\nTREND_DIFF: [decimal, 2 places]\nN_WAIT_COMPLAINTS: [integer]\nN_SERVICE_COMPLAINTS: [integer]\nN_FOOD_COMPLAINTS: [integer]\nN_WOULD_NOT_RETURN: [integer]\nAVG_COMPLAINERS: [decimal, 2 places]\nAVG_SATISFIED: [decimal, 2 places]\nCOMPLAINT_RATIO: [decimal, 3 places]\nSATISFACTION_GAP: [decimal, 2 places]\n===END===\n",
+  "response": "Step-by-step analysis (summary of approach)\n- Count total reviews (N_TOTAL) and tally star ratings to derive N_5STAR, N_1STAR, and AVG_ALL.\n- Order reviews as given (oldest to newest) and compute AVG_FIRST_THIRD from R1\u2013R6 and AVG_LAST_THIRD from the last six items (R15, R16, R17, R19, R20, R21).\n- Identify semantic categories per review:\n  - N_WAIT_COMPLAINTS: explicit frustration about wait time/lines or slow service\n  - N_SERVICE_COMPLAINTS: criticizes staff behavior or service quality\n  - N_FOOD_COMPLAINTS: criticizes food taste, temperature, or preparation\n  - N_WOULD_NOT_RETURN: explicit statement they won\u2019t return or won\u2019t recommend\n- Compute AVG_COMPLAINERS as the average rating of reviews with any complaint (any of the above) and AVG_SATISFIED as the average rating of reviews with no complaints.\n- Derive COMPLAINT_RATIO as (N_WAIT_COMPLAINTS + N_SERVICE_COMPLAINTS + N_FOOD_COMPLAINTS) / N_TOTAL, and SATISFACTION_GAP as AVG_SATISFIED \u2212 AVG_COMPLAINERS.\n\nFinal computed metrics\n===FINAL ANSWERS===\nN_TOTAL: 20\nN_1STAR: 0\nN_5STAR: 16\nAVG_ALL: 4.50\nAVG_FIRST_THIRD: 5.00\nAVG_LAST_THIRD: 4.83\nTREND_DIFF: -0.17\nN_WAIT_COMPLAINTS: 1\nN_SERVICE_COMPLAINTS: 0\nN_FOOD_COMPLAINTS: 0\nN_WOULD_NOT_RETURN: 1\nAVG_COMPLAINERS: 4.00\nAVG_SATISFIED: 4.56\nCOMPLAINT_RATIO: 0.050\nSATISFACTION_GAP: 0.56\n===END===",
+  "ground_truth": {
+    "N_TOTAL": 20,
+    "N_1STAR": 0,
+    "N_5STAR": 16,
+    "AVG_ALL": 4.75,
+    "AVG_FIRST_THIRD": 5.0,
+    "AVG_LAST_THIRD": 4.83,
+    "TREND_DIFF": -0.17,
+    "N_WAIT_COMPLAINTS": 1,
+    "N_SERVICE_COMPLAINTS": 0,
+    "N_FOOD_COMPLAINTS": 0,
+    "N_WOULD_NOT_RETURN": 1,
+    "AVG_COMPLAINERS": 5.0,
+    "AVG_SATISFIED": 4.74,
+    "COMPLAINT_RATIO": 0.05,
+    "SATISFACTION_GAP": -0.26
+  },
+  "parsed": {
+    "N_TOTAL": 20,
+    "N_1STAR": 0,
+    "N_5STAR": 16,
+    "N_WAIT_COMPLAINTS": 1,
+    "N_SERVICE_COMPLAINTS": 0,
+    "N_FOOD_COMPLAINTS": 0,
+    "N_WOULD_NOT_RETURN": 1,
+    "AVG_ALL": 4.5,
+    "AVG_FIRST_THIRD": 5.0,
+    "AVG_LAST_THIRD": 4.83,
+    "TREND_DIFF": -0.17,
+    "AVG_COMPLAINERS": 4.0,
+    "AVG_SATISFIED": 4.56,
+    "COMPLAINT_RATIO": 0.05,
+    "SATISFACTION_GAP": 0.56
+  },
+  "evaluation": {
+    "final_score": 0.9518596491228071,
+    "field_scores": {
+      "N_TOTAL": 1.0,
+      "N_1STAR": 1.0,
+      "N_5STAR": 1.0,
+      "AVG_ALL": 0.9578947368421052,
+      "AVG_FIRST_THIRD": 1.0,
+      "AVG_LAST_THIRD": 1.0,
+      "TREND_DIFF": 1.0,
+      "N_WAIT_COMPLAINTS": 1.0,
+      "N_SERVICE_COMPLAINTS": 1.0,
+      "N_FOOD_COMPLAINTS": 1.0,
+      "N_WOULD_NOT_RETURN": 1.0,
+      "AVG_COMPLAINERS": 0.84,
+      "AVG_SATISFIED": 1.0,
+      "COMPLAINT_RATIO": 1.0,
+      "SATISFACTION_GAP": 0.48
+    },
+    "field_results": [
+      {
+        "name": "N_TOTAL",
+        "expected": 20,
+        "predicted": 20,
+        "score": 1.0,
+        "tolerance": 0,
+        "depends": []
+      },
+      {
+        "name": "N_1STAR",
+        "expected": 0,
+        "predicted": 0,
+        "score": 1.0,
+        "tolerance": 0,
+        "depends": []
+      },
+      {
+        "name": "N_5STAR",
+        "expected": 16,
+        "predicted": 16,
+        "score": 1.0,
+        "tolerance": 0,
+        "depends": []
+      },
+      {
+        "name": "AVG_ALL",
+        "expected": 4.75,
+        "predicted": 4.5,
+        "score": 0.9578947368421052,
+        "tolerance": 0.05,
+        "depends": []
+      },
+      {
+        "name": "AVG_FIRST_THIRD",
+        "expected": 5.0,
+        "predicted": 5.0,
+        "score": 1.0,
+        "tolerance": 0.05,
+        "depends": []
+      },
+      {
+        "name": "AVG_LAST_THIRD",
+        "expected": 4.83,
+        "predicted": 4.83,
+        "score": 1.0,
+        "tolerance": 0.05,
+        "depends": []
+      },
+      {
+        "name": "TREND_DIFF",
+        "expected": -0.17,
+        "predicted": -0.17,
+        "score": 1.0,
+        "tolerance": 0.1,
+        "depends": [
+          "AVG_FIRST_THIRD",
+          "AVG_LAST_THIRD"
+        ]
+      },
+      {
+        "name": "N_WAIT_COMPLAINTS",
+        "expected": 1,
+        "predicted": 1,
+        "score": 1.0,
+        "tolerance": 1,
+        "depends": []
+      },
+      {
+        "name": "N_SERVICE_COMPLAINTS",
+        "expected": 0,
+        "predicted": 0,
+        "score": 1.0,
+        "tolerance": 1,
+        "depends": []
+      },
+      {
+        "name": "N_FOOD_COMPLAINTS",
+        "expected": 0,
+        "predicted": 0,
+        "score": 1.0,
+        "tolerance": 1,
+        "depends": []
+      },
+      {
+        "name": "N_WOULD_NOT_RETURN",
+        "expected": 1,
+        "predicted": 1,
+        "score": 1.0,
+        "tolerance": 1,
+        "depends": []
+      },
+      {
+        "name": "AVG_COMPLAINERS",
+        "expected": 5.0,
+        "predicted": 4.0,
+        "score": 0.84,
+        "tolerance": 0.2,
+        "depends": [
+          "N_WAIT_COMPLAINTS",
+          "N_SERVICE_COMPLAINTS",
+          "N_FOOD_COMPLAINTS"
+        ]
+      },
+      {
+        "name": "AVG_SATISFIED",
+        "expected": 4.74,
+        "predicted": 4.56,
+        "score": 1.0,
+        "tolerance": 0.2,
+        "depends": [
+          "N_WAIT_COMPLAINTS",
+          "N_SERVICE_COMPLAINTS",
+          "N_FOOD_COMPLAINTS"
+        ]
+      },
+      {
+        "name": "COMPLAINT_RATIO",
+        "expected": 0.05,
+        "predicted": 0.05,
+        "score": 1.0,
+        "tolerance": 0.05,
+        "depends": [
+          "N_WAIT_COMPLAINTS",
+          "N_SERVICE_COMPLAINTS",
+          "N_FOOD_COMPLAINTS",
+          "N_TOTAL"
+        ]
+      },
+      {
+        "name": "SATISFACTION_GAP",
+        "expected": -0.26,
+        "predicted": 0.56,
+        "score": 0.48,
+        "tolerance": 0.3,
+        "depends": [
+          "AVG_SATISFIED",
+          "AVG_COMPLAINERS"
+        ]
+      }
+    ]
+  }
+}
