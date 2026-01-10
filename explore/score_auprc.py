@@ -1,16 +1,6 @@
 #!/usr/bin/env python3
 """
 AUPRC (Average Precision) Scoring for G1
-
-Treats allergy risk assessment as a ranking problem.
-- Positive class: High/Critical Risk (GT)
-- Ranking signal: predicted final_risk_score
-- Metric: Average Precision (AUPRC)
-- Normalized AP: (AP - prevalence) / (1 - prevalence)
-
-Random baseline ≈ prevalence (e.g., 0.20 if 20% positive)
-Normalized random baseline ≈ 0.0
-Perfect ranking → nAP = 1.0
 """
 
 import json
@@ -21,15 +11,20 @@ from typing import List, Tuple
 
 def calculate_auprc(results_file) -> dict:
     """
-    Calculate AUPRC from benchmark results.
+    Calculate AUPRC from benchmark results with 2-Tier Difficulty.
     
-    Uses predicted final_risk_score to rank restaurants,
-    treats High/Critical as positive class.
+    1. Risk Detection (High+Critical vs Low): Primary difficulty metric (nAP)
+    2. Critical Isolation (Critical vs Rest): Detecting the worst offenders
+    3. Severity Ordering (Critical vs High): Ranking consistency at the top
     """
-    data = json.load(open(results_file))
+    try:
+        data = json.load(open(results_file))
+    except Exception as e:
+        print(f"Error loading results file: {e}")
+        return {}
     
     # Extract predictions and ground truth
-    y_true = []  # Binary: 1 if High/Critical, 0 if Low
+    gt_verdicts = []
     y_scores = []  # Predicted risk scores (for ranking)
     
     for run in data['runs']:
@@ -37,8 +32,7 @@ def calculate_auprc(results_file) -> dict:
             continue
         
         # Ground truth
-        gt_verdict = run['results']['verdict']['expected']
-        y_true.append(1 if gt_verdict in ['High Risk', 'Critical Risk'] else 0)
+        gt_verdicts.append(run['results']['verdict']['expected'])
         
         # Predicted score (for ranking)
         pred_score = run['results']['final_risk_score']['predicted']
@@ -46,68 +40,88 @@ def calculate_auprc(results_file) -> dict:
             pred_score = 0.0
         y_scores.append(float(pred_score))
    
-    # Calculate metrics
-    y_true = np.array(y_true)
+    # Convert to numpy
     y_scores = np.array(y_scores)
     
-    prevalence = y_true.mean()
+    # --- METRIC 1: RISK DETECTION (Risky vs Safe) ---
+    # Can the model separate High/Critical (Positive) from Low (Negative)?
+    y_true_risky = np.array([1 if gt in ['High Risk', 'Critical Risk'] else 0 for gt in gt_verdicts])
     
-    # Average Precision (AUPRC)
-    ap = average_precision_score(y_true, y_scores)
+    prevalence_risky = y_true_risky.mean()
+    if prevalence_risky > 0 and prevalence_risky < 1:
+        ap_risky = average_precision_score(y_true_risky, y_scores)
+        nap_risky = (ap_risky - prevalence_risky) / (1 - prevalence_risky)
+    else:
+        ap_risky = 0.0
+        nap_risky = 0.0
+
+    # --- METRIC 2: CRITICAL ISOLATION (Critical vs Rest) ---
+    # Can the model separate Critical (Positive) from High/Low (Negative)?
+    y_true_critical = np.array([1 if gt == 'Critical Risk' else 0 for gt in gt_verdicts])
     
-    # Normalized AP (random = 0, perfect = 1)
-    nap = (ap - prevalence) / (1 - prevalence) if prevalence < 1.0 else 0.0
+    prevalence_critical = y_true_critical.mean()
+    if prevalence_critical > 0 and prevalence_critical < 1:
+        ap_critical = average_precision_score(y_true_critical, y_scores)
+        nap_critical = (ap_critical - prevalence_critical) / (1 - prevalence_critical)
+    else:
+        ap_critical = 0.0
+        nap_critical = 0.0
+
+    # --- METRIC 3: SEVERITY ORDERING (Critical > High) ---
+    # Among ONLY the risky restaurants, does Critical rank higher than High?
+    mask_severe = [gt in ['High Risk', 'Critical Risk'] for gt in gt_verdicts]
+    mask_severe = np.array(mask_severe)
     
-    # Also calculate Positive-class F1 for comparison
-    # Use median predicted score as threshold
+    if mask_severe.sum() > 1:
+        y_scores_severe = y_scores[mask_severe]
+        y_true_severe = np.array([1 if gt == 'Critical Risk' else 0 for gt in np.array(gt_verdicts)[mask_severe]])
+        
+        if y_true_severe.sum() > 0 and y_true_severe.sum() < len(y_true_severe):
+            ap_severe_ordering = average_precision_score(y_true_severe, y_scores_severe)
+        else:
+            ap_severe_ordering = 0.0 # Sample too small or uniform class
+    else:
+        ap_severe_ordering = 0.0
+
+    # Calculate Binary Stats for Risky Class (at median threshold)
     threshold = np.median(y_scores)
     y_pred = (y_scores >= threshold).astype(int)
     
-    tp = ((y_true == 1) & (y_pred == 1)).sum()
-    fp = ((y_true == 0) & (y_pred == 1)).sum()
-    fn = ((y_true == 1) & (y_pred == 0)).sum()
+    tp = ((y_true_risky == 1) & (y_pred == 1)).sum()
+    fp = ((y_true_risky == 0) & (y_pred == 1)).sum()
+    fn = ((y_true_risky == 1) & (y_pred == 0)).sum()
     
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
     f1_pos = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
-    
+
     print("="*70)
-    print("AUPRC SCORING (Ranking-Based Evaluation)")
+    print("AUPRC SCORING (2-Tier Ranking Difficulty)")
     print("="*70)
+    print(f"Total Evaluated: {len(gt_verdicts)}")
+    num_critical = y_true_critical.sum()
+    num_high = y_true_risky.sum() - num_critical
+    num_low = len(gt_verdicts) - y_true_risky.sum()
+    print(f"Distribution: {num_critical} Critical, {num_high} High, {num_low} Low")
     print()
-    print(f"Dataset Composition:")
-    print(f"  Positive (High/Critical): {y_true.sum():3d} ({prevalence*100:5.1f}%)")
-    print(f"  Negative (Low):           {(~y_true.astype(bool)).sum():3d} ({(1-prevalence)*100:5.1f}%)")
-    print(f"  Total:                    {len(y_true):3d}")
+    print(f"1. RISK DETECTION (Risky vs Safe):")
+    print(f"   AP_Risky:          {ap_risky:.3f} (Random={prevalence_risky:.3f})")
+    print(f"   nAP_Risky:         {nap_risky:.3f}  ← PRIMARY DIFFICULTY METRIC")
     print()
-    print(f"Ranking Quality:")
-    print(f"  Average Precision (AP):   {ap:.3f}")
-    print(f"  Random Baseline:          {prevalence:.3f} (prevalence)")
-    print(f"  Normalized AP (nAP):      {nap:.3f} ← PRIMARY METRIC")
-    print(f"    (0 = random ranking, 1 = perfect)")
+    print(f"2. CRITICAL ISOLATION (Critical vs Rest):")
+    print(f"   AP_Critical:       {ap_critical:.3f} (Random={prevalence_critical:.3f})")
+    print(f"   nAP_Critical:      {nap_critical:.3f}")
     print()
-    print(f"Binary Classification (at median threshold={threshold:.1f}):")
-    print(f"  Positive-class F1:        {f1_pos:.3f}")
-    print(f"  Precision:                {precision:.3f}")
-    print(f"  Recall:                   {recall:.3f}")
+    print(f"3. SEVERITY ORDERING (Critical ranked above High?):")
+    print(f"   AP_Severity:       {ap_severe_ordering:.3f}")
     print()
-    print("="*70)
-    print("INTERPRETATION")
-    print("="*70)
-    print(f"• AUPRC measures ranking quality for detecting High/Critical cases")
-    print(f"• Normalized AP (nAP) = {nap:.3f}")
-    print(f"  - nAP ≈ 0: Random ranking (baseline)")
-    print(f"  - nAP ≈ 1: Perfect ranking (all High/Critical at top)")
-    print(f"• Target: nAP < 0.15 for difficult task")
     print("="*70)
     
     return {
-        'ap': ap,
-        'nap': nap,
-        'prevalence': prevalence,
-        'f1_pos': f1_pos,
-        'precision': precision,
-        'recall': recall
+        'nap_risky': nap_risky,
+        'nap_critical': nap_critical,
+        'ap_severe_ordering': ap_severe_ordering,
+        'f1_risky': f1_pos
     }
 
 

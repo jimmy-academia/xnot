@@ -1,4 +1,0 @@
-{"business_id": "test_1", "name": "Thai Basil", "categories": "Thai, Asian Fusion", "attributes": {"HasGlutenFreeOptions": true}}
-{"review_id": "r1", "text": "The food was delicious! Best Pad Thai ever.", "stars": 5, "date": "2023-01-01"}
-{"review_id": "r2", "text": "They were meticulous about my peanut allergy. The server checked with chef and they used a clean wok. Safest Thai place!", "stars": 5, "date": "2024-01-01", "useful": 5}
-{"review_id": "r3", "text": "Great food, but note: I had a mild reaction here years ago. Cross contamination happens.", "stars": 5, "date": "2020-01-01", "useful": 10}

@@ -641,7 +641,7 @@ def load_g1_semantic_gt():
     try:
         import json
         from pathlib import Path
-        gt_path = Path(__file__).parent / 'data' / 'semantic_gt_N100' / 'all_judgments.json'
+        gt_path = Path(__file__).parent / 'data' / 'semantic_gt' / 'all_judgments.json'
         if gt_path.exists():
             print(f"Loading semantic GT from {gt_path}")
             with open(gt_path, 'r') as f:
@@ -719,107 +719,12 @@ Finally, determine:
 
 Output JSON."""
 
----
-
-**DEFINITIONS** (Intermediate Variables - compute these first, do NOT output):
-- `AvgStars`: Average star rating across ALL reviews
-- `OldestYear`: Year of the oldest review (extract from date field)
-- `FlaggedReviews`: Reviews containing ANY keyword from SEVERE_FLAGS, MILD_FLAGS, or POSITIVE_FLAGS
-- `AvgAge_FlaggedReviews`: Average age in years of flagged reviews = Avg(2025 - ReviewYear for each flagged review)
-- `AvgStars_FlaggedReviews`: Average star rating across flagged reviews only
-- `TotalFlags`: Total count of SEVERE_FLAGS + MILD_FLAGS + POSITIVE_FLAGS
-- `RecentFlags`: Count of flags in reviews from 2024-2025
-- `OldFlags`: Count of flags in reviews before 2024
-- `BaseCuisineRisk`: 5.0 if restaurant categories include Thai/Vietnamese/Chinese/Indian/African/Malaysian, else 0.0
-- `PreliminaryRisk`: Preliminary risk score before safety margin adjustment (see formula in L6)
-
----
-
-**OUTPUT PRIMITIVES** (You MUST calculate and output ALL 24 values below):
-
-**L1: Basic Metadata** (NON-SCORED - informational only)
-1. **TOTAL_REVIEWS**: Count of all reviews in the dataset
-
-**L2: Raw Extraction** (NON-SCORED - simple keyword counting)
-2. **SEVERE_FLAGS**: Count reviews containing ANY of: 'reaction', 'hospital', 'nuts everywhere'
-3. **MILD_FLAGS**: Count reviews containing ANY of: 'peanut oil', 'cross contamination', 'got sick'
-4. **POSITIVE_FLAGS**: Count reviews containing ANY of: 'accommodated', 'dedicated fryer', 'checked with chef', 'safe for allergy', 'allergy menu'
-5. **GOOD_HYGIENE**: Count keyword mentions across ALL reviews for: 'clean', 'spotless', 'immaculate', 'shining', 'sanitary'
-6. **BAD_HYGIENE**: Count keyword mentions across ALL reviews for: 'dirty', 'filthy', 'grime', 'sticky', 'gross', 'bugs', 'roach'
-
-**L3: Basic Aggregation** (SCORED)
-7. **REVIEW_DENSITY**: TOTAL_REVIEWS / 10.0
-8. **STAR_VARIANCE**: AvgStars - 3.0
-9. **DATE_DECAY**: (2025 - OldestYear) * 0.15
-10. **THREAT_INDEX**: (SEVERE_FLAGS * 3.0) + (MILD_FLAGS * 1.5)
-11. **SAFETY_BUFFER**: POSITIVE_FLAGS * (AvgStars / 3.0) * 2.0
-12. **VOLATILITY**: THREAT_INDEX - SAFETY_BUFFER
-13. **HYGIENE_PENALTY**: (BAD_HYGIENE * 2.0) - (GOOD_HYGIENE * 0.5)
-
-**L4: Advanced Aggregation** (SCORED)
-14. **RECENCY_FACTOR**: 1.0 / (1.0 + (AvgAge_FlaggedReviews / 5.0))
-    - If no flagged reviews, use 0.5 as default
-15. **STAR_SEVERITY_CORRELATION**: (5.0 - AvgStars_FlaggedReviews) / 4.0
-    - If fewer than 2 flagged reviews, use 0.5 as default
-16. **EVIDENCE_QUALITY_SCORE**: Min(1.0, TotalFlags / 5.0)
-17. **TEMPORAL_TREND**: (RecentFlags - OldFlags) / TotalFlags
-    - If TotalFlags = 0, use 0.0
-18. **CUISINE_MODIFIER**: BaseCuisineRisk * (1.0 + STAR_SEVERITY_CORRELATION) / 10.0
-
-**L5: Risk Composition** (SCORED)
-19. **BASELINE_UNCERTAINTY**: Shannon entropy of star distribution
-    - Formula: -Sum(P_i * log2(P_i)) where P_i = probability of i-star reviews for i in {1,2,3,4,5}
-    - If all reviews have same star rating, entropy = 0.0
-20. **COMPOUND_RISK_INDEX**: VOLATILITY * RECENCY_FACTOR * (1.0 + EVIDENCE_QUALITY_SCORE)
-21. **SAFETY_MARGIN**: Max(0.0, 9.0 - PreliminaryRisk)
-
-**L6: Final Synthesis** (SCORED)
-22. **FINAL_RISK_SCORE**: 
-    ```
-    PreliminaryRisk = 6.5 
-                    + (VOLATILITY * 1.2) 
-                    + HYGIENE_PENALTY 
-                    + (REVIEW_DENSITY * 0.3) 
-                    - (STAR_VARIANCE * 0.8)
-                    + (DATE_DECAY * 0.4) 
-                    + (BaseCuisineRisk * 0.6) 
-                    + COMPOUND_RISK_INDEX 
-                    + (TEMPORAL_TREND * 1.5)
-                    + CUISINE_MODIFIER 
-                    + (BASELINE_UNCERTAINTY * 0.5)
-    
-    SAFETY_MARGIN = Max(0.0, 9.0 - PreliminaryRisk)
-    FINAL_RISK_SCORE = PreliminaryRisk - (SAFETY_MARGIN * 0.1)
-    ```
-    Round to 2 decimal places.
-
-23. **VERDICT**: 
-    - If FINAL_RISK_SCORE >= 9.0: "Critical Risk"
-    - Else if FINAL_RISK_SCORE >= 6.0: "High Risk"
-    - Else: "Low Risk"
-
----
-
-**OUTPUT FORMAT**: You MUST output all 23 numeric primitives + 1 verdict (24 total values) in the exact format specified.
-"""
-
 TASK_G1_TOLERANCES = {
-    'review_density': 0.01,
-    'star_variance': 0.3,
-    'date_decay': 0.2,
-    'threat_index': 1.0,
-    'safety_buffer': 1.0,
-    'volatility': 1.0,
-    'hygiene_penalty': 1.0,
-    'recency_factor': 0.1,
-    'star_severity_correlation': 0.15,
-    'evidence_quality_score': 0.1,
-    'temporal_trend': 0.2,
-    'cuisine_modifier': 0.5,
-    'baseline_uncertainty': 0.3,
-    'compound_risk_index': 1.5,
-    'safety_margin': 1.0,
-    'final_risk_score': 1.0
+    'firsthand_severe_count': 0,  # Strict count
+    'safety_trajectory': 0,  # Exact string match
+    'false_assurance_count': 0,  # Strict count
+    'evidence_consensus': 0.2,  # Float tolerance
+    'final_risk_score': 2.0,  # Score tolerance
 }
 
 # =============================================================================

@@ -45,14 +45,22 @@ We restrict the Core 100 to 5 distinct categories (Italian, Coffee, Pizza, Steak
 This maximizes our ability to stress-test the "Logic" of the model across different data structures while controlling variables.
 
 ## Review Scaling Strategy
-To test "Time Awareness" (G8) and "Needle-in-Haystack" retrieval, we scale N reviews using the **Newest-First** sorting.
+To test "Time Awareness" (G8) and "Needle-in-Haystack" retrieval, we scale **K** (reviews per restaurant) using the **Newest-First** sorting.
 
-| Scale (N) | Logic Coverage | Rationale |
-| :--- | :--- | :--- |
-| **N=25** | **Current State** | Focuses on "Now" (Operating Hours, Current Menu). |
-| **N=50** | **Recent History** | Guarantees pre-2020 overlap. Good for "Short-term vs Long-term" trends. |
-| **N=100** | **Deep History** | Strong chronological depth. |
-| **N=200** | **Full Context** | Needle-in-Haystack stress test. |
+**Naming Convention:**
+- **N** = Number of restaurants (fixed at 100)
+- **K** = Maximum reviews per restaurant (context size / stress level)
+
+**Important:** K represents "up to K reviews" - restaurants with fewer available reviews include all they have. This reflects real-world conditions where data availability varies, and tests the method's ability to adapt dynamically to different context sizes.
+
+| Scale (K) | Actual Avg | Logic Coverage | Rationale |
+| :--- | :--- | :--- | :--- |
+| **K=25** | 25.0 | **Current State** | Focuses on "Now" (Operating Hours, Current Menu). |
+| **K=50** | 50.0 | **Recent History** | Guarantees pre-2020 overlap. Short-term vs Long-term trends. |
+| **K=100** | ~88 | **Deep History** | Strong chronological depth. Some restaurants have <100 reviews. |
+| **K=200** | ~132 | **Full Context** | Needle-in-Haystack stress test. Many restaurants cap out earlier. |
+
+This design choice tests robustness to variable context lengths - a realistic condition that methods must handle.
 
 ## Why this is Publishable
 It demonstrates **Internal Validity** (Controlled Experiment) before claiming **External Validity** (Generalization).

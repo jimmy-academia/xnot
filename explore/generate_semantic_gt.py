@@ -29,11 +29,14 @@ def generate_semantic_judgments(dataset_path, sample_size=20, output_dir='data/h
     
     judgments = []
     for i, data in enumerate(sampled):
-        restaurant_name = data.get('name', f'Unknown_{i}')
-        
+        # Extract business info from nested structure
+        business = data.get('business', {})
+        restaurant_name = business.get('name', f'Unknown_{i}')
+
         print(f"\n[{i+1}/{len(sampled)}] {restaurant_name[:40]}")
-        
-        judgment = generate_semantic_judgment(data, data.get('reviews', []))
+
+        # Pass business dict (not full data) to semantic judge
+        judgment = generate_semantic_judgment(business, data.get('reviews', []))
         
         judgments.append({
             'restaurant': restaurant_name,
@@ -64,7 +67,7 @@ def generate_semantic_judgments(dataset_path, sample_size=20, output_dir='data/h
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', default='data/packed/dataset_N100.jsonl')
+    parser.add_argument('--dataset', default='data/dataset_K100.jsonl')
     parser.add_argument('--sample', type=int, default=20, help='Sample size for human validation')
     parser.add_argument('--output', default='data/human_review')
     args = parser.parse_args()

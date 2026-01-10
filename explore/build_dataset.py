@@ -84,8 +84,8 @@ def build_datasets(contexts, reviews_by_biz, users_map):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
     for n in SCALES:
-        out_path = OUTPUT_DIR / f"dataset_N{n}.jsonl"
-        print(f"Building N={n} -> {out_path}")
+        out_path = OUTPUT_DIR / f"dataset_K{n}.jsonl"
+        print(f"Building K={n} (reviews per restaurant) -> {out_path}")
         
         with open(out_path, 'w') as f:
             for b in contexts:
