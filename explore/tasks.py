@@ -13,159 +13,7 @@ from dataclasses import dataclass
 from typing import List, Dict, Any
 
 
-# =============================================================================
-# TASK A: RECENT VS HISTORICAL
-# =============================================================================
 
-@dataclass
-class TaskAGroundTruth:
-    n_total: int
-    n_recent: int
-    n_historical: int
-    avg_recent: float
-    avg_historical: float
-    delta: float
-    direction: str
-    recent_5star_ratio: float
-    historical_5star_ratio: float
-    recent_1star_ratio: float
-    historical_1star_ratio: float
-
-
-def compute_task_a_ground_truth(reviews: List[Any], restaurant: Any = None) -> TaskAGroundTruth:
-    n = len(reviews)
-    split_idx = (2 * n) // 3
-
-    historical = reviews[:split_idx]
-    recent = reviews[split_idx:]
-
-    avg_hist = sum(r['stars'] for r in historical) / len(historical) if historical else 0
-    avg_recent = sum(r['stars'] for r in recent) / len(recent) if recent else 0
-    delta = round(avg_recent - avg_hist, 2)
-
-    if delta > 0.3:
-        direction = "IMPROVING"
-    elif delta < -0.3:
-        direction = "DECLINING"
-    else:
-        direction = "STABLE"
-
-    recent_5star = sum(1 for r in recent if r['stars'] == 5) / len(recent) if recent else 0
-    hist_5star = sum(1 for r in historical if r['stars'] == 5) / len(historical) if historical else 0
-    recent_1star = sum(1 for r in recent if r['stars'] == 1) / len(recent) if recent else 0
-    hist_1star = sum(1 for r in historical if r['stars'] == 1) / len(historical) if historical else 0
-
-    return TaskAGroundTruth(
-        n_total=n,
-        n_recent=len(recent),
-        n_historical=len(historical),
-        avg_recent=round(avg_recent, 2),
-        avg_historical=round(avg_hist, 2),
-        delta=delta,
-        direction=direction,
-        recent_5star_ratio=round(recent_5star, 3),
-        historical_5star_ratio=round(hist_5star, 3),
-        recent_1star_ratio=round(recent_1star, 3),
-        historical_1star_ratio=round(hist_1star, 3),
-    )
-
-
-TASK_A_PROMPT = """Analyze temporal patterns in the reviews.
-
-The reviews are sorted chronologically. Split them into:
-- Historical: First 2/3 of reviews (older)
-- Recent: Last 1/3 of reviews (newer)
-
-Compute:
-1. N_TOTAL: Total number of reviews
-2. N_RECENT: Number of recent reviews (last 1/3)
-3. N_HISTORICAL: Number of historical reviews (first 2/3)
-4. AVG_RECENT: Average star rating of recent reviews (2 decimal places)
-5. AVG_HISTORICAL: Average star rating of historical reviews (2 decimal places)
-6. DELTA: AVG_RECENT - AVG_HISTORICAL (2 decimal places)
-7. DIRECTION: "IMPROVING" if DELTA > 0.3, "DECLINING" if DELTA < -0.3, else "STABLE"
-8. RECENT_5STAR_RATIO: Fraction of recent reviews with 5 stars (3 decimal places)
-9. HISTORICAL_5STAR_RATIO: Fraction of historical reviews with 5 stars (3 decimal places)
-10. RECENT_1STAR_RATIO: Fraction of recent reviews with 1 star (3 decimal places)
-11. HISTORICAL_1STAR_RATIO: Fraction of historical reviews with 1 star (3 decimal places)"""
-
-TASK_A_TOLERANCES = {'delta': 0.1, 'avg_recent': 0.1, 'avg_historical': 0.1}
-
-
-# =============================================================================
-# TASK B: CREDIBILITY WEIGHTING
-# =============================================================================
-
-@dataclass
-class TaskBGroundTruth:
-    n_total: int
-    n_high_useful: int
-    n_low_useful: int
-    avg_all: float
-    avg_high_useful: float
-    avg_low_useful: float
-    credibility_weighted_avg: float
-    high_vs_low_delta: float
-    divergence_score: float
-
-
-def compute_task_b_ground_truth(reviews: List[Any], restaurant: Any = None) -> TaskBGroundTruth:
-    n = len(reviews)
-
-    high_useful = [r for r in reviews if r['useful'] >= 3]
-    low_useful = [r for r in reviews if r['useful'] == 0]
-
-    avg_all = sum(r['stars'] for r in reviews) / n if n else 0
-    avg_high = sum(r['stars'] for r in high_useful) / len(high_useful) if high_useful else 0
-    avg_low = sum(r['stars'] for r in low_useful) / len(low_useful) if low_useful else 0
-
-    total_weight = sum(r['useful'] + 1 for r in reviews)
-    weighted_sum = sum(r['stars'] * (r['useful'] + 1) for r in reviews)
-    weighted_avg = weighted_sum / total_weight if total_weight else 0
-
-    mean = avg_all
-    variance = sum((r['stars'] - mean) ** 2 for r in reviews) / n if n else 0
-
-    return TaskBGroundTruth(
-        n_total=n,
-        n_high_useful=len(high_useful),
-        n_low_useful=len(low_useful),
-        avg_all=round(avg_all, 2),
-        avg_high_useful=round(avg_high, 2),
-        avg_low_useful=round(avg_low, 2),
-        credibility_weighted_avg=round(weighted_avg, 2),
-        high_vs_low_delta=round(avg_high - avg_low, 2) if high_useful and low_useful else 0.0,
-        divergence_score=round(variance, 2),
-    )
-
-
-TASK_B_PROMPT = """Analyze review credibility patterns.
-
-The "useful" field indicates how many other users found each review helpful.
-- High useful (>= 3): More credible reviews
-- Low useful (= 0): Less established reviews
-
-Compute:
-1. N_TOTAL: Total number of reviews
-2. N_HIGH_USEFUL: Reviews with useful >= 3
-3. N_LOW_USEFUL: Reviews with useful = 0
-4. AVG_ALL: Average star rating of all reviews (2 decimal places)
-5. AVG_HIGH_USEFUL: Average star rating of high-useful reviews (0 if none, 2 decimal places)
-6. AVG_LOW_USEFUL: Average star rating of low-useful reviews (0 if none, 2 decimal places)
-7. CREDIBILITY_WEIGHTED_AVG: Weighted average where weight = useful + 1
-   Formula: sum(stars * (useful+1)) / sum(useful+1) (2 decimal places)
-8. HIGH_VS_LOW_DELTA: AVG_HIGH_USEFUL - AVG_LOW_USEFUL (0 if either group empty, 2 decimal places)
-9. DIVERGENCE_SCORE: Variance of star ratings = sum((stars - mean)^2) / N (2 decimal places)"""
-
-TASK_B_TOLERANCES = {
-    'avg_all': 0.1, 'avg_high_useful': 0.1, 'avg_low_useful': 0.1,
-    'credibility_weighted_avg': 0.1, 'divergence_score': 0.1
-}
-
-
-# =============================================================================
-# TASK C: RATING-TEXT ALIGNMENT
-# =============================================================================
 
 @dataclass
 class TaskCGroundTruth:
@@ -402,6 +250,24 @@ class TaskFGroundTruth:
     price_adjusted_score: float
 
 
+@dataclass
+class TaskGGroundTruth:
+    n_reviews_with_wait: int
+    n_worth_it: int
+    n_not_worth_it: int
+    wait_redeemability_ratio: float
+    most_common_wait_complaint: str
+
+
+@dataclass
+class TaskHGroundTruth:
+    top_staff_member: str
+    n_mentions: int
+    avg_stars_with_staff: float
+    staff_sentiment_summary: str
+
+
+
 def compute_task_f_ground_truth(reviews: List[Any], restaurant: Any) -> TaskFGroundTruth:
     n = len(reviews)
 
@@ -421,7 +287,7 @@ def compute_task_f_ground_truth(reviews: List[Any], restaurant: Any) -> TaskFGro
     noise_ratio = len(noise_complaints) / n if n else 0
 
     attrs = restaurant.get('attributes', {})
-    price_tier = attrs.get('RestaurantsPriceRange2', 2)
+    price_tier = int(attrs.get('RestaurantsPriceRange2', 2))
     noise_level = attrs.get('NoiseLevel', 'average')
     price_adjusted = 1 - (price_ratio * (5 - price_tier))
 
@@ -435,6 +301,233 @@ def compute_task_f_ground_truth(reviews: List[Any], restaurant: Any) -> TaskFGro
         noise_complaint_ratio=round(noise_ratio, 3),
         avg_stars_price_complainers=round(sum(r['stars'] for r in price_complaints) / len(price_complaints), 2) if price_complaints else 0.0,
         price_adjusted_score=round(max(0, price_adjusted), 3),
+    )
+
+
+def compute_task_g_ground_truth(reviews: List[Any], restaurant: Any) -> TaskGGroundTruth:
+    """
+    Task G: Conditional Logic (Wait Times & "Worth It").
+
+    Logic:
+    1. Identify reviews mentioning "wait", "line", "queue", "table".
+    2. Classify as "Worth It" if they contain: "worth it", "worth the wait", "moved fast", "didn't mind".
+    3. Classify as "Not Worth It" if they contain: "too long", "ridiculous", "never again", "slow", "forever" AND NOT in "Worth It" set.
+    """
+    wait_reviews = []
+    worth_it = []
+    not_worth_it = []
+    
+    wait_keywords = ['wait', 'line', 'queue', 'table', 'reservation']
+    worth_keywords = ['worth it', 'worth the', 'moved fast', "didn't mind", 'not bad', 'quick']
+    neg_keywords = ['too long', 'ridiculous', 'never again', 'slow', 'forever', 'awful', 'rude']
+
+    for r in reviews:
+        text = r['text'].lower()
+        if any(w in text for w in wait_keywords):
+            wait_reviews.append(r)
+            if any(w in text for w in worth_keywords):
+                worth_it.append(r)
+            elif any(w in text for w in neg_keywords):
+                not_worth_it.append(r)
+                
+    n_wait = len(wait_reviews)
+    n_worth = len(worth_it)
+    n_not = len(not_worth_it)
+    
+    ratio = n_worth / n_wait if n_wait > 0 else 0.0
+    
+    # Simple heuristic for most common complaint word in not_worth_it
+    complaint_counts = {k: 0 for k in neg_keywords}
+    for r in not_worth_it:
+        text = r['text'].lower()
+        for k in neg_keywords:
+            if k in text:
+                complaint_counts[k] += 1
+    
+    most_common = max(complaint_counts.items(), key=lambda x: x[1])[0] if n_not > 0 else "none"
+
+    return TaskGGroundTruth(
+        n_reviews_with_wait=n_wait,
+        n_worth_it=n_worth,
+        n_not_worth_it=n_not,
+        wait_redeemability_ratio=round(ratio, 3),
+        most_common_wait_complaint=most_common
+    )
+
+
+@dataclass
+class TaskIGroundTruth:
+    top_user_name: str
+    top_user_useful_count: int
+    targeted_dish: str
+    n_other_reviews_of_dish: int
+    avg_stars_contradicting_dish: float
+
+
+def compute_task_i_ground_truth(reviews: List[Any], restaurant: Any) -> TaskIGroundTruth:
+    """
+    Task I: Multi-Hop Quantitative Reasoning.
+    1. Find user with highest 'useful' count.
+    2. Identify dish they mentioned (heuristic: first capitalized word after 'order' or 'had').
+    3. Find all OTHER reviews mentioning that dish.
+    4. Calculate avg stars of those other reviews.
+    """
+    if not reviews:
+        return TaskIGroundTruth("none", 0, "none", 0, 0.0)
+        
+    # 1. Top useful user
+    top_user_rev = max(reviews, key=lambda x: x.get('useful', 0))
+    user_id = top_user_rev.get('user_id', 'unknown')
+    # Since we don't have user names in the raw reviews dict sometimes, we use user_id or 'User [ID]'
+    user_display = f"User {user_id[:5]}"
+    useful_count = top_user_rev.get('useful', 0)
+    
+    # 2. Targeted dish (very simple extraction for GT)
+    # We look for common dishes in philly cafes data
+    dishes = ['coffee', 'espresso', 'latte', 'gelato', 'pasta', 'sandwich', 'salad', 'gnocchi', 'ravioli', 'meatball', 'octopus', 'steak']
+    target_dish = "none"
+    text_lower = top_user_rev['text'].lower()
+    for d in dishes:
+        if d in text_lower:
+            target_dish = d
+            break
+            
+    # 3. Other reviews mentioning dish
+    other_revs = [r for r in reviews if r['review_id'] != top_user_rev['review_id'] and target_dish in r['text'].lower()]
+    
+    avg_stars = sum(r['stars'] for r in other_revs) / len(other_revs) if other_revs else 0.0
+    
+    return TaskIGroundTruth(
+        top_user_name=user_display,
+        top_user_useful_count=useful_count,
+        targeted_dish=target_dish,
+        n_other_reviews_of_dish=len(other_revs),
+        avg_stars_contradicting_dish=round(avg_stars, 2)
+    )
+
+def compute_task_h_ground_truth(reviews: List[Any], restaurant: Any) -> TaskHGroundTruth:
+    """
+    Task H: Entity Resolution (Staff Aggregation).
+    """
+    import re
+    from collections import defaultdict
+    patterns = [
+        r'(?:server|waiter|waitress|bartender|host|hostess|manager|ask for|nice lady|shout out to)\s+([A-Z][a-z]+)',
+        r'([A-Z][a-z]+)\s+was our (?:server|waiter|waitress|bartender)'
+    ]
+    staff_mentions = defaultdict(list)
+    for r in reviews:
+        text = r['text']
+        found_names = set()
+        for p in patterns:
+            matches = re.findall(p, text)
+            for m in matches:
+                if len(m) > 2 and m.lower() not in ['he', 'she', 'they', 'the', 'this', 'that', 'it', 'if']:
+                    found_names.add(m)
+        for name in found_names:
+            staff_mentions[name].append(r)
+            
+    if not staff_mentions:
+        return TaskHGroundTruth("none", 0, 0.0, "neutral")
+        
+    top_staff = max(staff_mentions.items(), key=lambda x: len(x[1]))
+    name, revs = top_staff
+    avg_stars = sum(r['stars'] for r in revs) / len(revs)
+    sentiment = "positive" if avg_stars >= 4.0 else "negative" if avg_stars <= 2.5 else "mixed"
+    
+    return TaskHGroundTruth(
+        top_staff_member=name,
+        n_mentions=len(revs),
+        avg_stars_with_staff=round(avg_stars, 2),
+        staff_sentiment_summary=sentiment
+    )
+
+
+@dataclass
+class TaskJGroundTruth:
+    avg_useful_service: float
+    avg_useful_food: float
+    prioritized_aspect: str
+    avg_stars_prioritized: float
+
+
+def compute_task_j_ground_truth(reviews: List[Any], restaurant: Any) -> TaskJGroundTruth:
+    """
+    Task J: Weighted Aspect Priority.
+    """
+    service_revs = [r for r in reviews if any(w in r['text'].lower() for w in ['service', 'waitress', 'waiter', 'server', 'staff'])]
+    food_revs = [r for r in reviews if any(w in r['text'].lower() for w in ['food', 'dish', 'meal', 'eat', 'delicious', 'tasty'])]
+    
+    avg_u_service = sum(r.get('useful', 0) for r in service_revs) / len(service_revs) if service_revs else 0.0
+    avg_u_food = sum(r.get('useful', 0) for r in food_revs) / len(food_revs) if food_revs else 0.0
+    
+    if avg_u_service > avg_u_food:
+        priority = "service"
+        target_revs = service_revs
+    elif avg_u_food > avg_u_service:
+        priority = "food"
+        target_revs = food_revs
+    else:
+        priority = "draw"
+        target_revs = service_revs + food_revs
+        
+    avg_stars = sum(r['stars'] for r in target_revs) / len(target_revs) if target_revs else 0.0
+    
+    return TaskJGroundTruth(
+        avg_useful_service=round(avg_u_service, 2),
+        avg_useful_food=round(avg_u_food, 2),
+        prioritized_aspect=priority,
+        avg_stars_prioritized=round(avg_stars, 2)
+    )
+
+
+@dataclass
+class TaskKGroundTruth:
+    top_staff_member: str
+    earliest_rating: float
+    latest_rating: float
+    drift: str
+
+
+def compute_task_k_ground_truth(reviews: List[Any], restaurant: Any) -> TaskKGroundTruth:
+    """
+    Task K: Entity Sentiment Drift.
+    """
+    # Reuse staff extraction logic from Task H
+    import re
+    from collections import defaultdict
+    patterns = [r'(?:server|waiter|waitress|bartender|host|hostess|manager|ask for|nice lady|shout out to)\s+([A-Z][a-z]+)']
+    staff_mentions = defaultdict(list)
+    for r in reviews:
+        for p in patterns:
+            matches = re.findall(p, r['text'])
+            for m in matches:
+                if len(m) > 2 and m.lower() not in ['he', 'she', 'they', 'the', 'this']:
+                    staff_mentions[m].append(r)
+                    
+    if not staff_mentions:
+        return TaskKGroundTruth("none", 0.0, 0.0, "stable")
+        
+    top_staff = max(staff_mentions.items(), key=lambda x: len(x[1]))
+    name, revs = top_staff
+    
+    # Sort by date
+    revs_sorted = sorted(revs, key=lambda x: x['date'])
+    earliest = revs_sorted[0]['stars']
+    latest = revs_sorted[-1]['stars']
+    
+    if latest > earliest:
+        drift = "improving"
+    elif latest < earliest:
+        drift = "declining"
+    else:
+        drift = "stable"
+        
+    return TaskKGroundTruth(
+        top_staff_member=name,
+        earliest_rating=float(earliest),
+        latest_rating=float(latest),
+        drift=drift
     )
 
 
@@ -455,26 +548,72 @@ Compute:
 
 TASK_F_TOLERANCES = {'price_adjusted_score': 0.1}
 
+TASK_G_PROMPT = """Analyze the relationship between wait times and customer satisfaction.
+
+Compute:
+1. N_REVIEWS_WITH_WAIT: Count of reviews mentioning 'wait', 'line', 'queue', 'table', 'reservation'.
+2. N_WORTH_IT: From wait group, count explicitly positive wait experiences ("worth it", "moved fast").
+3. N_NOT_WORTH_IT: From wait group, count negative wait experiences ("too long", "slow").
+4. WAIT_REDEEMABILITY_RATIO: N_WORTH_IT / N_REVIEWS_WITH_WAIT (3 decimal places).
+5. MOST_COMMON_WAIT_COMPLAINT: Most frequent complaint keyword in negative wait reviews (e.g. 'too long', 'slow')."""
+
+TASK_G_TOLERANCES = {'wait_redeemability_ratio': 0.1}
+
+TASK_H_PROMPT = """Identify specific staff members mentioned by name and aggregate their performance.
+
+Compute:
+1. TOP_STAFF_MEMBER: The single capitalized name most frequently mentioned after role keywords (server, waiter, etc.).
+2. N_MENTIONS: Number of reviews mentioning this top staff member.
+3. AVG_STARS_WITH_STAFF: Average star rating of reviews mentioning this person (2 decimal places).
+4. STAFF_SENTIMENT_SUMMARY: 'positive' (avg>=4.0), 'negative' (avg<=2.5), or 'mixed'."""
+
+TASK_H_TOLERANCES = {'avg_stars_with_staff': 0.5}
+
+
+# =============================================================================
+# TASK REGISTRY
+# =============================================================================
+
+TASK_I_PROMPT = """Perform multi-hop quantitative analysis to identify user influence and contradictions.
+
+Compute:
+1. TOP_USER_NAME: The name/ID of the user whose review has the highest 'useful' count. Format as 'User [First 5 chars of ID]'.
+2. TOP_USER_USEFUL_COUNT: The useful count of that specific review.
+3. TARGETED_DISH: A specific dish mentioned in that user's review (e.g. coffee, gelato, pasta). Pick one.
+4. N_OTHER_REVIEWS_OF_DISH: Count of ALL OTHER reviews in the set that mention this same dish.
+5. AVG_STARS_CONTRADICTING_DISH: Average star rating of those other reviews (2 decimal places)."""
+
+TASK_I_TOLERANCES = {'avg_stars_contradicting_dish': 0.2}
+
+# =============================================================================
+# TASK REGISTRY
+# =============================================================================
+
+TASK_J_PROMPT = """Analyze which aspect of the restaurant is prioritized by 'useful' reviews.
+
+Compute:
+1. AVG_USEFUL_SERVICE: Average useful count for reviews mentioning service-related terms (2 decimal places).
+2. AVG_USEFUL_FOOD: Average useful count for reviews mentioning food-related terms (2 decimal places).
+3. PRIORITIZED_ASPECT: "service" if AVG_USEFUL_SERVICE > AVG_USEFUL_FOOD, "food" if vice-versa, else "draw".
+4. AVG_STARS_PRIORITIZED: Average star rating of the reviews in the prioritized group (2 decimal places)."""
+
+TASK_J_TOLERANCES = {'avg_useful_service': 0.5, 'avg_useful_food': 0.5, 'avg_stars_prioritized': 0.2}
+
+TASK_K_PROMPT = """Analyze the sentiment drift for the most mentioned staff member.
+
+Compute:
+1. TOP_STAFF_MEMBER: The name of the staff member mentioned most frequently.
+2. EARLIEST_RATING: The star rating of the chronologically earliest review mentioning this staff member.
+3. LATEST_RATING: The star rating of the chronologically latest review mentioning this staff member.
+4. DRIFT: "improving" if LATEST_RATING > EARLIEST_RATING, "declining" if LATEST_RATING < EARLIEST_RATING, else "stable"."""
+
+TASK_K_TOLERANCES = {}
 
 # =============================================================================
 # TASK REGISTRY
 # =============================================================================
 
 TASK_REGISTRY = {
-    'A': {
-        'name': 'Recent vs Historical',
-        'ground_truth_class': TaskAGroundTruth,
-        'compute_ground_truth': compute_task_a_ground_truth,
-        'prompt': TASK_A_PROMPT,
-        'tolerances': TASK_A_TOLERANCES,
-    },
-    'B': {
-        'name': 'Credibility Weighting',
-        'ground_truth_class': TaskBGroundTruth,
-        'compute_ground_truth': compute_task_b_ground_truth,
-        'prompt': TASK_B_PROMPT,
-        'tolerances': TASK_B_TOLERANCES,
-    },
     'C': {
         'name': 'Rating-Text Alignment',
         'ground_truth_class': TaskCGroundTruth,
@@ -495,6 +634,41 @@ TASK_REGISTRY = {
         'compute_ground_truth': compute_task_f_ground_truth,
         'prompt': TASK_F_PROMPT,
         'tolerances': TASK_F_TOLERANCES,
+    },
+    'G': {
+        'name': 'Conditional Sentiment',
+        'ground_truth_class': TaskGGroundTruth,
+        'compute_ground_truth': compute_task_g_ground_truth,
+        'prompt': TASK_G_PROMPT,
+        'tolerances': TASK_G_TOLERANCES,
+    },
+    'H': {
+        'name': 'Staff Entity Resolution',
+        'ground_truth_class': TaskHGroundTruth,
+        'compute_ground_truth': compute_task_h_ground_truth,
+        'prompt': TASK_H_PROMPT,
+        'tolerances': TASK_H_TOLERANCES,
+    },
+    'I': {
+        'name': 'Multi-Hop Reasoning',
+        'ground_truth_class': TaskIGroundTruth,
+        'compute_ground_truth': compute_task_i_ground_truth,
+        'prompt': TASK_I_PROMPT,
+        'tolerances': TASK_I_TOLERANCES,
+    },
+    'J': {
+        'name': 'Weighted Aspect Priority',
+        'ground_truth_class': TaskJGroundTruth,
+        'compute_ground_truth': compute_task_j_ground_truth,
+        'prompt': TASK_J_PROMPT,
+        'tolerances': TASK_J_TOLERANCES,
+    },
+    'K': {
+        'name': 'Entity Sentiment Drift',
+        'ground_truth_class': TaskKGroundTruth,
+        'compute_ground_truth': compute_task_k_ground_truth,
+        'prompt': TASK_K_PROMPT,
+        'tolerances': TASK_K_TOLERANCES,
     },
 }
 

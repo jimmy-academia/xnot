@@ -7,6 +7,7 @@ Usage:
     python explore/eval.py --task all --restaurant all
 """
 
+import asyncio
 import json
 import re
 import sys
@@ -16,20 +17,15 @@ from typing import Dict, List, Any
 from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils.llm import call_llm, configure
+from utils.llm import call_llm, call_llm_async, configure
 from tasks import TASK_REGISTRY, get_task, list_tasks
 
 DATA_DIR = Path(__file__).parent / "data"
-OUTPUT_FILE = Path(__file__).parent / "output.json"
+RESULTS_DIR = Path(__file__).parent / "results"
 
-# Available restaurants
-RESTAURANTS = [
-    "Acme_Oyster_House__ab50qdW.jsonl",
-    "Cochon_6a4gLLFS.jsonl",
-    "Commander_s_Palace__C7QiQQc.jsonl",
-    "Oceana_Grill_ac1AeYqs.jsonl",
-    "Royal_House_VQcCL9Pi.jsonl",
-]
+# Available restaurants - loaded dynamically
+RESTAURANTS = sorted([f.name for f in DATA_DIR.glob("*.jsonl") if not f.name.startswith("index")])
+
 
 
 SYSTEM_PROMPT_TEMPLATE = '''You are an expert data analyst. Your task is to analyze restaurant review data and compute specific metrics.
@@ -217,108 +213,158 @@ def evaluate_task(parsed: Dict, ground_truth: Any, tolerances: Dict[str, float] 
     return results
 
 
-def run_task(task_id: str, restaurant_file: str, max_reviews: int = 100, verbose: bool = True, save_output: bool = True) -> Dict:
-    """Run a single task on a single restaurant."""
+def _build_task_context(task_id: str, restaurant_file: str, max_reviews: int) -> Dict:
+    """Build task context without calling LLM."""
     restaurant, reviews = load_restaurant_data(restaurant_file, max_reviews)
     task = get_task(task_id)
-
-    # Print task instruction
-    print(f"\n{'='*60}")
-    print(f"Task {task_id}: {task['name']}")
-    print(f"{'='*60}")
-    print(task['prompt'])
-    print()
-
-    # Compute ground truth
     gt = task['compute_ground_truth'](reviews, restaurant)
-
-    # Build full prompt: instructions + restaurant + reviews + task + output format
     prompt = build_full_prompt(task_id, restaurant, reviews)
+    return {
+        'task_id': task_id, 'task': task, 'restaurant': restaurant,
+        'reviews': reviews, 'gt': gt, 'prompt': prompt, 'restaurant_file': restaurant_file,
+    }
 
-    if verbose:
-        print(f"Restaurant: {restaurant['name']}")
-        print(f"Reviews: {len(reviews)}")
-        print(f"Prompt length: {len(prompt):,} chars")
 
-    response = call_llm(prompt)
-    print("=== LLM output start ===")
-    print(response)
-    print("=== LLM output end ===")
+def _process_response(ctx: Dict, response: str) -> Dict:
+    """Process LLM response and build output data."""
     parsed = parse_response(response)
-    expected_fields = len(asdict(gt))
+    expected_fields = len(asdict(ctx['gt']))
     prompt_failure = detect_prompt_failure(response, parsed, expected_fields)
-    results = evaluate_task(parsed, gt, task['tolerances'])
-
-    # Add prompt failure info to results
+    results = evaluate_task(parsed, ctx['gt'], ctx['task']['tolerances'])
     results['_prompt_failure'] = prompt_failure
 
-    # Build output data
-    output_data = {
+    return {
         'timestamp': datetime.now().isoformat(),
-        'task': task_id,
-        'task_name': task['name'],
-        'restaurant': restaurant['name'],
-        'n_reviews': len(reviews),
-        'prompt': prompt,
+        'task': ctx['task_id'],
+        'task_name': ctx['task']['name'],
+        'restaurant': ctx['restaurant']['name'],
+        'n_reviews': len(ctx['reviews']),
+        'prompt': ctx['prompt'],
         'llm_response': response,
-        'ground_truth': asdict(gt),
+        'ground_truth': asdict(ctx['gt']),
         'parsed': parsed,
         'prompt_failure': prompt_failure,
         'results': results,
     }
 
-    # Save output if requested
-    if save_output:
-        with open(OUTPUT_FILE, 'w') as f:
-            json.dump(output_data, f, indent=2, default=str)
+
+def _print_result(output: Dict, show_response: bool = True):
+    """Print a single task result."""
+    print(f"\n{'='*60}")
+    print(f"Task {output['task']}: {output['task_name']} | {output['restaurant']}")
+    print(f"{'='*60}")
+
+    if show_response:
+        print(f"{'▼'*20} LLM OUTPUT START {'▼'*20}")
+        print(output['llm_response'])
+        print(f"{'▲'*20} LLM OUTPUT END {'▲'*22}")
+
+    if output['prompt_failure']:
+        print(f"⚠️  PROMPT FAILURE - fix the prompt, not a legitimate computational failure!")
+
+    print(f"--- Results ---")
+    for field, result in output['results'].items():
+        if field.startswith('_'):
+            continue
+        status = "✓" if result['score'] >= 0.9 else "~" if result['score'] >= 0.5 else "✗"
+        print(f"  {field}: {result['expected']} vs {result['predicted']} ({result['score']:.2f}) {status}")
+    print(f"Total Score: {output['results']['_total_score']:.3f}")
+
+
+def run_task(task_id: str, restaurant_file: str, max_reviews: int = 100, verbose: bool = True, save_output: bool = True) -> Dict:
+    """Run a single task on a single restaurant (sync)."""
+    ctx = _build_task_context(task_id, restaurant_file, max_reviews)
 
     if verbose:
-        if prompt_failure:
-            print(f"\n⚠️  PROMPT FAILURE - fix the prompt, not a legitimate computational failure!")
+        print(f"\nTask {task_id}: {ctx['task']['name']}")
+        print(f"Restaurant: {ctx['restaurant']['name']} | Reviews: {len(ctx['reviews'])} | Prompt: {len(ctx['prompt']):,} chars")
 
-        print(f"\n--- Results ---")
-        for field, result in results.items():
-            if field.startswith('_'):
-                continue
-            status = "✓" if result['score'] >= 0.9 else "~" if result['score'] >= 0.5 else "✗"
-            print(f"  {field}: {result['expected']} vs {result['predicted']} ({result['score']:.2f}) {status}")
+    response = call_llm(ctx['prompt'])
+    output = _process_response(ctx, response)
 
-        print(f"\nTotal Score: {results['_total_score']:.3f}")
-        if save_output:
-            print(f"Output: {OUTPUT_FILE}")
+    if verbose:
+        _print_result(output)
+    if save_output:
+        RESULTS_DIR.mkdir(exist_ok=True)
+        out_file = RESULTS_DIR / f"single_{task_id}_{ctx['restaurant_file']}.json"
+        with open(out_file, 'w') as f:
+            json.dump(output, f, indent=2, default=str)
+        print(f"Output: {out_file}")
 
-    return output_data
+    return output
 
 
-def run_all_tasks(max_reviews: int = 100):
-    """Run all tasks on all restaurants."""
+async def _run_task_async(task_id: str, restaurant_file: str, max_reviews: int) -> Dict:
+    """Run a single task asynchronously (no printing)."""
+    ctx = _build_task_context(task_id, restaurant_file, max_reviews)
+    response = await call_llm_async(ctx['prompt'])
+    return _process_response(ctx, response)
+
+
+def run_tasks(task_ids: List[str], max_reviews: int = 100, limit: int = None):
+    """Run specified tasks on selected restaurants in parallel."""
+    selected_restaurants = RESTAURANTS[:limit] if limit else RESTAURANTS
+    jobs = [(tid, rf) for rf in selected_restaurants for tid in task_ids]
+    n_jobs = len(jobs)
+
+    print(f"Running {n_jobs} jobs in parallel ({len(selected_restaurants)} restaurants × {len(task_ids)} tasks: {task_ids})...")
+
+    async def run_all():
+        tasks = [_run_task_async(tid, rf, max_reviews) for tid, rf in jobs]
+        return await asyncio.gather(*tasks, return_exceptions=True)
+
+    results = asyncio.run(run_all())
+
+    # Process results
     all_outputs = []
-    scores = {}  # (restaurant, task) -> score
+    scores = {}
+    for (task_id, rf), result in zip(jobs, results):
+        if isinstance(result, Exception):
+            print(f"ERROR [{rf[:10]}][{task_id}]: {result}")
+            scores[(rf, task_id)] = 0.0
+        else:
+            all_outputs.append(result)
+            scores[(rf, task_id)] = result['results']['_total_score']
+            _print_result(result, show_response=False)
 
-    for restaurant_file in RESTAURANTS:
-        for task_id in list_tasks():
-            try:
-                output = run_task(task_id, restaurant_file, max_reviews, verbose=True, save_output=False)
-                all_outputs.append(output)
-                scores[(restaurant_file, task_id)] = output['results']['_total_score']
-            except Exception as e:
-                print(f"ERROR: {e}")
-                scores[(restaurant_file, task_id)] = 0.0
+    # Create run directory
+    run_id = f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    run_dir = RESULTS_DIR / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
 
-    # Save and print summary
-    with open(OUTPUT_FILE, 'w') as f:
+    # Save detailed results
+    detailed_file = run_dir / "detailed_results.json"
+    with open(detailed_file, 'w') as f:
         json.dump({'timestamp': datetime.now().isoformat(), 'runs': all_outputs}, f, indent=2, default=str)
 
-    tasks = list_tasks()
-    print(f"\n{'='*60}\nSUMMARY\n{'='*60}")
-    print(f"{'Restaurant':<20}" + "".join(f"{t:<8}" for t in tasks) + "Avg")
+    # Generate summary table
+    summary_lines = []
+    summary_lines.append(f"{'='*60}\nSUMMARY\n{'='*60}")
+    header = f"{'Restaurant':<25}" + "".join(f"{t:<8}" for t in task_ids) + "Avg"
+    summary_lines.append(header)
 
-    for rf in RESTAURANTS:
-        name = rf.split('_')[0]
-        row = [scores.get((rf, t), 0) for t in tasks]
-        print(f"{name:<20}" + "".join(f"{s:.2f}    " for s in row) + f"{sum(row)/len(row):.2f}")
+    for rf in selected_restaurants:
+        name = rf.replace('.jsonl', '')[:24]
+        row = [scores.get((rf, t), 0) for t in task_ids]
+        line = f"{name:<25}" + "".join(f"{s:.2f}    " for s in row) + f"{sum(row)/len(row):.2f}"
+        summary_lines.append(line)
 
-    print(f"\nOutput: {OUTPUT_FILE}")
+    summary_text = "\n".join(summary_lines)
+    print(f"\n{summary_text}")
+    
+    with open(run_dir / "summary_table.txt", 'w') as f:
+        f.write(summary_text)
+
+    # Update latest symlink
+    latest_link = RESULTS_DIR / "latest"
+    if latest_link.exists() or latest_link.is_symlink():
+        latest_link.unlink()
+    try:
+        latest_link.symlink_to(run_id, target_is_directory=True)
+    except Exception:
+        pass
+
+    print(f"\nResults saved to: {run_dir}")
 
 
 if __name__ == "__main__":
@@ -328,14 +374,20 @@ if __name__ == "__main__":
     parser.add_argument("--task", default="A", help="Task ID (A, B, C, D, F) or 'all'")
     parser.add_argument("--restaurant", default="Acme", help="Restaurant name prefix or 'all'")
     parser.add_argument("--max-reviews", type=int, default=100)
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of restaurants to run")
     args = parser.parse_args()
 
     configure(temperature=0.0)
 
-    if args.task.lower() == 'all' or args.restaurant.lower() == 'all':
-        run_all_tasks(args.max_reviews)
+    if args.task.lower() == 'all' or ',' in args.task or args.restaurant.lower() == 'all':
+        if args.task.lower() == 'all':
+            task_ids = list_tasks()
+        else:
+            task_ids = [t.strip().upper() for t in args.task.split(',')]
+        
+        run_tasks(task_ids, args.max_reviews, args.limit)
     else:
         restaurant_file = next((f for f in RESTAURANTS if args.restaurant.lower() in f.lower()), None)
         if not restaurant_file:
-            sys.exit(f"Restaurant not found: {args.restaurant}\nAvailable: {RESTAURANTS}")
+            sys.exit(f"Restaurant not found: {args.restaurant}\\nAvailable: {RESTAURANTS}")
         run_task(args.task.upper(), restaurant_file, args.max_reviews)
