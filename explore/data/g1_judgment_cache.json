@@ -1,0 +1,272 @@
+{
+  "Unknown_N50": {
+    "severe_incidents": 0,
+    "mild_concerns": 1,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 3.0,
+    "verdict": "Low Risk",
+    "reasoning": "No peanut-specific allergy incidents are present in the reviews. One review notes illness (not clearly linked to peanut allergy) and another notes mice contamination, indicating hygiene concerns. No safety measures for allergies are mentioned. Overall peanut-allergy risk appears low, though hygiene issues warrant attention."
+  },
+  "Unknown_N59": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 1.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across 50 reviews there are no peanut allergy incidents or explicit cross-contamination mentions. The only hygiene-related issue is a single review noting mice droppings, balanced by another review praising cleanliness; no allergy-specific safety measures or accommodations are reported."
+  },
+  "Unknown_N100": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 1,
+    "hygiene_good": 0,
+    "hygiene_bad": 1,
+    "final_risk_score": 1.0,
+    "verdict": "Low Risk",
+    "reasoning": "No peanut allergy incidents are mentioned in the reviews. There is one note of gluten-free safety (not peanut-specific) and a single instance of undercooked wings, which indicates minimal allergy-related safety concerns overall. Absence of peanut-specific risk signals keeps the risk in the Low range."
+  },
+  "Unknown_N70": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across all reviews, there are no mentions of peanut allergies, peanut-containing ingredients, cross-contamination risks, or allergy accommodations. No safety or hygiene issues related to allergies are described."
+  },
+  "Unknown_N63": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 2,
+    "final_risk_score": 4.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across 63 reviews, there are no mentions of peanut allergies, reactions, or cross-contact specific to peanuts. There are a couple of hygiene-related concerns (one review notes dirty utensils; another mentions bread served cold), but no explicit allergy safety measures or incidents. Overall, peanut allergy risk appears low, with minor hygiene flags."
+  },
+  "Unknown_N64": {
+    "severe_incidents": 0,
+    "mild_concerns": 1,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 7.0,
+    "verdict": "High Risk",
+    "reasoning": "No explicit allergy accommodations identified. There is a major hygiene incident (glass found in food) and a menu item containing nuts (Nutella) which could pose cross-contact risks for peanut-allergic individuals, with no documented safety measures to mitigate these risks."
+  },
+  "Unknown_N75": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across 75 reviews, there are no reports of peanut allergy reactions or explicit cross-contact concerns. The only nut-related item mentioned is an almond croissant, with no safety accommodations or allergy-specific notes observed."
+  },
+  "Unknown_N67": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 2,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews mention peanut or other nut allergies, reactions, or cross-contamination risks. A couple of reviews note cleanliness/distance (positive safety signals), with no safety shortcomings related to allergy handling observed."
+  },
+  "Unknown_N66": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews mention peanut reactions, cross-contact, or peanut-containing foods; only gluten-free options noted, and no explicit safety lapses."
+  },
+  "Unknown_N55": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 3,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across 55 reviews, there are no mentions of peanut or nut allergy reactions, cross-contact concerns, or allergy accommodations. Some reviews note cleanliness (positive hygiene cues), supporting a low overall risk profile."
+  },
+  "Unknown_N51": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 2,
+    "hygiene_bad": 11,
+    "final_risk_score": 20.0,
+    "verdict": "Critical Risk",
+    "reasoning": "No allergy incidents are mentioned in the reviews, but there are pervasive hygiene issues (numerous reviews cite dirty bathrooms, flies, and dirty condiment areas) and no cited allergy safety measures; overall risk for peanut-allergic individuals is very high."
+  },
+  "Unknown_N54": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 2.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across 50 reviews there are no mentions of peanut allergies, reactions, or cross-contact. The only hygiene-related note is one instance of food arriving cold (potential temp control issue) and one explicit comment of cleanliness being good; overall allergy safety risk appears low."
+  },
+  "Unknown_N77": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 2,
+    "hygiene_bad": 5,
+    "final_risk_score": 5,
+    "verdict": "High Risk",
+    "reasoning": "No peanut-specific incidents or allergy accommodations are reported, but multiple reviews describe dirty/dilapidated conditions (tables, floors, bathrooms) indicating hygiene safety concerns that could lead to cross-contact or unsafe food handling. Safety measures for allergies are not mentioned, elevating overall risk despite no explicit peanut incidents."
+  },
+  "Unknown_N81": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "Review set contains no mentions of peanut allergies, peanut-related reactions, cross-contact, or allergy safety practices. No safety measures or incidents observed in the provided reviews."
+  },
+  "Unknown_N88": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 6,
+    "hygiene_bad": 1,
+    "final_risk_score": 1.0,
+    "verdict": "Low Risk",
+    "reasoning": "No peanut/nut allergy incidents mentioned in the reviews; overall hygiene appears good with several positive cleanliness notes, and only one review notes freshness concerns (not allergy-related)."
+  },
+  "Unknown_N60": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across 50 reviews, there are no mentions of peanuts, nuts, allergy reactions, cross-contamination, or related safety practices; the feedback centers on pizza quality and service rather than allergen safety."
+  },
+  "Unknown_N87": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 2,
+    "final_risk_score": 2.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews mention peanut allergy incidents or explicit allergy safety measures; two hygiene-related issues (hair in salad, gross bathroom) indicate some safety concerns but no peanut-specific risks are reported, so overall risk remains low."
+  },
+  "Unknown_N56": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 2,
+    "final_risk_score": 2.0,
+    "verdict": "Low Risk",
+    "reasoning": "No peanut-specific allergy incidents or cross-contact are mentioned in the reviews. There are occasional hygiene-related concerns (mask-wearing observed in reviews 8 and 10), but none indicate peanut risk; overall risk remains low."
+  },
+  "Unknown_N62": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 8,
+    "final_risk_score": 9.0,
+    "verdict": "Critical Risk",
+    "reasoning": "No explicit peanut allergy incidents are reported, but there are multiple strong hygiene safety concerns (rodent problem, mold growth on dough, dirty/dingy facilities, and consistently poor cleanliness signals) with no noted allergy accommodations or safety practices. In the context of severe peanut allergy risk, this pattern warrants a Critical Risk assessment."
+  },
+  "Unknown_N92": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 3,
+    "final_risk_score": 3,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews mention peanut-specific allergy incidents or cross-contact. There are hygiene-related safety flags (historical health code violations, strong kitchen odors, and restrooms lacking supplies) but no explicit evidence of peanut handling risks; overall risk is low."
+  },
+  "Unknown_N82": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "Across the 50 provided reviews, there are no mentions of peanut allergies, reactions, cross-contact with peanuts, or allergy-specific safety measures. The data does not indicate any peanut-related safety concerns for this restaurant during the reported period."
+  },
+  "Unknown_N57": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 1.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews mention peanut-specific reactions or cross-contamination risks. One review cites smoking in the kitchen (a hygiene concern) while another notes the place as spotlessly clean; overall there is no evidence of peanut allergy incidents or established safety measures, resulting in a low risk assessment."
+  },
+  "Unknown_N53": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 2,
+    "final_risk_score": 8.0,
+    "verdict": "Critical Risk",
+    "reasoning": "No peanut/allergy-specific incidents or safety measures were cited in the reviews. However, there are two clear hygiene/safety concerns (a roach noted in the dining area and smoking in the washroom) with no observed allergen safety measures, suggesting significant risk for peanut-allergy safety."
+  },
+  "Unknown_N71": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 0,
+    "final_risk_score": 0.0,
+    "verdict": "Low Risk",
+    "reasoning": "None of the 71 reviews mention peanut allergies, cross-contamination, or allergy accommodations; no safety or hygiene red flags related to allergies are evident in the text. Data is limited to general dining experiences, so while risk appears low based on this data, explicit allergen practices are not described."
+  },
+  "Unknown_N72": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 0,
+    "hygiene_bad": 3,
+    "final_risk_score": 6.0,
+    "verdict": "High Risk",
+    "reasoning": "No peanut allergy incidents or safety accommodations are mentioned. However, there are clear hygiene-related concerns (hair found in food, flies noted in shrimp fried rice, and a mentioned dirty bathroom) across reviews, indicating potential safety lapses. Absence of allergy-specific precautions or notes keeps overall risk elevated due to these hygiene issues."
+  },
+  "Unknown_N83": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 1.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews mention peanuts or peanut-containing ingredients, nor any allergy accommodations. One review notes questionable cleanliness (hygiene_bad) and another notes tidiness (hygiene_good). Overall, the available data do not indicate peanut allergy safety gaps; risk remains low, though not zero due to limited safety/clear allergy practices information."
+  },
+  "Unknown_N85": {
+    "severe_incidents": 0,
+    "mild_concerns": 0,
+    "safety_measures": 0,
+    "hygiene_good": 1,
+    "hygiene_bad": 1,
+    "final_risk_score": 1,
+    "verdict": "Low Risk",
+    "reasoning": "No peanut allergy\u2013related incidents or cross-contamination mentions across the provided reviews. Safety measures are not described. Hygiene notes are limited to one report of dirty tables (hygiene_bad) and one report of a clean bathroom (hygiene_good), suggesting overall low risk for peanut allergy safety."
+  }
+}

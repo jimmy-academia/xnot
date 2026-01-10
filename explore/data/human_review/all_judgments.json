@@ -1,0 +1,52 @@
+[
+  {
+    "restaurant": "Unknown_0",
+    "firsthand_severe_count": 0,
+    "safety_trajectory": "stable",
+    "false_assurance_count": 0,
+    "evidence_consensus": 0.0,
+    "final_risk_score": 4,
+    "verdict": "Low Risk",
+    "reasoning": "None of the reviews describe a personal severe allergic reaction or explicit allergy-safety assurances. There is no clear temporal pattern of allergy incidents to indicate improvement or deterioration. Because allergy-specific discussions are absent, there is no consensus data on safety, but the overall signal suggests low risk based on available review content."
+  },
+  {
+    "restaurant": "Unknown_1",
+    "firsthand_severe_count": 0,
+    "safety_trajectory": "stable",
+    "false_assurance_count": 0,
+    "evidence_consensus": 0.5,
+    "final_risk_score": 2.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews describe a first-person severe allergic reaction at the restaurant. There are no clear allergy-safety claims that were later contradicted by adverse events, so there is no apparent trend of improvement or deterioration in allergy safety (trajectory appears stable). The dataset provides no allergy-focused incidents or assurances to conflict, suggesting low measured risk, though explicit allergen-control details are not described in the reviews."
+  },
+  {
+    "restaurant": "Unknown_2",
+    "firsthand_severe_count": 0,
+    "safety_trajectory": "stable",
+    "false_assurance_count": 0,
+    "evidence_consensus": 0.0,
+    "final_risk_score": 2.0,
+    "verdict": "Low Risk",
+    "reasoning": "None of the 50 reviews describe a first-person severe allergic reaction, allergy safety claims, or related management changes. There is no allergy-specific evidence to indicate risk or improvement, so the safety context appears neutral and stable. With no incidents or explicit allergy concerns reported, the overall risk is low."
+  },
+  {
+    "restaurant": "Unknown_3",
+    "firsthand_severe_count": 0,
+    "safety_trajectory": "stable",
+    "false_assurance_count": 0,
+    "evidence_consensus": 0.5,
+    "final_risk_score": 6.5,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews describe a personal severe allergic reaction at this restaurant. Reviews focus on food, service, and ambiance with no explicit allergy-safety claims or incidents. The pattern suggests stability in allergy-safety perception, but there is little data to confirm strong safety measures or notable improvements."
+  },
+  {
+    "restaurant": "Unknown_4",
+    "firsthand_severe_count": 0,
+    "safety_trajectory": "stable",
+    "false_assurance_count": 0,
+    "evidence_consensus": 0.0,
+    "final_risk_score": 2.0,
+    "verdict": "Low Risk",
+    "reasoning": "No reviews describe a personal severe allergic reaction to peanuts or other allergens at this restaurant. There is no discussion of allergy accommodations or safety claims, and no evident temporal trend related to allergy safety; overall, the data suggests low risk, though information is limited."
+  }
+]

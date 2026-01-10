@@ -48,6 +48,9 @@ SYSTEM_PROMPT_TEMPLATE = '''You are an expert data analyst. Your task is to anal
 
 ## TASK
 
+**You MUST calculate ALL values listed below**. Follow the formulas exactly as specified.
+Do not skip any primitive, even if it seems redundant or trivial.
+
 {task_prompt}
 
 ## OUTPUT FORMAT

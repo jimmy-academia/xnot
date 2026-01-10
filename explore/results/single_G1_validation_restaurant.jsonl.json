@@ -1,43 +1,59 @@
 {
-  "timestamp": "2026-01-10T01:29:16.643205",
+  "timestamp": "2026-01-10T02:12:44.846345",
   "task": "G1",
   "task_name": "Severe Allergy Safety",
   "restaurant": "Thai Basil",
   "n_reviews": 3,
-  "prompt": "You are an expert data analyst. Your task is to analyze restaurant review data and compute specific metrics.\n\n## INSTRUCTIONS\n\n1. Read all the data carefully before computing answers\n2. Show your intermediate calculations for each metric\n3. Be precise with decimal places as specified in the task\n4. Complete this analysis in a single response\n5. Do NOT ask questions or request clarification - make reasonable assumptions for edge cases\n\n## RESTAURANT METADATA\n\n{'business_id': 'test_1', 'name': 'Thai Basil', 'categories': 'Thai, Asian Fusion', 'attributes': {'HasGlutenFreeOptions': True}}\n\n## REVIEWS (3 total)\n\n[R1] {'review_id': 'r1', 'text': 'The food was delicious! Best Pad Thai ever.', 'stars': 5, 'date': '2023-01-01'}\n[R2] {'review_id': 'r2', 'text': 'They were meticulous about my peanut allergy. The server checked with chef and they used a clean wok. Safest Thai place!', 'stars': 5, 'date': '2024-01-01', 'useful': 5}\n[R3] {'review_id': 'r3', 'text': 'Great food, but note: I had a mild reaction here years ago. Cross contamination happens.', 'stars': 5, 'date': '2020-01-01', 'useful': 10}\n\n## TASK\n\nAnalyze Severe Allergy & Hygiene Safety (The Centipede - v11).\n\n**Core Philosophy**: Every restaurant requires multi-step calculation. No defaults allowed.\n\n**Level 1: Mandatory Metadata** (MUST calculate for ALL restaurants)\n1. **TOTAL_REVIEWS**: Count of all reviews.\n2. **REVIEW_DENSITY**: TOTAL_REVIEWS / 10.0\n3. **STAR_VARIANCE**: (Sum(All Stars) / TOTAL_REVIEWS) - 3.0\n4. **DATE_DECAY**: (2025 - Oldest Review Year) * 0.15\n\n**Level 2: Allergy Flags**\n5. **SEVERE_FLAGS**: Count('reaction', 'hospital', 'nuts everywhere')\n6. **MILD_FLAGS**: Count('peanut oil', 'cross contamination', 'got sick')\n7. **POSITIVE_FLAGS**: Count('accommodated', 'dedicated fryer', 'checked with chef', 'safe for allergy', 'allergy menu')\n\n**Level 3: Hygiene Flags**\n8. **GOOD_HYGIENE**: Count('clean', 'spotless', 'immaculate', 'shining', 'sanitary')\n9. **BAD_HYGIENE**: Count('dirty', 'filthy', 'grime', 'sticky', 'gross', 'bugs', 'roach')\n\n**Level 4: Aggregation**\n10. **THREAT_INDEX**: (SEVERE_FLAGS * 3.0) + (MILD_FLAGS * 1.5)\n11. **SAFETY_BUFFER**: POSITIVE_FLAGS * (STAR_VARIANCE + 3.0) / 3.0 * 2.0\n12. **VOLATILITY**: THREAT_INDEX - SAFETY_BUFFER\n13. **HYGIENE_PENALTY**: (BAD_HYGIENE * 2.0) - (GOOD_HYGIENE * 0.5)\n\n**Level 5: Final Synthesis**\n14. **FINAL_RISK_SCORE**: `6.5 + (VOLATILITY * 1.2) + HYGIENE_PENALTY + (REVIEW_DENSITY * 0.3) - (STAR_VARIANCE * 0.8) + (DATE_DECAY * 0.4) + (Cuisine_Risk * 0.6)`\n    - Cuisine_Risk = 5.0 if Thai/Vietnamese/Chinese/Indian/African/Malaysian, else 0.0\n    - Verdict: >= 9.0: Critical Risk. >= 6.0: High Risk. < 6.0: Low Risk\n\nOutput Values:\n1. TOTAL_REVIEWS: Int\n2. REVIEW_DENSITY: Float(2)\n3. STAR_VARIANCE: Float(2)\n4. DATE_DECAY: Float(2)\n5. SEVERE_FLAGS: Int\n6. MILD_FLAGS: Int\n7. POSITIVE_FLAGS: Int\n8. GOOD_HYGIENE: Int\n9. BAD_HYGIENE: Int\n10. THREAT_INDEX: Float(2)\n11. SAFETY_BUFFER: Float(2)\n12. VOLATILITY: Float(2)\n13. HYGIENE_PENALTY: Float(2)\n14. FINAL_RISK_SCORE: Float(2)\n15. VERDICT: \"Critical Risk\", \"High Risk\", or \"Low Risk\"\n\n\n## OUTPUT FORMAT\n\nAfter your analysis, output your final answers in EXACTLY this format:\n\n===FINAL ANSWERS===\nTOTAL_REVIEWS: [integer]\nREVIEW_DENSITY: [decimal]\nSTAR_VARIANCE: [decimal]\nDATE_DECAY: [decimal]\nSEVERE_FLAGS: [integer]\nMILD_FLAGS: [integer]\nPOSITIVE_FLAGS: [integer]\nGOOD_HYGIENE: [integer]\nBAD_HYGIENE: [integer]\nTHREAT_INDEX: [decimal]\nSAFETY_BUFFER: [decimal]\nVOLATILITY: [decimal]\nHYGIENE_PENALTY: [decimal]\nFINAL_RISK_SCORE: [decimal]\nVERDICT: [string]\n===END===\n\nReplace each field with your computed value. Do not include units or extra text in the values.\n",
-  "llm_response": "===FINAL ANSWERS===\nTOTAL_REVIEWS: 3\nREVIEW_DENSITY: 0.30\nSTAR_VARIANCE: 2.00\nDATE_DECAY: 0.75\nSEVERE_FLAGS: 1\nMILD_FLAGS: 1\nPOSITIVE_FLAGS: 1\nGOOD_HYGIENE: 1\nBAD_HYGIENE: 0\nTHREAT_INDEX: 4.50\nSAFETY_BUFFER: 3.33\nVOLATILITY: 1.17\nHYGIENE_PENALTY: -0.50\nFINAL_RISK_SCORE: 9.19\nVERDICT: \"Critical Risk\"\n===END===",
+  "prompt": "You are an expert data analyst. Your task is to analyze restaurant review data and compute specific metrics.\n\n## INSTRUCTIONS\n\n1. Read all the data carefully before computing answers\n2. Show your intermediate calculations for each metric\n3. Be precise with decimal places as specified in the task\n4. Complete this analysis in a single response\n5. Do NOT ask questions or request clarification - make reasonable assumptions for edge cases\n\n## RESTAURANT METADATA\n\n{'business_id': 'test_1', 'name': 'Thai Basil', 'categories': 'Thai, Asian Fusion', 'attributes': {'HasGlutenFreeOptions': True}}\n\n## REVIEWS (3 total)\n\n[R1] {'review_id': 'r1', 'text': 'The food was delicious! Best Pad Thai ever.', 'stars': 5, 'date': '2023-01-01'}\n[R2] {'review_id': 'r2', 'text': 'They were meticulous about my peanut allergy. The server checked with chef and they used a clean wok. Safest Thai place!', 'stars': 5, 'date': '2024-01-01', 'useful': 5}\n[R3] {'review_id': 'r3', 'text': 'Great food, but note: I had a mild reaction here years ago. Cross contamination happens.', 'stars': 5, 'date': '2020-01-01', 'useful': 10}\n\n## TASK\n\n**You MUST calculate ALL values listed below**. Follow the formulas exactly as specified.\nDo not skip any primitive, even if it seems redundant or trivial.\n\nAnalyze Severe Allergy & Hygiene Safety (v12 - 25 Primitives).\n\n**CRITICAL EVALUATION CONTEXT**:\nThis task uses F2-score evaluation, which HEAVILY PENALIZES false negatives (missing high-risk restaurants).\nMissing a dangerous restaurant is 4\u00d7 WORSE than a false alarm.\nWhen uncertain, err on the side of reporting HIGHER risk.\n\n---\n\n**DEFINITIONS** (Intermediate Variables - compute these first, do NOT output):\n- `AvgStars`: Average star rating across ALL reviews\n- `OldestYear`: Year of the oldest review (extract from date field)\n- `FlaggedReviews`: Reviews containing ANY keyword from SEVERE_FLAGS, MILD_FLAGS, or POSITIVE_FLAGS\n- `AvgAge_FlaggedReviews`: Average age in years of flagged reviews = Avg(2025 - ReviewYear for each flagged review)\n- `AvgStars_FlaggedReviews`: Average star rating across flagged reviews only\n- `TotalFlags`: Total count of SEVERE_FLAGS + MILD_FLAGS + POSITIVE_FLAGS\n- `RecentFlags`: Count of flags in reviews from 2024-2025\n- `OldFlags`: Count of flags in reviews before 2024\n- `BaseCuisineRisk`: 5.0 if restaurant categories include Thai/Vietnamese/Chinese/Indian/African/Malaysian, else 0.0\n- `PreliminaryRisk`: Preliminary risk score before safety margin adjustment (see formula in L6)\n\n---\n\n**OUTPUT PRIMITIVES** (You MUST calculate and output ALL 24 values below):\n\n**L1: Basic Metadata** (NON-SCORED - informational only)\n1. **TOTAL_REVIEWS**: Count of all reviews in the dataset\n\n**L2: Raw Extraction** (NON-SCORED - simple keyword counting)\n2. **SEVERE_FLAGS**: Count reviews containing ANY of: 'reaction', 'hospital', 'nuts everywhere'\n3. **MILD_FLAGS**: Count reviews containing ANY of: 'peanut oil', 'cross contamination', 'got sick'\n4. **POSITIVE_FLAGS**: Count reviews containing ANY of: 'accommodated', 'dedicated fryer', 'checked with chef', 'safe for allergy', 'allergy menu'\n5. **GOOD_HYGIENE**: Count keyword mentions across ALL reviews for: 'clean', 'spotless', 'immaculate', 'shining', 'sanitary'\n6. **BAD_HYGIENE**: Count keyword mentions across ALL reviews for: 'dirty', 'filthy', 'grime', 'sticky', 'gross', 'bugs', 'roach'\n\n**L3: Basic Aggregation** (SCORED)\n7. **REVIEW_DENSITY**: TOTAL_REVIEWS / 10.0\n8. **STAR_VARIANCE**: AvgStars - 3.0\n9. **DATE_DECAY**: (2025 - OldestYear) * 0.15\n10. **THREAT_INDEX**: (SEVERE_FLAGS * 3.0) + (MILD_FLAGS * 1.5)\n11. **SAFETY_BUFFER**: POSITIVE_FLAGS * (AvgStars / 3.0) * 2.0\n12. **VOLATILITY**: THREAT_INDEX - SAFETY_BUFFER\n13. **HYGIENE_PENALTY**: (BAD_HYGIENE * 2.0) - (GOOD_HYGIENE * 0.5)\n\n**L4: Advanced Aggregation** (SCORED)\n14. **RECENCY_FACTOR**: 1.0 / (1.0 + (AvgAge_FlaggedReviews / 5.0))\n    - If no flagged reviews, use 0.5 as default\n15. **STAR_SEVERITY_CORRELATION**: (5.0 - AvgStars_FlaggedReviews) / 4.0\n    - If fewer than 2 flagged reviews, use 0.5 as default\n16. **EVIDENCE_QUALITY_SCORE**: Min(1.0, TotalFlags / 5.0)\n17. **TEMPORAL_TREND**: (RecentFlags - OldFlags) / TotalFlags\n    - If TotalFlags = 0, use 0.0\n18. **CUISINE_MODIFIER**: BaseCuisineRisk * (1.0 + STAR_SEVERITY_CORRELATION) / 10.0\n\n**L5: Risk Composition** (SCORED)\n19. **BASELINE_UNCERTAINTY**: Shannon entropy of star distribution\n    - Formula: -Sum(P_i * log2(P_i)) where P_i = probability of i-star reviews for i in {1,2,3,4,5}\n    - If all reviews have same star rating, entropy = 0.0\n20. **COMPOUND_RISK_INDEX**: VOLATILITY * RECENCY_FACTOR * (1.0 + EVIDENCE_QUALITY_SCORE)\n21. **SAFETY_MARGIN**: Max(0.0, 9.0 - PreliminaryRisk)\n\n**L6: Final Synthesis** (SCORED)\n22. **FINAL_RISK_SCORE**: \n    ```\n    PreliminaryRisk = 6.5 \n                    + (VOLATILITY * 1.2) \n                    + HYGIENE_PENALTY \n                    + (REVIEW_DENSITY * 0.3) \n                    - (STAR_VARIANCE * 0.8)\n                    + (DATE_DECAY * 0.4) \n                    + (BaseCuisineRisk * 0.6) \n                    + COMPOUND_RISK_INDEX \n                    + (TEMPORAL_TREND * 1.5)\n                    + CUISINE_MODIFIER \n                    + (BASELINE_UNCERTAINTY * 0.5)\n    \n    SAFETY_MARGIN = Max(0.0, 9.0 - PreliminaryRisk)\n    FINAL_RISK_SCORE = PreliminaryRisk - (SAFETY_MARGIN * 0.1)\n    ```\n    Round to 2 decimal places.\n\n23. **VERDICT**: \n    - If FINAL_RISK_SCORE >= 9.0: \"Critical Risk\"\n    - Else if FINAL_RISK_SCORE >= 6.0: \"High Risk\"\n    - Else: \"Low Risk\"\n\n---\n\n**OUTPUT FORMAT**: You MUST output all 23 numeric primitives + 1 verdict (24 total values) in the exact format specified.\n\n\n## OUTPUT FORMAT\n\nAfter your analysis, output your final answers in EXACTLY this format:\n\n===FINAL ANSWERS===\nTOTAL_REVIEWS: [integer]\nSEVERE_FLAGS: [integer]\nMILD_FLAGS: [integer]\nPOSITIVE_FLAGS: [integer]\nGOOD_HYGIENE: [integer]\nBAD_HYGIENE: [integer]\nREVIEW_DENSITY: [decimal]\nSTAR_VARIANCE: [decimal]\nDATE_DECAY: [decimal]\nTHREAT_INDEX: [decimal]\nSAFETY_BUFFER: [decimal]\nVOLATILITY: [decimal]\nHYGIENE_PENALTY: [decimal]\nRECENCY_FACTOR: [decimal]\nSTAR_SEVERITY_CORRELATION: [decimal]\nEVIDENCE_QUALITY_SCORE: [decimal]\nTEMPORAL_TREND: [decimal]\nCUISINE_MODIFIER: [decimal]\nBASELINE_UNCERTAINTY: [decimal]\nCOMPOUND_RISK_INDEX: [decimal]\nSAFETY_MARGIN: [decimal]\nFINAL_RISK_SCORE: [decimal]\nVERDICT: [string]\n===END===\n\nReplace each field with your computed value. Do not include units or extra text in the values.\n",
+  "llm_response": "===FINAL ANSWERS===\nTOTAL_REVIEWS: 3\nSEVERE_FLAGS: 1\nMILD_FLAGS: 1\nPOSITIVE_FLAGS: 1\nGOOD_HYGIENE: 1\nBAD_HYGIENE: 0\nREVIEW_DENSITY: 0.3\nSTAR_VARIANCE: 2.0\nDATE_DECAY: 0.75\nTHREAT_INDEX: 4.5\nSAFETY_BUFFER: 3.3333333333\nVOLATILITY: 1.1666666667\nHYGIENE_PENALTY: -0.5\nRECENCY_FACTOR: 0.625\nSTAR_SEVERITY_CORRELATION: 0.0\nEVIDENCE_QUALITY_SCORE: 0.6\nTEMPORAL_TREND: 0.0\nCUISINE_MODIFIER: 0.5\nBASELINE_UNCERTAINTY: 0.0\nCOMPOUND_RISK_INDEX: 1.1666666667\nSAFETY_MARGIN: 0.0\nFINAL_RISK_SCORE: 10.86\nVERDICT: Critical Risk\n===END===",
   "ground_truth": {
     "total_reviews": 3,
-    "review_density": 0.3,
-    "star_variance": 2.0,
-    "date_decay": 0.75,
     "severe_flags": 1,
     "mild_flags": 1,
     "positive_flags": 1,
     "good_hygiene": 1,
     "bad_hygiene": 0,
+    "review_density": 0.3,
+    "star_variance": 2.0,
+    "date_decay": 0.75,
     "threat_index": 4.5,
     "safety_buffer": 3.33,
     "volatility": 1.17,
     "hygiene_penalty": -0.5,
-    "final_risk_score": 9.19,
+    "recency_factor": 0.62,
+    "star_severity_correlation": 0.0,
+    "evidence_quality_score": 0.6,
+    "temporal_trend": 0.0,
+    "cuisine_modifier": 0.5,
+    "baseline_uncertainty": -0.0,
+    "compound_risk_index": 1.17,
+    "safety_margin": 0.0,
+    "final_risk_score": 10.86,
     "verdict": "Critical Risk"
   },
   "parsed": {
     "TOTAL_REVIEWS": 3,
-    "REVIEW_DENSITY": 0.3,
-    "STAR_VARIANCE": 2.0,
-    "DATE_DECAY": 0.75,
     "SEVERE_FLAGS": 1,
     "MILD_FLAGS": 1,
     "POSITIVE_FLAGS": 1,
     "GOOD_HYGIENE": 1,
     "BAD_HYGIENE": 0,
+    "REVIEW_DENSITY": 0.3,
+    "STAR_VARIANCE": 2.0,
+    "DATE_DECAY": 0.75,
     "THREAT_INDEX": 4.5,
-    "SAFETY_BUFFER": 3.33,
-    "VOLATILITY": 1.17,
+    "SAFETY_BUFFER": 3.3333333333,
+    "VOLATILITY": 1.1666666667,
     "HYGIENE_PENALTY": -0.5,
-    "FINAL_RISK_SCORE": 9.19,
+    "RECENCY_FACTOR": 0.625,
+    "STAR_SEVERITY_CORRELATION": 0.0,
+    "EVIDENCE_QUALITY_SCORE": 0.6,
+    "TEMPORAL_TREND": 0.0,
+    "CUISINE_MODIFIER": 0.5,
+    "BASELINE_UNCERTAINTY": 0.0,
+    "COMPOUND_RISK_INDEX": 1.1666666667,
+    "SAFETY_MARGIN": 0.0,
+    "FINAL_RISK_SCORE": 10.86,
     "VERDICT": "Critical Risk"
   },
   "prompt_failure": false,
@@ -45,21 +61,6 @@
     "total_reviews": {
       "expected": 3,
       "predicted": 3,
-      "score": 1.0
-    },
-    "review_density": {
-      "expected": 0.3,
-      "predicted": 0.3,
-      "score": 1.0
-    },
-    "star_variance": {
-      "expected": 2.0,
-      "predicted": 2.0,
-      "score": 1.0
-    },
-    "date_decay": {
-      "expected": 0.75,
-      "predicted": 0.75,
       "score": 1.0
     },
     "severe_flags": {
@@ -87,6 +88,21 @@
       "predicted": 0,
       "score": 1.0
     },
+    "review_density": {
+      "expected": 0.3,
+      "predicted": 0.3,
+      "score": 1.0
+    },
+    "star_variance": {
+      "expected": 2.0,
+      "predicted": 2.0,
+      "score": 1.0
+    },
+    "date_decay": {
+      "expected": 0.75,
+      "predicted": 0.75,
+      "score": 1.0
+    },
     "threat_index": {
       "expected": 4.5,
       "predicted": 4.5,
@@ -94,12 +110,12 @@
     },
     "safety_buffer": {
       "expected": 3.33,
-      "predicted": 3.33,
+      "predicted": 3.3333333333,
       "score": 1.0
     },
     "volatility": {
       "expected": 1.17,
-      "predicted": 1.17,
+      "predicted": 1.1666666667,
       "score": 1.0
     },
     "hygiene_penalty": {
@@ -107,9 +123,49 @@
       "predicted": -0.5,
       "score": 1.0
     },
+    "recency_factor": {
+      "expected": 0.62,
+      "predicted": 0.625,
+      "score": 1.0
+    },
+    "star_severity_correlation": {
+      "expected": 0.0,
+      "predicted": 0.0,
+      "score": 1.0
+    },
+    "evidence_quality_score": {
+      "expected": 0.6,
+      "predicted": 0.6,
+      "score": 1.0
+    },
+    "temporal_trend": {
+      "expected": 0.0,
+      "predicted": 0.0,
+      "score": 1.0
+    },
+    "cuisine_modifier": {
+      "expected": 0.5,
+      "predicted": 0.5,
+      "score": 1.0
+    },
+    "baseline_uncertainty": {
+      "expected": -0.0,
+      "predicted": 0.0,
+      "score": 1.0
+    },
+    "compound_risk_index": {
+      "expected": 1.17,
+      "predicted": 1.1666666667,
+      "score": 1.0
+    },
+    "safety_margin": {
+      "expected": 0.0,
+      "predicted": 0.0,
+      "score": 1.0
+    },
     "final_risk_score": {
-      "expected": 9.19,
-      "predicted": 9.19,
+      "expected": 10.86,
+      "predicted": 10.86,
       "score": 1.0
     },
     "verdict": {

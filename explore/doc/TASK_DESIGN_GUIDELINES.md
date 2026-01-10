@@ -74,6 +74,59 @@ Failure to prove safety implies danger.
 - **Reduction**: Only specific *positive* evidence (e.g., "clean") reduces this risk.
 - **Purpose**: Prevents "Free Wins" from empty contexts. If the model finds nothing, it must predict "Risk". This counters the LLM's natural "benefit of the doubt" bias.
 
+## Prompt Clarity Principles
+
+**Critical Rule**: Models should fail due to **complexity**, NOT due to **ambiguity**.
+
+### 1. Explicit Variable Definitions
+**Every** intermediate variable MUST be defined before use.
+- **Bad**: `RECENCY_FACTOR: 1.0 / (1 + (AvgAge_FlaggedReviews / 5.0))`  ← What is `AvgAge_FlaggedReviews`?
+- **Good**: 
+  ```
+  DEFINITIONS:
+  - AvgAge_FlaggedReviews: Average age in years of flagged reviews = Avg(2025 - ReviewYear for each flagged review)
+  
+  OUTPUT:
+  - RECENCY_FACTOR: 1.0 / (1 + (AvgAge_FlaggedReviews / 5.0))
+  ```
+
+### 2. Clear Semantic Instructions
+Use precise, unambiguous language for ALL operations.
+- **Bad**: `Count('keyword1', 'keyword2')` ← Count what? Mentions? Reviews?
+- **Good**: `Count reviews containing ANY of: 'keyword1', 'keyword2'`
+
+### 3. Explicit Scoring Markers
+Mark each primitive as SCORED or NON-SCORED.
+- **Purpose**: Helps the model understand which calculations are critical.
+- **Format**:
+  ```
+  L2: Raw Extraction (NON-SCORED - simple keyword counting)
+  L3: Basic Aggregation (SCORED)
+  ```
+
+### 4. Default Value Specifications
+For conditional logic, specify the default/fallback value.
+- **Bad**: `RECENCY_FACTOR: 1.0 / (1 + (AvgAge_FlaggedReviews / 5.0))`  ← What if no flags?
+- **Good**: `RECENCY_FACTOR: 1.0 / (1 + (AvgAge_FlaggedReviews / 5.0)). If no flagged reviews, use 0.5 as default.`
+
+### 5. Complete Formula Breakdown
+For complex multi-term formulas, show the full calculation step-by-step.
+- **Bad**: Single-line formula with 10+ terms
+- **Good**:
+  ```
+  FINAL_RISK_SCORE:
+  PreliminaryRisk = 6.5 
+                  + (VOLATILITY * 1.2) 
+                  + HYGIENE_PENALTY 
+                  + (REVIEW_DENSITY * 0.3)
+                  ...
+  FINAL_RISK_SCORE = PreliminaryRisk - (SAFETY_MARGIN * 0.1)
+  ```
+
+### 6. System-Level Instructions
+Add meta-instructions in the SYSTEM_PROMPT to ensure compliance.
+- **Required**: `You MUST calculate ALL values listed below. Follow formulas exactly. Do not skip any primitive.`
+
 ## Design Process (The Loop)
 1.  **Draft**: Define the Logic and Prompt.
 2.  **Validate**: Run on a single **Logic Trap** case (designed to fail simple reasoning).
