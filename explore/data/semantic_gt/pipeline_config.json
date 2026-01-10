@@ -1,0 +1,30 @@
+{
+  "source_file": "dataset_K200.jsonl",
+  "source_hash": "sha256:be48513cd28aa28109b9b9161e45967b0895fd0cdf785d13af4a4fc7a08093a6",
+  "created": "2025-01-10",
+  "tasks": {
+    "G1": {
+      "name": "Peanut Allergy Safety",
+      "description": "Is this restaurant safe for severe peanut allergies?",
+      "keywords": [
+        "peanut", "nut", "nuts", "almond", "cashew", "walnut", "pecan", "hazelnut", "pistachio",
+        "allergy", "allergic", "allergies", "allergen",
+        "reaction", "anaphyl", "epipen", "epinephrine",
+        "hives", "swell", "swelling", "swollen",
+        "gluten", "celiac", "coeliac",
+        "dietary", "restriction", "restrictions",
+        "accommodate", "accommodating", "accommodated",
+        "sensitive", "sensitivity", "intoleran", "intolerance",
+        "cross-contamin", "contamination",
+        "safe", "unsafe", "careful", "warning"
+      ],
+      "extraction_prompt_version": "v1",
+      "formula_version": "v1",
+      "extraction_fields": {
+        "incident_severity": ["none", "mild", "moderate", "severe"],
+        "account_type": ["none", "firsthand", "secondhand", "hypothetical"],
+        "safety_interaction": ["none", "positive", "negative", "betrayal"]
+      }
+    }
+  }
+}

@@ -1,0 +1,771 @@
+{
+  "restaurant": "Fino's Pizzeria & Restaurant",
+  "source_file": "dataset_K200.jsonl",
+  "n_reviews": 56,
+  "indexed_at": "2026-01-10T05:13:30.117068",
+  "reviews": [
+    {
+      "idx": 0,
+      "date": "2022-01-06 00:27:38",
+      "stars": 1.0,
+      "useful": 0,
+      "text_hash": "2d39cae70f703671",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 1,
+      "date": "2021-08-30 16:03:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "5a25192a42d306b1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 2,
+      "date": "2021-07-20 18:16:27",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "da32beddf0667261",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 3,
+      "date": "2021-03-31 00:32:31",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "c75fb09eaeb18e3e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "gluten"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 4,
+      "date": "2021-03-17 19:26:07",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "1f8e76ed34dd43ff",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 5,
+      "date": "2020-12-13 16:44:54",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "dbd54421aae55581",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "gluten"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 6,
+      "date": "2020-09-05 21:49:44",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4b9534c8fd96324e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 7,
+      "date": "2020-08-22 23:13:37",
+      "stars": 1.0,
+      "useful": 4,
+      "text_hash": "53c2031d7b3db5ab",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 8,
+      "date": "2020-07-27 19:48:08",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "7897989e854c02b7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 9,
+      "date": "2020-07-02 18:38:55",
+      "stars": 2.0,
+      "useful": 1,
+      "text_hash": "d763a4034874a518",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "safe"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 10,
+      "date": "2020-06-30 18:03:23",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "893d9f19e2229ad4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "cashew"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 11,
+      "date": "2020-06-28 00:14:41",
+      "stars": 1.0,
+      "useful": 0,
+      "text_hash": "8780cb79ca8f45f7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 12,
+      "date": "2020-06-02 23:39:22",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "242010ca33e7bdbc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 13,
+      "date": "2020-05-02 23:11:43",
+      "stars": 2.0,
+      "useful": 2,
+      "text_hash": "69fbcb233fe20390",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 14,
+      "date": "2020-02-29 19:07:41",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "469c0c88c2752ed1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 15,
+      "date": "2020-02-22 00:02:34",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f2c488a1dfdc28a0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "gluten",
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 16,
+      "date": "2020-01-27 14:50:28",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "b3ac7a3f4c909842",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 17,
+      "date": "2020-01-08 07:14:47",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "85a74a0c4e132afc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 18,
+      "date": "2019-09-12 19:21:45",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ff5d3be130ae842e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "gluten",
+            "intoleran"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 19,
+      "date": "2019-09-02 23:39:40",
+      "stars": 1.0,
+      "useful": 4,
+      "text_hash": "277b52ba7d66f81f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 20,
+      "date": "2018-09-01 18:46:32",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "92da3805c0db165d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "gluten"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 21,
+      "date": "2018-07-02 02:51:08",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b586d373b05c252a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 22,
+      "date": "2018-06-30 02:39:10",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "2c2277d9cb117df8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 23,
+      "date": "2018-05-02 19:19:47",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "11d1a67b18fd2095",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 24,
+      "date": "2018-02-04 02:54:56",
+      "stars": 1.0,
+      "useful": 1,
+      "text_hash": "5d2ef37cc66e1a3d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 25,
+      "date": "2018-01-26 20:12:23",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "a2e4f37d8c347936",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 26,
+      "date": "2017-09-05 22:00:50",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "53f3707066ae5c32",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 27,
+      "date": "2017-08-19 22:21:53",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "a2500f7bd155ddb0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 28,
+      "date": "2017-02-07 21:26:57",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4f10e67647e5b533",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 29,
+      "date": "2016-09-17 00:23:39",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b64f8eb0f9937fae",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 30,
+      "date": "2016-09-03 11:18:47",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "0babc84bb3ab935f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 31,
+      "date": "2016-04-26 23:21:56",
+      "stars": 5.0,
+      "useful": 7,
+      "text_hash": "8454c6f5e3ce6235",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts",
+            "intoleran"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 32,
+      "date": "2016-04-24 01:13:00",
+      "stars": 1.0,
+      "useful": 2,
+      "text_hash": "cb01c32f8edcee8b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 33,
+      "date": "2016-02-07 00:55:18",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "514f45f25b5a0bf0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 34,
+      "date": "2015-11-11 12:00:27",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "a9e4a9c9a767f306",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergic"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 35,
+      "date": "2015-08-14 18:34:03",
+      "stars": 1.0,
+      "useful": 3,
+      "text_hash": "57017a7face28b73",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 36,
+      "date": "2015-06-24 03:21:33",
+      "stars": 1.0,
+      "useful": 5,
+      "text_hash": "b8be59cf3caa0ce4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 37,
+      "date": "2015-04-11 01:14:38",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "b0b61c8fe4e41edc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 38,
+      "date": "2015-04-06 17:32:59",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "320ce8214c1e4c38",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 39,
+      "date": "2015-03-14 16:01:20",
+      "stars": 1.0,
+      "useful": 3,
+      "text_hash": "dc3930faee4e0dd0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 40,
+      "date": "2015-02-28 03:54:10",
+      "stars": 1.0,
+      "useful": 14,
+      "text_hash": "fc81e30a9f32526c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergic",
+            "reaction"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 41,
+      "date": "2015-01-02 22:27:48",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "e6ca717a293a5e4f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 42,
+      "date": "2014-11-02 19:36:08",
+      "stars": 1.0,
+      "useful": 9,
+      "text_hash": "2a06e64aec542ffa",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "allergic"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 43,
+      "date": "2014-10-26 00:53:38",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "491450d73d2647ae",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 44,
+      "date": "2014-04-16 14:22:44",
+      "stars": 1.0,
+      "useful": 1,
+      "text_hash": "01bb890d13e47e48",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 45,
+      "date": "2014-04-05 19:46:49",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "88830cdf7eaaff99",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 46,
+      "date": "2013-07-29 23:19:41",
+      "stars": 2.0,
+      "useful": 1,
+      "text_hash": "735f400fc1b64f29",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 47,
+      "date": "2013-04-21 02:24:47",
+      "stars": 1.0,
+      "useful": 10,
+      "text_hash": "28a6c9cfa8e2c1de",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "allergic",
+            "allergies",
+            "reaction"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 48,
+      "date": "2012-12-15 02:56:07",
+      "stars": 2.0,
+      "useful": 1,
+      "text_hash": "9263153eaf153300",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 49,
+      "date": "2012-12-07 23:48:03",
+      "stars": 1.0,
+      "useful": 1,
+      "text_hash": "9c7891e91a6f3413",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 50,
+      "date": "2012-07-24 15:47:50",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "dc209d857525c478",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 51,
+      "date": "2012-07-19 00:56:16",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "74cfe2e6301e65de",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 52,
+      "date": "2011-06-24 23:30:51",
+      "stars": 4.0,
+      "useful": 3,
+      "text_hash": "f96e14169608107f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 53,
+      "date": "2010-09-28 23:21:38",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "5ce7f439bcb5a438",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 54,
+      "date": "2010-07-30 22:20:41",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "c14e6854b2816b75",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 55,
+      "date": "2008-06-13 01:52:28",
+      "stars": 3.0,
+      "useful": 3,
+      "text_hash": "493ea506f71f4779",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "indexed_at": "2026-01-10T05:13:30.313597",
+  "source_file": "dataset_K200.jsonl",
+  "source_hash": "sha256:be48513cd28aa28109b9b9161e45967b0895fd0cdf785d13af4a4fc7a08093a6",
+  "total_restaurants": 100,
+  "total_reviews": 13232,
+  "tasks": {
+    "G1": {
+      "name": "Peanut Allergy Safety",
+      "keywords_count": 40,
+      "matching_reviews": 2173,
+      "matching_restaurants": 99,
+      "review_match_rate": "16.4%"
+    }
+  }
+}

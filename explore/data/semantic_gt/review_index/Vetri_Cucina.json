@@ -1,0 +1,2822 @@
+{
+  "restaurant": "Vetri Cucina",
+  "source_file": "dataset_K200.jsonl",
+  "n_reviews": 200,
+  "indexed_at": "2026-01-10T05:13:30.009685",
+  "reviews": [
+    {
+      "idx": 0,
+      "date": "2022-01-17 21:30:23",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "6a20b465a5771720",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 1,
+      "date": "2022-01-16 21:04:16",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "605264ad678f680a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 2,
+      "date": "2022-01-03 23:01:43",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "5d35b9e79901a244",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 3,
+      "date": "2021-12-09 22:30:59",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "62705adcf47c6128",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 4,
+      "date": "2021-11-15 03:35:54",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "56414e1fd767d272",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 5,
+      "date": "2021-11-12 18:48:32",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c4e6d8610f8d9811",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 6,
+      "date": "2021-11-07 23:44:59",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "19d4b423505d359e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 7,
+      "date": "2021-09-10 01:56:09",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "673d72c095c913f3",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 8,
+      "date": "2021-08-10 15:15:54",
+      "stars": 3.0,
+      "useful": 1,
+      "text_hash": "3f4c358ebfacd0a8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 9,
+      "date": "2021-07-19 20:40:25",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "b3d02c7c1d2ef794",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 10,
+      "date": "2021-07-19 20:18:51",
+      "stars": 1.0,
+      "useful": 1,
+      "text_hash": "42f970d793f159cc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 11,
+      "date": "2021-07-09 20:41:46",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "658619fa169222fa",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 12,
+      "date": "2021-06-28 03:09:15",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "bb5f90ea6af1c9dd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "warning"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 13,
+      "date": "2021-06-27 23:55:19",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "4bca1973422979e1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 14,
+      "date": "2021-06-24 17:07:06",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "2dd7cda43139b455",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 15,
+      "date": "2021-06-18 09:15:59",
+      "stars": 3.0,
+      "useful": 3,
+      "text_hash": "c2519e2b7e3cb114",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 16,
+      "date": "2021-06-01 01:26:01",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "7b0ede0fec6e4e17",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 17,
+      "date": "2021-05-26 02:40:47",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "96b74387954246de",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 18,
+      "date": "2021-05-24 17:51:15",
+      "stars": 5.0,
+      "useful": 6,
+      "text_hash": "1e7e37c28ce91db8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 19,
+      "date": "2021-05-15 18:17:19",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d5768d2351472863",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 20,
+      "date": "2021-05-04 13:33:35",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "2fecc8e72f5d8adb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 21,
+      "date": "2021-04-28 02:18:14",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4ab9f7c1046561a1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 22,
+      "date": "2021-04-07 11:40:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "df65f93ed09de410",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 23,
+      "date": "2021-04-05 15:03:21",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "7b3b93923755c760",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 24,
+      "date": "2021-02-13 23:13:23",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b5f9e81f527099c7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 25,
+      "date": "2021-02-02 00:38:28",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "0e7702ccf0c66cd7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 26,
+      "date": "2020-12-06 02:14:42",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "2fb0e6b9b2c674c4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "peanut",
+            "nut",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 27,
+      "date": "2020-11-12 11:03:47",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "dc2604f8828c28a2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 28,
+      "date": "2020-11-03 15:24:17",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "35756b4d7b72a6d9",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 29,
+      "date": "2020-10-26 19:47:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "fecc9316abf7ec4b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 30,
+      "date": "2020-10-19 15:46:19",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "beff16dcbf09c1f5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 31,
+      "date": "2020-10-18 02:45:26",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "ea232af810a82fe1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 32,
+      "date": "2020-10-15 15:22:31",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "bea6cff2ccb44a9e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 33,
+      "date": "2020-10-05 13:36:42",
+      "stars": 5.0,
+      "useful": 13,
+      "text_hash": "43e45bba16af84cc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "peanut",
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 34,
+      "date": "2020-10-05 02:14:12",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "3ce92d51831f1538",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 35,
+      "date": "2020-09-13 22:43:44",
+      "stars": 5.0,
+      "useful": 9,
+      "text_hash": "5d4a3951c41585c2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 36,
+      "date": "2020-07-13 12:25:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "3eaf2e56d74698f7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 37,
+      "date": "2020-03-07 16:49:38",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "50fc28ff0249790f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 38,
+      "date": "2020-03-05 04:34:08",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "6ec303e317794961",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "accommodate",
+            "accommodated"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 39,
+      "date": "2020-03-01 02:01:28",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "caa8ab1f50c7decd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts",
+            "almond",
+            "allergic",
+            "allergies"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 40,
+      "date": "2020-02-27 21:12:23",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "88e8d7e0fc3b9628",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond",
+            "hazelnut",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 41,
+      "date": "2020-02-24 04:13:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "5f2133d81ea5a5b7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 42,
+      "date": "2020-02-22 16:41:29",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "42952f4e2d25ed04",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 43,
+      "date": "2020-02-08 17:50:53",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "bfe77acf3b569afc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 44,
+      "date": "2020-02-04 21:46:13",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "72b2b811e39428d2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 45,
+      "date": "2020-02-03 17:16:29",
+      "stars": 3.0,
+      "useful": 1,
+      "text_hash": "4f075963a0a4250a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 46,
+      "date": "2019-12-31 16:00:04",
+      "stars": 5.0,
+      "useful": 4,
+      "text_hash": "fb14bd86b2446977",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 47,
+      "date": "2019-12-29 15:58:41",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "30f0a3e7cf1f56e6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 48,
+      "date": "2019-12-18 03:54:45",
+      "stars": 1.0,
+      "useful": 3,
+      "text_hash": "2c7a18f9a59a4187",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 49,
+      "date": "2019-12-09 15:38:24",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "c96578e70e8c32d1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "gluten",
+            "dietary",
+            "restriction",
+            "restrictions",
+            "sensitive",
+            "sensitivity"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 50,
+      "date": "2019-12-02 21:05:28",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "1eb9743b2bcf44ef",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 51,
+      "date": "2019-11-26 01:49:43",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b319121d943abd9c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 52,
+      "date": "2019-11-19 02:25:50",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "dc4323be3748467c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergies"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 53,
+      "date": "2019-11-18 21:06:06",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "f85952facf025430",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 54,
+      "date": "2019-11-08 18:22:49",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "88997db171196c93",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergies"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 55,
+      "date": "2019-10-23 22:03:55",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "bd7fdc3dc7046d3b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 56,
+      "date": "2019-10-13 16:16:03",
+      "stars": 3.0,
+      "useful": 1,
+      "text_hash": "2a5929abe33112cd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 57,
+      "date": "2019-10-11 13:50:22",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "9775be679c2dc6cf",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 58,
+      "date": "2019-09-06 04:07:18",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "dab0e3715ebbe189",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 59,
+      "date": "2019-08-25 14:31:58",
+      "stars": 5.0,
+      "useful": 4,
+      "text_hash": "5074c3f46d55e1d0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "dietary",
+            "restriction",
+            "restrictions",
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 60,
+      "date": "2019-08-18 14:43:16",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "29d22fae5e96dbc0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "pistachio",
+            "dietary",
+            "restriction",
+            "restrictions"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 61,
+      "date": "2019-07-30 21:05:00",
+      "stars": 3.0,
+      "useful": 1,
+      "text_hash": "6510fe354eb0e68d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 62,
+      "date": "2019-07-20 02:55:48",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "94b3ad9f9c603693",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 63,
+      "date": "2019-07-19 14:47:29",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "eb5462bad3bff921",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 64,
+      "date": "2019-07-18 12:41:31",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "6b064c3e529cd6ba",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 65,
+      "date": "2019-07-14 23:23:37",
+      "stars": 4.0,
+      "useful": 4,
+      "text_hash": "60c8a82b842fb781",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 66,
+      "date": "2019-07-11 21:42:26",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "d000eabc53b6433c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 67,
+      "date": "2019-07-09 18:48:06",
+      "stars": 1.0,
+      "useful": 2,
+      "text_hash": "3e34a0017d61400a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 68,
+      "date": "2019-06-23 13:05:50",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "2db97e204251c30b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 69,
+      "date": "2019-06-03 17:26:49",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "7be2eabf4037cc21",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "careful"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 70,
+      "date": "2019-05-31 02:10:12",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "4a4286bcac9d4306",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 71,
+      "date": "2019-05-26 16:30:30",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "9b23a1596134dae8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 72,
+      "date": "2019-05-25 23:49:11",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "f248ada19ad5b064",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 73,
+      "date": "2019-05-18 03:32:50",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "43fdbcbbab3eb25d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 74,
+      "date": "2019-05-14 13:26:58",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "bd6ff821ece160e9",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 75,
+      "date": "2019-05-13 02:33:07",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "7028913a5fdb7956",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 76,
+      "date": "2019-05-10 23:01:27",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "23ab919d191ec52e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 77,
+      "date": "2019-04-22 14:39:26",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "caa7a79ff7d76983",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 78,
+      "date": "2019-04-01 15:52:10",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "8d028f94345c276e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 79,
+      "date": "2019-03-08 14:32:07",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "5fb6feeba0ea1a97",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 80,
+      "date": "2019-03-08 14:01:11",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "7a3607d069247907",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 81,
+      "date": "2019-02-27 01:05:08",
+      "stars": 3.0,
+      "useful": 6,
+      "text_hash": "432e64b84962c8a2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 82,
+      "date": "2019-02-25 17:06:03",
+      "stars": 3.0,
+      "useful": 4,
+      "text_hash": "1945080844686507",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 83,
+      "date": "2019-02-23 12:45:40",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "1a517979a0ff5373",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "dietary",
+            "accommodate",
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 84,
+      "date": "2019-02-20 18:15:08",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "4df803d980f20ebf",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 85,
+      "date": "2019-01-31 12:32:20",
+      "stars": 3.0,
+      "useful": 1,
+      "text_hash": "e907d79c32a3d483",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "dietary",
+            "restriction",
+            "restrictions"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 86,
+      "date": "2019-01-27 06:26:28",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "cc2679ae685c31bb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 87,
+      "date": "2019-01-12 04:16:39",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "cd0b39bfad45477f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 88,
+      "date": "2018-12-31 14:03:09",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "0f8ee66848179afb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "dietary",
+            "restriction",
+            "restrictions",
+            "accommodate",
+            "accommodated"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 89,
+      "date": "2018-12-24 21:55:34",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "13ca5a7113a77883",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 90,
+      "date": "2018-11-20 21:57:33",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "33f2f3f080033431",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 91,
+      "date": "2018-11-09 23:21:12",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "5972d8924dcdf975",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 92,
+      "date": "2018-10-30 03:04:58",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "5eab26cd1ce4b2a4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 93,
+      "date": "2018-10-29 17:19:29",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "c77c8cbadee45449",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 94,
+      "date": "2018-10-21 15:35:47",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b8b2bd2fe603003f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 95,
+      "date": "2018-10-14 00:10:07",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "e9cdd64801292648",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 96,
+      "date": "2018-10-09 18:45:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b0eb2be7e3650110",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 97,
+      "date": "2018-09-21 01:44:18",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "d5b574d23164f8f5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "accommodate"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 98,
+      "date": "2018-08-26 18:50:42",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "a199bd11efbda98c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 99,
+      "date": "2018-08-22 18:35:29",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d4cdc888e98c46d6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 100,
+      "date": "2018-08-18 18:49:07",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "b0953aa7e2e3f54e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 101,
+      "date": "2018-08-13 13:40:12",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "18e0b8cb54d37e9d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 102,
+      "date": "2018-07-23 12:43:42",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f2bf68ea9de92c66",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 103,
+      "date": "2018-07-09 00:16:27",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "be1978d890ea0646",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 104,
+      "date": "2018-07-08 12:45:27",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "2ffb29af2764fa90",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergies",
+            "dietary"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 105,
+      "date": "2018-07-06 17:17:54",
+      "stars": 5.0,
+      "useful": 5,
+      "text_hash": "01820bf825d4d007",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 106,
+      "date": "2018-07-05 15:32:54",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f05856dcaa788e03",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 107,
+      "date": "2018-06-22 16:01:21",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "136cd0fbebc7ba96",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 108,
+      "date": "2018-06-21 20:16:32",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "bd19980a5fad7506",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 109,
+      "date": "2018-06-21 17:52:08",
+      "stars": 5.0,
+      "useful": 4,
+      "text_hash": "c9b092e31f2e0ec7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 110,
+      "date": "2018-06-15 06:43:58",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "6762a30f35c552bb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 111,
+      "date": "2018-06-05 00:03:57",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d0b6f7edbc02f796",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 112,
+      "date": "2018-05-30 15:57:31",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "4b5323424e184cf8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 113,
+      "date": "2018-05-21 02:42:09",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "7770db6af0230d7d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 114,
+      "date": "2018-05-10 15:35:24",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "2d1f9b80349ce55c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 115,
+      "date": "2018-05-09 03:21:43",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f2627e16e9288434",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 116,
+      "date": "2018-05-05 00:20:53",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "12a1106e1b7d7770",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 117,
+      "date": "2018-04-16 16:57:23",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "99be789527e329f4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts",
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 118,
+      "date": "2018-04-03 20:55:03",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "58a519a5459ab018",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 119,
+      "date": "2018-04-02 15:09:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "cba622008fa45983",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 120,
+      "date": "2018-04-02 01:42:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d6a2b344283a9e47",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 121,
+      "date": "2018-04-01 18:32:12",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "f53f9a95684b6a58",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 122,
+      "date": "2018-03-20 02:05:31",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "36939375857474fb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 123,
+      "date": "2018-03-19 01:20:54",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8468b5a2a6408ae8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 124,
+      "date": "2018-03-12 02:19:23",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "b047c346174661e4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 125,
+      "date": "2018-03-07 19:25:21",
+      "stars": 2.0,
+      "useful": 1,
+      "text_hash": "1e60fae5a230c9be",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 126,
+      "date": "2018-02-21 23:20:47",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "375d649597636893",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 127,
+      "date": "2018-02-19 01:10:20",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "782bd77cde15d7a5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 128,
+      "date": "2018-02-15 16:02:11",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "b286c172adc47181",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 129,
+      "date": "2018-02-12 14:14:52",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "f790eb7e07a4b10f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 130,
+      "date": "2018-01-29 19:46:44",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "6c0d019cbf8271b4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 131,
+      "date": "2018-01-18 02:21:48",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "53564962be83bcd6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 132,
+      "date": "2018-01-16 14:46:56",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "c563e8ee62d3b584",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 133,
+      "date": "2018-01-05 03:20:50",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "0adf284958435531",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergies"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 134,
+      "date": "2018-01-02 01:19:50",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "308c0a7cfd8cf190",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 135,
+      "date": "2017-12-31 00:06:45",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "3d00306129e96b53",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 136,
+      "date": "2017-12-26 02:32:10",
+      "stars": 3.0,
+      "useful": 2,
+      "text_hash": "1f2ea53107fbc477",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 137,
+      "date": "2017-12-20 12:22:29",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "73db1f4a8438f0e6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 138,
+      "date": "2017-12-19 13:03:42",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "281abc60a9ae0d1d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 139,
+      "date": "2017-11-14 16:52:34",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ca3b98e6ed518b09",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 140,
+      "date": "2017-11-12 15:52:34",
+      "stars": 4.0,
+      "useful": 4,
+      "text_hash": "e956a07e4bc8640c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 141,
+      "date": "2017-10-30 03:12:42",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "9a6d26d18ffe5af5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond",
+            "pistachio",
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 142,
+      "date": "2017-10-29 05:58:20",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ffd5b62d9d7c0dcc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 143,
+      "date": "2017-10-15 19:58:49",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "0ad6d40714be324c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 144,
+      "date": "2017-10-06 03:11:22",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "ce2e4df6e2975c65",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 145,
+      "date": "2017-09-17 01:37:35",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8eb2a1951f3c4be9",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 146,
+      "date": "2017-09-15 13:40:43",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "bc01ad71bcfd6f7d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 147,
+      "date": "2017-09-12 14:14:56",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "32f6c0f7f0d257f8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "dietary"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 148,
+      "date": "2017-09-11 01:13:31",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "63da1dd13ae5f0ea",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 149,
+      "date": "2017-09-10 22:27:20",
+      "stars": 2.0,
+      "useful": 3,
+      "text_hash": "f100af2ce898041f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 150,
+      "date": "2017-09-09 04:42:10",
+      "stars": 3.0,
+      "useful": 2,
+      "text_hash": "8d0121c25b7b932f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 151,
+      "date": "2017-08-18 18:36:27",
+      "stars": 3.0,
+      "useful": 6,
+      "text_hash": "4d3e0f17a2c48a3d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 152,
+      "date": "2017-08-10 17:28:03",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "52a4fdd7ec503500",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 153,
+      "date": "2017-08-10 15:21:27",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "2a0dc13fe18767c5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 154,
+      "date": "2017-08-07 15:18:11",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "cf97c0769d262e63",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 155,
+      "date": "2017-07-31 01:18:47",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "6147ce0e4aba655d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "gluten",
+            "accommodate",
+            "accommodated"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 156,
+      "date": "2017-07-28 11:42:52",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f3494e2bea616299",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 157,
+      "date": "2017-07-26 17:32:56",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "04d4cff801f49d48",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 158,
+      "date": "2017-07-13 17:32:27",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "bfae88b9113d7cd8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 159,
+      "date": "2017-05-02 20:33:22",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "dbff3aff9a2595f8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 160,
+      "date": "2017-04-27 22:36:24",
+      "stars": 2.0,
+      "useful": 2,
+      "text_hash": "d6e1cf169c237642",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "dietary",
+            "restriction",
+            "restrictions"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 161,
+      "date": "2017-04-27 00:31:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ada67f886c954644",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 162,
+      "date": "2017-04-23 02:22:21",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "d868bcdca87704b5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 163,
+      "date": "2017-04-19 13:43:13",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "786ccec50a937dcb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 164,
+      "date": "2017-03-25 06:09:25",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "5e13417d6dde9420",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "peanut",
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 165,
+      "date": "2017-03-25 04:05:13",
+      "stars": 3.0,
+      "useful": 5,
+      "text_hash": "43d8c3d6ca597379",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "careful"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 166,
+      "date": "2017-03-23 01:02:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "605d971f28d2a667",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 167,
+      "date": "2017-03-15 04:38:16",
+      "stars": 5.0,
+      "useful": 6,
+      "text_hash": "a91f67954202a458",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 168,
+      "date": "2017-03-05 17:07:32",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "71fa46ca74c6977a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 169,
+      "date": "2017-02-26 01:29:20",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "f68fa2cc7184db0c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 170,
+      "date": "2017-02-22 20:44:19",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4e8bbfebae272419",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 171,
+      "date": "2017-02-22 18:08:40",
+      "stars": 1.0,
+      "useful": 2,
+      "text_hash": "f1405fc91184f4dd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 172,
+      "date": "2017-02-21 17:52:24",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ab40adde0a837b05",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 173,
+      "date": "2017-02-20 02:14:55",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "23c42588a9d2469b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 174,
+      "date": "2017-02-16 15:35:27",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "6cfd36b04eaa82db",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 175,
+      "date": "2017-02-10 19:52:32",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "eba21d5eba5e8b7b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 176,
+      "date": "2017-02-05 17:48:23",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "e607fbbc0b1415d2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 177,
+      "date": "2017-01-20 01:57:30",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "5cfe1d1c0352947a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 178,
+      "date": "2017-01-01 20:07:53",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d6fbc095af978b7e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 179,
+      "date": "2016-12-28 16:55:14",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ebeee060c248fa3e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 180,
+      "date": "2016-12-12 02:11:20",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "e5520709954bbd79",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 181,
+      "date": "2016-12-11 20:43:13",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "bbbb17bb70520015",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 182,
+      "date": "2016-11-29 00:53:17",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "f379f519fd465a35",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "almond",
+            "pistachio"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 183,
+      "date": "2016-11-28 18:33:11",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "f7e6c9fab9bbf2c6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "dietary",
+            "restriction",
+            "restrictions"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 184,
+      "date": "2016-10-28 23:23:30",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "1143042c45c8ed24",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 185,
+      "date": "2016-10-28 19:43:44",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "2807a39645fb233a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 186,
+      "date": "2016-10-28 14:57:57",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b51412be293be653",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 187,
+      "date": "2016-10-27 18:26:46",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "94015114148c0f02",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "accommodate",
+            "accommodated"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 188,
+      "date": "2016-10-23 13:55:01",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f83883e76d567985",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 189,
+      "date": "2016-10-17 01:03:02",
+      "stars": 5.0,
+      "useful": 4,
+      "text_hash": "33e9072a9fee12c7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "almond"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 190,
+      "date": "2016-10-11 13:11:12",
+      "stars": 3.0,
+      "useful": 1,
+      "text_hash": "fbbd498f2a290318",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergies"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 191,
+      "date": "2016-09-16 14:17:24",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "416b4893cdcc0975",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 192,
+      "date": "2016-08-03 17:01:10",
+      "stars": 5.0,
+      "useful": 8,
+      "text_hash": "f39c6003da63a369",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "allergies"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 193,
+      "date": "2016-08-02 18:19:07",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "fd501acb74bb8976",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 194,
+      "date": "2016-07-26 01:05:09",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d495c69bc7769804",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 195,
+      "date": "2016-07-18 11:15:44",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "fb969d058adbaa0a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "accommodating"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 196,
+      "date": "2016-07-13 12:59:35",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8b6a3dc8726c3470",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 197,
+      "date": "2016-07-11 15:06:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "75991abb9db20d4d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 198,
+      "date": "2016-06-30 03:13:02",
+      "stars": 4.0,
+      "useful": 4,
+      "text_hash": "82f28e6d2ed7dee1",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 199,
+      "date": "2016-06-28 02:20:08",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "66060c4eeb83566a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    }
+  ]
+}

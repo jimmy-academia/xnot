@@ -1,0 +1,2644 @@
+{
+  "restaurant": "Rione",
+  "source_file": "dataset_K200.jsonl",
+  "n_reviews": 200,
+  "indexed_at": "2026-01-10T05:13:30.072274",
+  "reviews": [
+    {
+      "idx": 0,
+      "date": "2021-12-14 15:22:55",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "c5022d7c9c23d172",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 1,
+      "date": "2021-11-06 14:55:03",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "05642b60523b44f9",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 2,
+      "date": "2021-08-10 14:41:32",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "5886e7449b8db346",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 3,
+      "date": "2021-07-11 15:46:11",
+      "stars": 4.0,
+      "useful": 7,
+      "text_hash": "e467baf83a1b7b8a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 4,
+      "date": "2021-05-19 19:46:58",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ab933261e96fecad",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 5,
+      "date": "2021-05-07 00:17:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "fab1e17ef0eaa3be",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 6,
+      "date": "2021-04-03 21:39:46",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "15de6626a46b0fe5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 7,
+      "date": "2021-04-03 15:50:42",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "2453cde7a174dabd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 8,
+      "date": "2021-03-31 21:23:15",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "0e1627902242db33",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 9,
+      "date": "2021-03-27 00:46:52",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d3bb67bb6e90d5bc",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 10,
+      "date": "2021-03-25 01:12:26",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "f967658b16c6fc88",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 11,
+      "date": "2021-03-14 23:56:09",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "139135531ce0896e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 12,
+      "date": "2021-02-14 22:13:21",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "1af7f8adc7880acd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 13,
+      "date": "2021-01-29 20:33:01",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "472e6b8e701766bf",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 14,
+      "date": "2021-01-24 05:37:12",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "6e6271244cbf2d9c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 15,
+      "date": "2021-01-09 04:08:26",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "f7545e36c9c6f325",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 16,
+      "date": "2021-01-04 15:18:26",
+      "stars": 3.0,
+      "useful": 2,
+      "text_hash": "c20a916e67ceba6b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 17,
+      "date": "2020-12-28 05:51:06",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "10e5297b00a745e3",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 18,
+      "date": "2020-12-25 05:57:09",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "50d6fdff9288d17a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 19,
+      "date": "2020-12-18 02:03:31",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "bbc0146e180e0356",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 20,
+      "date": "2020-12-17 23:26:24",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "773b4b6a1af7657b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 21,
+      "date": "2020-11-22 19:24:23",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "e81ec7d8cb44af5b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 22,
+      "date": "2020-04-07 19:46:53",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "df2028b1d709f9d5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 23,
+      "date": "2020-03-10 10:42:57",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "cf82ef35d1ae6853",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 24,
+      "date": "2020-03-04 12:56:21",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "4a4223bd162935fa",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 25,
+      "date": "2020-01-26 23:32:55",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "8cb3a47f5feeb79d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 26,
+      "date": "2020-01-18 01:09:34",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "89350506edfa6c93",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 27,
+      "date": "2019-12-23 03:25:39",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "ce376682244f768f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 28,
+      "date": "2019-12-20 15:24:06",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "6a5fed4cc78124af",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 29,
+      "date": "2019-12-05 17:44:09",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "809c6a92310619b8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 30,
+      "date": "2019-11-25 04:23:56",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "5ae49c7fac19bd05",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 31,
+      "date": "2019-11-21 16:22:39",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "66ab255dee328720",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 32,
+      "date": "2019-10-28 20:32:22",
+      "stars": 2.0,
+      "useful": 5,
+      "text_hash": "0b5e492d234de440",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 33,
+      "date": "2019-10-11 22:25:47",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "87c0573d04f62b99",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 34,
+      "date": "2019-09-20 18:32:07",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "e75b3342a3ebed0a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 35,
+      "date": "2019-09-14 01:19:42",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "570e2a339692956f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 36,
+      "date": "2019-09-10 20:43:35",
+      "stars": 1.0,
+      "useful": 1,
+      "text_hash": "fd2904cf011e450f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 37,
+      "date": "2019-09-10 15:41:49",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "02677cdac6442d23",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 38,
+      "date": "2019-08-26 00:53:59",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "e7b3ca22589eef04",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 39,
+      "date": "2019-08-18 20:09:19",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c417b67a947c87cb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 40,
+      "date": "2019-08-07 03:52:40",
+      "stars": 3.0,
+      "useful": 2,
+      "text_hash": "8b51d53200bad0eb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 41,
+      "date": "2019-07-31 22:59:48",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "8a14cbba506cacb9",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 42,
+      "date": "2019-07-27 01:31:00",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "d4eb0e2c12e4462a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 43,
+      "date": "2019-07-21 19:54:35",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "55abd40fec784c31",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 44,
+      "date": "2019-07-18 00:17:20",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "4777bf2560f9764b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 45,
+      "date": "2019-06-26 20:36:26",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c9ef6e29d2e10fc7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 46,
+      "date": "2019-06-22 01:33:25",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "2ba912d43b7a324b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 47,
+      "date": "2019-05-17 23:07:42",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "4ae9f81a4e263860",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 48,
+      "date": "2019-05-14 16:48:24",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "4fa3e82d7224d718",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "safe"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 49,
+      "date": "2019-05-09 19:45:39",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "9383c1c25f6f0e06",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 50,
+      "date": "2019-05-08 22:01:30",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "3662f4c4fc77f03e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 51,
+      "date": "2019-05-07 17:25:37",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "1769fd33b50acedd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 52,
+      "date": "2019-04-25 18:35:11",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f602e7260c9befec",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 53,
+      "date": "2019-04-14 19:43:21",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "c77bc411abf176e6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 54,
+      "date": "2019-03-30 16:54:53",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "13a51f3f7cfd6a72",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 55,
+      "date": "2019-03-29 17:42:54",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "fa1281bfd086f700",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 56,
+      "date": "2019-02-27 04:53:54",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "d76692a7ae55fda2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 57,
+      "date": "2019-02-18 14:25:10",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "65d964eb53f4f09c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 58,
+      "date": "2019-02-15 21:09:40",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "1348a64965a368b3",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 59,
+      "date": "2019-02-11 14:44:14",
+      "stars": 2.0,
+      "useful": 1,
+      "text_hash": "ca0d335251446f5d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 60,
+      "date": "2019-01-15 17:57:35",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "28c009f4cbf5e68a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 61,
+      "date": "2018-12-29 00:39:41",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "986f2a987e8df130",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 62,
+      "date": "2018-12-23 20:58:17",
+      "stars": 3.0,
+      "useful": 4,
+      "text_hash": "962abff98f335eee",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 63,
+      "date": "2018-12-03 05:39:49",
+      "stars": 2.0,
+      "useful": 3,
+      "text_hash": "d893d13eb6ae9c34",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 64,
+      "date": "2018-11-15 00:16:28",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4c58a61b6406dcc0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 65,
+      "date": "2018-10-28 21:05:55",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "97dceecb2c060476",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 66,
+      "date": "2018-10-28 01:05:30",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "83991c0d0820abcb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 67,
+      "date": "2018-10-26 20:38:25",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "cd044f174f7837d3",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 68,
+      "date": "2018-10-21 23:59:05",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "9baa1e1088611d6a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 69,
+      "date": "2018-10-21 01:22:45",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "2731366f94a1429b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 70,
+      "date": "2018-10-18 00:59:00",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "3d648af1288e429e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 71,
+      "date": "2018-10-17 02:13:37",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "f6a27d873c2e063c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 72,
+      "date": "2018-10-16 21:13:33",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "dae7eb54f1988bbe",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 73,
+      "date": "2018-10-13 16:26:38",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c5970b1dc0620743",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 74,
+      "date": "2018-10-11 21:59:54",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "629f18c9186cba34",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 75,
+      "date": "2018-10-04 18:17:27",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "1430be9f60a26fcd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 76,
+      "date": "2018-10-02 02:27:01",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "2b8127b00acfb165",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 77,
+      "date": "2018-09-16 13:19:16",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4944acd0c76d3397",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 78,
+      "date": "2018-09-15 22:50:43",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "fd82fb6c47b974bf",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 79,
+      "date": "2018-09-14 22:31:09",
+      "stars": 2.0,
+      "useful": 0,
+      "text_hash": "eb2e9e7cd96554b6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 80,
+      "date": "2018-09-08 17:04:44",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "995a656335438918",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 81,
+      "date": "2018-08-24 17:51:19",
+      "stars": 5.0,
+      "useful": 7,
+      "text_hash": "cffd7428ac9daf09",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 82,
+      "date": "2018-08-20 19:54:37",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "2ed58e4d2b3831e6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 83,
+      "date": "2018-08-14 04:57:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "1b6840dd7b8b5907",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 84,
+      "date": "2018-08-11 23:55:38",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "916bd11800b23d3e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 85,
+      "date": "2018-08-09 23:03:49",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c9add366567052ca",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "allergy"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 86,
+      "date": "2018-08-09 12:59:14",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "0923f8084ef1a835",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 87,
+      "date": "2018-08-02 02:41:35",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "264d697e654aeb2c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 88,
+      "date": "2018-07-28 16:09:53",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "34da5ea7e0bfafa6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 89,
+      "date": "2018-07-26 15:48:37",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "f862d718da146c7e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 90,
+      "date": "2018-07-09 16:43:22",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "d90283beccc07fa2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 91,
+      "date": "2018-07-02 19:03:10",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "7e146ba834076ccd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut",
+            "nuts"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 92,
+      "date": "2018-06-28 20:23:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d6446efde5d1a84b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 93,
+      "date": "2018-06-24 17:08:11",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "edcc1b543e2016d7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 94,
+      "date": "2018-06-24 17:07:21",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "51e44172b2f23dca",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "reaction",
+            "sensitivity"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 95,
+      "date": "2018-06-23 11:59:36",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "5754ffbe1cb71bb8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 96,
+      "date": "2018-05-17 00:35:26",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "c9a69f57eabd5e59",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 97,
+      "date": "2018-05-08 16:50:13",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "62eed5d34334d3cd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 98,
+      "date": "2018-04-21 14:32:55",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "3cb3338381109ea3",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 99,
+      "date": "2018-04-08 02:35:01",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "e32f1a1ad239e5f4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 100,
+      "date": "2018-03-24 19:06:34",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8520189293ebe2d7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 101,
+      "date": "2018-03-19 20:57:30",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "52f9420e0bc205b2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 102,
+      "date": "2018-03-18 03:55:51",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "dc17ffc417594ac8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 103,
+      "date": "2018-03-11 00:32:49",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "c55809344cd4a3f8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 104,
+      "date": "2018-03-04 19:59:09",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "a640757042368ca5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 105,
+      "date": "2018-03-04 14:18:11",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d11e67e14379367b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 106,
+      "date": "2018-03-04 12:14:00",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "f428b3c32523a80a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 107,
+      "date": "2018-03-03 23:15:38",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "bd657fd1a45c927c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 108,
+      "date": "2018-03-03 02:25:50",
+      "stars": 5.0,
+      "useful": 5,
+      "text_hash": "fb06dd869fc6b465",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 109,
+      "date": "2018-02-27 05:26:52",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "8f90b2102dac8137",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 110,
+      "date": "2018-02-22 12:19:24",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8b228582b7681452",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 111,
+      "date": "2018-02-14 19:17:15",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c57a6cc8cec56524",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 112,
+      "date": "2018-02-06 02:07:36",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "5535848a0ac86483",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 113,
+      "date": "2018-01-30 03:52:26",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d938b46db5ea47e3",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 114,
+      "date": "2018-01-21 18:10:07",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "6c583e2d22c1d634",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 115,
+      "date": "2018-01-15 04:12:36",
+      "stars": 5.0,
+      "useful": 4,
+      "text_hash": "c75b224eee0d9dbb",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 116,
+      "date": "2018-01-12 03:12:34",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "b39b1d1a93b2f098",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 117,
+      "date": "2018-01-07 16:28:30",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "fea889decdab39e0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 118,
+      "date": "2018-01-04 19:36:12",
+      "stars": 5.0,
+      "useful": 8,
+      "text_hash": "135d5f9c08ffea36",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 119,
+      "date": "2017-12-27 14:51:39",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "bda1276d052aa2a0",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 120,
+      "date": "2017-12-21 02:32:42",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "e33b26858e35380c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 121,
+      "date": "2017-12-18 21:12:06",
+      "stars": 4.0,
+      "useful": 1,
+      "text_hash": "feb65a203e5ab7b5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 122,
+      "date": "2017-12-18 03:34:55",
+      "stars": 4.0,
+      "useful": 3,
+      "text_hash": "3791db190e34525b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 123,
+      "date": "2017-12-17 17:55:29",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "46222ee1da28178d",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 124,
+      "date": "2017-12-13 17:15:17",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "ef2a993f1888259e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 125,
+      "date": "2017-12-11 04:34:02",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "5b1be65b895e1852",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 126,
+      "date": "2017-12-09 01:32:31",
+      "stars": 5.0,
+      "useful": 21,
+      "text_hash": "4da33ffea0e86f04",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 127,
+      "date": "2017-12-06 05:03:44",
+      "stars": 4.0,
+      "useful": 8,
+      "text_hash": "5b5f04a31bd74333",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 128,
+      "date": "2017-12-02 02:53:18",
+      "stars": 3.0,
+      "useful": 2,
+      "text_hash": "41f71c1776babfda",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 129,
+      "date": "2017-11-29 15:44:07",
+      "stars": 4.0,
+      "useful": 3,
+      "text_hash": "423f2866f7968c74",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 130,
+      "date": "2017-11-29 13:38:54",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "3296a0810f32545e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 131,
+      "date": "2017-11-26 02:25:21",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "1c5fd31da16ac989",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 132,
+      "date": "2017-11-26 02:04:45",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "30a919856cc84ac8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 133,
+      "date": "2017-11-19 05:25:16",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "e4fbef63e5b092c4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 134,
+      "date": "2017-11-13 00:50:06",
+      "stars": 5.0,
+      "useful": 4,
+      "text_hash": "af420d3109401bae",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 135,
+      "date": "2017-11-12 21:44:24",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b6c18b1addafa2d8",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 136,
+      "date": "2017-11-07 14:15:55",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8970b379f4bbc414",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 137,
+      "date": "2017-11-04 18:21:17",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "8fbf580e5788657c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 138,
+      "date": "2017-11-03 22:59:45",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "8cee24c0fcaf8f30",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 139,
+      "date": "2017-10-31 14:46:14",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "60685199603302e7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "accommodate"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 140,
+      "date": "2017-10-29 13:13:28",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c96b78fcbd309c7f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 141,
+      "date": "2017-10-23 04:39:14",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "a766efda6d973095",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 142,
+      "date": "2017-10-15 21:15:47",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d8c9ce982024608c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 143,
+      "date": "2017-10-13 21:13:27",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "9fe41493f83e1552",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 144,
+      "date": "2017-10-13 17:13:33",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "784cd0f56675afa6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 145,
+      "date": "2017-10-05 00:37:26",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "9d1b6ebd02e10ff6",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 146,
+      "date": "2017-10-03 01:46:40",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "05cd9d01501def35",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 147,
+      "date": "2017-09-29 23:40:57",
+      "stars": 3.0,
+      "useful": 2,
+      "text_hash": "e896f6dd31a4e9f4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 148,
+      "date": "2017-09-29 20:50:05",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "032147cc02036064",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 149,
+      "date": "2017-09-19 18:09:52",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "9aadf5b8a107dade",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 150,
+      "date": "2017-09-18 15:17:01",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d60642c3b29f7262",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 151,
+      "date": "2017-09-09 23:14:19",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "c1be9ed9ba8335fe",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 152,
+      "date": "2017-09-07 23:23:22",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "96dc84683019cab7",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 153,
+      "date": "2017-08-23 15:26:34",
+      "stars": 3.0,
+      "useful": 0,
+      "text_hash": "886896c743251a2f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 154,
+      "date": "2017-08-22 12:27:48",
+      "stars": 5.0,
+      "useful": 3,
+      "text_hash": "9b24520d3eaed041",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 155,
+      "date": "2017-08-19 14:08:10",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b3c7d64fcbe9ffbf",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 156,
+      "date": "2017-08-13 01:45:40",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "3d2b94efcf4ab719",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 157,
+      "date": "2017-08-11 22:24:39",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "fbbefac61199eb4c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 158,
+      "date": "2017-08-11 00:51:26",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b794554cfb169957",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 159,
+      "date": "2017-08-08 23:12:37",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "422da31c2c9f8e25",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 160,
+      "date": "2017-08-08 20:08:48",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "0647b96bff31d8d5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 161,
+      "date": "2017-08-04 19:27:33",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "1f0ac48cf1923491",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 162,
+      "date": "2017-08-03 21:59:06",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "9b8a35a82381fbd5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 163,
+      "date": "2017-07-31 00:01:24",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "970c6de55554d41f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 164,
+      "date": "2017-07-29 19:54:08",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "8768441ec812d7d4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 165,
+      "date": "2017-07-29 00:34:12",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "642e40ee46576233",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 166,
+      "date": "2017-07-27 13:35:38",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "b9bd8dacedbdfb10",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 167,
+      "date": "2017-07-26 22:29:39",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "803871a359a6c0da",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 168,
+      "date": "2017-07-25 20:31:53",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "3f22c65c4c2cf182",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 169,
+      "date": "2017-07-25 14:26:41",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "1ac5bf3dcd83eb94",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 170,
+      "date": "2017-07-23 21:06:43",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "94af29dbf7f7af4f",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 171,
+      "date": "2017-07-21 01:01:45",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "9ce3001d27cdcb49",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 172,
+      "date": "2017-07-19 20:19:13",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "709fe26fee0628dd",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 173,
+      "date": "2017-07-18 19:05:41",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "98c02bc0e5083b90",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 174,
+      "date": "2017-07-18 03:27:21",
+      "stars": 4.0,
+      "useful": 5,
+      "text_hash": "291c6ced4f63dc44",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 175,
+      "date": "2017-07-18 01:37:03",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "74c65e6fe012edd9",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 176,
+      "date": "2017-07-15 16:43:11",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "4e01ce532154163e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 177,
+      "date": "2017-07-13 03:32:42",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "9a29250a7377386c",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 178,
+      "date": "2017-07-08 23:07:49",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "978a752744cf1d12",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 179,
+      "date": "2017-07-07 00:03:51",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "71a2ce2245bb62f5",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 180,
+      "date": "2017-07-05 23:47:46",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "6dc378ba45501874",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 181,
+      "date": "2017-07-03 20:50:52",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "6aaea07ae2684110",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 182,
+      "date": "2017-07-01 02:06:47",
+      "stars": 4.0,
+      "useful": 2,
+      "text_hash": "681549d5eae46267",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "pecan"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 183,
+      "date": "2017-06-29 21:53:33",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f27a27a467e70c29",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 184,
+      "date": "2017-06-28 23:02:48",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "852e57757d379246",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 185,
+      "date": "2017-06-27 16:30:20",
+      "stars": 2.0,
+      "useful": 4,
+      "text_hash": "2b36dad03ed3497a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 186,
+      "date": "2017-06-24 19:55:37",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "33216d9fe36cdf08",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 187,
+      "date": "2017-06-24 15:52:05",
+      "stars": 4.0,
+      "useful": 0,
+      "text_hash": "74dc1d1dc6278cb2",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 188,
+      "date": "2017-06-22 23:56:53",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "6d52a54aebe61713",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 189,
+      "date": "2017-06-22 17:12:18",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "2f8782991ecc5719",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 190,
+      "date": "2017-06-20 01:28:21",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "0f503d9e4e496919",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 191,
+      "date": "2017-06-18 02:47:03",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "d83f4722efaa2d41",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 192,
+      "date": "2017-06-18 00:08:21",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f57563256872d09b",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 193,
+      "date": "2017-06-16 19:10:34",
+      "stars": 5.0,
+      "useful": 1,
+      "text_hash": "8b65fb6b383d815e",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 194,
+      "date": "2017-06-16 15:58:35",
+      "stars": 2.0,
+      "useful": 2,
+      "text_hash": "baf6c282ca30ffd4",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 195,
+      "date": "2017-06-16 02:47:19",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "3de61d2537484828",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 196,
+      "date": "2017-06-09 23:03:06",
+      "stars": 4.0,
+      "useful": 3,
+      "text_hash": "b93a3b4207b1ea01",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 197,
+      "date": "2017-06-09 00:46:29",
+      "stars": 5.0,
+      "useful": 2,
+      "text_hash": "17154810c94dbaec",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    },
+    {
+      "idx": 198,
+      "date": "2017-06-08 17:34:06",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "f1fe09d205cfc24a",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": true,
+          "keywords_found": [
+            "nut"
+          ]
+        }
+      }
+    },
+    {
+      "idx": 199,
+      "date": "2017-06-06 02:40:09",
+      "stars": 5.0,
+      "useful": 0,
+      "text_hash": "62b5df1d60531a33",
+      "task_relevance": {
+        "G1": {
+          "keyword_match": false,
+          "keywords_found": []
+        }
+      }
+    }
+  ]
+}
