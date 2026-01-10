@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.llm import call_llm, call_llm_async, configure
 from g1_allergy import TASK_REGISTRY, get_task, list_tasks
 from g1_gt_compute import compute_gt_for_k
-from score_auprc import calculate_ordinal_auprc, print_report, CLASS_ORDER
+from score_auprc import calculate_ordinal_auprc, print_report, CLASS_ORDER, compute_avg_primitive_accuracy
 
 DATA_DIR = Path(__file__).parent / "data"
 RESULTS_DIR = Path(__file__).parent / "results"
@@ -266,6 +266,25 @@ def run_eval(task_id: str, k: int, limit: Optional[int] = None, verbose: bool = 
         y_true_ordinal = np.array(y_true_ordinal)
         y_scores = np.array(y_scores)
         metrics = calculate_ordinal_auprc(y_true_ordinal, y_scores)
+
+        # Calculate Adjusted AUPRC with primitive accuracy
+        # Prepare runs format for compute_avg_primitive_accuracy
+        runs_for_prim = [
+            {
+                'ground_truth': r.get('ground_truth', {}),
+                'parsed': r.get('parsed', {})
+            }
+            for r in outputs
+        ]
+        avg_prim_acc, per_restaurant_acc = compute_avg_primitive_accuracy(runs_for_prim)
+
+        # Add adjusted metrics
+        metrics['avg_primitive_accuracy'] = avg_prim_acc
+        metrics['adjusted_auprc'] = metrics['ordinal_auprc'] * avg_prim_acc
+        metrics['adjusted_nap'] = metrics['ordinal_nap'] * avg_prim_acc
+        metrics['primitive_accuracy_std'] = float(np.std(per_restaurant_acc)) if per_restaurant_acc else 0.0
+        metrics['primitive_accuracy_min'] = float(min(per_restaurant_acc)) if per_restaurant_acc else 0.0
+        metrics['primitive_accuracy_max'] = float(max(per_restaurant_acc)) if per_restaurant_acc else 0.0
     else:
         metrics = {'error': 'No valid predictions'}
 
@@ -340,12 +359,13 @@ def run_comparison(task_id: str, limit: int = 10):
     print("\n" + "="*70)
     print("COMPARISON SUMMARY")
     print("="*70)
-    print(f"{'K':<8} {'N':<6} {'AUPRC≥High':<12} {'AUPRC≥Crit':<12} {'Ordinal AUPRC':<14} {'Ordinal nAP':<12}")
+    print(f"{'K':<8} {'N':<6} {'Ordinal':<10} {'Prim Acc':<10} {'Adjusted':<10}")
+    print(f"{'':8} {'':6} {'AUPRC':<10} {'':10} {'AUPRC':<10}")
     print("-"*70)
 
     for r in all_results:
         m = r['metrics']
-        print(f"{r['k']:<8} {r['n']:<6} {m.get('auprc_ge_1', 0):<12.3f} {m.get('auprc_ge_2', 0):<12.3f} {m.get('ordinal_auprc', 0):<14.3f} {m.get('ordinal_nap', 0):<12.3f}")
+        print(f"{r['k']:<8} {r['n']:<6} {m.get('ordinal_auprc', 0):<10.3f} {m.get('avg_primitive_accuracy', 0):<10.3f} {m.get('adjusted_auprc', 0):<10.3f}")
 
 
 if __name__ == "__main__":

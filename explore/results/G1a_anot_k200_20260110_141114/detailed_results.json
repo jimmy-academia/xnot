@@ -1,0 +1,269 @@
+{
+  "timestamp": "2026-01-10T14:11:14.265678",
+  "method": "g1a_anot",
+  "task": "G1a",
+  "k": 200,
+  "n_restaurants": 5,
+  "metrics": {
+    "n_samples": 5,
+    "distribution": {
+      "Low Risk": 5,
+      "High Risk": 0,
+      "Critical Risk": 0
+    },
+    "auprc_ge_1": 0.0,
+    "nap_ge_1": 0.0,
+    "prevalence_ge_1": 0.0,
+    "threshold_1_name": ">=High Risk",
+    "auprc_ge_2": 0.0,
+    "nap_ge_2": 0.0,
+    "prevalence_ge_2": 0.0,
+    "threshold_2_name": ">=Critical Risk",
+    "ordinal_auprc": 0.0,
+    "ordinal_nap": 0.0,
+    "severity_ordering_ap": NaN,
+    "avg_primitive_accuracy": 1.0,
+    "adjusted_auprc": 0.0,
+    "adjusted_nap": 0.0,
+    "primitive_accuracy_std": 0.0,
+    "primitive_accuracy_min": 1.0,
+    "primitive_accuracy_max": 1.0
+  },
+  "runs": [
+    {
+      "restaurant": "Aladdin Pizzeria & Eatery",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Pizzeria Pesto",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.5
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 27,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.5,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Ricci's Hoagies",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.15
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 5,
+        "review_density": 0.5,
+        "confidence_penalty": 0.85,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.15,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Hosteria Da Elio",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.44
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.44,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Table 31",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "High Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 4.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 24,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 4.0,
+        "VERDICT": "High Risk"
+      }
+    }
+  ]
+}

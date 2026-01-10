@@ -1,0 +1,188 @@
+{
+  "extraction_fields": [
+    {
+      "name": "incident_severity",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "mild",
+        "moderate",
+        "severe"
+      ],
+      "description": "Severity of allergic reaction described in the review",
+      "extraction_hint": "none = no reaction described; mild = stomach upset or mild discomfort; moderate = visible symptoms (hives, swelling) or need meds; severe = life-threatening (anaphylaxis, ER, hospitalization)"
+    },
+    {
+      "name": "account_type",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "firsthand",
+        "secondhand",
+        "hypothetical"
+      ],
+      "description": "Who the incident is attributed to",
+      "extraction_hint": "firsthand = personal experience (I had, my child, we experienced); secondhand = reported by someone else; hypothetical = concern without incident"
+    },
+    {
+      "name": "safety_interaction",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "positive",
+        "negative",
+        "betrayal"
+      ],
+      "description": "Staff interaction about allergies and accommodation",
+      "extraction_hint": "positive = staff asked about allergies and accommodated; negative = staff dismissed or refused; betrayal = staff claimed safe but customer still had a reaction; none = no interaction"
+    },
+    {
+      "name": "restaurant_category",
+      "field_type": "enum",
+      "values": [
+        "Thai",
+        "Vietnamese",
+        "Chinese",
+        "Asian",
+        "Indian",
+        "Japanese",
+        "Korean",
+        "Mexican",
+        "Italian",
+        "American",
+        "Pizza",
+        "other"
+      ],
+      "description": "Cuisine category of the restaurant reviewed",
+      "extraction_hint": "category indicated in review metadata; use 'other' if not listed"
+    },
+    {
+      "name": "mentions_allergy",
+      "field_type": "boolean",
+      "values": [
+        "true",
+        "false"
+      ],
+      "description": "Whether the review explicitly mentions peanut/nut allergy terms",
+      "extraction_hint": "contains terms like peanut, peanut allergy, nut, allergy, anaphylaxis, epipen, etc."
+    },
+    {
+      "name": "date",
+      "field_type": "string",
+      "values": [],
+      "description": "Date of the review",
+      "extraction_hint": "recognizable date format (e.g., YYYY-MM-DD) or month/year"
+    },
+    {
+      "name": "stars",
+      "field_type": "number",
+      "values": [],
+      "description": "Star rating given in the review",
+      "extraction_hint": "numerical value typically 0-5"
+    },
+    {
+      "name": "useful",
+      "field_type": "number",
+      "values": [],
+      "description": "Number of useful votes for the review",
+      "extraction_hint": "count of helpful votes from metadata"
+    }
+  ],
+  "filter_condition": {
+    "keywords": [
+      "peanut",
+      "peanuts",
+      "nut",
+      "nuts",
+      "allergy",
+      "allerg",
+      "anaphylaxis",
+      "epipen",
+      "hives",
+      "swelling",
+      "rash",
+      "an emergency",
+      "cross-contamination"
+    ],
+    "patterns": [
+      "\\bpeanut\\b|\\bnut\\b",
+      "\\ballergy\\b",
+      "\\banaphylaxis\\b",
+      "\\bepipen\\b"
+    ],
+    "description": "Identify reviews mentioning peanut/nut allergies or safety concerns"
+  },
+  "aggregation_conditions": [
+    {
+      "name": "n_mild",
+      "agg_type": "count",
+      "conditions": {
+        "incident_severity": "mild",
+        "account_type": "firsthand"
+      },
+      "description": "Count of firsthand mild incidents"
+    },
+    {
+      "name": "n_moderate",
+      "agg_type": "count",
+      "conditions": {
+        "incident_severity": "moderate",
+        "account_type": "firsthand"
+      },
+      "description": "Count of firsthand moderate incidents"
+    },
+    {
+      "name": "n_severe",
+      "agg_type": "count",
+      "conditions": {
+        "incident_severity": "severe",
+        "account_type": "firsthand"
+      },
+      "description": "Count of firsthand severe incidents"
+    },
+    {
+      "name": "n_positive",
+      "agg_type": "count",
+      "conditions": {
+        "safety_interaction": "positive"
+      },
+      "description": "Count of positive safety interactions"
+    },
+    {
+      "name": "n_negative",
+      "agg_type": "count",
+      "conditions": {
+        "safety_interaction": "negative"
+      },
+      "description": "Count of negative safety interactions"
+    },
+    {
+      "name": "n_betrayal",
+      "agg_type": "count",
+      "conditions": {
+        "safety_interaction": "betrayal"
+      },
+      "description": "Count of betrayal safety interactions"
+    },
+    {
+      "name": "n_allergy_reviews",
+      "agg_type": "count",
+      "conditions": {
+        "mentions_allergy": "true"
+      },
+      "description": "Total reviews mentioning allergy-related terms"
+    },
+    {
+      "name": "n_total_incidents",
+      "agg_type": "sum",
+      "conditions": {},
+      "description": "Total firsthand incidents (mild + moderate + severe)"
+    }
+  ],
+  "required_metadata": [
+    "stars",
+    "date",
+    "useful",
+    "restaurant_category"
+  ]
+}

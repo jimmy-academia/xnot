@@ -1,0 +1,317 @@
+{
+  "lookups": [
+    {
+      "name": "cuisine_modifier_lookup",
+      "source_field": "restaurant_category",
+      "mapping": {
+        "Thai": 2.0,
+        "Vietnamese": 1.8,
+        "Chinese": 1.5,
+        "Asian": 1.5,
+        "Indian": 1.3,
+        "Japanese": 1.2,
+        "Korean": 1.2,
+        "Mexican": 1.0,
+        "Italian": 0.5,
+        "American": 0.5,
+        "Pizza": 0.5
+      },
+      "default": 1.0,
+      "description": "Risk modifier based on cuisine type"
+    }
+  ],
+  "computations": [
+    {
+      "name": "n_mild",
+      "formula": "sum(1 for sev, acc in zip(incident_severities, account_types) if sev == 'mild' and acc == 'firsthand')",
+      "depends_on": [
+        "incident_severities",
+        "account_types"
+      ],
+      "description": "Count of mild firsthand incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_moderate",
+      "formula": "sum(1 for sev, acc in zip(incident_severities, account_types) if sev == 'moderate' and acc == 'firsthand')",
+      "depends_on": [
+        "incident_severities",
+        "account_types"
+      ],
+      "description": "Count of moderate firsthand incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_severe",
+      "formula": "sum(1 for sev, acc in zip(incident_severities, account_types) if sev == 'severe' and acc == 'firsthand')",
+      "depends_on": [
+        "incident_severities",
+        "account_types"
+      ],
+      "description": "Count of severe firsthand incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_total_incidents",
+      "formula": "n_mild + n_moderate + n_severe",
+      "depends_on": [
+        "n_mild",
+        "n_moderate",
+        "n_severe"
+      ],
+      "description": "Total firsthand incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_positive",
+      "formula": "sum(1 for s in safety_interactions if s == 'positive')",
+      "depends_on": [
+        "safety_interactions"
+      ],
+      "description": "Positive safety interactions count",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_negative",
+      "formula": "sum(1 for s in safety_interactions if s == 'negative')",
+      "depends_on": [
+        "safety_interactions"
+      ],
+      "description": "Negative safety interactions count",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_betrayal",
+      "formula": "sum(1 for s in safety_interactions if s == 'betrayal')",
+      "depends_on": [
+        "safety_interactions"
+      ],
+      "description": "Betrayal safety interactions count",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_allergy_reviews",
+      "formula": "sum(1 for m in mentions_allergy_terms if m)",
+      "depends_on": [
+        "mentions_allergy_terms"
+      ],
+      "description": "Reviews mentioning allergy terms",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "review_density",
+      "formula": "min(1.0, n_allergy_reviews / 10.0)",
+      "depends_on": [
+        "n_allergy_reviews"
+      ],
+      "description": "Allergy term mentions density capped at 1.0",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "most_recent_incident_year",
+      "formula": "max(incident_years) if incident_years else 2020",
+      "depends_on": [
+        "incident_years"
+      ],
+      "description": "Most recent incident year (default 2020)",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "incident_age",
+      "formula": "2025 - most_recent_incident_year",
+      "depends_on": [
+        "most_recent_incident_year"
+      ],
+      "description": "Years since most recent incident",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "recency_decay",
+      "formula": "max(0.3, 1.0 - (incident_age * 0.15))",
+      "depends_on": [
+        "incident_age"
+      ],
+      "description": "Decay factor based on recency",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "TOTAL_INCIDENT_WEIGHT",
+      "formula": "sum((5 - s) + log(u + 1) for s, u in zip(incident_stars, incident_useful))",
+      "depends_on": [
+        "incident_stars",
+        "incident_useful"
+      ],
+      "description": "Total weighted incident score from per-incident reviews",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "credibility_factor",
+      "formula": "TOTAL_INCIDENT_WEIGHT / max(n_total_incidents, 1)",
+      "depends_on": [
+        "TOTAL_INCIDENT_WEIGHT",
+        "n_total_incidents"
+      ],
+      "description": "Credibility factor of safety incidents",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "incident_score",
+      "formula": "n_mild * 2 + n_moderate * 5 + n_severe * 15",
+      "depends_on": [
+        "n_mild",
+        "n_moderate",
+        "n_severe"
+      ],
+      "description": "Weighted incident score",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "cuisine_modifier",
+      "formula": "cuisine_modifier_lookup.get(restaurant_category, 1.0)",
+      "depends_on": [
+        "restaurant_category",
+        "cuisine_modifier_lookup"
+      ],
+      "description": "Cuisine-based risk modifier",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "CUISINE_IMPACT",
+      "formula": "CUISINE_MODIFIER * 0.5",
+      "depends_on": [
+        "cuisine_modifier"
+      ],
+      "description": "Impact from cuisine modifier",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "CONFIDENCE_PENALTY",
+      "formula": "1.0 - (0.3 * (1 - REVIEW_DENSITY))",
+      "depends_on": [
+        "REVIEW_DENSITY"
+      ],
+      "description": "Penalty factor based on density of allergy mentions",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "SAFETY_CREDIT",
+      "formula": "n_positive * 1.0 - n_negative * 0.5 - n_betrayal * 5.0",
+      "depends_on": [
+        "n_positive",
+        "n_negative",
+        "n_betrayal"
+      ],
+      "description": "Net safety credit from interactions",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "SAFETY_IMPACT",
+      "formula": "SAFETY_CREDIT * CONFIDENCE_PENALTY",
+      "depends_on": [
+        "SAFETY_CREDIT",
+        "CONFIDENCE_PENALTY"
+      ],
+      "description": "Impact of safety credit after confidence penalty",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "BASE_RISK",
+      "formula": "2.5",
+      "depends_on": [],
+      "description": "Base risk constant",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "INCIDENT_IMPACT",
+      "formula": "INCIDENT_SCORE * RECENCY_DECAY * CREDIBILITY_FACTOR",
+      "depends_on": [
+        "incident_score",
+        "recency_decay",
+        "credibility_factor"
+      ],
+      "description": "Impact from incidents after recency and credibility adjustments",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "RAW_RISK",
+      "formula": "BASE_RISK + INCIDENT_IMPACT - SAFETY_IMPACT + CUISINE_IMPACT - (n_betrayal * 3.0)",
+      "depends_on": [
+        "BASE_RISK",
+        "INCIDENT_IMPACT",
+        "SAFETY_IMPACT",
+        "CUISINE_IMPACT",
+        "n_betrayal"
+      ],
+      "description": "Unclamped risk before final bounds",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "FINAL_RISK_SCORE",
+      "formula": "max(0.0, min(20.0, RAW_RISK))",
+      "depends_on": [
+        "RAW_RISK"
+      ],
+      "description": "Final risk score bounded to [0, 20]",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "verdict",
+      "formula": "\"Low Risk\" if FINAL_RISK_SCORE < 4.0 else (\"High Risk\" if FINAL_RISK_SCORE < 8.0 else \"Critical Risk\")",
+      "depends_on": [
+        "FINAL_RISK_SCORE"
+      ],
+      "description": "Final verdict derived from risk score",
+      "is_aggregate": false,
+      "is_output": true
+    }
+  ],
+  "output_fields": [
+    "n_total_incidents",
+    "incident_score",
+    "recency_decay",
+    "credibility_factor",
+    "final_risk_score",
+    "verdict"
+  ],
+  "verdict_rule": {
+    "source_field": "FINAL_RISK_SCORE",
+    "rules": [
+      {
+        "condition": "< 4.0",
+        "verdict": "Low Risk"
+      },
+      {
+        "condition": "< 8.0",
+        "verdict": "High Risk"
+      },
+      {
+        "condition": ">= 8.0",
+        "verdict": "Critical Risk"
+      }
+    ]
+  }
+}
