@@ -265,10 +265,46 @@ data/semantic_gt/
 
 ---
 
+## 8. Review Count Cap (K=200)
+
+### Decision: Use up to 200 most recent reviews per restaurant
+
+**Justifications:**
+
+1. **Context window limits (practical)**
+   - 200 reviews ≈ 100-150K tokens of text
+   - Already pushing limits of most LLMs
+   - Larger contexts increase cost and latency
+
+2. **Recency relevance (domain-specific)**
+   - Restaurant safety changes over time (staff turnover, policy changes)
+   - Old reviews (5+ years) may not reflect current practices
+   - Formula already includes `recency_decay` to downweight old incidents
+
+3. **Diminishing returns**
+   - After ~100 reviews, marginal information decreases
+   - Most allergy-relevant signals appear in subset of reviews
+
+4. **Standardization**
+   - Fixed input size enables fair method comparison
+   - Reproducible across different context window sizes
+
+**Dataset statistics (K=200):**
+```
+Max reviews: 200 (many restaurants hit cap)
+Min reviews: 51
+Total restaurants: 100
+```
+
+**Default setting:** K=200 (all available reviews up to cap)
+
+---
+
 ## Changelog
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2025-01-10 | K=200 default | Use all available reviews, practical context limit |
 | 2025-01-10 | Dynamic GT per K | Fair evaluation across context sizes |
 | 2025-01-10 | G1a naming format | Avoid version number confusion |
 | 2025-01-10 | Formula-based GT | Deterministic, reproducible |

@@ -1,0 +1,4727 @@
+{
+  "timestamp": "2026-01-10T06:04:33.939419",
+  "task": "G1a",
+  "k": 200,
+  "n_restaurants": 100,
+  "metrics": {
+    "n_samples": 100,
+    "distribution": {
+      "Low Risk": 93,
+      "High Risk": 5,
+      "Critical Risk": 2
+    },
+    "auprc_ge_1": 0.49232572569216065,
+    "nap_ge_1": 0.45411368353995774,
+    "prevalence_ge_1": 0.07,
+    "threshold_1_name": ">=High Risk",
+    "auprc_ge_2": 0.51010101010101,
+    "nap_ge_2": 0.5001030715316429,
+    "prevalence_ge_2": 0.02,
+    "threshold_2_name": ">=Critical Risk",
+    "ordinal_auprc": 0.5012133678965853,
+    "ordinal_nap": 0.4771083775358003,
+    "severity_ordering_ap": 0.6428571428571428
+  },
+  "runs": [
+    {
+      "restaurant": "Aladdin Pizzeria & Eatery",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Pizzeria Pesto",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 27,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Ricci's Hoagies",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 5,
+        "review_density": 0.5,
+        "confidence_penalty": 0.85,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Hosteria Da Elio",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Table 31",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 24,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Two Eagles Cafe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 7,
+        "review_density": 0.7,
+        "confidence_penalty": 0.91,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Castellino's",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 12,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Ristorante Aroma",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 2,
+        "n_negative": 0,
+        "n_betrayal": 1,
+        "incident_score": 0.0,
+        "safety_credit": -3.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 23,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": -3.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "The Angelo Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 7,
+        "review_density": 0.7,
+        "confidence_penalty": 0.91,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Talluto's Authentic Italian Food",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 7,
+        "review_density": 0.7,
+        "confidence_penalty": 0.91,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Saloon Restaurant",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 29,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "L'Angolo Ristorante",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 20,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Vetri Cucina",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 1.44,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 1,
+        "n_total_incidents": 1,
+        "n_positive": 7,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 15.0,
+        "safety_credit": 6.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 74,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 1.099,
+        "credibility_factor": 1.099,
+        "incident_impact": 4.944,
+        "safety_impact": 6.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 1.444,
+        "final_risk_score": 1.44,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Alice Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 35,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Di Bruno Bros.",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.5,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": -0.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 31,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": -0.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.5,
+        "final_risk_score": 3.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "LaScala's",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 32,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Allegro Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Critical Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 9.5,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 1,
+        "n_severe": 0,
+        "n_total_incidents": 1,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 5.0,
+        "safety_credit": -0.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 25,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2018,
+        "incident_age": 7,
+        "recency_decay": 0.3,
+        "total_incident_weight": 4.0,
+        "credibility_factor": 4.0,
+        "incident_impact": 6.0,
+        "safety_impact": -0.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 9.5,
+        "final_risk_score": 9.5,
+        "verdict": "Critical Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Scannicchio's",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 45,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Nomad Roman Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 39,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Little Nonna's",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 43,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Mondo Dei Dolci",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 5,
+        "review_density": 0.5,
+        "confidence_penalty": 0.85,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Starbucks",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "NY Bagel Cafe & Deli",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 6,
+        "review_density": 0.6,
+        "confidence_penalty": 0.88,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "McDonald's",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 13,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Cosi",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 12,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Volo Coffeehouse",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 30,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Menagerie Coffee",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.5,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": -0.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 20,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": -0.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.5,
+        "final_risk_score": 3.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Beiler's Donuts",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 184,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 3,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.699537,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Rione",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 1,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 1,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 2.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 15,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2018,
+        "incident_age": 7,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 0.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Red Hook Coffee & Tea",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 38,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 2.0,
+        "final_risk_score": 2.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Kayuh Bicycles & Cafe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 11,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Caf\u00e9 L'Aube",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 25,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 2.0,
+        "final_risk_score": 2.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Alma Del Mar",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Palm Tree Market",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Buzz Cafe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 3,
+        "review_density": 0.3,
+        "confidence_penalty": 0.79,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Luna Caf\u00e9",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.5,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 39,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 2.5,
+        "final_risk_score": 2.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Manakeesh Cafe Bakery & Grill",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 40,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Manhattan Bagel",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 15,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Good Karma Cafe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 34,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Mugshots Coffeehouse & Cafe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 47,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Alex's Pizzeria",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 4,
+        "review_density": 0.4,
+        "confidence_penalty": 0.82,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Via Napoli",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 6,
+        "review_density": 0.6,
+        "confidence_penalty": 0.88,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Fino's Pizzeria & Restaurant",
+      "results": {
+        "verdict": {
+          "expected": "Critical Risk",
+          "predicted": "Critical Risk"
+        },
+        "final_risk_score": {
+          "expected": 20.0,
+          "predicted": 20.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 1,
+        "n_total_incidents": 1,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 1,
+        "incident_score": 15.0,
+        "safety_credit": -5.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 13,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2013,
+        "incident_age": 12,
+        "recency_decay": 0.3,
+        "total_incident_weight": 6.398,
+        "credibility_factor": 6.398,
+        "incident_impact": 28.791,
+        "safety_impact": -5.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 34.291,
+        "final_risk_score": 20.0,
+        "verdict": "Critical Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 2,
+        "INCIDENT_SCORE": 30.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 6.552972737,
+        "FINAL_RISK_SCORE": 20.0,
+        "VERDICT": "Critical Risk"
+      }
+    },
+    {
+      "restaurant": "Pine Street Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 5,
+        "review_density": 0.5,
+        "confidence_penalty": 0.85,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Stacy's Pizza & Wings",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 10,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Aldo Lamberti Trattoria",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 5,
+        "review_density": 0.5,
+        "confidence_penalty": 0.85,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Manayunk Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 3,
+        "review_density": 0.3,
+        "confidence_penalty": 0.79,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Liberty Choice",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 12,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "A Tutti, Ristorante Italiano",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.115
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 9,
+        "review_density": 0.9,
+        "confidence_penalty": 0.97,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 5.386294,
+        "FINAL_RISK_SCORE": 3.115,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Thin & Crispy",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 0,
+        "review_density": 0.0,
+        "confidence_penalty": 0.7,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Zavino",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 0.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 3,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 3.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 34,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 3.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 0.0,
+        "final_risk_score": 0.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Valanni",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 22,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Zuzu's Kitchen",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 14,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Angelino's Restaurant, Fairmount- Philadelphia",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 23,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Basilico Wood Fired Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 35,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Tower Style Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 24,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "LaScala's Pronto",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 1.0,
+          "predicted": 2.02
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 2,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 2.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 24,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 2.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 1.0,
+        "final_risk_score": 1.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.02,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Pizzeria Cappelli",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 21,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Santucci's Original Square Pizza",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 19,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Picanha Brazilian Steakhouse",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 26,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Chima Steakhouse",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.25,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 41,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 2.25,
+        "final_risk_score": 2.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Steve's Prince of Steaks",
+      "results": {
+        "verdict": {
+          "expected": "High Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 4.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 2,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": -1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 13,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": -1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 4.0,
+        "final_risk_score": 4.0,
+        "verdict": "High Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "LongHorn Steakhouse",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 36,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Marmont Steakhouse & Bar",
+      "results": {
+        "verdict": {
+          "expected": "High Risk",
+          "predicted": "High Risk"
+        },
+        "final_risk_score": {
+          "expected": 7.0,
+          "predicted": 5.165
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 1,
+        "n_severe": 0,
+        "n_total_incidents": 1,
+        "n_positive": 1,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 5.0,
+        "safety_credit": 0.5,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 26,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2019,
+        "incident_age": 6,
+        "recency_decay": 0.3,
+        "total_incident_weight": 3.0,
+        "credibility_factor": 3.0,
+        "incident_impact": 4.5,
+        "safety_impact": 0.5,
+        "cuisine_impact": 0.5,
+        "raw_risk": 7.0,
+        "final_risk_score": 7.0,
+        "verdict": "High Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 1,
+        "INCIDENT_SCORE": 2.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 3.0,
+        "FINAL_RISK_SCORE": 5.165,
+        "VERDICT": "High Risk"
+      }
+    },
+    {
+      "restaurant": "Fiore's Steaks and Shakes",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Ruth's Chris Steak House",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 19,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 2.0,
+        "final_risk_score": 2.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Applebee's Grill + Bar",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Winthorpe & Valentine Bar & Grill",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Tony's Famous Tomato Pie",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Lisa's Kitchen",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 3,
+        "review_density": 0.3,
+        "confidence_penalty": 0.79,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Hoof + Fin",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 15,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Yamato Japanese Sushi and Hibachi",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Barry's Steaks",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Union Trust",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 18,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 2.0,
+        "final_risk_score": 2.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Del Frisco's Double Eagle Steakhouse",
+      "results": {
+        "verdict": {
+          "expected": "High Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 4.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 2,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": -1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 30,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": -1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 4.0,
+        "final_risk_score": 4.0,
+        "verdict": "High Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Ocean Prime",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 36,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Chubbys Steaks",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 19,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Barclay Prime",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 37,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 2.0,
+        "final_risk_score": 2.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Tai Lake Restaurant",
+      "results": {
+        "verdict": {
+          "expected": "High Risk",
+          "predicted": "Critical Risk"
+        },
+        "final_risk_score": {
+          "expected": 6.29,
+          "predicted": 10.336262
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 1,
+        "n_severe": 0,
+        "n_total_incidents": 1,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 5.0,
+        "safety_credit": -0.5,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 29,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2015,
+        "incident_age": 10,
+        "recency_decay": 0.3,
+        "total_incident_weight": 1.693,
+        "credibility_factor": 1.693,
+        "incident_impact": 2.54,
+        "safety_impact": -0.5,
+        "cuisine_impact": 0.75,
+        "raw_risk": 6.29,
+        "final_risk_score": 6.29,
+        "verdict": "High Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 1,
+        "INCIDENT_SCORE": 15.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.693147,
+        "FINAL_RISK_SCORE": 10.336262,
+        "VERDICT": "Critical Risk"
+      }
+    },
+    {
+      "restaurant": "Square on Square",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 51,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 2.25,
+        "final_risk_score": 2.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Sang Kee Noodle House",
+      "results": {
+        "verdict": {
+          "expected": "High Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 5.55,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 1,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 1,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 2.0,
+        "safety_credit": -0.5,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 27,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2017,
+        "incident_age": 8,
+        "recency_decay": 0.3,
+        "total_incident_weight": 3.0,
+        "credibility_factor": 3.0,
+        "incident_impact": 1.8,
+        "safety_impact": -0.5,
+        "cuisine_impact": 0.75,
+        "raw_risk": 5.55,
+        "final_risk_score": 5.55,
+        "verdict": "High Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Ocean Harbor",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 36,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Wokano",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 18,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "China Gourmet",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 28,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Unit Su Vege",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 17,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "New Harmony Vegetarian Restaurant",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 47,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "LaTao HotPot",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 17,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Chili Szechuan",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 29,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "South Garden",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Chu Shang Spicy \u53a8\u5c1a\u9ebb\u8fa3",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.75,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 1,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": -0.5,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 19,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": -0.5,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.75,
+        "final_risk_score": 3.75,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Inchin\u2019s Bamboo Garden",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.25,
+          "predicted": 3.15
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 12,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 2.25,
+        "final_risk_score": 2.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.15,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Jin Jin Chinese Restaurant",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 11,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "China House",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.25,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 1,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 1.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 17,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 1.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 2.25,
+        "final_risk_score": 2.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Hidden Gem Cafe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 18,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Lau Kee Restaurant",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 2.76
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 6,
+        "review_density": 0.6,
+        "confidence_penalty": 0.88,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.76,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "TT Skewer",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 20,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Andorra Ping Pong",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.25,
+          "predicted": 3.25
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.5,
+        "n_allergy_reviews": 16,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.75,
+        "raw_risk": 3.25,
+        "final_risk_score": 3.25,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 3.25,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Pho Le Lai",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 1.4,
+          "predicted": 3.4
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 2,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 2.0,
+        "cuisine_modifier": 1.8,
+        "n_allergy_reviews": 13,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 2.0,
+        "cuisine_impact": 0.9,
+        "raw_risk": 1.4,
+        "final_risk_score": 1.4,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.4,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "La Citadelle",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 3.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 10,
+        "review_density": 1.0,
+        "confidence_penalty": 1.0,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 3.0,
+        "VERDICT": "Low Risk"
+      }
+    },
+    {
+      "restaurant": "Fezziwig's Sweet Shoppe",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "incident_score": 0.0,
+        "safety_credit": 0.0,
+        "cuisine_modifier": 1.0,
+        "n_allergy_reviews": 8,
+        "review_density": 0.8,
+        "confidence_penalty": 0.94,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "safety_impact": 0.0,
+        "cuisine_impact": 0.5,
+        "raw_risk": 3.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      }
+    }
+  ]
+}

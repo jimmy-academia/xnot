@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-L2 Evaluation Framework - Tests LLM ability to compute derived metrics.
+G1a Evaluation Framework with Cumulative Ordinal AUPRC Scoring.
+
+Uses dynamic GT per K - ground truth computed from same reviews model sees.
 
 Usage:
-    python explore/eval.py --task A --restaurant Acme
-    python explore/eval.py --task all --restaurant all
+    python eval.py --task G1a --limit 10    # Quick test (K=200 default)
+    python eval.py --task G1a               # Full eval on all 100 restaurants
+    python eval.py --task G1a --k 50        # Use K=50 instead
 """
 
 import asyncio
@@ -13,19 +16,18 @@ import re
 import sys
 from pathlib import Path
 from dataclasses import asdict
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from datetime import datetime
+import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.llm import call_llm, call_llm_async, configure
 from g1_allergy import TASK_REGISTRY, get_task, list_tasks
+from g1_gt_compute import compute_gt_for_k
+from score_auprc import calculate_ordinal_auprc, print_report, CLASS_ORDER
 
 DATA_DIR = Path(__file__).parent / "data"
 RESULTS_DIR = Path(__file__).parent / "results"
-
-# Available restaurants - loaded dynamically
-RESTAURANTS = sorted([f.name for f in DATA_DIR.glob("*.jsonl") if not f.name.startswith("index")])
-
 
 
 SYSTEM_PROMPT_TEMPLATE = '''You are an expert data analyst. Your task is to analyze restaurant review data and compute specific metrics.
@@ -65,6 +67,19 @@ Replace each field with your computed value. Do not include units or extra text 
 '''
 
 
+def load_dataset(k: int) -> List[Dict]:
+    """Load dataset for given K value."""
+    dataset_file = DATA_DIR / f"dataset_K{k}.jsonl"
+    if not dataset_file.exists():
+        raise FileNotFoundError(f"Dataset not found: {dataset_file}")
+
+    restaurants = []
+    with open(dataset_file) as f:
+        for line in f:
+            restaurants.append(json.loads(line))
+    return restaurants
+
+
 def build_output_fields(ground_truth_class) -> str:
     """Build output field template from ground truth dataclass."""
     from dataclasses import fields as dc_fields
@@ -72,47 +87,33 @@ def build_output_fields(ground_truth_class) -> str:
     return '\n'.join(f"{f.name.upper()}: {type_map.get(f.type, '[value]')}" for f in dc_fields(ground_truth_class))
 
 
-def load_restaurant_data(filename: str, max_reviews: int = 100) -> tuple:
-    """Load restaurant metadata and reviews as plain dicts."""
-    with open(DATA_DIR / filename) as f:
-        restaurant = json.loads(f.readline())
-        reviews = [json.loads(line) for line in f]
-    return restaurant, reviews[-max_reviews:] if max_reviews else reviews
-
-
-def build_full_prompt(task_id: str, restaurant: dict, reviews: List[dict]) -> str:
-    """Build full prompt with system template + task prompt."""
+def build_prompt(task_id: str, restaurant: Dict, k: int) -> str:
+    """Build evaluation prompt for a restaurant."""
     task = get_task(task_id)
+    business = restaurant['business']
+    reviews = restaurant['reviews']  # Already limited to K by dataset
 
-    # Format restaurant as full JSON dump
-    restaurant_data = str(restaurant)
+    # Format restaurant metadata
+    restaurant_data = f"""Name: {business['name']}
+Categories: {business.get('categories', 'N/A')}
+Stars: {business.get('stars', 'N/A')}
+Review Count: {len(reviews)}"""
 
-    # Format reviews as indexed JSON dumps
-    reviews_data = '\n'.join(f"[R{i}] {r}" for i, r in enumerate(reviews, 1))
+    # Format reviews with index
+    reviews_data = '\n\n'.join(
+        f"[R{i+1}] Date: {r.get('date', 'N/A')} | Stars: {r.get('stars', 'N/A')} | Useful: {r.get('useful', 0)}\n{r.get('text', '')}"
+        for i, r in enumerate(reviews)
+    )
 
-    # Get output fields from ground truth class
     output_fields = build_output_fields(task['ground_truth_class'])
 
-    # Build full prompt
     return SYSTEM_PROMPT_TEMPLATE.format(
         restaurant_data=restaurant_data,
         n_reviews=len(reviews),
         reviews_data=reviews_data,
         task_prompt=task['prompt'],
-        output_fields=output_fields,
+        output_fields=output_fields
     )
-
-
-def detect_prompt_failure(response: str, parsed: Dict[str, Any], expected_fields: int) -> bool:
-    """Return True if model failed due to prompt issues (not computation errors)."""
-    numeric_count = sum(1 for v in parsed.values() if isinstance(v, (int, float)))
-    if numeric_count >= expected_fields * 0.5:  # Got at least half the fields
-        return False
-    if '===FINAL' not in response.upper():
-        return True
-    if any(p in response.lower() for p in ['confirm', 'clarification', 'would you like']):
-        return True
-    return len(parsed) == 0
 
 
 def parse_response(response: str) -> Dict[str, Any]:
@@ -120,36 +121,23 @@ def parse_response(response: str) -> Dict[str, Any]:
     parsed = {}
 
     # Extract final answers block
-    final_block = response
     start_match = re.search(r'===\s*FINAL\s*ANSWERS\s*===', response, re.IGNORECASE)
     if start_match:
         remaining = response[start_match.end():]
         end_match = re.search(r'===\s*END\s*===', remaining, re.IGNORECASE)
-        if end_match:
-            final_block = remaining[:end_match.start()]
-        else:
-            final_block = remaining
+        final_block = remaining[:end_match.start()] if end_match else remaining
+    else:
+        final_block = response
 
-    # Parse lines - handle both "KEY: value" and "KEY:\nvalue" formats
-    lines = final_block.split('\n')
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-        i += 1
-
+    # Parse lines
+    for line in final_block.split('\n'):
+        line = line.strip()
         if ':' not in line:
             continue
 
         key, value = line.split(':', 1)
         key = key.strip().upper()
         value = value.strip()
-
-        # If value is empty, check next line
-        if not value and i < len(lines):
-            next_line = lines[i].strip()
-            if next_line and ':' not in next_line:
-                value = next_line
-                i += 1
 
         if not value:
             continue
@@ -161,284 +149,216 @@ def parse_response(response: str) -> Dict[str, Any]:
             else:
                 parsed[key] = int(value)
         except ValueError:
-            # Keep as string
             parsed[key] = value.strip('"\'')
 
     return parsed
 
 
-def score_field(predicted: Any, expected: Any, tolerance: float = 0) -> float:
-    """Score a single field."""
-    if predicted is None:
-        return 0.0
+async def eval_restaurant_async(
+    task_id: str,
+    restaurant: Dict,
+    k: int
+) -> Dict:
+    """Evaluate a single restaurant asynchronously."""
+    name = restaurant['business']['name']
+    task = get_task(task_id)
 
-    # String comparison
-    if isinstance(expected, str):
-        return 1.0 if str(predicted).upper() == expected.upper() else 0.0
+    # Build prompt
+    prompt = build_prompt(task_id, restaurant, k)
 
-    # Boolean comparison
-    if isinstance(expected, bool):
-        # Parse predicted if string
-        if isinstance(predicted, str):
-            pred_bool = predicted.lower() == 'true'
-        else:
-            pred_bool = bool(predicted)
-        return 1.0 if pred_bool == expected else 0.0
-
-    # Numeric comparison
+    # Get dynamic GT for this K
     try:
-        pred_val = float(predicted)
-        exp_val = float(expected)
-        error = abs(pred_val - exp_val)
-
-        if error <= tolerance:
-            return 1.0
-        else:
-            max_error = max(abs(exp_val), 1.0)
-            return max(0.0, 1.0 - (error - tolerance) / max_error)
-    except (ValueError, TypeError):
-        return 0.0
-
-
-def evaluate_task(parsed: Dict, ground_truth: Any, tolerances: Dict[str, float] = None, scoring_fields: List[str] = None) -> Dict:
-    """Evaluate parsed response against ground truth."""
-    if tolerances is None:
-        tolerances = {}
-
-    gt_dict = asdict(ground_truth)
-    results = {}
-
-    for field, expected in gt_dict.items():
-        field_upper = field.upper()
-        predicted = parsed.get(field_upper)
-        tolerance = tolerances.get(field, 0.05 if isinstance(expected, float) else 0)
-        score = score_field(predicted, expected, tolerance)
-
-        results[field] = {
-            'expected': expected,
-            'predicted': predicted,
-            'score': score,
+        gt = compute_gt_for_k(name, k=k)
+    except ValueError:
+        # No judgments for this restaurant
+        return {
+            'restaurant': name,
+            'k': k,
+            'error': 'No GT available',
+            'gt_verdict': 'Low Risk',
+            'gt_score': 2.75,
+            'pred_verdict': None,
+            'pred_score': None,
         }
 
-    # Calculate total score
-    # Custom Logic: Verdict Gating
-    # If a field named 'VERDICT' exists and scores 0, the entire task fails.
-    verdict_score = results.get('VERDICT', {}).get('score', 1.0)
-    
-    if verdict_score == 0.0:
-        results['_total_score'] = 0.0
-    else:
-        # Determine which fields to include in the average
-        if scoring_fields:
-            # Filter for fields present in both results and scoring_fields
-            # Case-insensitive matching might be needed if registry keys differ from result keys, 
-            # but usually they match the GT dataclass field names (lowercase).
-            target_keys = [k for k in results.keys() if k in scoring_fields and k != 'VERDICT']
-        else:
-            # Default: All non-Verdict dict fields
-            target_keys = [k for k, r in results.items() if k != 'VERDICT' and isinstance(r, dict)]
-            
-        scores_to_avg = [results[k]['score'] for k in target_keys if k in results]
-        
-        if scores_to_avg:
-            avg_premises = sum(scores_to_avg) / len(scores_to_avg)
-            results['_total_score'] = verdict_score * avg_premises
-        else:
-            # If no premises to score, result is just verdict score
-            results['_total_score'] = verdict_score
+    # Call LLM
+    response = await call_llm_async(prompt)
 
-    return results
+    # Parse response
+    parsed = parse_response(response)
+
+    return {
+        'restaurant': name,
+        'k': k,
+        'n_reviews': len(restaurant['reviews']),
+        'gt_verdict': gt.verdict,
+        'gt_score': gt.final_risk_score,
+        'gt_incidents': gt.n_total_incidents,
+        'pred_verdict': parsed.get('VERDICT'),
+        'pred_score': parsed.get('FINAL_RISK_SCORE'),
+        'pred_incidents': parsed.get('N_TOTAL_INCIDENTS'),
+        'parsed': parsed,
+        'ground_truth': asdict(gt),
+    }
 
 
-def _build_task_context(task_id: str, restaurant_file: str, max_reviews: int) -> Dict:
-    """Build task context without calling LLM.
+def run_eval(task_id: str, k: int, limit: Optional[int] = None, verbose: bool = True) -> Dict:
+    """
+    Run evaluation and compute AUPRC metrics.
 
     Args:
         task_id: Task identifier (e.g., 'G1a')
-        restaurant_file: Restaurant data file name
-        max_reviews: Maximum reviews to include (also used as K for dynamic GT)
+        k: Number of reviews (K value)
+        limit: Limit number of restaurants (None for all)
+        verbose: Print per-restaurant results
+
+    Returns:
+        Dictionary with AUPRC metrics and individual results
     """
-    restaurant, reviews = load_restaurant_data(restaurant_file, max_reviews)
-    task = get_task(task_id)
-    # Pass max_reviews as K for dynamic GT computation
-    # This ensures GT is computed from the same reviews the model sees
-    gt = task['compute_ground_truth'](reviews, restaurant, k=max_reviews)
-    prompt = build_full_prompt(task_id, restaurant, reviews)
-    return {
-        'task_id': task_id, 'task': task, 'restaurant': restaurant,
-        'reviews': reviews, 'gt': gt, 'prompt': prompt, 'restaurant_file': restaurant_file,
-        'k': max_reviews,
-    }
+    # Load dataset
+    restaurants = load_dataset(k)
+    if limit:
+        restaurants = restaurants[:limit]
 
+    print(f"\n{'='*70}")
+    print(f"Evaluating {task_id} with K={k} on {len(restaurants)} restaurants")
+    print(f"{'='*70}")
 
-def _process_response(ctx: Dict, response: str) -> Dict:
-    """Process LLM response and build output data."""
-    parsed = parse_response(response)
-    expected_fields = len(asdict(ctx['gt']))
-    prompt_failure = detect_prompt_failure(response, parsed, expected_fields)
-    results = evaluate_task(
-        parsed, 
-        ctx['gt'], 
-        ctx['task']['tolerances'], 
-        scoring_fields=ctx['task'].get('scoring_fields')
-    )
-    results['_prompt_failure'] = prompt_failure
-
-    return {
-        'timestamp': datetime.now().isoformat(),
-        'task': ctx['task_id'],
-        'task_name': ctx['task']['name'],
-        'restaurant': ctx['restaurant']['name'],
-        'n_reviews': len(ctx['reviews']),
-        'prompt': ctx['prompt'],
-        'llm_response': response,
-        'ground_truth': asdict(ctx['gt']),
-        'parsed': parsed,
-        'prompt_failure': prompt_failure,
-        'results': results,
-    }
-
-
-def _print_result(output: Dict, show_response: bool = True):
-    """Print a single task result."""
-    print(f"\n{'='*60}")
-    print(f"Task {output['task']}: {output['task_name']} | {output['restaurant']}")
-    print(f"{'='*60}")
-
-    if show_response:
-        print(f"{'▼'*20} LLM OUTPUT START {'▼'*20}")
-        print(output['llm_response'])
-        print(f"{'▲'*20} LLM OUTPUT END {'▲'*22}")
-
-    if output['prompt_failure']:
-        print(f"⚠️  PROMPT FAILURE - fix the prompt, not a legitimate computational failure!")
-
-    print(f"--- Results ---")
-    for field, result in output['results'].items():
-        if field.startswith('_'):
-            continue
-        status = "✓" if result['score'] >= 0.9 else "~" if result['score'] >= 0.5 else "✗"
-        print(f"  {field}: {result['expected']} vs {result['predicted']} ({result['score']:.2f}) {status}")
-    print(f"Total Score: {output['results']['_total_score']:.3f}")
-
-
-def run_task(task_id: str, restaurant_file: str, max_reviews: int = 100, verbose: bool = True, save_output: bool = True) -> Dict:
-    """Run a single task on a single restaurant (sync)."""
-    ctx = _build_task_context(task_id, restaurant_file, max_reviews)
-
-    if verbose:
-        print(f"\nTask {task_id}: {ctx['task']['name']}")
-        print(f"Restaurant: {ctx['restaurant']['name']} | Reviews: {len(ctx['reviews'])} | Prompt: {len(ctx['prompt']):,} chars")
-
-    response = call_llm(ctx['prompt'])
-    output = _process_response(ctx, response)
-
-    if verbose:
-        _print_result(output)
-    if save_output:
-        RESULTS_DIR.mkdir(exist_ok=True)
-        out_file = RESULTS_DIR / f"single_{task_id}_{ctx['restaurant_file']}.json"
-        with open(out_file, 'w') as f:
-            json.dump(output, f, indent=2, default=str)
-        print(f"Output: {out_file}")
-
-    return output
-
-
-async def _run_task_async(task_id: str, restaurant_file: str, max_reviews: int) -> Dict:
-    """Run a single task asynchronously (no printing)."""
-    ctx = _build_task_context(task_id, restaurant_file, max_reviews)
-    response = await call_llm_async(ctx['prompt'])
-    return _process_response(ctx, response)
-
-
-def run_tasks(task_ids: List[str], max_reviews: int = 100, limit: int = None):
-    """Run specified tasks on selected restaurants in parallel."""
-    selected_restaurants = RESTAURANTS[:limit] if limit else RESTAURANTS
-    jobs = [(tid, rf) for rf in selected_restaurants for tid in task_ids]
-    n_jobs = len(jobs)
-
-    print(f"Running {n_jobs} jobs in parallel ({len(selected_restaurants)} restaurants × {len(task_ids)} tasks: {task_ids})...")
-
+    # Run async evaluation
     async def run_all():
-        tasks = [_run_task_async(tid, rf, max_reviews) for tid, rf in jobs]
+        tasks = [eval_restaurant_async(task_id, r, k) for r in restaurants]
         return await asyncio.gather(*tasks, return_exceptions=True)
 
     results = asyncio.run(run_all())
 
     # Process results
-    all_outputs = []
-    scores = {}
-    for (task_id, rf), result in zip(jobs, results):
-        if isinstance(result, Exception):
-            print(f"ERROR [{rf[:10]}][{task_id}]: {result}")
-            scores[(rf, task_id)] = 0.0
-        else:
-            all_outputs.append(result)
-            scores[(rf, task_id)] = result['results']['_total_score']
-            _print_result(result, show_response=False)
+    outputs = []
+    y_true_ordinal = []
+    y_scores = []
 
-    # Create run directory
-    run_id = f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    run_dir = RESULTS_DIR / run_id
+    for result in results:
+        if isinstance(result, Exception):
+            print(f"ERROR: {result}")
+            continue
+        if result.get('error'):
+            continue
+
+        outputs.append(result)
+
+        # Collect for AUPRC
+        gt_verdict = result['gt_verdict']
+        pred_score = result['pred_score']
+
+        if gt_verdict in CLASS_ORDER and pred_score is not None:
+            y_true_ordinal.append(CLASS_ORDER[gt_verdict])
+            y_scores.append(float(pred_score))
+
+        # Print per-restaurant result
+        if verbose:
+            verdict_match = "✓" if result['pred_verdict'] == result['gt_verdict'] else "✗"
+            print(f"{result['restaurant'][:35]:<35} | GT: {result['gt_verdict']:<13} | Pred: {str(result['pred_verdict']):<13} {verdict_match}")
+
+    # Calculate AUPRC metrics
+    if len(y_true_ordinal) > 0:
+        y_true_ordinal = np.array(y_true_ordinal)
+        y_scores = np.array(y_scores)
+        metrics = calculate_ordinal_auprc(y_true_ordinal, y_scores)
+    else:
+        metrics = {'error': 'No valid predictions'}
+
+    # Print AUPRC report
+    print()
+    print_report(metrics)
+
+    # Save results
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    run_dir = RESULTS_DIR / f"{task_id}_k{k}_{timestamp}"
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    # Save detailed results
-    detailed_file = run_dir / "detailed_results.json"
-    with open(detailed_file, 'w') as f:
-        json.dump({'timestamp': datetime.now().isoformat(), 'runs': all_outputs}, f, indent=2, default=str)
+    # Save detailed results (compatible with score_auprc.py)
+    detailed = {
+        'timestamp': datetime.now().isoformat(),
+        'task': task_id,
+        'k': k,
+        'n_restaurants': len(outputs),
+        'metrics': metrics,
+        'runs': [
+            {
+                'restaurant': r['restaurant'],
+                'results': {
+                    'verdict': {'expected': r['gt_verdict'], 'predicted': r['pred_verdict']},
+                    'final_risk_score': {'expected': r['gt_score'], 'predicted': r['pred_score']},
+                },
+                'ground_truth': r.get('ground_truth', {}),
+                'parsed': r.get('parsed', {}),
+            }
+            for r in outputs
+        ]
+    }
 
-    # Generate summary table
-    summary_lines = []
-    summary_lines.append(f"{'='*60}\nSUMMARY\n{'='*60}")
-    header = f"{'Restaurant':<25}" + "".join(f"{t:<8}" for t in task_ids) + "Avg"
-    summary_lines.append(header)
-
-    for rf in selected_restaurants:
-        name = rf.replace('.jsonl', '')[:24]
-        row = [scores.get((rf, t), 0) for t in task_ids]
-        line = f"{name:<25}" + "".join(f"{s:.2f}    " for s in row) + f"{sum(row)/len(row):.2f}"
-        summary_lines.append(line)
-
-    summary_text = "\n".join(summary_lines)
-    print(f"\n{summary_text}")
-    
-    with open(run_dir / "summary_table.txt", 'w') as f:
-        f.write(summary_text)
+    with open(run_dir / "detailed_results.json", 'w') as f:
+        json.dump(detailed, f, indent=2, default=str)
 
     # Update latest symlink
     latest_link = RESULTS_DIR / "latest"
     if latest_link.exists() or latest_link.is_symlink():
         latest_link.unlink()
     try:
-        latest_link.symlink_to(run_id, target_is_directory=True)
+        latest_link.symlink_to(run_dir.name, target_is_directory=True)
     except Exception:
         pass
 
     print(f"\nResults saved to: {run_dir}")
 
+    return {
+        'k': k,
+        'n': len(outputs),
+        'metrics': metrics,
+        'outputs': outputs
+    }
+
+
+def run_comparison(task_id: str, limit: int = 10):
+    """Compare performance across different K values."""
+    print("\n" + "="*70)
+    print(f"{task_id} PERFORMANCE COMPARISON ACROSS K VALUES")
+    print("="*70)
+
+    all_results = []
+    for k in [25, 50, 100, 200]:
+        print(f"\n{'='*70}")
+        print(f"K = {k}")
+        print("="*70)
+        result = run_eval(task_id, k, limit=limit, verbose=False)
+        all_results.append(result)
+
+    # Summary table
+    print("\n" + "="*70)
+    print("COMPARISON SUMMARY")
+    print("="*70)
+    print(f"{'K':<8} {'N':<6} {'AUPRC≥High':<12} {'AUPRC≥Crit':<12} {'Ordinal AUPRC':<14} {'Ordinal nAP':<12}")
+    print("-"*70)
+
+    for r in all_results:
+        m = r['metrics']
+        print(f"{r['k']:<8} {r['n']:<6} {m.get('auprc_ge_1', 0):<12.3f} {m.get('auprc_ge_2', 0):<12.3f} {m.get('ordinal_auprc', 0):<14.3f} {m.get('ordinal_nap', 0):<12.3f}")
+
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="L2 Task Evaluation")
-    parser.add_argument("--task", default="A", help="Task ID (A, B, C, D, F) or 'all'")
-    parser.add_argument("--restaurant", default="Acme", help="Restaurant name prefix or 'all'")
-    parser.add_argument("--max-reviews", type=int, default=100)
-    parser.add_argument("--limit", type=int, default=None, help="Limit number of restaurants to run")
+    parser = argparse.ArgumentParser(description="Evaluation with Ordinal AUPRC")
+    parser.add_argument("--task", default="G1a", help="Task ID (e.g., G1a)")
+    parser.add_argument("--k", type=int, default=200, help="Number of reviews (K value)")
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of restaurants")
+    parser.add_argument("--compare", action="store_true", help="Compare across K values")
+    parser.add_argument("--quiet", action="store_true", help="Less verbose output")
     args = parser.parse_args()
 
     configure(temperature=0.0)
 
-    if args.task.lower() == 'all' or ',' in args.task or args.restaurant.lower() == 'all':
-        if args.task.lower() == 'all':
-            task_ids = list_tasks()
-        else:
-            task_ids = [t.strip().upper() for t in args.task.split(',')]
-        
-        run_tasks(task_ids, args.max_reviews, args.limit)
+    if args.compare:
+        run_comparison(args.task, limit=args.limit or 10)
     else:
-        restaurant_file = next((f for f in RESTAURANTS if args.restaurant.lower() in f.lower()), None)
-        if not restaurant_file:
-            sys.exit(f"Restaurant not found: {args.restaurant}\\nAvailable: {RESTAURANTS}")
-        run_task(args.task.upper(), restaurant_file, args.max_reviews)
+        run_eval(args.task, args.k, limit=args.limit, verbose=not args.quiet)
