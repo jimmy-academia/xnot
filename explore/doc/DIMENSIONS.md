@@ -6,8 +6,8 @@ The SCALE benchmark is defined by the following dimensions.
 
 | Symbol | Dimension | Count / Description |
 | :--- | :--- | :--- |
-| **K** | **Contexts** | **100** Restaurants (Context Units). Each unit is a self-contained set of reviews, item_meta, review_meta, and reviewer_meta. |
-| **N** | **Reviews** | **Scalable**. Varies per context (e.g., 50, 100, 500, 1000) to test "Needle-in-Haystack" limits. |
+| **N** | **Restaurants** | **100** Restaurants (Context Units). Each unit is a self-contained set of reviews, item_meta, review_meta, and reviewer_meta. |
+| **K** | **Reviews** | **Scalable**. Up to K reviews per restaurant (e.g., 25, 50, 100, 200) to test "Needle-in-Haystack" limits. |
 | **Q** | **Queries** | **30 ~ 100**. The distinct questions posed (from the 100 defined tasks). |
 | **P** | **Premises** | **Variable**. The intermediate facts required to answer Q. Designed per query. |
 
@@ -15,22 +15,22 @@ The SCALE benchmark is defined by the following dimensions.
 
 We define performance at three levels of aggregation to isolate failure modes.
 
-### 1. The Instance Score ($S_{q,k}$)
-*Scope: 1 Query ($q$) on 1 Restaurant ($k$).*
+### 1. The Instance Score ($S_{q,n}$)
+*Scope: 1 Query ($q$) on 1 Restaurant ($n$).*
 
 The score for a single execution. It punishes "Right Answer, Wrong Reason" (Hallucination).
 
-$$ S_{q,k} = Verdict_{q,k} \times \underbrace{\left( \frac{1}{|P_q|} \sum_{p \in P_q} Grounding_{p,k} \right)}_{\text{Evidence Quality}} $$
+$$ S_{q,n} = Verdict_{q,n} \times \underbrace{\left( \frac{1}{|P_q|} \sum_{p \in P_q} Grounding_{p,n} \right)}_{\text{Evidence Quality}} $$
 
 *   **Verdict**: Binary (0/1). Is the final decision correct?
 *   **Grounding**: Binary (0/1). Is the specific premise $p$ correctly retrieved/calculated for this restaurant?
 
 ### 2. Task Reliability ($\mu_q$)
-*Scope: 1 Query ($q$) averaged over all $K$ Restaurants.*
+*Scope: 1 Query ($q$) averaged over all $N$ Restaurants.*
 
 Measures how **robust** the model is at a specific logic type (e.g., "Can it *consistently* detect peanut safety?").
 
-$$ \mu_q = \frac{1}{K} \sum_{k=1}^{K} S_{q,k} $$
+$$ \mu_q = \frac{1}{N} \sum_{n=1}^{N} S_{q,n} $$
 
 ### 3. Group Competency ($C_g$)
 *Scope: All Queries in one Group ($g$) (e.g., "Health & Safety").*

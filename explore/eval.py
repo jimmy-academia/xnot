@@ -18,7 +18,7 @@ from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from utils.llm import call_llm, call_llm_async, configure
-from tasks import TASK_REGISTRY, get_task, list_tasks
+from g1_allergy import TASK_REGISTRY, get_task, list_tasks
 
 DATA_DIR = Path(__file__).parent / "data"
 RESULTS_DIR = Path(__file__).parent / "results"
