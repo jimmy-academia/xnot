@@ -1,0 +1,559 @@
+{
+  "timestamp": "2026-01-10T05:53:57.181887",
+  "k": 25,
+  "n_restaurants": 10,
+  "avg_score": 0.8933333333333335,
+  "verdict_accuracy": 1.0,
+  "results": [
+    {
+      "restaurant": "Aladdin Pizzeria & Eatery",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "score": 1.0
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "restaurant": "Pizzeria Pesto",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "Ricci's Hoagies",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "Hosteria Da Elio",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "Table 31",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "Two Eagles Cafe",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "Castellino's",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "Ristorante Aroma",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    },
+    {
+      "restaurant": "The Angelo Pizza",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 1.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "score": 1.0
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 1.0
+      },
+      "score": 1.0
+    },
+    {
+      "restaurant": "Talluto's Authentic Italian Food",
+      "k": 25,
+      "n_reviews": 25,
+      "ground_truth": {
+        "n_total_incidents": 0,
+        "incident_score": 0.0,
+        "recency_decay": 0.3,
+        "credibility_factor": 1.0,
+        "final_risk_score": 3.0,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_TOTAL_INCIDENTS": 0,
+        "INCIDENT_SCORE": 0.0,
+        "RECENCY_DECAY": 0.3,
+        "CREDIBILITY_FACTOR": 0.0,
+        "FINAL_RISK_SCORE": 2.75,
+        "VERDICT": "Low Risk"
+      },
+      "results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": 0,
+          "score": 1.0
+        },
+        "incident_score": {
+          "expected": 0.0,
+          "predicted": 0.0,
+          "score": 1.0
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "score": 1.0
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 0.0,
+          "score": 0.19999999999999996
+        },
+        "final_risk_score": {
+          "expected": 3.0,
+          "predicted": 2.75,
+          "score": 1.0
+        },
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk",
+          "score": 1.0
+        },
+        "_total_score": 0.8666666666666667
+      },
+      "score": 0.8666666666666667
+    }
+  ]
+}

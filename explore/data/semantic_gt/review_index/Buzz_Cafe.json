@@ -11,7 +11,7 @@
       "useful": 0,
       "text_hash": "0701f76763087679",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -24,7 +24,7 @@
       "useful": 1,
       "text_hash": "6e5d2361b795bbdd",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -37,7 +37,7 @@
       "useful": 0,
       "text_hash": "e74434b8929bc611",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -50,7 +50,7 @@
       "useful": 1,
       "text_hash": "5f9866cfcc1cb785",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -63,7 +63,7 @@
       "useful": 0,
       "text_hash": "15696cb3a47e4c1d",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -76,7 +76,7 @@
       "useful": 0,
       "text_hash": "bdef6a93bc9a2990",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -89,7 +89,7 @@
       "useful": 0,
       "text_hash": "1c0ec48e1fd565ab",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -102,7 +102,7 @@
       "useful": 1,
       "text_hash": "521a33c50abd206c",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -115,7 +115,7 @@
       "useful": 0,
       "text_hash": "f85abb2ea1d02a69",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -128,7 +128,7 @@
       "useful": 0,
       "text_hash": "b0b1323c90499e99",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -141,7 +141,7 @@
       "useful": 3,
       "text_hash": "b303db2fca1ff317",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -154,7 +154,7 @@
       "useful": 1,
       "text_hash": "203a55d2c69541b7",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -167,7 +167,7 @@
       "useful": 1,
       "text_hash": "523c1b33ce59bd32",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -180,7 +180,7 @@
       "useful": 0,
       "text_hash": "2dba061f7824ce04",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -193,7 +193,7 @@
       "useful": 0,
       "text_hash": "3cbf0ff274e88f49",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -206,7 +206,7 @@
       "useful": 1,
       "text_hash": "5344ca2c10d92ee4",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": true,
           "keywords_found": [
             "accommodating"
@@ -221,7 +221,7 @@
       "useful": 0,
       "text_hash": "9f0ca358328d3a67",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -234,7 +234,7 @@
       "useful": 0,
       "text_hash": "4ab617d048a96a9a",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -247,7 +247,7 @@
       "useful": 1,
       "text_hash": "770786675b25bea8",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -260,7 +260,7 @@
       "useful": 0,
       "text_hash": "0d2f93c4ce6ea937",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -273,7 +273,7 @@
       "useful": 6,
       "text_hash": "d2402b5c390350f5",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -286,7 +286,7 @@
       "useful": 2,
       "text_hash": "c155752170d2de07",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -299,7 +299,7 @@
       "useful": 3,
       "text_hash": "17d9839190bc64df",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -312,7 +312,7 @@
       "useful": 2,
       "text_hash": "68ed14eaaa35f40e",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -325,7 +325,7 @@
       "useful": 0,
       "text_hash": "95aad23ae6825532",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -338,7 +338,7 @@
       "useful": 0,
       "text_hash": "d04be4e3cab93517",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -351,7 +351,7 @@
       "useful": 0,
       "text_hash": "a591e650517015f0",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -364,7 +364,7 @@
       "useful": 0,
       "text_hash": "45beddc3d6d76199",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -377,7 +377,7 @@
       "useful": 0,
       "text_hash": "c2afb21f6f4ab825",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -390,7 +390,7 @@
       "useful": 2,
       "text_hash": "d51e07efc90e9913",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -403,7 +403,7 @@
       "useful": 0,
       "text_hash": "fe56931240f95415",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -416,7 +416,7 @@
       "useful": 1,
       "text_hash": "2dff7a72917e35fe",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": true,
           "keywords_found": [
             "nut"
@@ -431,7 +431,7 @@
       "useful": 2,
       "text_hash": "808ee55c09a3fa07",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -444,7 +444,7 @@
       "useful": 3,
       "text_hash": "d5981dfd8e3b2964",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -457,7 +457,7 @@
       "useful": 0,
       "text_hash": "2cafe8648b202827",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -470,7 +470,7 @@
       "useful": 0,
       "text_hash": "20d1eb542198fe2a",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -483,7 +483,7 @@
       "useful": 0,
       "text_hash": "6190b679263ed9e1",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -496,7 +496,7 @@
       "useful": 1,
       "text_hash": "5ef18effa5a8eb66",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -509,7 +509,7 @@
       "useful": 0,
       "text_hash": "f2679e25b79b0255",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -522,7 +522,7 @@
       "useful": 0,
       "text_hash": "7bf8483517003f9f",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -535,7 +535,7 @@
       "useful": 0,
       "text_hash": "bc4d495b8cf7a629",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -548,7 +548,7 @@
       "useful": 0,
       "text_hash": "05e93de8b2d3eccb",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -561,7 +561,7 @@
       "useful": 0,
       "text_hash": "7fc6a5312387fca6",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -574,7 +574,7 @@
       "useful": 3,
       "text_hash": "fec5cc5f325c0124",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -587,7 +587,7 @@
       "useful": 0,
       "text_hash": "2dd15d91be5bbe76",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -600,7 +600,7 @@
       "useful": 2,
       "text_hash": "d303dc9b3e21d070",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": true,
           "keywords_found": [
             "peanut",
@@ -617,7 +617,7 @@
       "useful": 0,
       "text_hash": "eb0caec59d6e85f6",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -630,7 +630,7 @@
       "useful": 0,
       "text_hash": "9a4e344072cca455",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -643,7 +643,7 @@
       "useful": 1,
       "text_hash": "856f19a075ec791a",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -656,7 +656,7 @@
       "useful": 1,
       "text_hash": "8ad7b20b1b1f4406",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -669,7 +669,7 @@
       "useful": 1,
       "text_hash": "f1a36122a3941adf",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -682,7 +682,7 @@
       "useful": 0,
       "text_hash": "425c0a30aaa43838",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -695,7 +695,7 @@
       "useful": 0,
       "text_hash": "164bbb76abf1217b",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -708,7 +708,7 @@
       "useful": 2,
       "text_hash": "fd3b11ea7ed665f0",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }
@@ -721,7 +721,7 @@
       "useful": 2,
       "text_hash": "d8a70258aab98eef",
       "task_relevance": {
-        "G1": {
+        "G1a": {
           "keyword_match": false,
           "keywords_found": []
         }

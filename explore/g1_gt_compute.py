@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
 """
-Deterministic Ground Truth Computation for G1.1 (Peanut Allergy Safety)
+Deterministic Ground Truth Computation for G1a (Peanut Allergy Safety)
 
 Computes GT values from stored per-review judgments using explicit formulas.
 NO LLM calls - pure arithmetic on stored semantic judgments.
 
+Supports dynamic K: GT is computed only from reviews 0 to K-1.
+This ensures fair evaluation when testing with different review counts.
+
 Usage:
-    # Compute GT for one restaurant
-    from g1_gt_compute import compute_gt_from_judgments
-    gt = compute_gt_from_judgments("Restaurant Name")
+    # Compute GT for one restaurant (all reviews)
+    from g1_gt_compute import compute_gt_for_k
+    gt = compute_gt_for_k("Restaurant Name")  # K=None means all
+
+    # Compute GT for K=50 reviews only
+    gt = compute_gt_for_k("Restaurant Name", k=50)
 
     # Compute all and save
-    python g1_gt_compute.py
-    python g1_gt_compute.py --restaurant "Table 31"  # Single restaurant
+    python g1_gt_compute.py --save
+    python g1_gt_compute.py --save --k 50  # Save GT for K=50
 """
 
 import json
@@ -22,8 +28,8 @@ from dataclasses import dataclass, asdict
 from typing import Dict, List, Any, Optional
 
 DATA_DIR = Path(__file__).parent / "data"
-JUDGMENTS_FILE = DATA_DIR / "semantic_gt" / "task_G1" / "judgments.json"
-OUTPUT_FILE = DATA_DIR / "semantic_gt" / "task_G1" / "computed_gt.json"
+JUDGMENTS_FILE = DATA_DIR / "semantic_gt" / "task_G1a" / "judgments.json"
+OUTPUT_FILE = DATA_DIR / "semantic_gt" / "task_G1a" / "computed_gt.json"
 
 # Cuisine risk modifiers (peanut/nut usage prevalence)
 CUISINE_RISK_BASE = {
@@ -246,6 +252,44 @@ def load_judgments() -> Dict[str, Dict]:
     return data.get("judgments", {})
 
 
+def compute_gt_for_k(restaurant_name: str, k: int = None) -> G1GroundTruth:
+    """
+    Compute GT for a restaurant using only reviews 0 to k-1.
+
+    This enables fair evaluation when testing with different context sizes.
+    A model seeing K reviews should be scored against GT from the same K reviews.
+
+    Args:
+        restaurant_name: Name of the restaurant
+        k: Number of reviews to consider (0 to k-1). If None, use all reviews.
+
+    Returns:
+        G1GroundTruth dataclass computed from filtered reviews
+
+    Example:
+        # GT from first 50 reviews only
+        gt = compute_gt_for_k("Vetri Cucina", k=50)
+    """
+    all_judgments = load_judgments()
+
+    if restaurant_name not in all_judgments:
+        raise ValueError(f"No judgments found for: {restaurant_name}")
+
+    data = all_judgments[restaurant_name]
+
+    # Filter reviews by original index (reviews have 'idx' field from source dataset)
+    if k is not None:
+        filtered_reviews = [r for r in data.get("reviews", []) if r.get("idx", 0) < k]
+    else:
+        filtered_reviews = data.get("reviews", [])
+
+    # Compute GT from filtered data
+    return compute_gt_from_data({
+        "restaurant_meta": data.get("restaurant_meta", {}),
+        "reviews": filtered_reviews
+    })
+
+
 def compute_gt_from_judgments(restaurant_name: str) -> G1GroundTruth:
     """
     Compute GT for a single restaurant by name.
@@ -264,20 +308,40 @@ def compute_gt_from_judgments(restaurant_name: str) -> G1GroundTruth:
     return compute_gt_from_data(all_judgments[restaurant_name])
 
 
-def compute_all_gt() -> Dict[str, G1GroundTruth]:
-    """Compute GT for all restaurants with stored judgments."""
+def compute_all_gt(k: int = None) -> Dict[str, G1GroundTruth]:
+    """
+    Compute GT for all restaurants with stored judgments.
+
+    Args:
+        k: Number of reviews to consider per restaurant (0 to k-1).
+           If None, use all reviews.
+
+    Returns:
+        Dict mapping restaurant name to G1GroundTruth
+    """
     all_judgments = load_judgments()
-    return {name: compute_gt_from_data(data) for name, data in all_judgments.items()}
+    result = {}
+
+    for name in all_judgments:
+        result[name] = compute_gt_for_k(name, k=k)
+
+    return result
 
 
-def save_computed_gt():
-    """Compute GT for all restaurants and save to file."""
-    all_gt = compute_all_gt()
+def save_computed_gt(k: int = None):
+    """
+    Compute GT for all restaurants and save to file.
+
+    Args:
+        k: Number of reviews to consider (0 to k-1). If None, use all reviews.
+    """
+    all_gt = compute_all_gt(k=k)
 
     output = {
-        "task_id": "G1",
+        "task_id": "G1a",
         "computed_at": __import__("datetime").datetime.now().isoformat(),
         "formula_version": "v1",
+        "k": k if k is not None else "all",
         "restaurants": {}
     }
 
@@ -293,43 +357,53 @@ def save_computed_gt():
         "verdict_distribution": verdicts
     }
 
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUTPUT_FILE, 'w') as f:
+    # Use different output file for different K values
+    if k is not None:
+        output_file = OUTPUT_FILE.parent / f"computed_gt_k{k}.json"
+    else:
+        output_file = OUTPUT_FILE
+
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, 'w') as f:
         json.dump(output, f, indent=2)
 
-    return output
+    return output, output_file
 
 
-def print_gt(restaurant_name: str = None):
+def print_gt(restaurant_name: str = None, k: int = None):
     """Print GT for one or all restaurants."""
     if restaurant_name:
-        gt = compute_gt_from_judgments(restaurant_name)
+        gt = compute_gt_for_k(restaurant_name, k=k)
+        k_str = f"K={k}" if k else "all reviews"
         print(f"\n{'='*60}")
-        print(f"G1.1 Ground Truth: {restaurant_name}")
+        print(f"G1a Ground Truth: {restaurant_name} ({k_str})")
         print(f"{'='*60}")
         for field, value in asdict(gt).items():
             print(f"  {field}: {value}")
     else:
-        all_gt = compute_all_gt()
+        all_gt = compute_all_gt(k=k)
+        k_str = f"K={k}" if k else "all reviews"
         verdicts = {"Low Risk": 0, "High Risk": 0, "Critical Risk": 0}
         for name, gt in all_gt.items():
             verdicts[gt.verdict] += 1
             print(f"{name}: {gt.verdict} (score={gt.final_risk_score})")
-        print(f"\nDistribution: {verdicts}")
+        print(f"\nDistribution ({k_str}): {verdicts}")
 
 
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Compute G1.1 Ground Truth")
+    parser = argparse.ArgumentParser(description="Compute G1a Ground Truth")
     parser.add_argument("--restaurant", type=str, help="Compute for specific restaurant")
     parser.add_argument("--save", action="store_true", help="Save computed GT to file")
+    parser.add_argument("--k", type=int, help="Number of reviews to use (0 to k-1)")
     args = parser.parse_args()
 
     if args.save:
-        output = save_computed_gt()
-        print(f"Saved GT for {output['summary']['total_restaurants']} restaurants")
+        output, output_file = save_computed_gt(k=args.k)
+        k_str = f"K={args.k}" if args.k else "all reviews"
+        print(f"Saved GT for {output['summary']['total_restaurants']} restaurants ({k_str})")
         print(f"Distribution: {output['summary']['verdict_distribution']}")
-        print(f"Output: {OUTPUT_FILE}")
+        print(f"Output: {output_file}")
     else:
-        print_gt(args.restaurant)
+        print_gt(args.restaurant, k=args.k)

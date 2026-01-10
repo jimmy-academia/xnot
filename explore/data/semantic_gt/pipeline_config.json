@@ -3,7 +3,7 @@
   "source_hash": "sha256:be48513cd28aa28109b9b9161e45967b0895fd0cdf785d13af4a4fc7a08093a6",
   "created": "2025-01-10",
   "tasks": {
-    "G1": {
+    "G1a": {
       "name": "Peanut Allergy Safety",
       "description": "Is this restaurant safe for severe peanut allergies?",
       "keywords": [

@@ -251,14 +251,23 @@ def evaluate_task(parsed: Dict, ground_truth: Any, tolerances: Dict[str, float] 
 
 
 def _build_task_context(task_id: str, restaurant_file: str, max_reviews: int) -> Dict:
-    """Build task context without calling LLM."""
+    """Build task context without calling LLM.
+
+    Args:
+        task_id: Task identifier (e.g., 'G1a')
+        restaurant_file: Restaurant data file name
+        max_reviews: Maximum reviews to include (also used as K for dynamic GT)
+    """
     restaurant, reviews = load_restaurant_data(restaurant_file, max_reviews)
     task = get_task(task_id)
-    gt = task['compute_ground_truth'](reviews, restaurant)
+    # Pass max_reviews as K for dynamic GT computation
+    # This ensures GT is computed from the same reviews the model sees
+    gt = task['compute_ground_truth'](reviews, restaurant, k=max_reviews)
     prompt = build_full_prompt(task_id, restaurant, reviews)
     return {
         'task_id': task_id, 'task': task, 'restaurant': restaurant,
         'reviews': reviews, 'gt': gt, 'prompt': prompt, 'restaurant_file': restaurant_file,
+        'k': max_reviews,
     }
 
 

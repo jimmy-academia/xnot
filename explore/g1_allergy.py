@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-G1.1: Peanut Allergy Safety Task
+G1a: Peanut Allergy Safety Task
 
 Semantic reasoning task for assessing restaurant safety for severe peanut allergies.
 Uses deterministically computed GT from stored per-review LLM judgments.
@@ -9,12 +9,15 @@ GT Pipeline:
 1. Keyword filtering identifies allergy-relevant reviews
 2. LLM extracts per-review signals (incident_severity, account_type, safety_interaction)
 3. Python formulas compute all aggregates deterministically
+
+Dynamic GT per K:
+- GT is computed from reviews 0 to K-1 only
+- Ensures fair evaluation when testing with different context sizes
+- See g1_gt_compute.py for computation details
 """
 
 from dataclasses import dataclass
-from typing import List, Dict, Any
-import json
-from pathlib import Path
+from typing import List, Any
 
 
 @dataclass
@@ -36,62 +39,49 @@ class TaskG1GroundTruth:
     verdict: str  # "Low Risk", "High Risk", "Critical Risk"
 
 
-# Global cache for computed GT
-G1_COMPUTED_GT_CACHE = None
+# Dynamic GT computation - no static cache needed
+# GT is computed on-demand for each K value using compute_gt_for_k()
 
 
-def load_g1_computed_gt():
-    """Load pre-computed ground truth from deterministic computation."""
-    global G1_COMPUTED_GT_CACHE
-    if G1_COMPUTED_GT_CACHE is not None:
-        return G1_COMPUTED_GT_CACHE
-
-    try:
-        gt_path = Path(__file__).parent / 'data' / 'semantic_gt' / 'task_G1' / 'computed_gt.json'
-        if gt_path.exists():
-            with open(gt_path, 'r') as f:
-                data = json.load(f)
-                G1_COMPUTED_GT_CACHE = data.get('restaurants', {})
-        else:
-            print(f"WARNING: Computed GT file not found at {gt_path}")
-            G1_COMPUTED_GT_CACHE = {}
-    except Exception as e:
-        print(f"ERROR loading computed GT: {e}")
-        G1_COMPUTED_GT_CACHE = {}
-
-    return G1_COMPUTED_GT_CACHE
-
-
-def compute_task_g1_ground_truth(reviews: List[Any], restaurant: Any) -> TaskG1GroundTruth:
+def compute_task_g1_ground_truth(reviews: List[Any], restaurant: Any, k: int = None) -> TaskG1GroundTruth:
     """
-    Load G1.1 ground truth from pre-computed deterministic values.
+    Compute G1a ground truth dynamically based on K.
 
-    The GT is computed from stored per-review LLM judgments via explicit formulas.
-    See g1_gt_compute.py for the full computation logic.
+    For fair evaluation across different context sizes, GT is computed from
+    only the reviews that the model can see (reviews 0 to k-1).
+
+    Args:
+        reviews: List of reviews (used for fallback only)
+        restaurant: Restaurant metadata dict
+        k: Number of reviews model can see. If None, use all reviews.
+
+    Returns:
+        TaskG1GroundTruth computed from reviews 0 to k-1
     """
-    gt_cache = load_g1_computed_gt()
+    from g1_gt_compute import compute_gt_for_k
+
     res_name = restaurant.get('name', 'Unknown')
 
-    if res_name in gt_cache:
-        gt = gt_cache[res_name]
+    try:
+        gt = compute_gt_for_k(res_name, k=k)
         return TaskG1GroundTruth(
-            n_total_incidents=int(gt.get('n_total_incidents', 0)),
-            incident_score=float(gt.get('incident_score', 0)),
-            recency_decay=float(gt.get('recency_decay', 1.0)),
-            credibility_factor=float(gt.get('credibility_factor', 1.0)),
-            final_risk_score=float(gt.get('final_risk_score', 2.5)),
-            verdict=str(gt.get('verdict', 'Low Risk'))
+            n_total_incidents=gt.n_total_incidents,
+            incident_score=gt.incident_score,
+            recency_decay=gt.recency_decay,
+            credibility_factor=gt.credibility_factor,
+            final_risk_score=gt.final_risk_score,
+            verdict=gt.verdict
         )
-
-    # Fallback for unknown restaurants
-    return TaskG1GroundTruth(
-        n_total_incidents=0,
-        incident_score=0.0,
-        recency_decay=1.0,
-        credibility_factor=1.0,
-        final_risk_score=2.75,  # BASE_RISK + CUISINE_IMPACT default
-        verdict="Low Risk"
-    )
+    except ValueError:
+        # Fallback for unknown restaurants
+        return TaskG1GroundTruth(
+            n_total_incidents=0,
+            incident_score=0.0,
+            recency_decay=1.0,
+            credibility_factor=1.0,
+            final_risk_score=2.75,  # BASE_RISK + CUISINE_IMPACT default
+            verdict="Low Risk"
+        )
 
 
 TASK_G1_PROMPT = """Analyze the reviews for PEANUT/NUT ALLERGY SAFETY using the exact formulas below.
@@ -187,7 +177,7 @@ TASK_G1_TOLERANCES = {
 
 # Task Registry (G1 only for now)
 TASK_REGISTRY = {
-    'G1': {
+    'G1a': {
         'name': 'Peanut Allergy Safety',
         'ground_truth_class': TaskG1GroundTruth,
         'compute_ground_truth': compute_task_g1_ground_truth,
