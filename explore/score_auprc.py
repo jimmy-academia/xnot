@@ -2,16 +2,7 @@
 """
 Cumulative Ordinal AUPRC Scoring for G1.1 (Peanut Allergy Safety)
 
-For ordinal classes: Low < High < Critical
-
-Cumulative ordinal approach:
-- AUPRC_ge_high: P(Y >= High) - Can model separate (High+Critical) from Low?
-- AUPRC_ge_critical: P(Y >= Critical) - Can model separate Critical from rest?
-- Ordinal_AUPRC: Mean of cumulative AUPRCs (respects ordinal structure)
-
-References:
-- Waegeman et al. "ROC analysis in ordinal regression learning"
-- Cardoso & Costa "Learning to classify ordinal data"
+See doc/ORDINAL_AUPRC.md for methodology and references.
 """
 
 import json
