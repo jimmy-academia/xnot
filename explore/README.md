@@ -40,26 +40,55 @@ explore/
 └── archive/                # Archived/outdated code
 ```
 
-## Quick Start
+## Benchmark Results (G1a-v2 Task)
 
-```bash
-# Run full evaluation (100 restaurants, parallel)
-python -m explore.general_anot.eval
+### Method Comparison
 
-# Or from explore directory
-cd explore
-python -m general_anot.eval
-```
+| Method | Adjusted AUPRC | Range | Consistency |
+|--------|----------------|-------|-------------|
+| **General ANoT** | **0.82 avg** | 0.74-0.87 | Stable |
+| Direct LLM (zero-shot) | 0.53 avg | 0.43-0.67 | Variable |
+| Chain of Thought | 0.49 avg | 0.26-0.61 | Highly variable |
 
-## Performance (G1a-v2 Task)
+### Detailed Metrics (General ANoT)
 
 | Metric | Value |
 |--------|-------|
-| Ordinal AUPRC | 0.799 |
-| Primitive Accuracy | 0.765 |
-| **Adjusted AUPRC** | **0.612** |
-| Verdict Accuracy | 87% |
-| Time (100 restaurants) | 87s |
+| Ordinal AUPRC | 0.95 avg |
+| Primitive Accuracy | 0.87 avg |
+| **Adjusted AUPRC** | **0.82 avg** |
+| Verdict Accuracy | 98% |
+| Time (100 restaurants) | ~70s |
+
+### Why General ANoT Outperforms Baselines
+
+| Factor | General ANoT | Baselines |
+|--------|-------------|-----------|
+| **Extraction** | Structured per-review with explicit criteria | LLM interprets entire context at once |
+| **Computation** | Deterministic formulas (Python math) | LLM computes everything including arithmetic |
+| **Decomposition** | Filtering → Extraction → Aggregation → Computation | Monolithic single-pass |
+| **Error isolation** | Errors in one review don't cascade | Single error can corrupt entire output |
+
+### Consistency Analysis
+
+General ANoT's structured approach reduces variance because:
+1. Each review is extracted independently with clear criteria
+2. Aggregation and computation are deterministic (not LLM-dependent)
+3. The Formula Seed provides explicit rules, reducing interpretation variance
+
+## Quick Start
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Run General ANoT evaluation (100 restaurants, parallel)
+python -m explore.general_anot.eval
+
+# Run baselines for comparison
+python -m explore.baselines.direct_llm_v2
+python -m explore.baselines.cot
+```
 
 ## Key Concepts
 
@@ -83,6 +112,43 @@ Adjusted AUPRC = Ordinal AUPRC × Primitive Accuracy
 - **Ordinal AUPRC**: How well the risk score orders restaurants by true risk class
 - **Primitive Accuracy**: How accurately intermediate values match ground truth
 
+This metric ensures the model gets the right answer *for the right reasons*.
+
+### Two-Phase Architecture
+
+```
+Phase 1: Compile                    Phase 2: Execute
+┌─────────────────────┐            ┌─────────────────────┐
+│ Task Formula (NL)   │            │ Restaurant Data     │
+│ "Compute risk..."   │            │ - reviews[]         │
+└─────────┬───────────┘            │ - metadata          │
+          │                        └─────────┬───────────┘
+          ▼                                  │
+┌─────────────────────┐                      │
+│ LLM: Understand     │                      │
+│ - What to extract   │                      │
+│ - How to aggregate  │                      │
+│ - What to compute   │                      │
+└─────────┬───────────┘                      │
+          │                                  │
+          ▼                                  ▼
+┌─────────────────────┐            ┌─────────────────────┐
+│ Formula Seed (JSON) │───────────▶│ Interpreter         │
+│ - filter keywords   │            │ 1. Filter reviews   │
+│ - extraction schema │            │ 2. Extract signals  │
+│ - aggregation defs  │            │ 3. Aggregate counts │
+│ - computation steps │            │ 4. Compute formulas │
+└─────────────────────┘            └─────────┬───────────┘
+                                             │
+                                             ▼
+                                   ┌─────────────────────┐
+                                   │ Result              │
+                                   │ - FINAL_RISK_SCORE  │
+                                   │ - VERDICT           │
+                                   │ - intermediates...  │
+                                   └─────────────────────┘
+```
+
 ## Usage
 
 ```python
@@ -97,16 +163,21 @@ result = await interpreter.execute(reviews, restaurant_context)
 
 # Result contains FINAL_RISK_SCORE, VERDICT, and all intermediate values
 print(result["VERDICT"])  # "Low Risk", "High Risk", or "Critical Risk"
+print(result["FINAL_RISK_SCORE"])  # 0.0 - 20.0
 ```
 
-## Baselines
-
-Compare against baseline methods:
+## Run Commands
 
 ```bash
-# Direct LLM (V2 formula)
-python -m explore.baselines.direct_llm_v2 --limit 10
+# General ANoT (main framework)
+python -m explore.general_anot.eval
 
-# Chain of Thought
-python -m explore.baselines.cot --limit 10
+# Direct LLM baseline (zero-shot)
+python -m explore.baselines.direct_llm_v2
+
+# Chain of Thought baseline
+python -m explore.baselines.cot
+
+# With limit for quick testing
+python -m explore.baselines.direct_llm_v2 --limit 10
 ```

@@ -28,9 +28,15 @@ Evaluation:
     asyncio.run(run_eval())
 
 Key Performance (G1a-v2, 100 restaurants):
-- Ordinal AUPRC: 0.799
-- Primitive Accuracy: 0.765
-- Adjusted AUPRC: 0.612
+- Ordinal AUPRC: 0.95 avg
+- Primitive Accuracy: 0.87 avg
+- Adjusted AUPRC: 0.82 avg (range: 0.74-0.87)
+- Verdict Accuracy: 98%
+
+Comparison vs Baselines:
+- General ANoT: 0.82 avg (stable)
+- Direct LLM:   0.53 avg (variable)
+- Chain of Thought: 0.49 avg (highly variable)
 """
 
 from .phase1 import generate_formula_seed
