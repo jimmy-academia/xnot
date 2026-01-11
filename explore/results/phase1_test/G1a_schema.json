@@ -10,7 +10,7 @@
         "moderate",
         "severe"
       ],
-      "description": "Severity of any allergic reaction described in the review"
+      "description": "Severity of any allergic incident described in the review"
     },
     {
       "name": "account_type",
@@ -21,7 +21,7 @@
         "secondhand",
         "hypothetical"
       ],
-      "description": "Source of the allergy incident (firsthand experience, secondhand report, hypothetical concern, or none)"
+      "description": "Origin of the allergy incident in the account"
     },
     {
       "name": "safety_interaction",
@@ -32,7 +32,7 @@
         "negative",
         "betrayal"
       ],
-      "description": "Staff interaction regarding allergies and whether accommodations were successful"
+      "description": "Staff interaction about allergies and accommodation"
     }
   ],
   "review_metadata": [
@@ -41,55 +41,63 @@
     "useful"
   ],
   "filter_keywords": [
+    "allergy",
+    "allergic",
     "peanut",
     "peanuts",
     "nut",
     "nuts",
-    "allergy",
-    "allergic",
+    "tree nut",
+    "tree nuts",
     "anaphylaxis",
     "epipen",
-    "epiPen",
+    "epinephrine",
     "allergen",
-    "cross-contact",
-    "crosscontact",
-    "hazard"
+    "allergen(s)",
+    "allergy-safe",
+    "allergen-safe",
+    "safety"
   ],
   "aggregations": [
     {
       "name": "N_MILD",
       "formula": "COUNT(incident_severity='mild' AND account_type='firsthand')",
-      "description": "Count of firsthand reviews with mild incidents"
+      "description": "Firsthand reviews with mild incidents"
     },
     {
       "name": "N_MODERATE",
       "formula": "COUNT(incident_severity='moderate' AND account_type='firsthand')",
-      "description": "Count of firsthand reviews with moderate incidents"
+      "description": "Firsthand reviews with moderate incidents"
     },
     {
       "name": "N_SEVERE",
       "formula": "COUNT(incident_severity='severe' AND account_type='firsthand')",
-      "description": "Count of firsthand reviews with severe incidents"
+      "description": "Firsthand reviews with severe incidents"
     },
     {
       "name": "N_TOTAL_INCIDENTS",
       "formula": "N_MILD + N_MODERATE + N_SEVERE",
-      "description": "Total firsthand incidents"
+      "description": "Total first-hand incident reviews"
     },
     {
       "name": "N_POSITIVE",
       "formula": "COUNT(safety_interaction='positive')",
-      "description": "Number of positive safety interactions"
+      "description": "Total positive safety interactions"
     },
     {
       "name": "N_NEGATIVE",
       "formula": "COUNT(safety_interaction='negative')",
-      "description": "Number of negative safety interactions"
+      "description": "Total negative safety interactions"
     },
     {
       "name": "N_BETRAYAL",
       "formula": "COUNT(safety_interaction='betrayal')",
-      "description": "Number of betrayal safety interactions"
+      "description": "Total betrayal safety interactions"
+    },
+    {
+      "name": "N_ALLERGY_REVIEWS",
+      "formula": "COUNT(allergy_mentions=true)",
+      "description": "Reviews mentioning allergy-related terms"
     }
   ],
   "computations": [
@@ -101,7 +109,7 @@
         "N_MODERATE",
         "N_SEVERE"
       ],
-      "description": "Weighted sum of firsthand incident severities"
+      "description": "Weighted incident score by severity"
     },
     {
       "name": "SAFETY_CREDIT",
@@ -111,23 +119,16 @@
         "N_NEGATIVE",
         "N_BETRAYAL"
       ],
-      "description": "Credit derived from safety interactions"
+      "description": "Net credit from safety interactions"
     },
     {
       "name": "CUISINE_MODIFIER",
-      "formula": "CUISINE_MODIFIER_MAP.get(restaurant_category, 1.0)",
+      "formula": "CUISINE_MODIFIER_LOOKUP.get(restaurant_category, 1.0)",
       "depends_on": [
-        "restaurant_category"
+        "restaurant_category",
+        "CUISINE_MODIFIER_LOOKUP"
       ],
-      "description": "Modifier based on restaurant category via lookup"
-    },
-    {
-      "name": "N_ALLERGY_REVIEWS",
-      "formula": "COUNT(reviews WHERE review_text CONTAINS allergy-related terms)",
-      "depends_on": [
-        "REVIEW_TEXT_COLLECTION"
-      ],
-      "description": "Number of reviews mentioning allergy-related terms"
+      "description": "Restaurant cuisine safety modifier based on category"
     },
     {
       "name": "REVIEW_DENSITY",
@@ -135,7 +136,7 @@
       "depends_on": [
         "N_ALLERGY_REVIEWS"
       ],
-      "description": "Proportion of reviews mentioning allergy terms, capped at 1.0"
+      "description": "Density of allergy-related reviews"
     },
     {
       "name": "CONFIDENCE_PENALTY",
@@ -143,15 +144,15 @@
       "depends_on": [
         "REVIEW_DENSITY"
       ],
-      "description": "Penalty factor based on allergy-review density"
+      "description": "Confidence penalty based on review density"
     },
     {
       "name": "MOST_RECENT_INCIDENT_YEAR",
-      "formula": "MAX(year) of incident_reviews, default 2020",
+      "formula": "max(years_of_incident_reviews, default=2020)",
       "depends_on": [
-        "incident_years"
+        "years_of_incident_reviews"
       ],
-      "description": "Year of the most recent incident (default 2020 if none)"
+      "description": "Most recent incident year with default 2020"
     },
     {
       "name": "INCIDENT_AGE",
@@ -159,7 +160,7 @@
       "depends_on": [
         "MOST_RECENT_INCIDENT_YEAR"
       ],
-      "description": "Age of the most recent incident relative to 2025"
+      "description": "Age since the most recent incident year (relative to 2025)"
     },
     {
       "name": "RECENCY_DECAY",
@@ -167,40 +168,34 @@
       "depends_on": [
         "INCIDENT_AGE"
       ],
-      "description": "Decay factor based on incident recency"
+      "description": "Recency decay factor"
     },
     {
-      "name": "WEIGHT",
+      "name": "WEIGHT_PER_INCIDENT",
       "formula": "(5 - stars) + log(useful + 1)",
       "depends_on": [
         "stars",
         "useful"
       ],
-      "description": "Per-incident weight component for a review"
+      "description": "Per-incident weight for credibility"
     },
     {
       "name": "TOTAL_INCIDENT_WEIGHT",
-      "formula": "SUM(WEIGHT_i for each incident review)",
+      "formula": "SUM(WEIGHT_PER_INCIDENT) over incident_reviews",
       "depends_on": [
-        "WEIGHT",
+        "WEIGHT_PER_INCIDENT",
         "incident_reviews"
       ],
       "description": "Total weight across incident reviews"
     },
     {
       "name": "CREDIBILITY_FACTOR",
-      "formula": "TOTAL_INCIDENT_WEIGHT / MAX(N_TOTAL_INCIDENTS, 1)",
+      "formula": "TOTAL_INCIDENT_WEIGHT / max(N_TOTAL_INCIDENTS, 1)",
       "depends_on": [
         "TOTAL_INCIDENT_WEIGHT",
         "N_TOTAL_INCIDENTS"
       ],
-      "description": "Credibility factor based on incident weight and count"
-    },
-    {
-      "name": "BASE_RISK",
-      "formula": "2.5",
-      "depends_on": [],
-      "description": "Base risk constant"
+      "description": "Overall credibility factor"
     },
     {
       "name": "INCIDENT_IMPACT",
@@ -210,7 +205,7 @@
         "RECENCY_DECAY",
         "CREDIBILITY_FACTOR"
       ],
-      "description": "Impact contribution from incidents"
+      "description": "Impact of incidents on risk"
     },
     {
       "name": "SAFETY_IMPACT",
@@ -219,7 +214,7 @@
         "SAFETY_CREDIT",
         "CONFIDENCE_PENALTY"
       ],
-      "description": "Impact contribution from safety interactions"
+      "description": "Impact of safety interactions on risk"
     },
     {
       "name": "CUISINE_IMPACT",
@@ -227,7 +222,7 @@
       "depends_on": [
         "CUISINE_MODIFIER"
       ],
-      "description": "Impact contribution from cuisine category"
+      "description": "Impact of cuisine category"
     },
     {
       "name": "RAW_RISK",
@@ -239,20 +234,20 @@
         "CUISINE_IMPACT",
         "N_BETRAYAL"
       ],
-      "description": "Unbounded risk before clamping"
+      "description": "Unclamped risk before final enforcement"
     },
     {
       "name": "FINAL_RISK_SCORE",
-      "formula": "min(20.0, max(0.0, RAW_RISK))",
+      "formula": "max(0.0, min(20.0, RAW_RISK))",
       "depends_on": [
         "RAW_RISK"
       ],
-      "description": "Final risk score, bounded [0, 20]"
+      "description": "Final risk score bounded between 0 and 20"
     }
   ],
   "lookups": [
     {
-      "name": "CUISINE_MODIFIER",
+      "name": "CUISINE_MODIFIER_LOOKUP",
       "mapping": {
         "Thai": 2.0,
         "Vietnamese": 1.8,
@@ -271,6 +266,26 @@
     }
   ],
   "output_fields": [
+    "N_MILD",
+    "N_MODERATE",
+    "N_SEVERE",
+    "N_TOTAL_INCIDENTS",
+    "N_POSITIVE",
+    "N_NEGATIVE",
+    "N_BETRAYAL",
+    "N_ALLERGY_REVIEWS",
+    "REVIEW_DENSITY",
+    "CONFIDENCE_PENALTY",
+    "MOST_RECENT_INCIDENT_YEAR",
+    "INCIDENT_AGE",
+    "RECENCY_DECAY",
+    "WEIGHT_PER_INCIDENT",
+    "TOTAL_INCIDENT_WEIGHT",
+    "CREDIBILITY_FACTOR",
+    "INCIDENT_IMPACT",
+    "SAFETY_IMPACT",
+    "CUISINE_IMPACT",
+    "RAW_RISK",
     "FINAL_RISK_SCORE",
     "VERDICT"
   ],
@@ -278,12 +293,12 @@
     "source_field": "FINAL_RISK_SCORE",
     "thresholds": [
       {
-        "max": 3.999999,
+        "max": 3.9999,
         "verdict": "Low Risk"
       },
       {
         "min": 4.0,
-        "max": 7.999999,
+        "max": 7.9999,
         "verdict": "High Risk"
       },
       {
@@ -292,5 +307,5 @@
       }
     ]
   },
-  "extraction_prompt_template": "You will be given a single review with placeholders: REVIEW_TEXT, REVIEW_STARS, REVIEW_DATE. Your task is to output a JSON object with the following keys and constrained values:\n- incident_severity: one of [none, mild, moderate, severe]\n- account_type: one of [none, firsthand, secondhand, hypothetical]\n- safety_interaction: one of [none, positive, negative, betrayal]\nIf information needed to determine any field is missing in the review, default as follows: incident_severity = 'none', account_type = 'none', safety_interaction = 'none'.\nReturn only the JSON object and nothing else."
+  "extraction_prompt_template": "You are an AI assistant that extracts allergy-safety signals from a single review.\n\nPlaceholders to use: REVIEW_TEXT, REVIEW_STARS, REVIEW_DATE.\n\nFrom REVIEW_TEXT, determine and return a JSON object with the following fields:\n- incident_severity: one of 'none','mild','moderate','severe'. Describe any allergic incident severity described in the review.\n- account_type: one of 'none','firsthand','secondhand','hypothetical'. Indicate the origin of the allergy incident in the account.\n- safety_interaction: one of 'none','positive','negative','betrayal'. Indicate staff interaction about allergies and accommodations.\n\nReturn a JSON object with exactly these keys and values taken from the allowed enumerations. Do not include any additional fields."
 }

@@ -1,0 +1,409 @@
+{
+  "task_name": "G1a",
+  "filter_keywords": [
+    "peanut",
+    "peanuts",
+    "nut",
+    "nuts",
+    "allergy",
+    "allerg",
+    "anaphylaxis",
+    "epipen",
+    "hives",
+    "swelling",
+    "rash",
+    "an emergency",
+    "cross-contamination"
+  ],
+  "extraction_fields": [
+    {
+      "name": "incident_severity",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "mild",
+        "moderate",
+        "severe"
+      ],
+      "description": "Severity of allergic reaction described in the review",
+      "extraction_hint": "none = no reaction described; mild = stomach upset or mild discomfort; moderate = visible symptoms (hives, swelling) or need meds; severe = life-threatening (anaphylaxis, ER, hospitalization)"
+    },
+    {
+      "name": "account_type",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "firsthand",
+        "secondhand",
+        "hypothetical"
+      ],
+      "description": "Who the incident is attributed to",
+      "extraction_hint": "firsthand = personal experience (I had, my child, we experienced); secondhand = reported by someone else; hypothetical = concern without incident"
+    },
+    {
+      "name": "safety_interaction",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "positive",
+        "negative",
+        "betrayal"
+      ],
+      "description": "Staff interaction about allergies and accommodation",
+      "extraction_hint": "positive = staff asked about allergies and accommodated; negative = staff dismissed or refused; betrayal = staff claimed safe but customer still had a reaction; none = no interaction"
+    }
+  ],
+  "extraction_prompt": "Analyze this restaurant review and extract the following signals.\n\nREVIEW:\n{review_text}\n\nREVIEW METADATA:\n- Date: {review_date}\n- Stars: {review_stars}\n- Useful votes: {review_useful}\n\nEXTRACT THESE FIELDS:\n\n**incident_severity**\n  Type: Choose ONE of ['none', 'mild', 'moderate', 'severe']\n  Description: Severity of allergic reaction described in the review\n  Hints: none = no reaction described; mild = stomach upset or mild discomfort; moderate = visible symptoms (hives, swelling) or need meds; severe = life-threatening (anaphylaxis, ER, hospitalization)\n\n**account_type**\n  Type: Choose ONE of ['none', 'firsthand', 'secondhand', 'hypothetical']\n  Description: Who the incident is attributed to\n  Hints: firsthand = personal experience (I had, my child, we experienced); secondhand = reported by someone else; hypothetical = concern without incident\n\n**safety_interaction**\n  Type: Choose ONE of ['none', 'positive', 'negative', 'betrayal']\n  Description: Staff interaction about allergies and accommodation\n  Hints: positive = staff asked about allergies and accommodated; negative = staff dismissed or refused; betrayal = staff claimed safe but customer still had a reaction; none = no interaction\n\nOUTPUT FORMAT:\nReturn a JSON object with these exact keys:\n{\n  \"incident_severity\": \"<one of ['none', 'mild', 'moderate', 'severe']>\",\n  \"account_type\": \"<one of ['none', 'firsthand', 'secondhand', 'hypothetical']>\",\n  \"safety_interaction\": \"<one of ['none', 'positive', 'negative', 'betrayal']>\"\n}\n\nIf a field cannot be determined from the review, use the default:\n  incident_severity: \"none\"\n  account_type: \"none\"\n  safety_interaction: \"none\"",
+  "array_assemblies": [
+    {
+      "array_name": "incident_severities",
+      "source_field": "incident_severity",
+      "filter_condition": "",
+      "include_metadata": false
+    },
+    {
+      "array_name": "account_types",
+      "source_field": "account_type",
+      "filter_condition": "",
+      "include_metadata": false
+    },
+    {
+      "array_name": "safety_interactions",
+      "source_field": "safety_interaction",
+      "filter_condition": "",
+      "include_metadata": false
+    },
+    {
+      "array_name": "review_stars",
+      "source_field": "stars",
+      "filter_condition": "",
+      "include_metadata": false
+    },
+    {
+      "array_name": "review_useful",
+      "source_field": "useful",
+      "filter_condition": "",
+      "include_metadata": false
+    },
+    {
+      "array_name": "review_years",
+      "source_field": "year",
+      "filter_condition": "",
+      "include_metadata": false
+    }
+  ],
+  "lookups": [
+    {
+      "name": "cuisine_modifier_lookup",
+      "source_field": "restaurant_category",
+      "mapping": {
+        "Thai": 2.0,
+        "Vietnamese": 1.8,
+        "Chinese": 1.5,
+        "Asian": 1.5,
+        "Indian": 1.3,
+        "Japanese": 1.2,
+        "Korean": 1.2,
+        "Mexican": 1.0,
+        "Italian": 0.5,
+        "American": 0.5,
+        "Pizza": 0.5
+      },
+      "default": 1.0,
+      "description": "Risk modifier based on cuisine type"
+    }
+  ],
+  "computations": [
+    {
+      "name": "n_mild",
+      "formula": "sum(1 for e in extractions if e[\"incident_severity\"] == \"mild\" and e[\"account_type\"] == \"firsthand\")",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Count of firsthand mild incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_moderate",
+      "formula": "sum(1 for e in extractions if e[\"incident_severity\"] == \"moderate\" and e[\"account_type\"] == \"firsthand\")",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Count of firsthand moderate incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_severe",
+      "formula": "sum(1 for e in extractions if e[\"incident_severity\"] == \"severe\" and e[\"account_type\"] == \"firsthand\")",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Count of firsthand severe incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_total_incidents",
+      "formula": "n_mild + n_moderate + n_severe",
+      "depends_on": [
+        "n_mild",
+        "n_moderate",
+        "n_severe"
+      ],
+      "description": "Total firsthand incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_positive",
+      "formula": "sum(1 for e in extractions if e[\"safety_interaction\"] == \"positive\")",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Count of positive safety interactions",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_negative",
+      "formula": "sum(1 for e in extractions if e[\"safety_interaction\"] == \"negative\")",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Count of negative safety interactions",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_betrayal",
+      "formula": "sum(1 for e in extractions if e[\"safety_interaction\"] == \"betrayal\")",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Count of betrayal safety interactions",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_allergy_reviews",
+      "formula": "len(extractions)",
+      "depends_on": [
+        "extractions"
+      ],
+      "description": "Total reviews mentioning allergy-related terms",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "review_density",
+      "formula": "min(1.0, n_allergy_reviews / 10.0)",
+      "depends_on": [
+        "n_allergy_reviews"
+      ],
+      "description": "Allergy term mentions density capped at 1.0",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "most_recent_incident_year",
+      "formula": "max(review_years) if review_years else 2020",
+      "depends_on": [
+        "review_years"
+      ],
+      "description": "Most recent incident year (default 2020)",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "incident_age",
+      "formula": "2025 - most_recent_incident_year",
+      "depends_on": [
+        "most_recent_incident_year"
+      ],
+      "description": "Years since most recent incident",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "recency_decay",
+      "formula": "max(0.3, 1.0 - (incident_age * 0.15))",
+      "depends_on": [
+        "incident_age"
+      ],
+      "description": "Decay factor based on recency",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "total_incident_weight",
+      "formula": "sum((5 - s) + log(u + 1) for s, u in zip(review_stars, review_useful))",
+      "depends_on": [
+        "review_stars",
+        "review_useful"
+      ],
+      "description": "Total weighted incident score from per-incident reviews",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "credibility_factor",
+      "formula": "total_incident_weight / max(n_total_incidents, 1)",
+      "depends_on": [
+        "total_incident_weight",
+        "n_total_incidents"
+      ],
+      "description": "Credibility factor of safety incidents",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "incident_score",
+      "formula": "n_mild * 2 + n_moderate * 5 + n_severe * 15",
+      "depends_on": [
+        "n_mild",
+        "n_moderate",
+        "n_severe"
+      ],
+      "description": "Weighted incident score",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "cuisine_modifier",
+      "formula": "cuisine_modifier_lookup.get(restaurant_category, 1.0)",
+      "depends_on": [
+        "restaurant_category",
+        "cuisine_modifier_lookup"
+      ],
+      "description": "Cuisine-based risk modifier",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "cuisine_impact",
+      "formula": "cuisine_modifier * 0.5",
+      "depends_on": [
+        "cuisine_modifier"
+      ],
+      "description": "Impact from cuisine modifier",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "confidence_penalty",
+      "formula": "1.0 - (0.3 * (1 - review_density))",
+      "depends_on": [
+        "review_density"
+      ],
+      "description": "Penalty factor based on density of allergy mentions",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "safety_credit",
+      "formula": "n_positive * 1.0 - n_negative * 0.5 - n_betrayal * 5.0",
+      "depends_on": [
+        "n_positive",
+        "n_negative",
+        "n_betrayal"
+      ],
+      "description": "Net safety credit from interactions",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "safety_impact",
+      "formula": "safety_credit * confidence_penalty",
+      "depends_on": [
+        "safety_credit",
+        "confidence_penalty"
+      ],
+      "description": "Impact of safety credit after confidence penalty",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "base_risk",
+      "formula": "2.5",
+      "depends_on": [],
+      "description": "Base risk constant",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "incident_impact",
+      "formula": "incident_score * recency_decay * credibility_factor",
+      "depends_on": [
+        "incident_score",
+        "recency_decay",
+        "credibility_factor"
+      ],
+      "description": "Impact from incidents after recency and credibility adjustments",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "raw_risk",
+      "formula": "base_risk + incident_impact - safety_impact + cuisine_impact - (n_betrayal * 3.0)",
+      "depends_on": [
+        "base_risk",
+        "incident_impact",
+        "safety_impact",
+        "cuisine_impact",
+        "n_betrayal"
+      ],
+      "description": "Unclamped risk before final bounds",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "final_risk_score",
+      "formula": "max(0.0, min(20.0, raw_risk))",
+      "depends_on": [
+        "raw_risk"
+      ],
+      "description": "Final risk score bounded to [0, 20]",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "verdict",
+      "formula": "\"Low Risk\" if final_risk_score < 4.0 else (\"High Risk\" if final_risk_score < 8.0 else \"Critical Risk\")",
+      "depends_on": [
+        "final_risk_score"
+      ],
+      "description": "Final verdict derived from risk score",
+      "is_aggregate": false,
+      "is_output": true
+    }
+  ],
+  "output_fields": [
+    "n_total_incidents",
+    "incident_score",
+    "recency_decay",
+    "credibility_factor",
+    "final_risk_score",
+    "verdict"
+  ],
+  "name_map": {
+    "SAFETY_CREDIT": "safety_credit",
+    "FINAL_RISK_SCORE": "final_risk_score",
+    "RECENCY_DECAY": "recency_decay",
+    "CUISINE_MODIFIER": "cuisine_modifier",
+    "SAFETY_IMPACT": "safety_impact",
+    "TOTAL_INCIDENT_WEIGHT": "total_incident_weight",
+    "REVIEW_DENSITY": "review_density",
+    "CUISINE_IMPACT": "cuisine_impact",
+    "BASE_RISK": "base_risk",
+    "RAW_RISK": "raw_risk",
+    "CONFIDENCE_PENALTY": "confidence_penalty",
+    "INCIDENT_IMPACT": "incident_impact",
+    "CREDIBILITY_FACTOR": "credibility_factor",
+    "INCIDENT_SCORE": "incident_score",
+    "incident_years": "review_years",
+    "incident_stars": "review_stars",
+    "incident_useful": "review_useful"
+  }
+}

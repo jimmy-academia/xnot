@@ -154,6 +154,111 @@ For G1a (Peanut Allergy Safety), the scored primitives are:
 
 Note: `final_risk_score` and `verdict` are NOT included in primitive accuracy as they are captured by AUPRC.
 
+---
+
+## G1a-v2: Harder Formula with Level 3/4 Primitives
+
+### Primitive Hierarchy
+
+V2 introduces a deeper computation graph with primitives at different dependency levels:
+
+```
+Level 1: Per-Review Extraction
+  incident_severity, account_type, safety_interaction, year, stars, useful
+       │
+       ▼
+Level 2: Direct Aggregations (6 primitives)
+  ├── n_total_incidents (93% acc) ─────────┐
+  ├── n_allergy_reviews (1% acc) ──────────┤
+  ├── trajectory_multiplier (93% acc) ─────┤
+  ├── recency_decay (99% acc) ─────────────┤
+  ├── credibility_factor (93% acc) ────────┤
+  └── cuisine_impact (48% acc) ────────────┤
+       │                                   │
+       ▼                                   │
+Level 3: Derived from Level 2 (4 primitives)
+  ├── trust_score (91% acc) ───────────────┤
+  ├── trust_impact (91% acc) ──────────────┤
+  ├── positive_credit (83% acc) ───────────┤
+  └── adjusted_incident_score (95% acc) ───┤
+       │                                   │
+       ▼                                   │
+Level 4: Compound (1 primitive)            │
+  └── incident_impact (96% acc) ◄──────────┘
+       │
+       ▼
+Final Score: RAW_RISK = BASE + incident_impact + trust_impact + cuisine_impact - positive_credit
+```
+
+### Two Independent Computation Chains
+
+The V2 formula has two separate dependency chains:
+
+**Chain A: Incident Path** (Level 3/4 primitives, 83-96% accuracy)
+- `n_mild/n_moderate/n_severe` → `adjusted_incident_score` → `incident_impact`
+- Well-structured, model performs reliably
+
+**Chain B: Cuisine/Silence Path** (broken, 1-48% accuracy)
+- `n_allergy_reviews` → `silence_penalty` → `cuisine_impact`
+- `n_allergy_reviews` has definition mismatch (keyword match vs semantic relevance)
+- Model predicts 0 → incorrectly triggers silence_penalty → doubles cuisine_impact
+
+### V2 Scored Primitives
+
+| Primitive | Level | Tolerance | Baseline Accuracy |
+|-----------|-------|-----------|-------------------|
+| `n_total_incidents` | 2 | 0 | 93% |
+| `n_allergy_reviews` | 2 | 0 | 1% |
+| `trajectory_multiplier` | 2 | 0 | 93% |
+| `recency_decay` | 2 | 0.1 | 99% |
+| `credibility_factor` | 2 | 0.2 | 93% |
+| `cuisine_impact` | 2 | 0.2 | 48% |
+| `trust_score` | 3 | 0.1 | 91% |
+| `trust_impact` | 3 | 0.3 | 91% |
+| `positive_credit` | 3 | 0.2 | 83% |
+| `adjusted_incident_score` | 3 | 1.0 | 95% |
+| `incident_impact` | 4 | 2.0 | 96% |
+
+---
+
+## Design Decision: Score All Primitives
+
+### The Question
+
+With V2 baseline results:
+- **AUPRC**: 0.238 (already low - task is hard)
+- **Primitive Accuracy**: 80.3% (pulled up by easy primitives)
+- **Adjusted AUPRC**: 0.191
+
+Should we separate "scoring" vs "non-scoring" primitives?
+
+If we only scored hard primitives (n_allergy_reviews, cuisine_impact):
+- Primitive Accuracy would drop to ~25%
+- Adjusted AUPRC would be 0.238 × 0.25 = 0.06
+
+### Decision: Score All Primitives
+
+**Rationale:**
+
+1. **AUPRC = 0.238 already demonstrates task difficulty** - baseline is near random on ranking
+
+2. **Adjusted AUPRC = 0.191 is a reasonable single metric** - incorporates both ranking and reasoning quality
+
+3. **Per-primitive breakdown is valuable for ANALYSIS** - understanding where failures occur (e.g., n_allergy_reviews at 1% reveals definition mismatch)
+
+4. **Separating scoring/non-scoring adds complexity without clear benefit** - the task is already hard enough
+
+5. **Consistency across task versions** - V1 and V2 use the same scoring approach (all primitives counted)
+
+### When to Reconsider
+
+Separating scoring/non-scoring primitives might be valuable if:
+- Different methods have similar AUPRC but different primitive accuracy patterns
+- We need finer-grained difficulty tuning
+- Some primitives are purely diagnostic (computed for analysis only)
+
+For now, the simpler approach (score all) suffices.
+
 ### Usage
 
 ```bash

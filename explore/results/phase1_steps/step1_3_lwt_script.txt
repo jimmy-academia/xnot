@@ -1,0 +1,45 @@
+# === LWT SEED SCRIPT ===
+# Task: G1a
+
+# --- FILTER RELEVANT REVIEWS ---
+(filter_keywords)=CONST(["peanut", "peanuts", "nut", "nut allergy", "peanut allergy", "allergy", "allergic", "anaphylaxis", "epipen", "epi-pen", "allergic reaction"])
+(relevant_reviews)=TOOL('keyword_filter', reviews={(context)}[reviews], keywords={(filter_keywords)})
+
+# --- EXTRACTION (Phase 2 expands per review) ---
+# @FOREACH review_idx IN range(len(relevant_reviews)):
+#   (extract_{review_idx})=LLM(extraction_prompt.format(review=relevant_reviews[review_idx]))
+# @END_FOREACH
+# Extraction prompt stored in: extraction_prompt
+
+# --- ARRAY ASSEMBLY ---
+
+# --- LOOKUPS ---
+(cuisine_modifier)=CONST({"Thai": 2.0, "Vietnamese": 1.8, "Chinese": 1.5, "Asian": 1.5, "Indian": 1.3, "Japanese": 1.2, "Korean": 1.2, "Mexican": 1.0, "Italian": 0.5, "American": 0.5, "Pizza": 0.5})
+
+# --- COMPUTATIONS ---
+(n_mild)=COMPUTE('0')
+(n_moderate)=COMPUTE('0')
+(n_severe)=COMPUTE('0')
+(n_total_incidents)=COMPUTE('n_mild + n_moderate + n_severe')
+(n_positive)=COMPUTE('0')
+(n_negative)=COMPUTE('0')
+(n_betrayal)=COMPUTE('0')
+(n_allergy_reviews)=COMPUTE('0')
+(review_density)=COMPUTE('min(1.0, n_allergy_reviews / 10.0)')
+(most_recent_incident_year)=COMPUTE('2020')
+(incident_age)=COMPUTE('2025 - most_recent_incident_year')
+(recency_decay)=COMPUTE('max(0.3, 1.0 - (incident_age * 0.15))')
+(total_incident_weight)=COMPUTE('0')
+(credibility_factor)=COMPUTE('total_incident_weight / max(n_total_incidents, 1)')
+(incident_score)=COMPUTE('n_mild * 2 + n_moderate * 5 + n_severe * 15')
+(base_risk)=COMPUTE('2.5')
+(safety_credit)=COMPUTE('n_positive * 1.0 - n_negative * 0.5 - n_betrayal * 5.0')
+(confidence_penalty)=COMPUTE('1.0 - (0.3 * (1 - review_density))')
+(safety_impact)=COMPUTE('safety_credit * confidence_penalty')
+(cuisine_impact)=COMPUTE('cuisine_modifier * 0.5')
+(raw_risk)=COMPUTE('base_risk + incident_score * recency_decay * credibility_factor - safety_impact + cuisine_impact - (n_betrayal * 3.0)')
+(final_risk_score)=COMPUTE('min(20.0, max(0.0, raw_risk))')
+(verdict)=COMPUTE('"Low Risk" if final_risk_score < 4.0 else ("High Risk" if final_risk_score < 8.0 else "Critical Risk")')
+
+# --- OUTPUT ---
+# Output fields: ['n_total_incidents', 'incident_score', 'recency_decay', 'credibility_factor', 'final_risk_score', 'verdict']

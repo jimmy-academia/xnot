@@ -1,0 +1,938 @@
+{
+  "timestamp": "2026-01-10T19:24:44.048277",
+  "method": "general_anot",
+  "task": "G1a-v2",
+  "k": 200,
+  "workers": 50,
+  "seed_task": "G1a-v2",
+  "seed_generated_dynamically": true,
+  "n_restaurants": 5,
+  "metrics": {
+    "n_samples": 5,
+    "distribution": {
+      "Low Risk": 5,
+      "High Risk": 0,
+      "Critical Risk": 0
+    },
+    "auprc_ge_1": 0.0,
+    "nap_ge_1": 0.0,
+    "prevalence_ge_1": 0.0,
+    "threshold_1_name": ">=High Risk",
+    "auprc_ge_2": 0.0,
+    "nap_ge_2": 0.0,
+    "prevalence_ge_2": 0.0,
+    "threshold_2_name": ">=Critical Risk",
+    "ordinal_auprc": 0.0,
+    "ordinal_nap": 0.0,
+    "severity_ordering_ap": NaN,
+    "avg_primitive_accuracy": 0.38181818181818183,
+    "adjusted_auprc": 0.0,
+    "adjusted_nap": 0.0,
+    "per_primitive": {
+      "n_total_incidents": {
+        "accuracy": 0.0,
+        "level": 2
+      },
+      "n_allergy_reviews": {
+        "accuracy": 0.2,
+        "level": 2
+      },
+      "trust_score": {
+        "accuracy": 1.0,
+        "level": 3
+      },
+      "adjusted_incident_score": {
+        "accuracy": 0.0,
+        "level": 3
+      },
+      "trajectory_multiplier": {
+        "accuracy": 1.0,
+        "level": 2
+      },
+      "recency_decay": {
+        "accuracy": 1.0,
+        "level": 2
+      },
+      "credibility_factor": {
+        "accuracy": 1.0,
+        "level": 2
+      },
+      "cuisine_impact": {
+        "accuracy": 0.0,
+        "level": 2
+      },
+      "incident_impact": {
+        "accuracy": 0.0,
+        "level": 4
+      },
+      "trust_impact": {
+        "accuracy": 0.0,
+        "level": 3
+      },
+      "positive_credit": {
+        "accuracy": 0.0,
+        "level": 3
+      }
+    }
+  },
+  "primitive_stats": {
+    "n_total_incidents": {
+      "accuracy": 0.0,
+      "level": 2,
+      "correct": 0,
+      "total": 5
+    },
+    "n_allergy_reviews": {
+      "accuracy": 0.2,
+      "level": 2,
+      "correct": 1,
+      "total": 5
+    },
+    "trust_score": {
+      "accuracy": 1.0,
+      "level": 3,
+      "correct": 5,
+      "total": 5
+    },
+    "adjusted_incident_score": {
+      "accuracy": 0.0,
+      "level": 3,
+      "correct": 0,
+      "total": 5
+    },
+    "trajectory_multiplier": {
+      "accuracy": 1.0,
+      "level": 2,
+      "correct": 5,
+      "total": 5
+    },
+    "recency_decay": {
+      "accuracy": 1.0,
+      "level": 2,
+      "correct": 5,
+      "total": 5
+    },
+    "credibility_factor": {
+      "accuracy": 1.0,
+      "level": 2,
+      "correct": 5,
+      "total": 5
+    },
+    "cuisine_impact": {
+      "accuracy": 0.0,
+      "level": 2,
+      "correct": 0,
+      "total": 5
+    },
+    "incident_impact": {
+      "accuracy": 0.0,
+      "level": 4,
+      "correct": 0,
+      "total": 5
+    },
+    "trust_impact": {
+      "accuracy": 0.0,
+      "level": 3,
+      "correct": 0,
+      "total": 5
+    },
+    "positive_credit": {
+      "accuracy": 0.0,
+      "level": 3,
+      "correct": 0,
+      "total": 5
+    }
+  },
+  "runs": [
+    {
+      "restaurant": "Aladdin Pizzeria & Eatery",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.5,
+          "predicted": 2.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "n_allergy_reviews": 9,
+        "trust_raw": 1.0,
+        "trust_score": 1.0,
+        "mild_weight": 1.0,
+        "moderate_weight": 5.0,
+        "severe_weight": 15.0,
+        "adjusted_incident_score": 0.0,
+        "n_recent": 0,
+        "n_old": 0,
+        "recent_ratio": 0.0,
+        "trajectory_multiplier": 1.0,
+        "cuisine_modifier": 1.0,
+        "silence_penalty": 0.0,
+        "cuisine_impact": 0.5,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "trust_impact": 0.0,
+        "positive_credit": 0.0,
+        "raw_risk": 2.5,
+        "final_risk_score": 2.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_MILD": 0,
+        "N_MODERATE": 0,
+        "N_SEVERE": 0,
+        "N_TOTAL_INCIDENTS": 0,
+        "N_POSITIVE": 0,
+        "N_NEGATIVE": 0,
+        "N_BETRAYAL": 0,
+        "N_ALLERGY_REVIEWS": 8,
+        "TRUST_SCORE": 1.0,
+        "MILD_WEIGHT": 1.0,
+        "MODERATE_WEIGHT": 5.0,
+        "ADJUSTED_INCIDENT_SCORE": 0.0,
+        "N_RECENT": 0,
+        "N_OLD": 0,
+        "RECENT_RATIO": 0,
+        "TRAJECTORY_MULTIPLIER": 1.0,
+        "CUISINE_MODIFIER": 0.0,
+        "SILENCE_PENALTY": 0,
+        "CUISINE_IMPACT": 0.0,
+        "MOST_RECENT_YEAR": 2020,
+        "INCIDENT_AGE": 5,
+        "RECENCY_DECAY": 0.3,
+        "TOTAL_WEIGHT": 0,
+        "CREDIBILITY_FACTOR": 1.0,
+        "INCIDENT_IMPACT": 0.0,
+        "TRUST_IMPACT": 0.0,
+        "POSITIVE_CREDIT": 0.0,
+        "RAW_RISK": 2.0,
+        "FINAL_RISK_SCORE": 2.0,
+        "VERDICT": "Low Risk"
+      },
+      "primitive_results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "n_allergy_reviews": {
+          "expected": 9,
+          "predicted": 8,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "trust_score": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 3
+        },
+        "adjusted_incident_score": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 1.0,
+          "level": 3
+        },
+        "trajectory_multiplier": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0,
+          "level": 2
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 2
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "cuisine_impact": {
+          "expected": 0.5,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "incident_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 2.0,
+          "level": 4
+        },
+        "trust_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.3,
+          "level": 3
+        },
+        "positive_credit": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 3
+        }
+      }
+    },
+    {
+      "restaurant": "Pizzeria Pesto",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.5,
+          "predicted": 2.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "n_allergy_reviews": 27,
+        "trust_raw": 1.0,
+        "trust_score": 1.0,
+        "mild_weight": 1.0,
+        "moderate_weight": 5.0,
+        "severe_weight": 15.0,
+        "adjusted_incident_score": 0.0,
+        "n_recent": 0,
+        "n_old": 0,
+        "recent_ratio": 0.0,
+        "trajectory_multiplier": 1.0,
+        "cuisine_modifier": 1.0,
+        "silence_penalty": 0.0,
+        "cuisine_impact": 0.5,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "trust_impact": 0.0,
+        "positive_credit": 0.0,
+        "raw_risk": 2.5,
+        "final_risk_score": 2.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_MILD": 0,
+        "N_MODERATE": 0,
+        "N_SEVERE": 0,
+        "N_TOTAL_INCIDENTS": 0,
+        "N_POSITIVE": 0,
+        "N_NEGATIVE": 0,
+        "N_BETRAYAL": 0,
+        "N_ALLERGY_REVIEWS": 12,
+        "TRUST_SCORE": 1.0,
+        "MILD_WEIGHT": 1.0,
+        "MODERATE_WEIGHT": 5.0,
+        "ADJUSTED_INCIDENT_SCORE": 0.0,
+        "N_RECENT": 0,
+        "N_OLD": 0,
+        "RECENT_RATIO": 0,
+        "TRAJECTORY_MULTIPLIER": 1.0,
+        "CUISINE_MODIFIER": 0.0,
+        "SILENCE_PENALTY": 0,
+        "CUISINE_IMPACT": 0.0,
+        "MOST_RECENT_YEAR": 2020,
+        "INCIDENT_AGE": 5,
+        "RECENCY_DECAY": 0.3,
+        "TOTAL_WEIGHT": 0,
+        "CREDIBILITY_FACTOR": 1.0,
+        "INCIDENT_IMPACT": 0.0,
+        "TRUST_IMPACT": 0.0,
+        "POSITIVE_CREDIT": 0.0,
+        "RAW_RISK": 2.0,
+        "FINAL_RISK_SCORE": 2.0,
+        "VERDICT": "Low Risk"
+      },
+      "primitive_results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "n_allergy_reviews": {
+          "expected": 27,
+          "predicted": 12,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "trust_score": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 3
+        },
+        "adjusted_incident_score": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 1.0,
+          "level": 3
+        },
+        "trajectory_multiplier": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0,
+          "level": 2
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 2
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "cuisine_impact": {
+          "expected": 0.5,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "incident_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 2.0,
+          "level": 4
+        },
+        "trust_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.3,
+          "level": 3
+        },
+        "positive_credit": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 3
+        }
+      }
+    },
+    {
+      "restaurant": "Ricci's Hoagies",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.5,
+          "predicted": 2.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "n_allergy_reviews": 5,
+        "trust_raw": 1.0,
+        "trust_score": 1.0,
+        "mild_weight": 1.0,
+        "moderate_weight": 5.0,
+        "severe_weight": 15.0,
+        "adjusted_incident_score": 0.0,
+        "n_recent": 0,
+        "n_old": 0,
+        "recent_ratio": 0.0,
+        "trajectory_multiplier": 1.0,
+        "cuisine_modifier": 1.0,
+        "silence_penalty": 0.0,
+        "cuisine_impact": 0.5,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "trust_impact": 0.0,
+        "positive_credit": 0.0,
+        "raw_risk": 2.5,
+        "final_risk_score": 2.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_MILD": 0,
+        "N_MODERATE": 0,
+        "N_SEVERE": 0,
+        "N_TOTAL_INCIDENTS": 0,
+        "N_POSITIVE": 0,
+        "N_NEGATIVE": 0,
+        "N_BETRAYAL": 0,
+        "N_ALLERGY_REVIEWS": 5,
+        "TRUST_SCORE": 1.0,
+        "MILD_WEIGHT": 1.0,
+        "MODERATE_WEIGHT": 5.0,
+        "ADJUSTED_INCIDENT_SCORE": 0.0,
+        "N_RECENT": 0,
+        "N_OLD": 0,
+        "RECENT_RATIO": 0,
+        "TRAJECTORY_MULTIPLIER": 1.0,
+        "CUISINE_MODIFIER": 0.0,
+        "SILENCE_PENALTY": 0,
+        "CUISINE_IMPACT": 0.0,
+        "MOST_RECENT_YEAR": 2020,
+        "INCIDENT_AGE": 5,
+        "RECENCY_DECAY": 0.3,
+        "TOTAL_WEIGHT": 0,
+        "CREDIBILITY_FACTOR": 1.0,
+        "INCIDENT_IMPACT": 0.0,
+        "TRUST_IMPACT": 0.0,
+        "POSITIVE_CREDIT": 0.0,
+        "RAW_RISK": 2.0,
+        "FINAL_RISK_SCORE": 2.0,
+        "VERDICT": "Low Risk"
+      },
+      "primitive_results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "n_allergy_reviews": {
+          "expected": 5,
+          "predicted": 5,
+          "correct": true,
+          "tolerance": 0,
+          "level": 2
+        },
+        "trust_score": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 3
+        },
+        "adjusted_incident_score": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 1.0,
+          "level": 3
+        },
+        "trajectory_multiplier": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0,
+          "level": 2
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 2
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "cuisine_impact": {
+          "expected": 0.5,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "incident_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 2.0,
+          "level": 4
+        },
+        "trust_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.3,
+          "level": 3
+        },
+        "positive_credit": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 3
+        }
+      }
+    },
+    {
+      "restaurant": "Hosteria Da Elio",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.5,
+          "predicted": 2.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "n_allergy_reviews": 9,
+        "trust_raw": 1.0,
+        "trust_score": 1.0,
+        "mild_weight": 1.0,
+        "moderate_weight": 5.0,
+        "severe_weight": 15.0,
+        "adjusted_incident_score": 0.0,
+        "n_recent": 0,
+        "n_old": 0,
+        "recent_ratio": 0.0,
+        "trajectory_multiplier": 1.0,
+        "cuisine_modifier": 1.0,
+        "silence_penalty": 0.0,
+        "cuisine_impact": 0.5,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "trust_impact": 0.0,
+        "positive_credit": 0.0,
+        "raw_risk": 2.5,
+        "final_risk_score": 2.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_MILD": 0,
+        "N_MODERATE": 0,
+        "N_SEVERE": 0,
+        "N_TOTAL_INCIDENTS": 0,
+        "N_POSITIVE": 0,
+        "N_NEGATIVE": 0,
+        "N_BETRAYAL": 0,
+        "N_ALLERGY_REVIEWS": 5,
+        "TRUST_SCORE": 1.0,
+        "MILD_WEIGHT": 1.0,
+        "MODERATE_WEIGHT": 5.0,
+        "ADJUSTED_INCIDENT_SCORE": 0.0,
+        "N_RECENT": 0,
+        "N_OLD": 0,
+        "RECENT_RATIO": 0,
+        "TRAJECTORY_MULTIPLIER": 1.0,
+        "CUISINE_MODIFIER": 0.0,
+        "SILENCE_PENALTY": 0,
+        "CUISINE_IMPACT": 0.0,
+        "MOST_RECENT_YEAR": 2020,
+        "INCIDENT_AGE": 5,
+        "RECENCY_DECAY": 0.3,
+        "TOTAL_WEIGHT": 0,
+        "CREDIBILITY_FACTOR": 1.0,
+        "INCIDENT_IMPACT": 0.0,
+        "TRUST_IMPACT": 0.0,
+        "POSITIVE_CREDIT": 0.0,
+        "RAW_RISK": 2.0,
+        "FINAL_RISK_SCORE": 2.0,
+        "VERDICT": "Low Risk"
+      },
+      "primitive_results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "n_allergy_reviews": {
+          "expected": 9,
+          "predicted": 5,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "trust_score": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 3
+        },
+        "adjusted_incident_score": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 1.0,
+          "level": 3
+        },
+        "trajectory_multiplier": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0,
+          "level": 2
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 2
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "cuisine_impact": {
+          "expected": 0.5,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "incident_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 2.0,
+          "level": 4
+        },
+        "trust_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.3,
+          "level": 3
+        },
+        "positive_credit": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 3
+        }
+      }
+    },
+    {
+      "restaurant": "Table 31",
+      "results": {
+        "verdict": {
+          "expected": "Low Risk",
+          "predicted": "Low Risk"
+        },
+        "final_risk_score": {
+          "expected": 2.5,
+          "predicted": 2.0
+        }
+      },
+      "ground_truth": {
+        "n_mild": 0,
+        "n_moderate": 0,
+        "n_severe": 0,
+        "n_total_incidents": 0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_betrayal": 0,
+        "n_allergy_reviews": 24,
+        "trust_raw": 1.0,
+        "trust_score": 1.0,
+        "mild_weight": 1.0,
+        "moderate_weight": 5.0,
+        "severe_weight": 15.0,
+        "adjusted_incident_score": 0.0,
+        "n_recent": 0,
+        "n_old": 0,
+        "recent_ratio": 0.0,
+        "trajectory_multiplier": 1.0,
+        "cuisine_modifier": 1.0,
+        "silence_penalty": 0.0,
+        "cuisine_impact": 0.5,
+        "most_recent_incident_year": 2020,
+        "incident_age": 5,
+        "recency_decay": 0.3,
+        "total_incident_weight": 0.0,
+        "credibility_factor": 1.0,
+        "incident_impact": 0.0,
+        "trust_impact": 0.0,
+        "positive_credit": 0.0,
+        "raw_risk": 2.5,
+        "final_risk_score": 2.5,
+        "verdict": "Low Risk"
+      },
+      "parsed": {
+        "N_MILD": 0,
+        "N_MODERATE": 0,
+        "N_SEVERE": 0,
+        "N_TOTAL_INCIDENTS": 0,
+        "N_POSITIVE": 0,
+        "N_NEGATIVE": 0,
+        "N_BETRAYAL": 0,
+        "N_ALLERGY_REVIEWS": 18,
+        "TRUST_SCORE": 1.0,
+        "MILD_WEIGHT": 1.0,
+        "MODERATE_WEIGHT": 5.0,
+        "ADJUSTED_INCIDENT_SCORE": 0.0,
+        "N_RECENT": 0,
+        "N_OLD": 0,
+        "RECENT_RATIO": 0,
+        "TRAJECTORY_MULTIPLIER": 1.0,
+        "CUISINE_MODIFIER": 0.0,
+        "SILENCE_PENALTY": 0,
+        "CUISINE_IMPACT": 0.0,
+        "MOST_RECENT_YEAR": 2020,
+        "INCIDENT_AGE": 5,
+        "RECENCY_DECAY": 0.3,
+        "TOTAL_WEIGHT": 0,
+        "CREDIBILITY_FACTOR": 1.0,
+        "INCIDENT_IMPACT": 0.0,
+        "TRUST_IMPACT": 0.0,
+        "POSITIVE_CREDIT": 0.0,
+        "RAW_RISK": 2.0,
+        "FINAL_RISK_SCORE": 2.0,
+        "VERDICT": "Low Risk"
+      },
+      "primitive_results": {
+        "n_total_incidents": {
+          "expected": 0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "n_allergy_reviews": {
+          "expected": 24,
+          "predicted": 18,
+          "correct": false,
+          "tolerance": 0,
+          "level": 2
+        },
+        "trust_score": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 3
+        },
+        "adjusted_incident_score": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 1.0,
+          "level": 3
+        },
+        "trajectory_multiplier": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0,
+          "level": 2
+        },
+        "recency_decay": {
+          "expected": 0.3,
+          "predicted": 0.3,
+          "correct": true,
+          "tolerance": 0.1,
+          "level": 2
+        },
+        "credibility_factor": {
+          "expected": 1.0,
+          "predicted": 1.0,
+          "correct": true,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "cuisine_impact": {
+          "expected": 0.5,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 2
+        },
+        "incident_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 2.0,
+          "level": 4
+        },
+        "trust_impact": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.3,
+          "level": 3
+        },
+        "positive_credit": {
+          "expected": 0.0,
+          "predicted": null,
+          "correct": false,
+          "tolerance": 0.2,
+          "level": 3
+        }
+      }
+    }
+  ]
+}

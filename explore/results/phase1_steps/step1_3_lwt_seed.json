@@ -1,0 +1,312 @@
+{
+  "task_name": "G1a",
+  "filter_keywords": [
+    "peanut",
+    "peanuts",
+    "nut",
+    "nut allergy",
+    "peanut allergy",
+    "allergy",
+    "allergic",
+    "anaphylaxis",
+    "epipen",
+    "epi-pen",
+    "allergic reaction"
+  ],
+  "extraction_fields": [
+    {
+      "name": "incident_severity",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "mild",
+        "moderate",
+        "severe"
+      ],
+      "description": "Severity of allergic reaction described in the review",
+      "extraction_hint": "none: no reaction described; mild: minor symptoms (stomach upset, mild discomfort); moderate: visible symptoms (hives, swelling, needed medication); severe: life-threatening (anaphylaxis, EpiPen, ER visit, hospitalization)"
+    },
+    {
+      "name": "account_type",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "firsthand",
+        "secondhand",
+        "hypothetical"
+      ],
+      "description": "Type of account regarding the allergy incident",
+      "extraction_hint": "firsthand: personal experience (e.g., 'I had', 'my child', 'we experienced'); secondhand: report heard from someone else (e.g., 'I heard', 'friend told me'); hypothetical: concern without an actual incident; none if not an allergy-related incident"
+    },
+    {
+      "name": "safety_interaction",
+      "field_type": "enum",
+      "values": [
+        "none",
+        "positive",
+        "negative",
+        "betrayal"
+      ],
+      "description": "Staff interaction about allergies and handling",
+      "extraction_hint": "positive: staff asked about allergies AND accommodated; negative: staff dismissive or refused to accommodate; betrayal: staff claimed safe BUT customer still had a reaction; none: no staff interaction about allergies"
+    }
+  ],
+  "extraction_prompt": "Analyze this restaurant review and extract the following signals.\n\nREVIEW:\n{review_text}\n\nREVIEW METADATA:\n- Date: {review_date}\n- Stars: {review_stars}\n- Useful votes: {review_useful}\n\nEXTRACT THESE FIELDS:\n\n**incident_severity**\n  Type: Choose ONE of ['none', 'mild', 'moderate', 'severe']\n  Description: Severity of allergic reaction described in the review\n  Hints: none: no reaction described; mild: minor symptoms (stomach upset, mild discomfort); moderate: visible symptoms (hives, swelling, needed medication); severe: life-threatening (anaphylaxis, EpiPen, ER visit, hospitalization)\n\n**account_type**\n  Type: Choose ONE of ['none', 'firsthand', 'secondhand', 'hypothetical']\n  Description: Type of account regarding the allergy incident\n  Hints: firsthand: personal experience (e.g., 'I had', 'my child', 'we experienced'); secondhand: report heard from someone else (e.g., 'I heard', 'friend told me'); hypothetical: concern without an actual incident; none if not an allergy-related incident\n\n**safety_interaction**\n  Type: Choose ONE of ['none', 'positive', 'negative', 'betrayal']\n  Description: Staff interaction about allergies and handling\n  Hints: positive: staff asked about allergies AND accommodated; negative: staff dismissive or refused to accommodate; betrayal: staff claimed safe BUT customer still had a reaction; none: no staff interaction about allergies\n\nOUTPUT FORMAT:\nReturn a JSON object with these exact keys:\n{\n  \"incident_severity\": \"<one of ['none', 'mild', 'moderate', 'severe']>\",\n  \"account_type\": \"<one of ['none', 'firsthand', 'secondhand', 'hypothetical']>\",\n  \"safety_interaction\": \"<one of ['none', 'positive', 'negative', 'betrayal']>\"\n}\n\nIf a field cannot be determined from the review, use the default:\n  incident_severity: \"none\"\n  account_type: \"none\"\n  safety_interaction: \"none\"",
+  "array_assemblies": [],
+  "lookups": [
+    {
+      "name": "cuisine_modifier",
+      "source_field": "categories",
+      "mapping": {
+        "Thai": 2.0,
+        "Vietnamese": 1.8,
+        "Chinese": 1.5,
+        "Asian": 1.5,
+        "Indian": 1.3,
+        "Japanese": 1.2,
+        "Korean": 1.2,
+        "Mexican": 1.0,
+        "Italian": 0.5,
+        "American": 0.5,
+        "Pizza": 0.5
+      },
+      "default": 1.0,
+      "description": "Risk modifier based on cuisine type"
+    }
+  ],
+  "computations": [
+    {
+      "name": "n_mild",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Count of firsthand mild incidents",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "n_moderate",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Count of firsthand moderate incidents",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "n_severe",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Count of firsthand severe incidents",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "n_total_incidents",
+      "formula": "n_mild + n_moderate + n_severe",
+      "depends_on": [
+        "n_mild",
+        "n_moderate",
+        "n_severe"
+      ],
+      "description": "Total firsthand incidents",
+      "is_aggregate": true,
+      "is_output": true
+    },
+    {
+      "name": "n_positive",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Positive safety interactions",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "n_negative",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Negative safety interactions",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "n_betrayal",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Betrayal safety interactions",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "n_allergy_reviews",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Number of allergy-related reviews",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "review_density",
+      "formula": "min(1.0, n_allergy_reviews / 10.0)",
+      "depends_on": [
+        "n_allergy_reviews"
+      ],
+      "description": "Review density for allergy mentions",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "most_recent_incident_year",
+      "formula": "2020",
+      "depends_on": [],
+      "description": "Most recent incident year (default)",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "incident_age",
+      "formula": "2025 - most_recent_incident_year",
+      "depends_on": [
+        "most_recent_incident_year"
+      ],
+      "description": "Age since most recent allergy incident",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "recency_decay",
+      "formula": "max(0.3, 1.0 - (incident_age * 0.15))",
+      "depends_on": [
+        "incident_age"
+      ],
+      "description": "Decay factor based on recency",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "total_incident_weight",
+      "formula": "0",
+      "depends_on": [],
+      "description": "Sum of weights for incident reviews (placeholder with no incidents)",
+      "is_aggregate": true,
+      "is_output": false
+    },
+    {
+      "name": "credibility_factor",
+      "formula": "total_incident_weight / max(n_total_incidents, 1)",
+      "depends_on": [
+        "total_incident_weight",
+        "n_total_incidents"
+      ],
+      "description": "Credibility factor for the incident score",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "incident_score",
+      "formula": "n_mild * 2 + n_moderate * 5 + n_severe * 15",
+      "depends_on": [
+        "n_mild",
+        "n_moderate",
+        "n_severe"
+      ],
+      "description": "Weighted incident score",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "base_risk",
+      "formula": "2.5",
+      "depends_on": [],
+      "description": "Baseline risk",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "safety_credit",
+      "formula": "n_positive * 1.0 - n_negative * 0.5 - n_betrayal * 5.0",
+      "depends_on": [
+        "n_positive",
+        "n_negative",
+        "n_betrayal"
+      ],
+      "description": "Overall safety-related credibility credit",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "confidence_penalty",
+      "formula": "1.0 - (0.3 * (1 - review_density))",
+      "depends_on": [
+        "review_density"
+      ],
+      "description": "Penalty based on confidence in reviews",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "safety_impact",
+      "formula": "safety_credit * confidence_penalty",
+      "depends_on": [
+        "safety_credit",
+        "confidence_penalty"
+      ],
+      "description": "Impact of safety interactions on risk",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "cuisine_impact",
+      "formula": "cuisine_modifier * 0.5",
+      "depends_on": [
+        "cuisine_modifier"
+      ],
+      "description": "Impact of cuisine type on risk",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "raw_risk",
+      "formula": "base_risk + incident_score * recency_decay * credibility_factor - safety_impact + cuisine_impact - (n_betrayal * 3.0)",
+      "depends_on": [
+        "base_risk",
+        "incident_score",
+        "recency_decay",
+        "credibility_factor",
+        "safety_impact",
+        "cuisine_impact",
+        "n_betrayal"
+      ],
+      "description": "Raw risk before capping",
+      "is_aggregate": false,
+      "is_output": false
+    },
+    {
+      "name": "final_risk_score",
+      "formula": "min(20.0, max(0.0, raw_risk))",
+      "depends_on": [
+        "raw_risk"
+      ],
+      "description": "Final risk score after clamping to [0,20]",
+      "is_aggregate": false,
+      "is_output": true
+    },
+    {
+      "name": "verdict",
+      "formula": "\"Low Risk\" if final_risk_score < 4.0 else (\"High Risk\" if final_risk_score < 8.0 else \"Critical Risk\")",
+      "depends_on": [
+        "final_risk_score"
+      ],
+      "description": "Overall risk verdict derived from final risk score",
+      "is_aggregate": false,
+      "is_output": true
+    }
+  ],
+  "output_fields": [
+    "n_total_incidents",
+    "incident_score",
+    "recency_decay",
+    "credibility_factor",
+    "final_risk_score",
+    "verdict"
+  ],
+  "name_map": {}
+}

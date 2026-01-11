@@ -1,0 +1,53 @@
+# === LWT SEED SCRIPT ===
+# Task: G1a
+
+# --- FILTER RELEVANT REVIEWS ---
+(filter_keywords)=CONST(["peanut", "peanuts", "nut", "nuts", "allergy", "allerg", "anaphylaxis", "epipen", "hives", "swelling", "rash", "an emergency", "cross-contamination"])
+(relevant_reviews)=TOOL('keyword_filter', reviews={(context)}[reviews], keywords={(filter_keywords)})
+
+# --- EXTRACTION (Phase 2 expands per review) ---
+# @FOREACH review_idx IN range(len(relevant_reviews)):
+#   (extract_{review_idx})=LLM(extraction_prompt.format(review=relevant_reviews[review_idx]))
+# @END_FOREACH
+# Extraction prompt stored in: extraction_prompt
+
+# --- ARRAY ASSEMBLY ---
+(incident_severities)=ASSEMBLE(extractions, field='incident_severity')
+(account_types)=ASSEMBLE(extractions, field='account_type')
+(safety_interactions)=ASSEMBLE(extractions, field='safety_interaction')
+(review_stars)=ASSEMBLE(extractions, field='stars')
+(review_useful)=ASSEMBLE(extractions, field='useful')
+(review_years)=ASSEMBLE(extractions, field='year')
+
+# --- LOOKUPS ---
+(cuisine_modifier_lookup)=CONST({"Thai": 2.0, "Vietnamese": 1.8, "Chinese": 1.5, "Asian": 1.5, "Indian": 1.3, "Japanese": 1.2, "Korean": 1.2, "Mexican": 1.0, "Italian": 0.5, "American": 0.5, "Pizza": 0.5})
+
+# --- COMPUTATIONS ---
+(n_mild)=COMPUTE('sum(1 for e in extractions if e["incident_severity"] == "mild" and e["account_type"] == "firsthand")')
+(n_moderate)=COMPUTE('sum(1 for e in extractions if e["incident_severity"] == "moderate" and e["account_type"] == "firsthand")')
+(n_severe)=COMPUTE('sum(1 for e in extractions if e["incident_severity"] == "severe" and e["account_type"] == "firsthand")')
+(n_total_incidents)=COMPUTE('n_mild + n_moderate + n_severe')
+(n_positive)=COMPUTE('sum(1 for e in extractions if e["safety_interaction"] == "positive")')
+(n_negative)=COMPUTE('sum(1 for e in extractions if e["safety_interaction"] == "negative")')
+(n_betrayal)=COMPUTE('sum(1 for e in extractions if e["safety_interaction"] == "betrayal")')
+(n_allergy_reviews)=COMPUTE('len(extractions)')
+(review_density)=COMPUTE('min(1.0, n_allergy_reviews / 10.0)')
+(most_recent_incident_year)=COMPUTE('max(review_years) if review_years else 2020')
+(incident_age)=COMPUTE('2025 - most_recent_incident_year')
+(recency_decay)=COMPUTE('max(0.3, 1.0 - (incident_age * 0.15))')
+(total_incident_weight)=COMPUTE('sum((5 - s) + log(u + 1) for s, u in zip(review_stars, review_useful))')
+(credibility_factor)=COMPUTE('total_incident_weight / max(n_total_incidents, 1)')
+(incident_score)=COMPUTE('n_mild * 2 + n_moderate * 5 + n_severe * 15')
+(cuisine_modifier)=COMPUTE('cuisine_modifier_lookup.get(restaurant_category, 1.0)')
+(cuisine_impact)=COMPUTE('cuisine_modifier * 0.5')
+(confidence_penalty)=COMPUTE('1.0 - (0.3 * (1 - review_density))')
+(safety_credit)=COMPUTE('n_positive * 1.0 - n_negative * 0.5 - n_betrayal * 5.0')
+(safety_impact)=COMPUTE('safety_credit * confidence_penalty')
+(base_risk)=COMPUTE('2.5')
+(incident_impact)=COMPUTE('incident_score * recency_decay * credibility_factor')
+(raw_risk)=COMPUTE('base_risk + incident_impact - safety_impact + cuisine_impact - (n_betrayal * 3.0)')
+(final_risk_score)=COMPUTE('max(0.0, min(20.0, raw_risk))')
+(verdict)=COMPUTE('"Low Risk" if final_risk_score < 4.0 else ("High Risk" if final_risk_score < 8.0 else "Critical Risk")')
+
+# --- OUTPUT ---
+# Output fields: ['n_total_incidents', 'incident_score', 'recency_decay', 'credibility_factor', 'final_risk_score', 'verdict']
