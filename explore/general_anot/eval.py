@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from explore.general_anot.phase2 import FormulaSeedInterpreter
+from explore.general_anot.utils import compact_json_dumps, get_next_run_number
 from explore.scoring.ground_truth import compute_gt_for_k
 from explore.scoring.auprc import calculate_ordinal_auprc, CLASS_ORDER, print_report, DEFAULT_TOLERANCES_V2
 from dataclasses import asdict
@@ -219,14 +220,26 @@ async def main():
     # Paths
     dataset_path = Path(__file__).parent.parent / "data" / "dataset_K200.jsonl"
     seed_path = Path(__file__).parent.parent / "results" / "phase1_v2" / "formula_seed.json"
-    output_dir = Path(__file__).parent.parent / "results" / "general_anot_eval"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    results_base = Path(__file__).parent.parent / "results" / "general_anot_eval"
+    results_base.mkdir(parents=True, exist_ok=True)
+
+    # Create numbered run directory: NNN_YYYYMMDD_HHMMSS
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_num = get_next_run_number(results_base)
+    run_dir = results_base / f"{run_num:03d}_{timestamp}"
+    run_dir.mkdir(parents=True, exist_ok=True)
 
     # Load formula seed
     print(f"\nLoading formula seed from: {seed_path}")
     with open(seed_path) as f:
         seed = json.load(f)
     print(f"  Task: {seed.get('task_name', 'unknown')}")
+
+    # Save formula seed to run directory (separate file for reproducibility)
+    seed_output = run_dir / "formula_seed.json"
+    with open(seed_output, 'w') as f:
+        f.write(compact_json_dumps(seed))
+    print(f"  Formula seed copied to: {seed_output}")
 
     # Load dataset
     print(f"\nLoading dataset from: {dataset_path}")
@@ -268,35 +281,37 @@ async def main():
     print(f"  GT distribution: {summary['gt_distribution']}")
     print(f"\n  Elapsed time: {elapsed:.1f}s ({elapsed/len(results):.2f}s per restaurant)")
 
-    # Save results
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = output_dir / f"results_{timestamp}.json"
+    # Save results (formula_seed stored separately)
+    results_file = run_dir / "results.json"
+    results_data = {
+        "timestamp": timestamp,
+        "run_number": run_num,
+        "seed_path": str(seed_path),
+        "dataset_path": str(dataset_path),
+        "summary": summary,
+        "metrics": {k: float(v) if isinstance(v, (np.floating, float)) else v
+                   for k, v in metrics.items()},
+        "elapsed_seconds": elapsed,
+        "results": results
+    }
+    with open(results_file, 'w') as f:
+        f.write(compact_json_dumps(results_data))
 
-    with open(output_file, 'w') as f:
-        json.dump({
-            "timestamp": timestamp,
-            "seed_path": str(seed_path),
-            "dataset_path": str(dataset_path),
-            "summary": summary,
-            "metrics": {k: float(v) if isinstance(v, (np.floating, float)) else v
-                       for k, v in metrics.items()},
-            "elapsed_seconds": elapsed,
-            "results": results
-        }, f, indent=2, default=str)
-
-    print(f"\n  Results saved to: {output_file}")
+    print(f"\n  Run directory: {run_dir}")
+    print(f"  Results: {results_file}")
+    print(f"  Formula seed: {seed_output}")
 
     # Final score
     print("\n" + "=" * 70)
-    print("🎯 FINAL SCORE")
+    print("FINAL SCORE")
     print("=" * 70)
     ordinal = metrics.get('ordinal_auprc', 0)
     prim_acc = metrics.get('avg_primitive_accuracy', 0)
     adjusted = metrics.get('adjusted_auprc', 0)
     print(f"  Ordinal AUPRC:      {ordinal:.4f}")
     print(f"  Primitive Accuracy: {prim_acc:.4f}")
-    print(f"  ─────────────────────────────")
-    print(f"  ADJUSTED AUPRC:     {adjusted:.4f}  = {ordinal:.3f} × {prim_acc:.3f}")
+    print(f"  ---------------------------------")
+    print(f"  ADJUSTED AUPRC:     {adjusted:.4f}  = {ordinal:.3f} x {prim_acc:.3f}")
     print("=" * 70)
 
     return results
