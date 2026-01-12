@@ -117,36 +117,35 @@ This metric ensures the model gets the right answer *for the right reasons*.
 ### Two-Phase Architecture
 
 ```
-Phase 1: Compile                    Phase 2: Execute
-┌─────────────────────┐            ┌─────────────────────┐
-│ Task Formula (NL)   │            │ Restaurant Data     │
-│ "Compute risk..."   │            │ - reviews[]         │
-└─────────┬───────────┘            │ - metadata          │
-          │                        └─────────┬───────────┘
-          ▼                                  │
-┌─────────────────────┐                      │
-│ LLM: Understand     │                      │
-│ - What to extract   │                      │
-│ - How to aggregate  │                      │
-│ - What to compute   │                      │
-└─────────┬───────────┘                      │
-          │                                  │
-          ▼                                  ▼
-┌─────────────────────┐            ┌─────────────────────┐
-│ Formula Seed (JSON) │───────────▶│ Interpreter         │
-│ - filter keywords   │            │ 1. Filter reviews   │
-│ - extraction schema │            │ 2. Extract signals  │
-│ - aggregation defs  │            │ 3. Aggregate counts │
-│ - computation steps │            │ 4. Compute formulas │
-└─────────────────────┘            └─────────┬───────────┘
-                                             │
-                                             ▼
-                                   ┌─────────────────────┐
-                                   │ Result              │
-                                   │ - FINAL_RISK_SCORE  │
-                                   │ - VERDICT           │
-                                   │ - intermediates...  │
-                                   └─────────────────────┘
+Phase 1 (once per task):
+
+  Task Prompt ──────▶ Phase 1 (LLM) ──────▶ Formula Seed
+  (Query; en)         "Understand"          (JSON schema)
+                                                  │
+      ┌───────────────────────────────────────────┘
+      │
+      │   Formula Seed contains:
+      │   • filter keywords
+      │   • extraction schema
+      │   • aggregation defs
+      │   • computation steps
+      │
+      ▼
+Phase 2 (per restaurant):
+
+  Restaurant ─────────▶ Phase 2 ──────────▶ Risk Score
+  + Reviews            (Interpreter)         + Verdict
+                            │
+                            ├─ 1. Filter reviews   (Python - sparse retrieval)
+                            ├─ 2. Extract signals  (LLM - per review JSON)
+                            ├─ 3. Aggregate counts (Python - count structured data)
+                            └─ 4. Compute formulas (Python - Network of Thought)
+                            │
+                            ▼
+                       Result contains:
+                       • FINAL_RISK_SCORE (0-20)
+                       • VERDICT (Low/High/Critical Risk)
+                       • All intermediate values
 ```
 
 ## Usage
