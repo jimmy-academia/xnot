@@ -1,0 +1,149 @@
+{
+  "version": "1.0", "overview": {
+    "purpose": "Analyze reviews mentioning peanut/nut allergy safety to compute a risk score and verdict using the exact stepwise formulas provided.", "current_year": 2025
+  },
+  "data_sources": {
+    "reviews": {
+      "required_fields": ["review_id", "restaurant_id", "text", "review_date", "review_year", "stars", "useful_votes", "restaurant_categories"]
+    }
+  },
+  "filtering": {
+    "purpose": "Identify reviews that mention allergy-related topics (peanut/nut allergy safety) for further extraction.", "relevance_detectors": [
+      {
+        "type": "substring", "patterns": [" Allerg", "allerg", "nut", "peanut", "peanuts", "anaphylaxis", "epi-pen", "epipen", "hives", "swelling", "rash", "anaphylactic", "allergy", "allergies"]
+      },
+      {
+        "type": "phrase", "patterns": ["allerg*", "nut allergy", "peanut allergy", "peanuts", "food allergy", "allergic reaction", "cross contamination", "cross-contamination"],
+        "case_insensitive": true
+      }
+    ],
+    "allergy_mentions_required": true,
+    "scope_behavior": {
+      "notes": "Reviews that mention allergy-related terms but do not discuss safety interactions or incidents should still be considered for STEP 2 extraction (ACCOUNT_TYPE, INCIDENT_SEVERITY, SAFETY_INTERACTION).", "default_values": {
+        "MENTION_ALLERGY": true
+      }
+    }
+  },
+  "per_review_extraction_schema": {
+    "target_review_fields": {
+      "review_id": {
+        "type": "string"
+      },
+      "restaurant_id": {
+        "type": "string"
+      },
+      "text": {
+        "type": "string"
+      },
+      "review_date": {
+        "type": "string", "format": "date"
+      },
+      "review_year": {
+        "type": "integer"
+      },
+      "stars": {
+        "type": "integer", "range": [1, 5]
+      },
+      "useful_votes": {
+        "type": "integer", "range": [0, null
+        ]
+      },
+      "restaurant_categories": {
+        "type": "array", "items": {
+          "type": "string"
+        }
+      },
+      "MENTION_ALLERGY": {
+        "type": "boolean", "default": true
+      },
+      "ACCOUNT_TYPE": {
+        "type": "enum", "values": ["none", "firsthand", "secondhand", "hypothetical"],
+        "default": "none", "extraction_rules": {
+          "firsthand_patterns": [" I had ", " I experienced ", " my child ", " my family ", " we had "],
+          "secondhand_patterns": [" I heard ", " a friend told me ", " someone said ", " reportedly "],
+          "hypothetical_patterns": [" concern ", " worried ", " could be ", " might be ", " I’m concerned about ", " I worry that ", " could happen "]
+        }
+      },
+      "INCIDENT_SEVERITY": {
+        "type": "enum", "values": ["none", "mild", "moderate", "severe"],
+        "default": "none", "extraction_rules": {
+          "signals_for_severe": ["anaphylaxis", "epipen", "epinephrine", "ER", "emergency", "life-threatening", "loss of consciousness"],
+          "signals_for_moderate": ["hives", "swelling", "rash", "shortness of breath", "wheezing", "needed medication", "took antihistamines", "doctor visit"],
+          "signals_for_mild": ["stomachache", "mild discomfort", "nausea", "stomach upset", "indigestion"]
+        }
+      },
+      "SAFETY_INTERACTION": {
+        "type": "enum", "values": ["none", "positive", "negative", "betrayal"],
+        "default": "none", "extraction_rules": {
+          "positive_patterns": ["staff asked about allergies", "they asked about nut allergies", "they accommodated", "took precautions", "prepared allergy-friendly option", "no cross-contamination"],
+          "negative_patterns": ["staff dismissed", "ignored allergy", "refused to accommodate", "claimed safe when not", "did not take precautions"],
+          "betrayal_patterns": ["claimed safe", "it’s safe", "they told me there would be no peanuts", "they assured no cross-contamination but I still reacted"]
+        },
+        "notes": "If no safety interaction is described, value remains 'none'."
+      }
+    }
+  },
+  "aggregation_definitions": {
+    "N_MILD": {
+      "source": "reviews", "condition": {
+        "INCIDENT_SEVERITY": "mild", "ACCOUNT_TYPE": "firsthand"
+      }
+    },
+    "N_MODERATE": {
+      "source": "reviews", "condition": {
+        "INCIDENT_SEVERITY": "moderate", "ACCOUNT_TYPE": "firsthand"
+      }
+    },
+    "N_SEVERE": {
+      "source": "reviews", "condition": {
+        "INCIDENT_SEVERITY": "severe", "ACCOUNT_TYPE": "firsthand"
+      }
+    },
+    "N_TOTAL_INCIDENTS": {
+      "formula": "N_MILD + N_MODERATE + N_SEVERE"
+    },
+    "N_POSITIVE": {
+      "source": "reviews", "condition": {
+        "SAFETY_INTERACTION": "positive"
+      }
+    },
+    "N_NEGATIVE": {
+      "source": "reviews", "condition": {
+        "SAFETY_INTERACTION": "negative"
+      }
+    },
+    "N_BETRAYAL": {
+      "source": "reviews", "condition": {
+        "SAFETY_INTERACTION": "betrayal"
+      }
+    },
+    "N_ALLERGY_REVIEWS": {
+      "formula": "COUNT of reviews where MENTION_ALLERGY == true"
+    },
+    "TOTAL_WEIGHT_PER_INCIDENT": {
+      "formula": "(5 - stars) + ln(useful_votes + 1)"
+    }
+  },
+  "external_data_and_lookup": {
+    "CUISINE_MODIFIERS": {
+      "Thai": 2.0, "Vietnamese": 1.8, "Chinese": 1.5, "Asian Fusion": 1.5, "Indian": 1.3, "Japanese": 1.2, "Korean": 1.2, "Mexican": 1.0, "Italian": 0.5, "American": 0.5, "Pizza": 0.5, "default": 1.0
+    },
+    "CUISINE_MODIFIER_DETECTION": {
+      "method": "highest_value_from_restaurant_categories", "sources": ["restaurant_categories", "categories"],
+      "default_value": 1.0
+    },
+    "SILENCE_PENALTY_RULE": {
+      "condition": "N_ALLERGY_REVIEWS == 0", "formula": "CUISINE_MODIFIER * 0.5", "else": 0
+    }
+  },
+  "calculation_steps": {
+    "order_of_operations": ["TRUST_RAW", "TRUST_SCORE", "MILD_WEIGHT", "MODERATE_WEIGHT", "ADJUSTED_INCIDENT_SCORE", "N_RECENT", "N_OLD", "RECENT_RATIO", "TRAJECTORY_MULTIPLIER", "MOST_RECENT_YEAR", "RECENCY_DECAY", "TOTAL_WEIGHT", "CREDIBILITY_FACTOR", "CUISINE_MODIFIER", "SILENCE_PENALTY", "CUISINE_IMPACT", "INCIDENT_IMPACT", "TRUST_IMPACT", "POSITIVE_CREDIT", "RAW_RISK", "FINAL_RISK_SCORE", "VERDICT"],
+    "definitions": {
+      "TRUST_RAW": "1.0 + (N_POSITIVE * 0.1) - (N_NEGATIVE * 0.2) - (N_BETRAYAL * 0.5)", "TRUST_SCORE": "clamp(TRUST_RAW, 0.1, 1.0)", "MILD_WEIGHT": "2 * (1.5 - TRUST_SCORE)", "MODERATE_WEIGHT": "5 * (1.3 - 0.3 * TRUST_SCORE)", "ADJUSTED_INCIDENT_SCORE": "N_MILD * MILD_WEIGHT + N_MODERATE * MODERATE_WEIGHT + N_SEVERE * 15", "N_RECENT": "count of incidents with review_year >= 2023", "N_OLD": "count of incidents with review_year < 2023", "RECENT_RATIO": "N_RECENT / N_TOTAL_INCIDENTS if N_TOTAL_INCIDENTS > 0 else 0", "TRAJECTORY_MULTIPLIER": "1.3 if N_TOTAL_INCIDENTS > 0 and RECENT_RATIO > 0.7; 0.7 if N_TOTAL_INCIDENTS > 0 and RECENT_RATIO < 0.3; else 1.0", "MOST_RECENT_YEAR": "max(review_year) among incident reviews if N_TOTAL_INCIDENTS > 0 else 2020", "RECENCY_DECAY": "max(0.3, 1.0 - ((2025 - MOST_RECENT_YEAR) * 0.15))", "TOTAL_WEIGHT": "sum over all incident reviews of ((5 - stars) + ln(useful_votes + 1))", "CREDIBILITY_FACTOR": "TOTAL_WEIGHT / N_TOTAL_INCIDENTS if N_TOTAL_INCIDENTS > 0 else 1.0", "CUISINE_MODIFIER": "derived from CUISINE_MODIFIERS via restaurant_categories; if multiple categories match, take the highest modifier; if none match, 1.0", "SILENCE_PENALTY": "CUISINE_MODIFIER * 0.5 if N_ALLERGY_REVIEWS == 0 else 0", "CUISINE_IMPACT": "(CUISINE_MODIFIER * 0.5) + SILENCE_PENALTY", "INCIDENT_IMPACT": "ADJUSTED_INCIDENT_SCORE * TRAJECTORY_MULTIPLIER * RECENCY_DECAY * CREDIBILITY_FACTOR", "TRUST_IMPACT": "(1.0 - TRUST_SCORE) * 3.0", "POSITIVE_CREDIT": "N_POSITIVE * TRUST_SCORE * 0.5", "RAW_RISK": "2.0 + INCIDENT_IMPACT + TRUST_IMPACT + CUISINE_IMPACT - POSITIVE_CREDIT", "FINAL_RISK_SCORE": "clamp(RAW_RISK, 0.0, 20.0)", "VERDICT": "if FINAL_RISK_SCORE < 4.0 then 'Low Risk' else if FINAL_RISK_SCORE < 8.0 then 'High Risk' else 'Critical Risk'"
+    }
+  },
+  "output_specification": {
+    "reported_values": ["N_MILD", "N_MODERATE", "N_SEVERE", "N_TOTAL_INCIDENTS", "N_POSITIVE", "N_NEGATIVE", "N_BETRAYAL", "N_ALLERGY_REVIEWS", "TRUST_SCORE", "MILD_WEIGHT", "MODERATE_WEIGHT", "ADJUSTED_INCIDENT_SCORE", "N_RECENT", "N_OLD", "RECENT_RATIO", "TRAJECTORY_MULTIPLIER", "CUISINE_MODIFIER", "SILENCE_PENALTY", "CUISINE_IMPACT", "RECENCY_DECAY", "CREDIBILITY_FACTOR", "INCIDENT_IMPACT", "TRUST_IMPACT", "POSITIVE_CREDIT", "RAW_RISK", "FINAL_RISK_SCORE", "VERDICT"],
+    "format": "JSON with numeric and string values as appropriate"
+  }
+}

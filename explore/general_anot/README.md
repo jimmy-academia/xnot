@@ -5,16 +5,17 @@ General ANoT separates **task understanding** (Phase 1) from **task execution** 
 ## Architecture Overview
 
 ```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│  Task Prompt    │────▶│   Phase 1 (LLM)  │────▶│  Formula Seed   │
-│  (Query; en)    │     │  "Understand"    │     │  (JSON schema)  │
-└─────────────────┘     └──────────────────┘     └────────┬────────┘
-                                                          │
-                                                          ▼
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│   Restaurant    │────▶│   Phase 2        │────▶│  Risk Score +   │
-│   + Reviews     │     │  (Interpreter)   │     │  Verdict        │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│ Task Prompt  │────▶│ Phase 1      │────▶│ Formula Seed │
+│ (Query; en)  │     │ (LLM)        │     │ (JSON)       │
+└──────────────┘     └──────────────┘     └──────┬───────┘
+                                                 │
+                     ┌───────────────────────────┘
+                     ▼
+┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+│ Restaurant   │──▶│ Phase 2      │──▶│ Risk Score   │
+│ + Reviews    │   │ (Interpreter)│   │ + Verdict    │
+└──────────────┘   └──────────────┘   └──────────────┘
 ```
 
 **Key insight**: The Formula Seed is a *predetermined schema* that captures task semantics without hardcoding domain logic. Phase 2 is a generic interpreter that executes any Formula Seed.
