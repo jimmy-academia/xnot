@@ -1,0 +1,419 @@
+============================================================
+PROMPT
+============================================================
+# ALLERGY SAFETY POLICY EVALUATION
+
+## Goal
+For each restaurant, decide an automated action for peanut/nut allergy safety using its reviews.
+
+## Action Space
+Output one of: ALLOW, WARN, BLOCK
+
+## Evidence Rules (MUST FOLLOW)
+1. You may output BLOCK only if you find at least 2 independent first-hand reviews within the last 2 years that describe a severe allergic reaction after eating at the restaurant.
+2. For every review used as evidence, you must output: the review_id and a short quote from the review that supports the claim.
+
+## Conservativeness Rule
+If reviews conflict and you cannot resolve the conflict confidently, choose the safer action (WARN over ALLOW, BLOCK over WARN).
+
+## Output Format
+For EACH restaurant, output in this exact JSON format:
+```json
+{
+  "restaurant_id": "<business_id>",
+  "restaurant_name": "<name>",
+  "action": "ALLOW|WARN|BLOCK",
+  "evidence": [
+    {
+      "review_id": "<id>",
+      "quote": "<relevant quote>",
+      "date": "<review date>",
+      "relevance": "<why this is evidence>"
+    }
+  ],
+  "policy_rule_applied": "<which rule led to this decision>",
+  "reasoning": "<brief explanation>"
+}
+```
+
+## Current Date for Reference
+Today is 2024-01-15. Reviews within the last 2 years means reviews dated 2022-01-15 or later.
+
+---
+
+# RESTAURANTS AND REVIEWS TO EVALUATE
+
+
+## Restaurant: Milkcrate Cafe
+- Business ID: e-ZyZc24wgkKafM3pguR2w
+- Categories: Books, Mags, Music & Video, Restaurants, Vinyl Records, Food, Shopping, Breakfast & Brunch, Coffee & Tea
+- Address: 400 E Girard Ave, Philadelphia
+- Stars: 4.5 (228 reviews)
+
+### Reviews (15 shown):
+
+**Review ID: pi9fHo3DdkX1rN770FZ-LQ**
+- Date: 2009-10-14 16:14:06
+- Stars: 3.0
+- Text: This place automatically got 4 stars for painting a gigantic orange record with a cow (whose lone spot initially formed the shape of Pennsylvania, but now is, perhaps, Philadelphia?  I'm not sure) listening to a gramophone on the side of a building.  The mural makes me incredibly happy, and, since I live right off of Girard, I get to see it every day.  However, they serve La Colombe, which makes everyone happy except me.  I don't know what my damage is, but I don't like it.  There are very few p...
+
+**Review ID: gtRDVEXgOnLctwz2poRDKg**
+- Date: 2011-08-01 14:21:21
+- Stars: 4.0
+- Text: This ain't Starbucks. If that's all you need to hear before writing this place off, then Milkcrate isn't for you anyway.  If you realize that statement is a compliment, then you should definitely give it a try.  I love the unpretentiously hip atmosphere and  neighborhood feel.  I had the intention of having one of these highly praised egg sandwiches but the tomato/avocado/cucumber/cream cheese bagel sounded and tasted delicious.  I almost always want to have some meat in my meal but this was jus...
+
+**Review ID: qL2_DokKed7GFDtkKWIw-A**
+- Date: 2016-08-08 01:43:34
+- Stars: 3.0
+- Text: After eating way too much for lunch at Sketch Burger, my daughter and I needed some caffeine in a hurry. Milkcrate Cafe fit the bill as it is just across Girard Avenue.
+
+Milkcrate Cafe is cool little place, with decent seating for enjoying coffee and the food that is made there. We couldn't even look at the food after over doing is so much at Sketch. However the menu and the dishes we saw looked really good and unique. We ordered two ice coffees and Milkcrate brews and serves La Colombe coffee. ...
+
+**Review ID: XtBLKiPpGp9f1r4ArVO2LQ**
+- Date: 2015-02-25 00:16:23
+- Stars: 4.0
+- Text: Milkcrate is deep Fishtown. It's the kind of place you walk into at 10 am on a Tuesday morning and encounter a dozen seemingly unemployed young people milling about in pilled beanies and delightfully soiled flannel. Why am *I* getting cappuccino at 10 am on a Tuesday morning, you may ask? Erm, let's stick to the topic at hand.
+
+I mostly love this place. 8 times out of 10, my large cappuccino is awesome ($4). Those other two times, I'm not sure what happens. Too many grounds in the portafilter? T...
+
+**Review ID: RIClyCEPh9S3cu_otRLsTQ**
+- Date: 2018-06-23 15:08:28
+- Stars: 1.0
+- Text: I've rarely get what I ordered. It's ridiculous how incompetent they are taking and fulfilling orders sometimes. I only go because it's close and they have bagels. Everything else is too far. I'm disappointed most of the time, seriously. I pray a new bagel place opens up that is closer.  Also a smile might help from behind the counter. Cool place and I'm a big supporter of local shops. But they should double check their orders when busy in the morning.
+
+**Review ID: ZXwEP9MSul65ec4jE8mFAA**
+- Date: 2016-11-05 20:26:05
+- Stars: 1.0
+- Text: I just moved to the neighborhood, brand new to Philly from Chicago. I was super excited to check out Milkcrate Cafe, was gonna get a coffee and browse the collection in the basement. On the way downstairs the girl asked me to leave my bag at the counter. I informed her that this bag was my purse  which contains my wallet, keys, phone, etc. She told me I'd still have to leave it with her. So, I left and I won't be going back. Which is really a shame, because I planned on getting my coffee here on...
+
+**Review ID: ocKD0skjl94T_I9SAdDMsw**
+- Date: 2012-09-03 19:52:56
+- Stars: 4.0
+- Text: Hands down, my favorite coffee shop in Fishtown...I enjoy coming here on Saturday mornings, getting an iced coffee and perusing the records that line the walls of the cafe.  If I'm hungry, I go for the Notorious E.G.G. - a bagel egg and cheese sandwich...with added avocado.   It's really hard to find a good egg sandwich around Philly these days and I must say that Milkcrate's is one of my favorites.  Coffee is decent, not amazing, but gets the job done. 
+
+Coffee shop service is good, food does n...
+
+**Review ID: 1x-n2D5_GoY4njacchcLHA**
+- Date: 2014-08-02 13:30:52
+- Stars: 2.0
+- Text: Keep trying to give this place another chance, but just continue to be disappointed whenever I order a bagel. This used to be my go-to spot, but not anymore. I just ordered an everything bagel w/ cream cheese, opened the foil and immediately regretted it. My bagel tasted (and felt) like 4 day old stale bread, and was not even warm despite my specifying "toasted". Seems petty to be so angry and annoyed about a bagel, but you're a cafe, and the bagels used to be on point. Sorry Milkcrate, I tried....
+
+**Review ID: iTpVEziv_AnuhrXZjMOwgQ**
+- Date: 2011-06-16 16:19:55
+- Stars: 5.0
+- Text: Ok, as a hardcore coffee shop fiend it's time I gave props where props are due.
+
+Atmosphere- Alot of independent shops have a filthy, overcrowded vibe with just "too much" going on.  Here they keep it simple, and I much prefer to look at charming LP's than terrible "cafe-quality" local art.  This place feels airy and clean, but still homey and comfortable.  Also the crowd that tends to gather there is far less annoying than the trendy neighborhood suggests.  Very diverse, with lots of kids and d...
+
+**Review ID: yWyNcBmroWIusSctKuJiyQ**
+- Date: 2017-09-08 14:18:30
+- Stars: 2.0
+- Text: Place is OK, surprised the porkroll on a english muffin is $8.  Hash special is just a chopped up sausage with potatoes and an egg for $8.50.  Breakfast burrito is very tiny with beans and kinda blah. Also there is only one coffee brewed and it's kinda watered down. Better to brew your own than pay $3-4 for their coffee.  Don't mean to knock this tiny place, but the food and coffee just doesn't stand up to what you can get elsewhere.  Place isn't bad but I've definitely experienced better.
+
+**Review ID: K_mtiUB_CM1ak_8v36rEtA**
+- Date: 2016-05-04 14:15:43
+- Stars: 2.0
+- Text: Still good coffee etc. But, the past 3 times I have ordered food the order has been messed up. For example, I ordered a sausage egg and cheese with tomato... received egg on bread and was charged for all the additions. Today I went in because they said they would take care of the next time for me since this has recurred, and I was again overcharged and my sandwich is still missing its ingredients!
+
+**Review ID: XyTyVdAfVRejZMPo40W4Pw**
+- Date: 2013-07-11 19:21:57
+- Stars: 3.0
+- Text: Here's the thing... I have probably been here at least 100 times since they opened so I'm definitely a fan.  It's hard to beat a hipster/vinyl/coffee shop less than a block from your house especially when you are a twenty-something vinyl loving coffee drinker.  But god damn it's just impossible to give them more than 3 stars.  Their food is mediocre and uninspired (save for the creative names) and I have not seen a new menu item since they opened.  Their coffee is middle of the pack.  I get bett...
+
+**Review ID: 9a5CMp5nXArnJq4aF7ofTQ**
+- Date: 2016-11-01 17:41:21
+- Stars: 5.0
+- Text: So pork roll is a Philly thing and I was told I must try it. Had to get the full food experience while I was in town, right? Brunch time came around and my sister and her bf suggested we try this spot. It's a casual, order at the counter place with mostly 2-4 tops. It's also a record store so there are records lining the walls, record players on display and more in the basement. 
+
+We were focused on food. Aaron got the Elvis sandwich which is croissant with Nutella and bananas - the best sweet b...
+
+**Review ID: cBXtipUp-EcDezBxa95SUg**
+- Date: 2013-12-28 20:31:04
+- Stars: 2.0
+- Text: I get called a hipster and THIS place feels super pretentious. A dollar up charge for hummus instead of cream cheese? C'mon now. Limited bagel selection (and underwhelming in texture too), limited sandwich list and watered down coffee. 
+
+Apparently they used to sell vinyl, now they just have $20-$30 collectors pieces mounted to the wall (which are available for purchase, clever clever).
+
+We walked in here at 1pm on Saturday. Empty. That alone is a red flag for me (but I walked optimistically in ...
+
+**Review ID: 8Iwyqx11u4UFYX1DNr3YGw**
+- Date: 2020-01-25 00:12:43
+- Stars: 4.0
+- Text: Great to spend the morning in Fishtown having breakfast at the Milkcrate Cafe at the corner of E. Columbia and Girard. Interesting enviro with a huge record collection spanning music of the late 20th/early 21st Centuries. I didn't make it down to the vinyl shop in the basement (just read about it in their Yelp page), but as a holder of old wax, I wish I had. Next time. 
+
+Still, the cafe is part of the gentrification of this part of Philly and is in the perfect location to take advantage of it. I...
+
+---
+
+## Restaurant: Tria Cafe Rittenhouse
+- Business ID: eJaeTZlIdM3HWCq__Ve4Wg
+- Categories: French, Spanish, Tapas Bars, Cafes, Restaurants, Wine Bars, Modern European, Bars, Nightlife, Italian, Comedy Clubs, Greek, American (New)
+- Address: 123 S 18th St, Philadelphia
+- Stars: 4.5 (880 reviews)
+
+### Reviews (15 shown):
+
+**Review ID: UnCE9lfAJZOpOTUlai6Zlg**
+- Date: 2009-05-21 00:52:12
+- Stars: 5.0
+- Text: My husband and I had been walking around for so long as we argued where to eat and what to eat that eventually it was past 10pm and most restaurants started closing up.  We walked around a full hour more, and after 11pm restaurants were definitely done.  Sulking and annoyed with each other, we headed back to our hotel with empty bellies.  We decided to walk up a street that we hadn't yet been on, and came across Tria.
+
+A server was bringing food out to the one outdoor table, and I was so hungry ...
+
+**Review ID: z9A4AI5o4zzfS6-Gye7tIQ**
+- Date: 2013-09-08 17:00:24
+- Stars: 2.0
+- Text: A local recommended this place for us out of towners, and we decided to dine there the night before we had to leave.  We are reservation people, so were disappointed that they did not have reservations (like many places in Philadelphia(not quite sure why?), but we thought not many people would be eating around 4pm, boy were we wrong.  The place was packed (which it was every time we had walked by during our stay).  Which is great for them, and must be a sign of it's popularity.  We somehow got a...
+
+**Review ID: pskasR1Ju4Knl3xiLvoM-Q**
+- Date: 2013-08-17 15:17:13
+- Stars: 3.0
+- Text: I met a friend at Tria last night. It was the first time for both of us. We ordered wine and split some "snacks" to start. I would have liked go see more variety with the ingredients across the menu, but the taste was excellent. My favorite was the Warm Poached Black Mission Figs with Gorgonzola and Prosciutto di Parma.  I highly recommend it. I was impressed by the wine list as well. I started with the Carménère "Armador". It was a delicious semi-dry red with nice hints of various flavors and s...
+
+**Review ID: 5V9z8VtUrBQ_1d_S-LeRFg**
+- Date: 2017-10-15 04:01:56
+- Stars: 4.0
+- Text: I picked this place to meet a person. I was sold on the location and yelp rating (classic). 
+
+After entering the establishment, I made my way to the high tops along the back wall. After thrusting myself up onto the stool, my very first observation was a gigantic pile of lettuce behind the counter in the back. I guess 2 or 3pm something on a Saturday afternoon is dinner/evening preparation time. Fortunately, other than being easily distract-able from ADD, there were no negative implications of th...
+
+**Review ID: ceZ5jhpjyZ9A42K3FfkRXQ**
+- Date: 2010-01-18 02:08:16
+- Stars: 4.0
+- Text: A paradox is "a statement or proposition that seems self-contradictory or absurd but in reality expresses a possible truth." For example... Sometimes you want to go out but just don't want to be around too many people. Sometimes you're craving something tasty but not exactly dinner or dessert. Sometimes you want to experience an upscale vibe but nothing flashy. You're not trying to be difficult, it's just how you feel. For those nights, Tria is just the scene you might be looking for. 
+
+As a dis...
+
+**Review ID: I2ezMvPqNL9pRYyzpTopGA**
+- Date: 2017-06-29 02:36:48
+- Stars: 2.0
+- Text: First time here. Weekday lunch. Usually lunch across the street at Dandelion which is dependable ..tried and true but cramped as hell. Thought we would try something new. Got there before noon and the waiter was nice.. friendly and prompt. Explained the menu and answered all of our questions. We were a big group and a few had been here for happy hour or wine tasting events. No one had much to say about food since they had never eaten anything other than snacks.  I ordered a roasted chicken and L...
+
+**Review ID: 4fusz6ep2yPzrRymjINq1g**
+- Date: 2013-10-22 18:07:51
+- Stars: 2.0
+- Text: I love Tria, I love wine, I love cheese, I love their appetizers, their food, etc. That's why it bothers me the experience we had there on Sunday at Sunday School. We had a group of about 10 women, and we had asked the waiter to do separate checks. We were polite and apologetic regarding this request, but when you have some women arriving at noon, some leaving early, some arriving at 2pm, etc, it was necessary. 
+
+Unfortunately, there was some table moving because the staff was seemingly obsessin...
+
+**Review ID: bHLuFvEtlNjYeCYwlyBKzA**
+- Date: 2013-07-04 03:31:07
+- Stars: 4.0
+- Text: My husband and I took their Cheese 101 class a few months ago, but still hadn't gotten to the actual Tria restaurant, so we decided to come in for dinner to finally try it out! The restaurant is small and they don't take reservations, but we figured we wouldn't have any trouble getting a seat for an early dinner on a rainy Tuesday. Wrong! The place was packed and noisy. We added our names to a list and waited around in the vestibule for a little while before moving to a bar seat where drinks wer...
+
+**Review ID: tTYSFREgpEBWiZye5mvppA**
+- Date: 2008-04-06 02:54:34
+- Stars: 4.0
+- Text: Tria...Tria...Tria....my old watering hole. I have spent many a nites and many a paychecks...and it has always been worth it. 
+
+I came to Tria a few summers ago the first time, it was a long long evening and ended with last call. With among the last beers my brother & I had we decided to get some cheese which came with ultra ultra tasty honey. On asking our chirpy waitress (how she had a bounce in her step and energy in her voice at the end of a Saturday is beyond me) where that honey came from ...
+
+**Review ID: 9HOtaLL46SO3RGvM6g0ZCA**
+- Date: 2013-08-02 23:10:43
+- Stars: 1.0
+- Text: Terrible Beware!
+
+Saw all the glowing reviews and attempted to get in several times but they didn't have any tables available. Finally went by during lunch and got a table. The table was wedged next to a booth and had virtually no privacy! Waitress recommended the Salad of Grilled Asparagus, Artichoke, White Beans. I can tell you that there was nothing grilled except the bread on the bottom. It was cold and seemed pre made. The taste was blah. My son had the Lancaster Turkey, Bacon and Cheddar S...
+
+**Review ID: 5TMbXzFUI8Pq_LjhPAIslA**
+- Date: 2012-12-05 16:45:55
+- Stars: 5.0
+- Text: Tria is as good as it gets!
+
+Having just traveling to Philly for a few days, I managed to go to Tria twice during my stay.  This place is straight up and cozy enough to enjoy a couple of small plates while sipping on a local brew on tap or one of their many selections of outstanding wines.
+
+Obviously, the decision was made through searching Yelp and it lead me straight to Tria from the hotel...while searching for a place to hang and grab a bite with the wife.
+
+As we walked in on a Sunday evening...
+
+**Review ID: dvvBG8Hqhsvdhn9fcLCCzw**
+- Date: 2008-04-14 05:00:07
+- Stars: 5.0
+- Text: So, the other night I was running late to meet up with a friend for a little wining and dining and Bump.  Well, since I was running so late we decided just to go around the corner from his place to Tria.  I've always wanted to check it out, so it was cool.  
+
+We got there close to 9:30 pm and the hostess asked us if we wanted seating, and if so, we would have to wait.  Well, before we could even make our decision, a girl at the bar offered her seat to my companion and I as her date was just arou...
+
+**Review ID: TUju-zujnR2v6gKY88cdCw**
+- Date: 2018-03-26 18:44:46
+- Stars: 5.0
+- Text: I've had the impression since I came to Philly that I just wasn't the type of person to visit Tria. Toted as one of the premier locations for wine and cheese, I assumed it was too fancy for my plebian taste buds. I don't know much beyond "red, white, and sparkling" when it comes to wine, and while I absolutely love cheese, that's not saying much. Mostly because I love all foods. All this to say - I was completely wrong in my assumptions about Tria, and I cannot wait to get back. 
+
+Throw away the...
+
+**Review ID: 1fEh1IrIdyBL245xsMM3Bg**
+- Date: 2009-02-09 14:13:53
+- Stars: 3.0
+- Text: 3.5 stars
+
+If there is one thing that i have learned from going on beer trips with my parents since i was in high school its that i can't keep up with them drinking beer.   (and no i haven't been drinking beer since HS!)  So when my Dad suggested checking out Tria for our first stop on the beer trip to Philly, i was excited that they had something i could easily drink and keep up with the rents: wine.  
+
+However my plan was nearly foiled when i sat down and saw they had a Russian River tap.  I k...
+
+**Review ID: hmovvHWG0GUeM7kZ6SCuag**
+- Date: 2020-03-16 04:35:28
+- Stars: 1.0
+- Text: Quite disappointing! I came in to have a few drinks before I met friends and although the rave reviews the service for me was no existent! I sat at the bar which wasn't crowded and watch a bartender walk back and forth past me he didn't give a menu just ignored me for what ever reason. He seemed to be attentive to patrons beside me. Finally someone else came from the back and asked if I've been helped I said no he gave me menu and disappeared returning 10 mins later I asked about a wine only to ...
+
+---
+
+## Restaurant: Front Street Cafe
+- Business ID: JrG4NINLspXPNhSXg7Q07Q
+- Categories: Coffee & Tea, Restaurants, Cafes, American (New), Cocktail Bars, Breakfast & Brunch, Vegan, Bars, Nightlife, Food, Juice Bars & Smoothies, Beer Gardens
+- Address: 1253 N Front St, Philadelphia
+- Stars: 4.0 (716 reviews)
+
+### Reviews (15 shown):
+
+**Review ID: 9tYA3o8gG31tDoYKv82njg**
+- Date: 2016-08-07 20:03:19
+- Stars: 1.0
+- Text: Well it only took me sitting here for a good 7 minutes before anyone even acknowledged my presence after the hostess sat me.  There was hardly anyone here even but lots of employees walking by me.  I knew what I wanted when I walked in the door.  Ordered eggs Benedict poached hard/done, Applewood bacon & a Salty Dog.  Bartender brings me my drink...as a shot. WTF??? She said that it said no ice when she "looked it up".  Who doesn't know what a Greyhound or a Salty Dog are?  Grapefruit/vodka & gr...
+
+**Review ID: OG5vPEcHj28AiXa6Q_XJ4A**
+- Date: 2016-04-27 01:59:58
+- Stars: 1.0
+- Text: I am writing about a poor experience at this café on Saturday afternoon (April 23).  Firstly, our server never came to greet us, and when the hostess walked by, she noticed and sent her over. Once there, she informed us no one told her we were her table.  Next, we ordered the Acai Bowl, which is mostly banana whip.  I have worked in restaurants that served whip, have a whip machine at home, and had this dish there in the past so I know there was absolutely no banana in it. When the server asked ...
+
+**Review ID: CEginOQx1a9VTKFEa9wgsA**
+- Date: 2016-02-08 19:22:33
+- Stars: 2.0
+- Text: I'm going to preface this review by saying that I am thrilled to have a spot like this so close to home. The variety of offerings from one venue with hours that practically make it a 24-hour operation should yield a review of much more praise...unfortunately it falls flat. There's a lot that Front Street Cafe can be and should be doing to really make this an all-star neighborhood contender. Here's the breakdown of woo's and boo's:
+
+CAFE: 
+Woo!: I'll start here because I have great things to say ...
+
+**Review ID: ZqKTDYEfONa9JRTg-ZGh_w**
+- Date: 2018-09-19 18:15:15
+- Stars: 2.0
+- Text: Came here for breakfast today.... I spent a long time working in the service industry (serving, bartending, management) That being said I understand that things can't always be perfect, but my experience kind of forced me to be "that guy" on yelp, I feel slightly robbed and Unsatisfied after this morning. 
+
+I ordered the Veggie Hash with poached egg, Chicken Waffle bites, an order of fries with 3 of the house-made aioli (because I heard they were delicious). 
+
+Our food came out and it was cold ,...
+
+**Review ID: PEA1lk_K11O942ifqb55cQ**
+- Date: 2016-05-17 17:35:54
+- Stars: 3.0
+- Text: Went to Front Street Cafe, last Saturday evening, with my wife, my daughter, her boyfriend, his father and his father's girlfriend.
+
+Service was prompt, as it should be.
+
+Drinks were excellent.
+
+Appetizers were wonderful.
+
+The meal, it was good for 4 out of 6 of us.
+
+I had the hamburger, which tasted fine, but was under cooked. I asked for Medium, pink in the middle. I always say pink in the middle to the waitstaff, always. The burger was Rare in the middle, regardless, I ate it anyway. I'm not ...
+
+**Review ID: oks8NfxFnrWe17lYzUolvg**
+- Date: 2016-09-25 14:35:47
+- Stars: 5.0
+- Text: It's just nice to see something done right. A restaurant/cafe/bar/performance space seems like a recipe for disaster, but thoughtful attention to the customer experience down to small details make this place a winner. Some things I appreciated when my husband and I visited for brunch yesterday:
+
+* It can take a while to get seated, but there's a coffee bar right there where you can order yummy drinks and smoothies while you wait. There's also some seating, which in our case was taken up by famil...
+
+**Review ID: TFQJLnsKHbSp41WSMXDd6Q**
+- Date: 2016-09-01 17:03:14
+- Stars: 2.0
+- Text: Gorgeous, HUGE place.  Interior and massive outdoors patio is what dream eateries are made of.  Cool, clean, with a little industrial, a little farmhouse. There is so much room, you feel like you can breathe, stretch out and enjoy your meal, cocktails, what have you. And folks, that's where my compliments will end. The burger was pretty good, but dang, this place needs WORK. It's been a while since I've experienced such horrendous service like what's going on here.
+
+What absolutely ruined my exp...
+
+**Review ID: -aAYTj0i5vbZ_1Ya_Ms_mw**
+- Date: 2017-10-18 02:02:31
+- Stars: 5.0
+- Text: The following review is for brunch:
+
+Came here on Saturday morning as I had bookmarked this place for a while and heard great things. I am not a vegan, but lactose intolerant and have a difficult time with bread (not gluten free, just can't do a lot of bread). Let me start by saying that I had a really difficult time picking only one thing...so I didn't! Here is what I got:
+
+1. Porridge: Oh....My.....Lord was this good. This bowl (gluten free and vegan btw) is so large and full of all of the goo...
+
+**Review ID: C6nrGgU1l-iKTj6EE4KuuQ**
+- Date: 2018-01-03 23:20:11
+- Stars: 4.0
+- Text: My company had a meeting here one afternoon around lunch time. 
+
+We called ahead to let them know a large party would be coming, and they saved a seat for us upstairs at a large table. The upstairs is significantly smaller than downstairs but it was very quiet and there were lots of people up there studying and working, so it seemed like the right place for us to be. I want to open my review by saying that I really love the atmosphere of the restaurant. Like many restaurants in Northern Libertie...
+
+**Review ID: b_sFI7o9usdoXqNEAELJnA**
+- Date: 2015-11-18 04:08:05
+- Stars: 3.0
+- Text: This review pertains to our happy hour/dinner experience.
+
+My friends and I arrived around 5pm on a weekday. Immediately, we loved the ambiance of the place - so clean/modern, but cozy and inviting at the same time. Unfortunately, there wasn't much else that impressed us about Front Street Cafe.
+
+First, they don't have a dedicated happy hour menu, although they do offer specials. There was no mention of happy hour anywhere, and our waitress never brought it up - we only knew from having visited ...
+
+**Review ID: HdjtIcchrbXvoRky8mEg8A**
+- Date: 2015-11-11 15:39:37
+- Stars: 3.0
+- Text: I am hopeful that FSC will become a five star favorite of mine, but for now not so much. I've been clamoring to try it and was so excited that we finally had a Saturday available for brunch. 
+
+First, it's gorgeous. They took their time with this place and it shows. I'd go back just for the building. I definitely want to sit in the garden and have coffee drinks, and cocktails, and dinner. But for now the main vibe I got from the place was coldness. It was a recurring theme.
+
+Our server was disint...
+
+**Review ID: mBbRcP4ZCKT3MtVso1NUlQ**
+- Date: 2018-11-13 04:04:37
+- Stars: 4.0
+- Text: We originally wanted to go to One Shot Cafe the day we came here but we were not disappointed at all.
+
+The decor and atmosphere is great! Really comforting, especially when coming in from the cold outside. As soon as you step in, you're greeted by a large lobby and bar that serves tea, coffee, and smoothies. We got teas while we waited which were fitting for the cold weather (green jade blossom).
+
+When being seated, the area is quite small but packed. There's a homey feel to it as everyone is ha...
+
+**Review ID: S3k9O8wjBwfzuEpKErCyNg**
+- Date: 2016-09-21 12:32:44
+- Stars: 4.0
+- Text: Ok, so my first time here was not my favorite dining experience. Actually, it's my least favorite dining experience of all time!!! My car got towed (illegally come to find out) on Front Street, in front of Kung Fu Necktie across the street. Be VERY careful parking around here as the area is known for vicious tow truck companies just running away with your car! Well, one company really. A truly traumatic experience. I mean, awful!! AWFUL!! Threatened with pit-bulls, dead bolted in a room full of ...
+
+**Review ID: ET17XC7BGr1-zhJebclBeA**
+- Date: 2019-04-22 03:08:10
+- Stars: 3.0
+- Text: Ambiance: Absolutely Gorgeous! Very roomy and the outdoor garden is very beautiful on this 70 degree day for brunch. 
+
+Service: (3.5/5) I went today (4/21/2019) for Sunday Brunch with a party of 5, my GF's cousin put her name down with the hostesses (there were two of them, a male and female) and we waited. As 20 minutes went by, she went back to check and the hostess got a little hasty and just tossed the mini-clipboard menus down as if we were in the wrong when she sat us down at our table. Ou...
+
+**Review ID: olbKumjzxskVGDTEwmzjZA**
+- Date: 2019-04-20 16:47:06
+- Stars: 1.0
+- Text: This used to be one of my favorite restaurants in Philly. I'm vegan and brought my friend who is extremely allergic to dairy to try French Onion Soup for the first time in her life and she was so excited. She almost immediately started having a reaction so we asked our server if it was made with real cheese by mistake. Next thing we knew the manager came over with a prepared monologue about how much they respect the vegan diet and how they would never intentionally cause someone to break their m...
+
+
+---
+
+# TASK
+Evaluate EACH restaurant above according to the Allergy Safety Policy.
+Output a JSON array with one entry per restaurant.
+
+
+============================================================
+RESPONSE
+============================================================
+[
+  {
+    "restaurant_id": "e-ZyZc24wgkKafM3pguR2w",
+    "restaurant_name": "Milkcrate Cafe",
+    "action": "ALLOW",
+    "evidence": [],
+    "policy_rule_applied": "No qualifying evidence found under Evidence Rule 1 within the last 2 years",
+    "reasoning": "There are no first-hand reviews dated 2022-01-15 or later describing a severe peanut/nut allergy reaction at Milkcrate Cafe; therefore there is no basis to warn or block."
+  },
+  {
+    "restaurant_id": "eJaeTZlIdM3HWCq__Ve4Wg",
+    "restaurant_name": "Tria Cafe Rittenhouse",
+    "action": "ALLOW",
+    "evidence": [],
+    "policy_rule_applied": "No qualifying evidence found under Evidence Rule 1 within the last 2 years",
+    "reasoning": "There are no first-hand reviews dated 2022-01-15 or later describing a severe peanut/nut allergy reaction at Tria Cafe Rittenhouse; therefore there is no basis to warn or block."
+  },
+  {
+    "restaurant_id": "JrG4NINLspXPNhSXg7Q07Q",
+    "restaurant_name": "Front Street Cafe",
+    "action": "ALLOW",
+    "evidence": [],
+    "policy_rule_applied": "No qualifying evidence found under Evidence Rule 1 within the last 2 years",
+    "reasoning": "There are no first-hand reviews dated 2022-01-15 or later describing a severe peanut/nut allergy reaction at Front Street Cafe; therefore there is no basis to warn or block."
+  }
+]

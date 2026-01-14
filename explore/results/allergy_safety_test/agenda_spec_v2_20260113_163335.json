@@ -1,0 +1,142 @@
+[
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Allegro Pizza",
+    "gt_verdict": "Critical Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Fino's Pizzeria & Restaurant",
+    "gt_verdict": "Critical Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Steve's Prince of Steaks",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Marmont Steakhouse & Bar",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Del Frisco's Double Eagle Steakhouse",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Tai Lake Restaurant",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Sang Kee Noodle House",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Aladdin Pizzeria & Eatery",
+    "gt_verdict": "Low Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Pizzeria Pesto",
+    "gt_verdict": "Low Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Ricci's Hoagies",
+    "gt_verdict": "Low Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  }
+]

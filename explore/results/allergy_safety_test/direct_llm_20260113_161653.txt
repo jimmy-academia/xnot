@@ -1,0 +1,99 @@
+============================================================
+EXPECTED GROUND TRUTH
+============================================================
+Critical Risk | score= 9.50 | Allegro Pizza
+Critical Risk | score=20.00 | Fino's Pizzeria & Restaurant
+High Risk     | score= 4.00 | Steve's Prince of Steaks
+High Risk     | score= 7.00 | Marmont Steakhouse & Bar
+High Risk     | score= 4.00 | Del Frisco's Double Eagle Steakhouse
+High Risk     | score= 6.29 | Tai Lake Restaurant
+High Risk     | score= 5.55 | Sang Kee Noodle House
+Low Risk      | score= 3.00 | Aladdin Pizzeria & Eatery
+Low Risk      | score= 3.00 | Pizzeria Pesto
+Low Risk      | score= 3.00 | Ricci's Hoagies
+
+============================================================
+LLM RESPONSE
+============================================================
+[
+  {
+    "restaurant_name": "Allegro Pizza",
+    "verdict": "High Risk",
+    "evidence": [
+      {
+        "review_idx": 42,
+        "incident_type": "allergic_reaction",
+        "severity": "mild",
+        "quote": "I break out in hives from the spices of wings."
+      }
+    ],
+    "reasoning": "A firsthand allergic reaction (hives) was reported after consuming wings, indicating an allergen exposure risk at Allegro Pizza."
+  },
+  {
+    "restaurant_name": "Fino's Pizzeria & Restaurant",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  },
+  {
+    "restaurant_name": "Steve's Prince of Steaks",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  },
+  {
+    "restaurant_name": "Marmont Steakhouse & Bar",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  },
+  {
+    "restaurant_name": "Del Frisco's Double Eagle Steakhouse",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  },
+  {
+    "restaurant_name": "Tai Lake Restaurant",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  },
+  {
+    "restaurant_name": "Sang Kee Noodle House",
+    "verdict": "High Risk",
+    "evidence": [
+      {
+        "review_idx": 24,
+        "incident_type": "allergic_reaction",
+        "severity": "moderate",
+        "quote": "almonds in it"
+      },
+      {
+        "review_idx": 24,
+        "incident_type": "staff_issue",
+        "severity": "moderate",
+        "quote": "The server didn't know about the almonds in it"
+      }
+    ],
+    "reasoning": "Almonds caused an allergic reaction in a guest, and staff appeared unaware of the almond allergen, indicating both an allergy risk and a staff-awareness gap."
+  },
+  {
+    "restaurant_name": "Aladdin Pizzeria & Eatery",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  },
+  {
+    "restaurant_name": "Pizzeria Pesto",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No peanut/nut allergy incidents identified in the reviews; gluten-free option exists but no allergy incidents reported."
+  },
+  {
+    "restaurant_name": "Ricci's Hoagies",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No allergy-related incidents were identified in the provided reviews."
+  }
+]

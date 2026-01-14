@@ -1,0 +1,152 @@
+[
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Allegro Pizza",
+    "gt_verdict": "Critical Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Fino's Pizzeria & Restaurant",
+    "gt_verdict": "Critical Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Steve's Prince of Steaks",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "High Risk",
+    "evidences": [
+      {
+        "review_id": "8p3BbQwgk9bDsWL0cXEzmg",
+        "quote": "Came here for restaurant week... The baked Brie, which didn't have anything listed under it on the menu. Turns out it had almonds in it. My friend had an allergic reaction to it. The server didn't know about the almonds in it and when my friend said \"I won't die or anything\" about the severity of her allergy he was like oh ok! My friend's husband had to leave to get her Benadryl during dinner. We had to ask for new silverware for her.",
+        "extracted_fields": {
+          "severity": "mild",
+          "firsthand": "true",
+          "date": "2019-09-29"
+        }
+      }
+    ],
+    "restaurant_name": "Marmont Steakhouse & Bar",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "High Risk",
+      "verdict_expected_from_evidence": "High Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 1,
+      "total_evidences": 1
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Del Frisco's Double Eagle Steakhouse",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Tai Lake Restaurant",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Sang Kee Noodle House",
+    "gt_verdict": "High Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Aladdin Pizzeria & Eatery",
+    "gt_verdict": "Low Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Pizzeria Pesto",
+    "gt_verdict": "Low Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  },
+  {
+    "verdict": "Low Risk",
+    "evidences": [],
+    "restaurant_name": "Ricci's Hoagies",
+    "gt_verdict": "Low Risk",
+    "agenda_spec_analysis": {
+      "verdict_given": "Low Risk",
+      "verdict_expected_from_evidence": "Low Risk",
+      "consistent": true,
+      "recent_firsthand_severe_count": 0,
+      "recent_firsthand_any_count": 0,
+      "total_evidences": 0
+    }
+  }
+]

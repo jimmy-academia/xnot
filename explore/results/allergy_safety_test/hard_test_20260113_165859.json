@@ -1,0 +1,499 @@
+{
+  "prediction": {
+    "verdict": "Critical",
+    "sem_filter_results": {
+      "total_reviews": 15,
+      "potentially_relevant_ids": [
+        "R002",
+        "R003",
+        "R004",
+        "R005",
+        "R006",
+        "R007",
+        "R009",
+        "R010",
+        "R011",
+        "R012",
+        "R013",
+        "R014",
+        "R015"
+      ]
+    },
+    "sem_extract_results": [
+      {
+        "review_id": "R002",
+        "allergen_raw": "peanuts",
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-08-15",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "R003",
+        "allergen_raw": "peanuts",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2019-08-15",
+        "is_incident": true,
+        "exclusion_reason": "secondhand account of the same incident as R002"
+      },
+      {
+        "review_id": "R004",
+        "allergen_raw": "coconut",
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-06-20",
+        "is_incident": false,
+        "exclusion_reason": "not a covered allergen"
+      },
+      {
+        "review_id": "R005",
+        "allergen_raw": "tree nut",
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-03-10",
+        "is_incident": false,
+        "exclusion_reason": "no reaction"
+      },
+      {
+        "review_id": "R006",
+        "allergen_raw": "cashew",
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2018-11-22",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "R007",
+        "allergen_raw": "nut allergies",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2018-09-05",
+        "is_incident": false,
+        "exclusion_reason": "unclear allergen details; not a confirmed incident"
+      },
+      {
+        "review_id": "R009",
+        "allergen_raw": "peanuts",
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2018-05-30",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "R010",
+        "allergen_raw": "walnuts",
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2017-12-01",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "R011",
+        "allergen_raw": "walnut",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2017-12-01",
+        "is_incident": true,
+        "exclusion_reason": "duplicate of R010"
+      },
+      {
+        "review_id": "R012",
+        "allergen_raw": "fish sauce",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2017-08-20",
+        "is_incident": false,
+        "exclusion_reason": "non-nut allergen; not a covered allergen"
+      },
+      {
+        "review_id": "R013",
+        "allergen_raw": "almond",
+        "severity": "none",
+        "firsthand": true,
+        "date": "2016-05-15",
+        "is_incident": true,
+        "exclusion_reason": "pre-2017 (not recent)"
+      },
+      {
+        "review_id": "R014",
+        "allergen_raw": "nut allergies",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2019-02-28",
+        "is_incident": false,
+        "exclusion_reason": "not a specific incident; general forum claim"
+      },
+      {
+        "review_id": "R015",
+        "allergen_raw": "macadamia nuts",
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-10-10",
+        "is_incident": true,
+        "exclusion_reason": ""
+      }
+    ],
+    "sem_join_results": [
+      {
+        "review_id": "R002",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanuts",
+        "is_covered": true
+      },
+      {
+        "review_id": "R003",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanuts",
+        "is_covered": true
+      },
+      {
+        "review_id": "R004",
+        "allergen_raw": "coconut",
+        "allergen_canonical": "NOT_COVERED:coconut",
+        "is_covered": false
+      },
+      {
+        "review_id": "R005",
+        "allergen_raw": "tree nut",
+        "allergen_canonical": "tree_nut:unknown",
+        "is_covered": true
+      },
+      {
+        "review_id": "R006",
+        "allergen_raw": "cashew",
+        "allergen_canonical": "tree_nut:cashew",
+        "is_covered": true
+      },
+      {
+        "review_id": "R007",
+        "allergen_raw": "nut allergies",
+        "allergen_canonical": "NOT_COVERED:nut_allergies",
+        "is_covered": false
+      },
+      {
+        "review_id": "R009",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanuts",
+        "is_covered": true
+      },
+      {
+        "review_id": "R010",
+        "allergen_raw": "walnuts",
+        "allergen_canonical": "tree_nut:walnut",
+        "is_covered": true
+      },
+      {
+        "review_id": "R011",
+        "allergen_raw": "walnut",
+        "allergen_canonical": "tree_nut:walnut",
+        "is_covered": true
+      },
+      {
+        "review_id": "R012",
+        "allergen_raw": "fish sauce",
+        "allergen_canonical": "NOT_COVERED:fish_sauce",
+        "is_covered": false
+      },
+      {
+        "review_id": "R013",
+        "allergen_raw": "almond",
+        "allergen_canonical": "tree_nut:almond",
+        "is_covered": true
+      },
+      {
+        "review_id": "R014",
+        "allergen_raw": "nut allergies",
+        "allergen_canonical": "NOT_COVERED:nut_allergies",
+        "is_covered": false
+      },
+      {
+        "review_id": "R015",
+        "allergen_raw": "macadamia nuts",
+        "allergen_canonical": "tree_nut:macadamia",
+        "is_covered": true
+      }
+    ],
+    "sem_distinct_results": {
+      "incident_groups": [
+        {
+          "group_id": 1,
+          "review_ids": [
+            "R002",
+            "R003"
+          ],
+          "reason": "same_as:R002"
+        },
+        {
+          "group_id": 2,
+          "review_ids": [
+            "R006"
+          ],
+          "reason": "independent"
+        },
+        {
+          "group_id": 3,
+          "review_ids": [
+            "R009"
+          ],
+          "reason": "independent"
+        },
+        {
+          "group_id": 4,
+          "review_ids": [
+            "R010",
+            "R011"
+          ],
+          "reason": "same_as:R010"
+        },
+        {
+          "group_id": 5,
+          "review_ids": [
+            "R015"
+          ],
+          "reason": "independent"
+        },
+        {
+          "group_id": 6,
+          "review_ids": [
+            "R013"
+          ],
+          "reason": "independent"
+        }
+      ],
+      "independent_incident_count": 6
+    },
+    "final_counts": {
+      "independent_firsthand_recent_severe_covered": 2,
+      "independent_firsthand_recent_any_covered": 5
+    },
+    "reasoning": "Identified all reviews mentioning peanuts or tree nuts (covered allergens). Deduplicated incidents using cross-references and same-date/same-party/same-allergen criteria. Independent first-hand incidents with covered allergens and after 2017-01-01 are: R002 (peanut, severe, 2019-08-15) and R010 (walnut, severe, 2017-12-01). Additional independent first-hand incidents with covered allergens and after 2017-01-01 include R009 (peanut, mild, 2018-05-30), R006 (cashew, mild, 2018-11-22), and R015 (macadamia, moderate, 2018-10-10). R003 and R011 are duplicates of R002 and R010 respectively. There are six distinct incidents in total when including pre-2017 events (e.g., R013 almond, 2016-05-15). Since there are at least two independent first-hand severe incidents (R002 and R010), the risk verdict is Critical. Potentially relevant reviews also include non-covered allergen mentions (e.g., coconut, fish sauce) and general nut-allergy warnings, which were captured in the sem_extract_results and sem_join_results for completeness."
+  },
+  "ground_truth": {
+    "sem_filter": {
+      "relevant_review_ids": [
+        "R002",
+        "R003",
+        "R004",
+        "R005",
+        "R006",
+        "R007",
+        "R009",
+        "R010",
+        "R011",
+        "R013",
+        "R014",
+        "R015"
+      ],
+      "notes": "R001, R008, R012 not relevant (no nut allergy mention)"
+    },
+    "sem_join": {
+      "R002": {
+        "raw": "peanut",
+        "canonical": "peanut",
+        "covered": true
+      },
+      "R003": {
+        "raw": "nut",
+        "canonical": "peanut (same incident as R002)",
+        "covered": true
+      },
+      "R004": {
+        "raw": "coconut",
+        "canonical": "NOT_COVERED:coconut",
+        "covered": false
+      },
+      "R005": {
+        "raw": "tree nut",
+        "canonical": "tree_nut:unspecified",
+        "covered": true,
+        "is_incident": false
+      },
+      "R006": {
+        "raw": "cashew",
+        "canonical": "tree_nut:cashew",
+        "covered": true
+      },
+      "R007": {
+        "raw": "nut",
+        "canonical": "unknown",
+        "covered": true,
+        "is_incident": false,
+        "reason": "secondhand"
+      },
+      "R009": {
+        "raw": "peanut",
+        "canonical": "peanut",
+        "covered": true
+      },
+      "R010": {
+        "raw": "walnuts",
+        "canonical": "tree_nut:walnut",
+        "covered": true
+      },
+      "R011": {
+        "raw": "walnut",
+        "canonical": "tree_nut:walnut (same incident as R010)",
+        "covered": true
+      },
+      "R013": {
+        "raw": "almond",
+        "canonical": "tree_nut:almond",
+        "covered": true,
+        "is_incident": false,
+        "reason": "secondhand"
+      },
+      "R014": {
+        "raw": "nut",
+        "canonical": "unknown",
+        "covered": true,
+        "is_incident": false,
+        "reason": "secondhand"
+      },
+      "R015": {
+        "raw": "macadamia",
+        "canonical": "tree_nut:macadamia",
+        "covered": true
+      }
+    },
+    "sem_extract": {
+      "R002": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-08-15",
+        "is_incident": true
+      },
+      "R003": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2019-08-15",
+        "is_incident": false,
+        "reason": "witness, not victim"
+      },
+      "R004": {
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2019-06-20",
+        "is_incident": true,
+        "but_excluded": "coconut not covered"
+      },
+      "R005": {
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-03-10",
+        "is_incident": false,
+        "reason": "no reaction occurred"
+      },
+      "R006": {
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2018-11-22",
+        "is_incident": true
+      },
+      "R007": {
+        "severity": "unknown",
+        "firsthand": false,
+        "date": "2018-09-05",
+        "is_incident": false,
+        "reason": "secondhand from staff"
+      },
+      "R009": {
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2018-05-30",
+        "is_incident": true
+      },
+      "R010": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2017-12-01",
+        "is_incident": true
+      },
+      "R011": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2017-12-01",
+        "is_incident": false,
+        "reason": "same incident as R010"
+      },
+      "R013": {
+        "severity": "unknown",
+        "firsthand": false,
+        "date": "2016-05-15",
+        "is_incident": false,
+        "reason": "secondhand + not recent"
+      },
+      "R014": {
+        "severity": "unknown",
+        "firsthand": false,
+        "date": "2019-02-28",
+        "is_incident": false,
+        "reason": "secondhand from internet"
+      },
+      "R015": {
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-10-10",
+        "is_incident": true
+      }
+    },
+    "sem_distinct": {
+      "incident_groups": [
+        {
+          "id": 1,
+          "review_ids": [
+            "R002",
+            "R003"
+          ],
+          "allergen": "peanut",
+          "date": "2019-08-15",
+          "reason": "R003 explicitly references R002, same incident"
+        },
+        {
+          "id": 2,
+          "review_ids": [
+            "R006"
+          ],
+          "allergen": "cashew",
+          "date": "2018-11-22"
+        },
+        {
+          "id": 3,
+          "review_ids": [
+            "R009"
+          ],
+          "allergen": "peanut",
+          "date": "2018-05-30"
+        },
+        {
+          "id": 4,
+          "review_ids": [
+            "R010",
+            "R011"
+          ],
+          "allergen": "walnut",
+          "date": "2017-12-01",
+          "reason": "R011 says 'my wife's review', same incident"
+        },
+        {
+          "id": 5,
+          "review_ids": [
+            "R015"
+          ],
+          "allergen": "macadamia",
+          "date": "2018-10-10"
+        }
+      ],
+      "independent_incidents": 5
+    },
+    "final_verdict": {
+      "independent_firsthand_recent_severe_covered": 2,
+      "explanation": "Incident #1 (R002, peanut, 2019) and Incident #4 (R010, walnut, 2017) are both severe, firsthand, recent, covered",
+      "verdict": "Critical"
+    }
+  }
+}

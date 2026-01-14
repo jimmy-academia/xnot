@@ -1,0 +1,231 @@
+{
+  "restaurant": {
+    "name": "Borderline Bistro",
+    "business_id": "SYNTH_002",
+    "categories": "American, Fusion, Restaurants",
+    "stars": 3.8
+  },
+  "reviews": [
+    {
+      "review_id": "B001",
+      "date": "2019-10-05",
+      "stars": 5,
+      "text": "Great brunch spot! The avocado toast is amazing."
+    },
+    {
+      "review_id": "B002",
+      "date": "2019-09-20",
+      "stars": 1,
+      "text": "DANGEROUS! My colleague Sarah came here last week and had a severe reaction to hidden peanuts in the pad thai. She told me her throat closed up and she had to use her EpiPen. I'm sharing her story because she doesn't use Yelp. Please be careful!"
+    },
+    {
+      "review_id": "B003",
+      "date": "2019-08-15",
+      "stars": 2,
+      "text": "I have a severe tree nut allergy. When I asked about the walnut crusted salmon, the waiter assured me the kitchen could make it without walnuts. Well, I took one bite and immediately my lips started tingling. I spit it out fast so I was fine, but clearly there was cross-contamination. Very disappointing."
+    },
+    {
+      "review_id": "B004",
+      "date": "2019-07-01",
+      "stars": 1,
+      "text": "My wife nearly died here. We specifically told them about her peanut allergy THREE TIMES. The dessert came out and she took a bite - it had peanut butter in it! Her throat started swelling immediately. We had to call 911 and she was rushed to the ER. The manager blamed us for not being 'careful enough'. Absolutely unacceptable."
+    },
+    {
+      "review_id": "B005",
+      "date": "2019-07-01",
+      "stars": 1,
+      "text": "I'm the husband from the review about my wife's peanut allergy reaction (see above). I want to add that she was hospitalized for two days. The restaurant has shown zero remorse. We are pursuing legal action."
+    },
+    {
+      "review_id": "B006",
+      "date": "2019-04-10",
+      "stars": 3,
+      "text": "Food was decent. I saw on the local news that someone had an allergic reaction here a few months ago. Made me nervous but I don't have allergies so it was fine for me."
+    },
+    {
+      "review_id": "B007",
+      "date": "2019-03-22",
+      "stars": 2,
+      "text": "My daughter is allergic to cashews. We asked for a nut-free meal and they brought out something with cashew cream sauce! Luckily I noticed before she ate it. No reaction occurred but this could have been very bad. Zero stars for allergen awareness."
+    },
+    {
+      "review_id": "B008",
+      "date": "2019-01-15",
+      "stars": 4,
+      "text": "Pretty good food. BTW for those with nut allergies - I overheard the table next to me ask about allergens and the staff seemed knowledgeable. They even showed them the ingredient list."
+    },
+    {
+      "review_id": "B009",
+      "date": "2018-11-30",
+      "stars": 1,
+      "text": "According to what my neighbor told me, her son who has a walnut allergy ate here and ended up in the hospital with anaphylaxis. She said it was terrifying. I'll never eat here with my family."
+    },
+    {
+      "review_id": "B010",
+      "date": "2018-10-20",
+      "stars": 2,
+      "text": "I'm highly allergic to pistachios. The baklava wasn't supposed to have pistachios according to the menu, but it definitely did. My face swelled up and I had to take Benadryl. The manager offered a free dessert as compensation - are you kidding me?!"
+    },
+    {
+      "review_id": "B011",
+      "date": "2018-06-15",
+      "stars": 3,
+      "text": "Average experience. The coconut curry made me break out in hives since I'm allergic to coconut. I should have asked more carefully. My fault really."
+    },
+    {
+      "review_id": "B012",
+      "date": "2017-12-01",
+      "stars": 1,
+      "text": "Posted on behalf of my elderly mother who doesn't do computers: She ordered the 'nut-free' brownie and had a severe reaction. Turns out it had almond flour! She used her EpiPen and my father drove her to urgent care. The restaurant claimed the menu said 'may contain traces' but it absolutely did not."
+    },
+    {
+      "review_id": "B013",
+      "date": "2017-08-20",
+      "stars": 2,
+      "text": "Went here years ago and my friend had a mild reaction to something with hazelnuts. Nothing too serious, just some itching. The staff was apologetic."
+    },
+    {
+      "review_id": "B014",
+      "date": "2016-05-10",
+      "stars": 1,
+      "text": "My son went into anaphylactic shock after eating the pad thai which had hidden peanuts. Worst day of my life. He was in the ICU for three days. This was back in 2016 but I'm only now writing this review because I saw they're still in business."
+    },
+    {
+      "review_id": "B015",
+      "date": "2019-11-01",
+      "stars": 4,
+      "text": "Good food overall. I always carry my EpiPen for my almond allergy but had no issues. Asked about nuts in everything I ordered and staff was helpful."
+    }
+  ],
+  "ground_truth": {
+    "challenge_notes": "This dataset is designed so that INCORRECT firsthand/secondhand classification WILL flip the verdict",
+
+    "sem_join": {
+      "B002": {"raw": "peanuts", "canonical": "peanut", "covered": true},
+      "B003": {"raw": "walnut, tree nut", "canonical": "tree_nut:walnut", "covered": true},
+      "B004": {"raw": "peanut", "canonical": "peanut", "covered": true},
+      "B005": {"raw": "peanut", "canonical": "peanut", "covered": true},
+      "B006": {"raw": "allergic reaction", "canonical": "unknown", "covered": true},
+      "B007": {"raw": "cashews", "canonical": "tree_nut:cashew", "covered": true},
+      "B009": {"raw": "walnut", "canonical": "tree_nut:walnut", "covered": true},
+      "B010": {"raw": "pistachios", "canonical": "tree_nut:pistachio", "covered": true},
+      "B011": {"raw": "coconut", "canonical": "NOT_COVERED:coconut", "covered": false},
+      "B012": {"raw": "almond", "canonical": "tree_nut:almond", "covered": true},
+      "B013": {"raw": "hazelnuts", "canonical": "tree_nut:hazelnut", "covered": true},
+      "B014": {"raw": "peanuts", "canonical": "peanut", "covered": true},
+      "B015": {"raw": "almond", "canonical": "tree_nut:almond", "covered": true}
+    },
+
+    "sem_extract": {
+      "B002": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2019-09-20",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'My colleague Sarah told me' - reviewer is sharing someone else's story"
+      },
+      "B003": {
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2019-08-15",
+        "is_incident": true,
+        "note": "tingling lips, spit it out - mild, not severe"
+      },
+      "B004": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-07-01",
+        "is_incident": true,
+        "note": "spouse at same meal = firsthand per spec"
+      },
+      "B005": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-07-01",
+        "is_incident": false,
+        "reason": "DUPLICATE of B004 - same incident, husband's perspective"
+      },
+      "B006": {
+        "severity": "unknown",
+        "firsthand": false,
+        "date": "2019-04-10",
+        "is_incident": false,
+        "reason": "SECONDHAND - saw on local news"
+      },
+      "B007": {
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-03-22",
+        "is_incident": false,
+        "reason": "NO REACTION - caught before eating"
+      },
+      "B009": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2018-11-30",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'my neighbor told me' about her son"
+      },
+      "B010": {
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-10-20",
+        "is_incident": true,
+        "note": "face swelling + Benadryl = moderate"
+      },
+      "B011": {
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-06-15",
+        "is_incident": false,
+        "reason": "COCONUT - not covered allergen"
+      },
+      "B012": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2017-12-01",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'posted on behalf of my elderly mother' - mother experienced it, not reviewer"
+      },
+      "B013": {
+        "severity": "mild",
+        "firsthand": false,
+        "date": "2017-08-20",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'my friend had a reaction' (not dining together implied by 'years ago')"
+      },
+      "B014": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2016-05-10",
+        "is_incident": false,
+        "reason": "NOT RECENT - 2016 is before 2017 cutoff"
+      },
+      "B015": {
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-11-01",
+        "is_incident": false,
+        "reason": "NO REACTION - carried EpiPen but no issues"
+      }
+    },
+
+    "sem_distinct": {
+      "incident_groups": [
+        {"id": 1, "review_ids": ["B003"], "allergen": "walnut", "severity": "mild", "date": "2019-08-15"},
+        {"id": 2, "review_ids": ["B004", "B005"], "allergen": "peanut", "severity": "severe", "date": "2019-07-01"},
+        {"id": 3, "review_ids": ["B010"], "allergen": "pistachio", "severity": "moderate", "date": "2018-10-20"}
+      ],
+      "independent_firsthand_recent_covered": 3,
+      "note": "Only 3 actual incidents - B002, B006, B009, B012, B013 are all SECONDHAND"
+    },
+
+    "final_verdict": {
+      "independent_firsthand_recent_severe_covered": 1,
+      "independent_firsthand_recent_any_covered": 3,
+      "explanation": "Only ONE severe incident qualifies: B004/B005 (peanut, severe). B002 is SECONDHAND (colleague told them). B009 is SECONDHAND (neighbor told them). B012 is SECONDHAND (posted on behalf of mother). B014 is NOT RECENT (2016).",
+      "verdict": "High Risk",
+      "why_not_critical": "Need 2 severe, only have 1. If LLM incorrectly counts B002, B009, or B012 as firsthand, it would wrongly say Critical."
+    }
+  }
+}

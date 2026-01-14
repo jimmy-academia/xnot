@@ -1,0 +1,149 @@
+{
+  "restaurant": {
+    "name": "Nutty Thai Kitchen",
+    "business_id": "SYNTH_001",
+    "categories": "Thai, Asian Fusion, Restaurants",
+    "stars": 4.0
+  },
+  "reviews": [
+    {
+      "review_id": "R001",
+      "date": "2019-08-15",
+      "stars": 5,
+      "text": "Amazing pad thai! Best in the city. Service was great, will definitely come back."
+    },
+    {
+      "review_id": "R002",
+      "date": "2019-08-15",
+      "stars": 1,
+      "text": "SERIOUS WARNING: My husband ordered the chicken satay and within minutes his throat started swelling. He has a severe peanut allergy and we specifically asked if the satay sauce had peanuts - the server said NO. We had to use his EpiPen and rush to the ER. The sauce absolutely had peanuts. This could have killed him. AVOID if you have nut allergies."
+    },
+    {
+      "review_id": "R003",
+      "date": "2019-08-15",
+      "stars": 1,
+      "text": "I was at the table next to the couple where the husband had an allergic reaction (see my wife's review R002). It was terrifying to watch. The staff seemed completely unprepared. I saw them use an EpiPen. Please take nut allergies seriously!"
+    },
+    {
+      "review_id": "R004",
+      "date": "2019-06-20",
+      "stars": 2,
+      "text": "Food was okay but I had a reaction to something. I'm allergic to coconut and even though I asked them to leave it out of my curry, I got itchy and had hives. Had to take Benadryl. Not coming back."
+    },
+    {
+      "review_id": "R005",
+      "date": "2019-03-10",
+      "stars": 4,
+      "text": "Delicious food! I always carry my EpiPen since I have tree nut allergies, but I ordered carefully and had no issues. The staff was helpful about ingredients."
+    },
+    {
+      "review_id": "R006",
+      "date": "2018-11-22",
+      "stars": 1,
+      "text": "My daughter has a cashew allergy and we ordered the vegetable stir fry asking for NO NUTS. It came loaded with cashews! She took one bite and her lips started tingling. Luckily we caught it early and she just took Benadryl, but this is unacceptable."
+    },
+    {
+      "review_id": "R007",
+      "date": "2018-09-05",
+      "stars": 3,
+      "text": "Good food but I heard from the waiter that someone had an allergic reaction here last month. He said they're more careful now about nut allergies. Just something to be aware of."
+    },
+    {
+      "review_id": "R008",
+      "date": "2018-07-14",
+      "stars": 1,
+      "text": "Terrible experience. I'm lactose intolerant and they put dairy in everything even when I asked them not to. Was sick all night. They need better training."
+    },
+    {
+      "review_id": "R009",
+      "date": "2018-05-30",
+      "stars": 2,
+      "text": "The papaya salad had peanuts that weren't listed on the menu. I have a mild peanut sensitivity and got a stomach ache. Nothing serious but they should label better."
+    },
+    {
+      "review_id": "R010",
+      "date": "2017-12-01",
+      "stars": 1,
+      "text": "LIFE THREATENING! My son ate the spring rolls which apparently had crushed walnuts. He went into anaphylaxis. We called 911 and he was hospitalized overnight. The manager apologized but this should never happen. They need to list ALL ingredients."
+    },
+    {
+      "review_id": "R011",
+      "date": "2017-12-01",
+      "stars": 1,
+      "text": "I'm the father mentioned in my wife's review about our son's walnut allergy reaction. I want to add that the hospital said it was one of the worst cases they'd seen. He could have died. We are consulting lawyers."
+    },
+    {
+      "review_id": "R012",
+      "date": "2017-08-20",
+      "stars": 4,
+      "text": "Great Thai food! The only issue was they use a lot of fish sauce which my friend is allergic to. She got a bit sick but it's not their fault - we should have asked."
+    },
+    {
+      "review_id": "R013",
+      "date": "2016-05-15",
+      "stars": 1,
+      "text": "My friend who eats here regularly told me about a serious nut allergy incident last year. I'm not taking any chances with my almond allergy. Staying away."
+    },
+    {
+      "review_id": "R014",
+      "date": "2019-02-28",
+      "stars": 1,
+      "text": "I read on a food allergy forum that this place is dangerous for people with nut allergies. Apparently multiple people have had reactions here. Not worth the risk."
+    },
+    {
+      "review_id": "R015",
+      "date": "2018-10-10",
+      "stars": 2,
+      "text": "The mango sticky rice had macadamia nuts which weren't mentioned. I have a tree nut allergy and my face started swelling. Took Benadryl and Zyrtec. The manager offered a refund but the damage was done."
+    }
+  ],
+  "ground_truth": {
+    "sem_filter": {
+      "relevant_review_ids": ["R002", "R003", "R004", "R005", "R006", "R007", "R009", "R010", "R011", "R013", "R014", "R015"],
+      "notes": "R001, R008, R012 not relevant (no nut allergy mention)"
+    },
+    "sem_join": {
+      "R002": {"raw": "peanut", "canonical": "peanut", "covered": true},
+      "R003": {"raw": "nut", "canonical": "peanut (same incident as R002)", "covered": true},
+      "R004": {"raw": "coconut", "canonical": "NOT_COVERED:coconut", "covered": false},
+      "R005": {"raw": "tree nut", "canonical": "tree_nut:unspecified", "covered": true, "is_incident": false},
+      "R006": {"raw": "cashew", "canonical": "tree_nut:cashew", "covered": true},
+      "R007": {"raw": "nut", "canonical": "unknown", "covered": true, "is_incident": false, "reason": "secondhand"},
+      "R009": {"raw": "peanut", "canonical": "peanut", "covered": true},
+      "R010": {"raw": "walnuts", "canonical": "tree_nut:walnut", "covered": true},
+      "R011": {"raw": "walnut", "canonical": "tree_nut:walnut (same incident as R010)", "covered": true},
+      "R013": {"raw": "almond", "canonical": "tree_nut:almond", "covered": true, "is_incident": false, "reason": "secondhand"},
+      "R014": {"raw": "nut", "canonical": "unknown", "covered": true, "is_incident": false, "reason": "secondhand"},
+      "R015": {"raw": "macadamia", "canonical": "tree_nut:macadamia", "covered": true}
+    },
+    "sem_extract": {
+      "R002": {"severity": "severe", "firsthand": true, "date": "2019-08-15", "is_incident": true},
+      "R003": {"severity": "severe", "firsthand": false, "date": "2019-08-15", "is_incident": false, "reason": "witness, not victim"},
+      "R004": {"severity": "moderate", "firsthand": true, "date": "2019-06-20", "is_incident": true, "but_excluded": "coconut not covered"},
+      "R005": {"severity": "none", "firsthand": true, "date": "2019-03-10", "is_incident": false, "reason": "no reaction occurred"},
+      "R006": {"severity": "mild", "firsthand": true, "date": "2018-11-22", "is_incident": true},
+      "R007": {"severity": "unknown", "firsthand": false, "date": "2018-09-05", "is_incident": false, "reason": "secondhand from staff"},
+      "R009": {"severity": "mild", "firsthand": true, "date": "2018-05-30", "is_incident": true},
+      "R010": {"severity": "severe", "firsthand": true, "date": "2017-12-01", "is_incident": true},
+      "R011": {"severity": "severe", "firsthand": true, "date": "2017-12-01", "is_incident": false, "reason": "same incident as R010"},
+      "R013": {"severity": "unknown", "firsthand": false, "date": "2016-05-15", "is_incident": false, "reason": "secondhand + not recent"},
+      "R014": {"severity": "unknown", "firsthand": false, "date": "2019-02-28", "is_incident": false, "reason": "secondhand from internet"},
+      "R015": {"severity": "moderate", "firsthand": true, "date": "2018-10-10", "is_incident": true}
+    },
+    "sem_distinct": {
+      "incident_groups": [
+        {"id": 1, "review_ids": ["R002", "R003"], "allergen": "peanut", "date": "2019-08-15", "reason": "R003 explicitly references R002, same incident"},
+        {"id": 2, "review_ids": ["R006"], "allergen": "cashew", "date": "2018-11-22"},
+        {"id": 3, "review_ids": ["R009"], "allergen": "peanut", "date": "2018-05-30"},
+        {"id": 4, "review_ids": ["R010", "R011"], "allergen": "walnut", "date": "2017-12-01", "reason": "R011 says 'my wife's review', same incident"},
+        {"id": 5, "review_ids": ["R015"], "allergen": "macadamia", "date": "2018-10-10"}
+      ],
+      "independent_incidents": 5
+    },
+    "final_verdict": {
+      "independent_firsthand_recent_severe_covered": 2,
+      "explanation": "Incident #1 (R002, peanut, 2019) and Incident #4 (R010, walnut, 2017) are both severe, firsthand, recent, covered",
+      "verdict": "Critical"
+    }
+  }
+}

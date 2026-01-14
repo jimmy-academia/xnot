@@ -1,0 +1,150 @@
+[
+  {
+    "restaurant_name": "Allegro Pizza",
+    "verdict": "High Risk",
+    "evidence": [
+      {
+        "review_idx": 42,
+        "incident_type": "allergic_reaction",
+        "severity": "moderate",
+        "quote": "I break out in hives from the spices of wings."
+      }
+    ],
+    "reasoning": "There is a firsthand report of an allergic reaction (hives) after consuming wings, indicating spice/allergen risk. This single moderate incident meets the threshold for High Risk in this assessment. No other explicit allergy-related incidents or staff awareness failures are noted, but the presence of even one allergic reaction warrants elevated caution.",
+    "expected": "Critical Risk"
+  },
+  {
+    "restaurant_name": "Fino's Pizzeria & Restaurant",
+    "verdict": "High Risk",
+    "evidence": [
+      {
+        "review_idx": 40,
+        "incident_type": "staff_issue",
+        "severity": "moderate",
+        "quote": "If you are actually vegan or allergic to dairy pls don't eat here. They do not use vegan cheese and they do not 'make their own'."
+      },
+      {
+        "review_idx": 24,
+        "incident_type": "staff_issue",
+        "severity": "moderate",
+        "quote": "THIS IS NOT VEGAN. The \"vegan\" cheese they use is dairy cheese. DO NOT GO HERE IF YOU'RE VEGAN OR DAIRY FREE. They are liars. Owner says he makes his own cheese and then says that it Daiya."
+      },
+      {
+        "review_idx": 36,
+        "incident_type": "staff_issue",
+        "severity": "moderate",
+        "quote": "This place does not understand the meaning of 'vegan'. They will put dairy cheese on your pizza, and try to pass it off as daiya."
+      },
+      {
+        "review_idx": 42,
+        "incident_type": "staff_issue",
+        "severity": "moderate",
+        "quote": "They put REAL cheese on your Vegan pizza! DO NOT GO HERE IF YOU ARE VEGAN!"
+      },
+      {
+        "review_idx": 47,
+        "incident_type": "staff_issue",
+        "severity": "moderate",
+        "quote": "If you're vegan or allergic to dairy, beware. They charge about $5 more for a vegan pizza..."
+      }
+    ],
+    "reasoning": "Multiple reviews highlight mislabeling of vegan/dairy-free options and failure to honor dairy allergies, indicating recurring staff-awareness issues. While no explicit allergy reactions are documented, these patterns present a meaningful allergy safety risk, justifying a High Risk assessment.",
+    "expected": "Critical Risk"
+  },
+  {
+    "restaurant_name": "Steve's Prince of Steaks",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No reviews mention peanut or nut allergy incidents, and there are no reported staff awareness issues related to allergens. The only related notes are general complaints (customer service, pricing, cleanliness) and one review about gluten-free accommodations (not peanut/nut-specific). Based on available reviews, there is no evidence of allergy safety problems.",
+    "expected": "High Risk"
+  },
+  {
+    "restaurant_name": "Marmont Steakhouse & Bar",
+    "verdict": "High Risk",
+    "evidence": [
+      {
+        "review_idx": 24,
+        "incident_type": "allergic_reaction",
+        "severity": "mild",
+        "quote": "The baked Brie ... had almonds in it. My friend had an allergic reaction to it."
+      },
+      {
+        "review_idx": 24,
+        "incident_type": "staff_awareness",
+        "severity": "mild",
+        "quote": "The server didn't know about the almonds in it and when my friend said 'I won't die or anything' about the severity of her allergy he was like oh ok!"
+      }
+    ],
+    "reasoning": "A firsthand report documents an almond allergy reaction caused by an item (baked Brie) that contained almonds and was not properly labeled. The server appeared unaware of the almond content, indicating a failure in allergen awareness. This constitutes a significant allergy safety concern with potential for more events if unaddressed.",
+    "expected": "High Risk"
+  },
+  {
+    "restaurant_name": "Del Frisco's Double Eagle Steakhouse",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No firsthand allergic reactions, staff allergy awareness issues, or wrong orders due to allergens are mentioned in the reviews. Reviews predominantly discuss general service, atmosphere, and food quality; no allergy incidents observed.",
+    "expected": "High Risk"
+  },
+  {
+    "restaurant_name": "Tai Lake Restaurant",
+    "verdict": "Critical Risk",
+    "evidence": [
+      {
+        "review_idx": 138,
+        "incident_type": "allergic_reaction",
+        "severity": "severe",
+        "quote": "I had a MAJOR allergic response including swollen eyelids and throat"
+      }
+    ],
+    "reasoning": "Review #138 describes a firsthand severe allergic reaction (major allergy response with swelling of eyes/throat) potentially linked to a dish. This indicates a life-threatening allergy safety risk. With a single severe incident, the risk level is categorized as Critical rather than Low or High.",
+    "expected": "High Risk"
+  },
+  {
+    "restaurant_name": "Sang Kee Noodle House",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No reviews mention peanut or tree-nut allergies, allergic reactions, or staff mishandling of nut-related allergens. The reviews contain various service and food quality concerns, but none indicate nut-related safety incidents. Therefore, peanut/nut allergy risk is Low.",
+    "expected": "High Risk"
+  },
+  {
+    "restaurant_name": "Aladdin Pizzeria & Eatery",
+    "verdict": "High Risk",
+    "evidence": [
+      {
+        "review_idx": 3,
+        "incident_type": "staff_issue",
+        "severity": "mild",
+        "quote": "stated twice not to include cheese/dairy on one half of the vegetarian pizza. Pizza arrived liberally coated in cheese - one half of party unable to partake in dinner."
+      }
+    ],
+    "reasoning": "There is a documented staff failure to honor a dairy-free request, creating potential dairy allergy exposure. While no actual allergic reaction is reported, this pattern indicates a risk to diners with dairy/nut allergies, justifying a High Risk assessment.",
+    "expected": "Low Risk"
+  },
+  {
+    "restaurant_name": "Pizzeria Pesto",
+    "verdict": "Low Risk",
+    "evidence": [
+      {
+        "review_idx": 7,
+        "incident_type": "none",
+        "severity": "none",
+        "quote": "Our family has someone with celiac, and this place has safe gluten free pizza for her."
+      },
+      {
+        "review_idx": 35,
+        "incident_type": "none",
+        "severity": "none",
+        "quote": "All three were delicious - INCLUDING the gluten free pie, which was a nice surprise."
+      }
+    ],
+    "reasoning": "No reports of peanut or nut allergy incidents. Reviews frequently mention gluten-free options and general allergen awareness (e.g., GF pizzas), but there are no peanut/nut allergy-specific concerns or incidents. Overall, low risk for peanut/nut allergy safety.",
+    "expected": "Low Risk"
+  },
+  {
+    "restaurant_name": "Ricci's Hoagies",
+    "verdict": "Low Risk",
+    "evidence": [],
+    "reasoning": "No reviews report allergic reactions, miscommunication around allergens, or other allergy-specific safety incidents. Reviews discuss general order accuracy and quality, but nothing indicating allergy safety concerns.",
+    "expected": "Low Risk"
+  }
+]

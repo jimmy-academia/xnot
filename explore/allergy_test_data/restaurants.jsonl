@@ -1,0 +1,4 @@
+{"business_id": "SAFE001", "name": "Green Leaf Cafe", "address": "100 Main St", "city": "Philadelphia", "stars": 4.5, "review_count": 150, "categories": "Coffee & Tea, Vegan, Cafes"}
+{"business_id": "WARN001", "name": "Nutty Delights Bakery", "address": "200 Oak Ave", "city": "Philadelphia", "stars": 4.0, "review_count": 200, "categories": "Bakeries, Desserts, Coffee & Tea"}
+{"business_id": "BLOCK001", "name": "Peanut Paradise Cafe", "address": "300 Elm St", "city": "Philadelphia", "stars": 3.5, "review_count": 180, "categories": "Thai, Asian Fusion, Cafes"}
+{"business_id": "EDGE001", "name": "Ambiguous Eats", "address": "400 Pine Rd", "city": "Philadelphia", "stars": 4.2, "review_count": 120, "categories": "American, Brunch, Cafes"}

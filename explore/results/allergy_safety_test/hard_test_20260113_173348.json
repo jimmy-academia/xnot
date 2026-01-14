@@ -1,0 +1,485 @@
+{
+  "prediction": {
+    "verdict": "Critical",
+    "sem_filter_results": {
+      "total_reviews": 15,
+      "potentially_relevant_ids": [
+        "B002",
+        "B003",
+        "B004",
+        "B005",
+        "B006",
+        "B007",
+        "B008",
+        "B009",
+        "B010",
+        "B011",
+        "B012",
+        "B013",
+        "B014",
+        "B015"
+      ]
+    },
+    "sem_extract_results": [
+      {
+        "review_id": "B001",
+        "allergen_raw": "",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2019-10-05",
+        "is_incident": false,
+        "exclusion_reason": "No allergy mentioned"
+      },
+      {
+        "review_id": "B002",
+        "allergen_raw": "peanuts",
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2019-09-20",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B003",
+        "allergen_raw": "walnut",
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2019-08-15",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B004",
+        "allergen_raw": "peanuts",
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-07-01",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B005",
+        "allergen_raw": "peanuts",
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-07-01",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B006",
+        "allergen_raw": "",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2019-04-10",
+        "is_incident": false,
+        "exclusion_reason": "No allergy described"
+      },
+      {
+        "review_id": "B007",
+        "allergen_raw": "cashews",
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-03-22",
+        "is_incident": false,
+        "exclusion_reason": "No reaction occurred"
+      },
+      {
+        "review_id": "B008",
+        "allergen_raw": "",
+        "severity": "none",
+        "firsthand": false,
+        "date": "2019-01-15",
+        "is_incident": false,
+        "exclusion_reason": "No allergy described"
+      },
+      {
+        "review_id": "B009",
+        "allergen_raw": "walnut",
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2018-11-30",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B010",
+        "allergen_raw": "pistachio",
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-10-20",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B011",
+        "allergen_raw": "coconut",
+        "severity": "none",
+        "firsthand": true,
+        "date": "2018-06-15",
+        "is_incident": false,
+        "exclusion_reason": "Not a covered allergen (coconut not counted)"
+      },
+      {
+        "review_id": "B012",
+        "allergen_raw": "almond",
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2017-12-01",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B013",
+        "allergen_raw": "hazelnuts",
+        "severity": "mild",
+        "firsthand": false,
+        "date": "2017-08-20",
+        "is_incident": true,
+        "exclusion_reason": "Secondhand account"
+      },
+      {
+        "review_id": "B014",
+        "allergen_raw": "peanuts",
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2016-05-10",
+        "is_incident": true,
+        "exclusion_reason": ""
+      },
+      {
+        "review_id": "B015",
+        "allergen_raw": "almond",
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-11-01",
+        "is_incident": false,
+        "exclusion_reason": "No reaction"
+      }
+    ],
+    "sem_join_results": [
+      {
+        "review_id": "B002",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B003",
+        "allergen_raw": "walnut",
+        "allergen_canonical": "tree_nut:walnut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B004",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B005",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B007",
+        "allergen_raw": "cashews",
+        "allergen_canonical": "tree_nut:cashew",
+        "is_covered": true
+      },
+      {
+        "review_id": "B009",
+        "allergen_raw": "walnut",
+        "allergen_canonical": "tree_nut:walnut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B010",
+        "allergen_raw": "pistachio",
+        "allergen_canonical": "tree_nut:pistachio",
+        "is_covered": true
+      },
+      {
+        "review_id": "B011",
+        "allergen_raw": "coconut",
+        "allergen_canonical": "NOT_COVERED:coconut",
+        "is_covered": false
+      },
+      {
+        "review_id": "B012",
+        "allergen_raw": "almond",
+        "allergen_canonical": "tree_nut:almond",
+        "is_covered": true
+      },
+      {
+        "review_id": "B013",
+        "allergen_raw": "hazelnuts",
+        "allergen_canonical": "tree_nut:hazelnut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B014",
+        "allergen_raw": "peanuts",
+        "allergen_canonical": "peanut",
+        "is_covered": true
+      },
+      {
+        "review_id": "B015",
+        "allergen_raw": "almond",
+        "allergen_canonical": "tree_nut:almond",
+        "is_covered": true
+      }
+    ],
+    "sem_distinct_results": {
+      "incident_groups": [
+        {
+          "group_id": 1,
+          "review_ids": [
+            "B004",
+            "B005"
+          ],
+          "reason": "same_as:B004"
+        },
+        {
+          "group_id": 2,
+          "review_ids": [
+            "B003"
+          ],
+          "reason": "independent"
+        },
+        {
+          "group_id": 3,
+          "review_ids": [
+            "B010"
+          ],
+          "reason": "independent"
+        },
+        {
+          "group_id": 4,
+          "review_ids": [
+            "B012"
+          ],
+          "reason": "independent"
+        },
+        {
+          "group_id": 5,
+          "review_ids": [
+            "B014"
+          ],
+          "reason": "independent"
+        }
+      ],
+      "independent_incident_count": 5
+    },
+    "final_counts": {
+      "independent_firsthand_recent_severe_covered": 2,
+      "independent_firsthand_recent_any_covered": 4
+    },
+    "reasoning": "Assessment per spec: Identify all reviews mentioning covered allergens (peanuts or tree nuts). Treat same-date/same-party/same-allergen duplicates as a single incident. Consider only firsthand reports that are recent (2017-01-01 or later) for the final risk verdict. Severity mapping: severe (anaphylaxis/ER), moderate (antihistamines/Benadryl or significant symptoms), mild (tingling). Review B004/B005 describe the same peanut incident (wife) on 2019-07-01; counted once. Incidents: 2019-07-01 peanut (B004/B005), 2019-08-15 walnut (B003), 2018-10-20 pistachio (B010), 2017-12-01 almond (B012), 2016-05-10 peanut (B014). Among first-hand recent incidents with covered allergens, there are two severe cases (peanut 2019-07-01 and almond 2017-12-01) and two or more total incidents, yielding the Critical verdict per the labeling rule. All non-covered allergens (e.g., coconut in B011) are excluded from incident counting. Potentially relevant mentions (allergy-related) were gathered from all reviews to populate sem_filter_results."
+  },
+  "ground_truth": {
+    "challenge_notes": "This dataset is designed so that INCORRECT firsthand/secondhand classification WILL flip the verdict",
+    "sem_join": {
+      "B002": {
+        "raw": "peanuts",
+        "canonical": "peanut",
+        "covered": true
+      },
+      "B003": {
+        "raw": "walnut, tree nut",
+        "canonical": "tree_nut:walnut",
+        "covered": true
+      },
+      "B004": {
+        "raw": "peanut",
+        "canonical": "peanut",
+        "covered": true
+      },
+      "B005": {
+        "raw": "peanut",
+        "canonical": "peanut",
+        "covered": true
+      },
+      "B006": {
+        "raw": "allergic reaction",
+        "canonical": "unknown",
+        "covered": true
+      },
+      "B007": {
+        "raw": "cashews",
+        "canonical": "tree_nut:cashew",
+        "covered": true
+      },
+      "B009": {
+        "raw": "walnut",
+        "canonical": "tree_nut:walnut",
+        "covered": true
+      },
+      "B010": {
+        "raw": "pistachios",
+        "canonical": "tree_nut:pistachio",
+        "covered": true
+      },
+      "B011": {
+        "raw": "coconut",
+        "canonical": "NOT_COVERED:coconut",
+        "covered": false
+      },
+      "B012": {
+        "raw": "almond",
+        "canonical": "tree_nut:almond",
+        "covered": true
+      },
+      "B013": {
+        "raw": "hazelnuts",
+        "canonical": "tree_nut:hazelnut",
+        "covered": true
+      },
+      "B014": {
+        "raw": "peanuts",
+        "canonical": "peanut",
+        "covered": true
+      },
+      "B015": {
+        "raw": "almond",
+        "canonical": "tree_nut:almond",
+        "covered": true
+      }
+    },
+    "sem_extract": {
+      "B002": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2019-09-20",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'My colleague Sarah told me' - reviewer is sharing someone else's story"
+      },
+      "B003": {
+        "severity": "mild",
+        "firsthand": true,
+        "date": "2019-08-15",
+        "is_incident": true,
+        "note": "tingling lips, spit it out - mild, not severe"
+      },
+      "B004": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-07-01",
+        "is_incident": true,
+        "note": "spouse at same meal = firsthand per spec"
+      },
+      "B005": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2019-07-01",
+        "is_incident": false,
+        "reason": "DUPLICATE of B004 - same incident, husband's perspective"
+      },
+      "B006": {
+        "severity": "unknown",
+        "firsthand": false,
+        "date": "2019-04-10",
+        "is_incident": false,
+        "reason": "SECONDHAND - saw on local news"
+      },
+      "B007": {
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-03-22",
+        "is_incident": false,
+        "reason": "NO REACTION - caught before eating"
+      },
+      "B009": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2018-11-30",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'my neighbor told me' about her son"
+      },
+      "B010": {
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-10-20",
+        "is_incident": true,
+        "note": "face swelling + Benadryl = moderate"
+      },
+      "B011": {
+        "severity": "moderate",
+        "firsthand": true,
+        "date": "2018-06-15",
+        "is_incident": false,
+        "reason": "COCONUT - not covered allergen"
+      },
+      "B012": {
+        "severity": "severe",
+        "firsthand": false,
+        "date": "2017-12-01",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'posted on behalf of my elderly mother' - mother experienced it, not reviewer"
+      },
+      "B013": {
+        "severity": "mild",
+        "firsthand": false,
+        "date": "2017-08-20",
+        "is_incident": false,
+        "reason": "SECONDHAND - 'my friend had a reaction' (not dining together implied by 'years ago')"
+      },
+      "B014": {
+        "severity": "severe",
+        "firsthand": true,
+        "date": "2016-05-10",
+        "is_incident": false,
+        "reason": "NOT RECENT - 2016 is before 2017 cutoff"
+      },
+      "B015": {
+        "severity": "none",
+        "firsthand": true,
+        "date": "2019-11-01",
+        "is_incident": false,
+        "reason": "NO REACTION - carried EpiPen but no issues"
+      }
+    },
+    "sem_distinct": {
+      "incident_groups": [
+        {
+          "id": 1,
+          "review_ids": [
+            "B003"
+          ],
+          "allergen": "walnut",
+          "severity": "mild",
+          "date": "2019-08-15"
+        },
+        {
+          "id": 2,
+          "review_ids": [
+            "B004",
+            "B005"
+          ],
+          "allergen": "peanut",
+          "severity": "severe",
+          "date": "2019-07-01"
+        },
+        {
+          "id": 3,
+          "review_ids": [
+            "B010"
+          ],
+          "allergen": "pistachio",
+          "severity": "moderate",
+          "date": "2018-10-20"
+        }
+      ],
+      "independent_firsthand_recent_covered": 3,
+      "note": "Only 3 actual incidents - B002, B006, B009, B012, B013 are all SECONDHAND"
+    },
+    "final_verdict": {
+      "independent_firsthand_recent_severe_covered": 1,
+      "independent_firsthand_recent_any_covered": 3,
+      "explanation": "Only ONE severe incident qualifies: B004/B005 (peanut, severe). B002 is SECONDHAND (colleague told them). B009 is SECONDHAND (neighbor told them). B012 is SECONDHAND (posted on behalf of mother). B014 is NOT RECENT (2016).",
+      "verdict": "High Risk",
+      "why_not_critical": "Need 2 severe, only have 1. If LLM incorrectly counts B002, B009, or B012 as firsthand, it would wrongly say Critical."
+    }
+  }
+}
